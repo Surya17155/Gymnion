@@ -9,9 +9,9 @@ function AdminDashboard() {
     <div className="py-6 space-y-8">
       {/* Phase Heading */}
       <div className="space-y-1">
-        <h2 className="text-2xl font-bold tracking-tight">Phase 6 — Payments</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Phase 8 — Reminders, exports, polish</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Monthly fee cycle generation → paid/pending/overdue dashboard → manual (cash/UPI) payment recording → Razorpay connect for the gym → member Pay Now with hosted checkout → verified webhook updating payment status → receipts and admin notification.
+          Single + bulk payment reminders, CSV exports (members / payments / attendance with date range), in-app notification bell, empty/loading/error states, accessibility pass, SEO metadata per route.
         </p>
       </div>
       
