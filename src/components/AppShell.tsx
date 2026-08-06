@@ -77,10 +77,27 @@ export function AppShell({ children, title = "GymSync", showNav = true, showBack
 
 function NavItem({ to, icon, label, active }: { to: string; icon: string; label: string; active?: boolean }) {
   const icons: Record<string, any> = {
-    home: <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>,
-    activity: <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>,
-    'credit-card': <rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>,
-    user: <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+    home: (
+      <>
+        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </>
+    ),
+    activity: (
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+    ),
+    'credit-card': (
+      <>
+        <rect width="20" height="14" x="2" y="5" rx="2"/>
+        <line x1="2" x2="22" y1="10" y2="10"/>
+      </>
+    ),
+    user: (
+      <>
+        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </>
+    )
   };
 
   return (
