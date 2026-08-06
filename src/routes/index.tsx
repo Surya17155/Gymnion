@@ -46,7 +46,8 @@ function Index() {
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Current Phase</h3>
           <div className="bg-gym-surface-raised rounded-xl p-5 border border-white/5 shadow-xl">
             <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">
-              Enable Lovable Cloud. Then in a single migration, create the complete database schema for GymSync.
+              implement this in the backend of this app: Make sure that the rules an dpolicies of this app set properly so that It cannot make any error or issue in the future
+              {"\n\n"}Enable Lovable Cloud. Then in a single migration, create the complete database schema for GymSync.
 
               {"\n\n"}Tables (all with RLS enabled):
               {"\n\n"}1. user_roles: id (uuid PK, refs auth.users), role (enum: super_admin, gym_admin, member), gym_id (uuid, nullable, refs gyms), created_at
