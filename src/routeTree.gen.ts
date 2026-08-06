@@ -11,6 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardAdminRouteImport } from './routes/dashboard/admin'
+import { Route as DashboardMRouteImport } from './routes/dashboard/m'
+import { Route as DashboardSuperAdminRouteImport } from './routes/dashboard/super-admin'
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +27,26 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAdminRoute = DashboardAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardMRoute = DashboardMRouteImport.update({
+  id: '/m',
+  path: '/m',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSuperAdminRoute = DashboardSuperAdminRouteImport.update({
+  id: '/super-admin',
+  path: '/super-admin',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
   id: '/auth/login/',
   path: '/auth/login/',
@@ -31,31 +55,63 @@ const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/m': typeof DashboardMRoute
+  '/dashboard/super-admin': typeof DashboardSuperAdminRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/m': typeof DashboardMRoute
+  '/dashboard/super-admin': typeof DashboardSuperAdminRoute
+  '/dashboard': typeof DashboardIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/m': typeof DashboardMRoute
+  '/dashboard/super-admin': typeof DashboardSuperAdminRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/auth/login/'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/dashboard/admin'
+    | '/dashboard/m'
+    | '/dashboard/super-admin'
+    | '/dashboard/'
+    | '/auth/login/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/auth/login'
-  id: '__root__' | '/' | '/dashboard' | '/auth/login/'
+  to:
+    | '/'
+    | '/dashboard/admin'
+    | '/dashboard/m'
+    | '/dashboard/super-admin'
+    | '/dashboard'
+    | '/auth/login'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/dashboard/admin'
+    | '/dashboard/m'
+    | '/dashboard/super-admin'
+    | '/dashboard/'
+    | '/auth/login/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   AuthLoginIndexRoute: typeof AuthLoginIndexRoute
 }
 
@@ -75,6 +131,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/admin': {
+      id: '/dashboard/admin'
+      path: '/admin'
+      fullPath: '/dashboard/admin'
+      preLoaderRoute: typeof DashboardAdminRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/m': {
+      id: '/dashboard/m'
+      path: '/m'
+      fullPath: '/dashboard/m'
+      preLoaderRoute: typeof DashboardMRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/super-admin': {
+      id: '/dashboard/super-admin'
+      path: '/super-admin'
+      fullPath: '/dashboard/super-admin'
+      preLoaderRoute: typeof DashboardSuperAdminRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/auth/login/': {
       id: '/auth/login/'
       path: '/auth/login'
@@ -85,21 +169,29 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface DashboardRouteChildren {
+  DashboardAdminRoute: typeof DashboardAdminRoute
+  DashboardMRoute: typeof DashboardMRoute
+  DashboardSuperAdminRoute: typeof DashboardSuperAdminRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAdminRoute: DashboardAdminRoute,
+  DashboardMRoute: DashboardMRoute,
+  DashboardSuperAdminRoute: DashboardSuperAdminRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   AuthLoginIndexRoute: AuthLoginIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
