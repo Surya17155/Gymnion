@@ -9,9 +9,9 @@ function AdminDashboard() {
     <div className="py-6 space-y-8">
       {/* Phase Heading */}
       <div className="space-y-1">
-        <h2 className="text-2xl font-bold tracking-tight">Phase 5 — Attendance</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Phase 6 — Payments</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Static gym QR at /checkin?gym=ID → logged-in check-in, second scan prompts check-out → success screens → admin "currently in gym" / "today's visits" with live refresh → GitHub-style contribution calendar → manual attendance edit with audit rows.
+          Monthly fee cycle generation → paid/pending/overdue dashboard → manual (cash/UPI) payment recording → Razorpay connect for the gym → member Pay Now with hosted checkout → verified webhook updating payment status → receipts and admin notification.
         </p>
       </div>
       
