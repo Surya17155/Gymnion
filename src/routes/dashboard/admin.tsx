@@ -33,34 +33,43 @@ function AdminDashboard() {
         </div>
       </div>
 
-      {/* Contribution Calendar Placeholder */}
+      {/* Payment Actions */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">Gym Usage (Last 30 Days)</h3>
-        </div>
-        <div className="p-5 rounded-3xl bg-gym-surface-raised border border-white/5 overflow-hidden">
-          <div className="flex gap-1.5 overflow-x-auto pb-2 scrollbar-hide">
-            {Array.from({ length: 28 }).map((_, i) => (
-              <div 
-                key={i} 
-                className={`w-3 h-3 rounded-sm flex-shrink-0 ${
-                  i % 7 === 0 ? 'bg-gym-accent' : 
-                  i % 5 === 0 ? 'bg-gym-accent/60' : 
-                  i % 3 === 0 ? 'bg-gym-accent/30' : 'bg-gym-surface-muted'
-                }`} 
-              />
-            ))}
-          </div>
-          <div className="flex justify-between mt-3 text-[9px] font-bold text-subtle uppercase">
-            <span>Less</span>
-            <div className="flex gap-1">
-              <div className="w-2 h-2 rounded-sm bg-gym-surface-muted" />
-              <div className="w-2 h-2 rounded-sm bg-gym-accent/30" />
-              <div className="w-2 h-2 rounded-sm bg-gym-accent/60" />
-              <div className="w-2 h-2 rounded-sm bg-gym-accent" />
+        <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">Payment Actions</h3>
+        <div className="grid grid-cols-1 gap-3">
+          <button className="flex items-center justify-between p-5 rounded-3xl bg-gym-surface-raised border border-white/5 hover:bg-gym-surface-muted transition-colors text-left group">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-gym-accent/10 flex items-center justify-center text-gym-accent">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+              </div>
+              <div>
+                <div className="font-bold group-hover:text-gym-accent transition-colors">Record Payment</div>
+                <div className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">Cash / UPI / Transfer</div>
+              </div>
             </div>
-            <span>More</span>
-          </div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-subtle">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
+          </button>
+
+          <button className="flex items-center justify-between p-5 rounded-3xl bg-gym-surface-raised border border-white/5 hover:bg-gym-surface-muted transition-colors text-left group">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-gym-accent/10 flex items-center justify-center text-gym-accent">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+                </svg>
+              </div>
+              <div>
+                <div className="font-bold group-hover:text-gym-accent transition-colors">Razorpay Connect</div>
+                <div className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">Online Payment Setup</div>
+              </div>
+            </div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-subtle">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
+          </button>
         </div>
       </div>
 
