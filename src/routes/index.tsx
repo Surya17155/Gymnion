@@ -41,6 +41,36 @@ function Index() {
           <StatCard label="Heart" value="72" unit="bpm" progress={0.4} pulse />
         </section>
 
+        {/* Phase Section - The target of the visual edit */}
+        <section className="space-y-4">
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Current Phase</h3>
+          <div className="bg-gym-surface-raised rounded-xl p-5 border border-white/5 shadow-xl">
+            <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">
+              Enable Lovable Cloud. Then in a single migration, create the complete database schema for GymSync.
+
+              {"\n\n"}Tables (all with RLS enabled):
+              {"\n\n"}1. user_roles: id (uuid PK, refs auth.users), role (enum: super_admin, gym_admin, member), gym_id (uuid, nullable, refs gyms), created_at
+              {"\n\n"}2. gyms: id (uuid PK), name (text, required), address (text), phone (text), owner_user_id (uuid, refs auth.users), status (enum: pending, approved, suspended, default pending), razorpay_account_id (text, nullable), subscription_tier (text, default 'standard'), created_at, approved_at (nullable), approved_by (nullable)
+              {"\n\n"}3. gym_admins: id (uuid PK), gym_id (uuid FK refs gyms), user_id (uuid refs auth.users), created_at
+              {"\n\n"}4. fee_plans: id (uuid PK), gym_id (uuid FK), name (text, required), amount_paise (integer, >0), description (text), is_active (boolean, default true), created_at
+              {"\n\n"}5. members: id (uuid PK), gym_id (uuid FK), user_id (uuid, nullable, refs auth.users — null until invite accepted), full_name (text, required), phone (text, required), email (text, required), photo_url (text, nullable), fee_plan_id (uuid, nullable, refs fee_plans), status (enum: invited, active, inactive, default invited), join_date (date, default CURRENT_DATE), invite_token (uuid, nullable), invite_expires_at (timestamptz, nullable), deleted_at (timestamptz, nullable), created_at. UNIQUE(gym_id, email), UNIQUE(gym_id, phone).
+              {"\n\n"}6. attendance: id (uuid PK), gym_id (uuid FK), member_id (uuid FK), check_in_at (timestamptz, default now()), check_out_at (timestamptz, nullable), source (enum: qr, manual, default qr), created_at. Index on (member_id, check_in_at).
+              {"\n\n"}7. attendance_audit: id (bigserial PK), attendance_id (uuid FK), actor_id (uuid refs auth.users), action (text), before (jsonb), after (jsonb), created_at.
+              {"\n\n"}8. payments: id (uuid PK), gym_id (uuid FK), member_id (uuid FK), fee_month (date, first day of month), amount_paise (integer), status (enum: pending, paid, failed, refunded, default pending), source (enum: razorpay, manual, default razorpay), razorpay_order_id (text, nullable), razorpay_payment_id (text, nullable), payment_method (text, nullable), paid_at (timestamptz, nullable), recorded_by (uuid, nullable, refs auth.users), note (text, nullable), created_at. Index on (member_id, fee_month). UNIQUE index on razorpay_payment_id WHERE NOT NULL.
+
+              {"\n\n"}Security-definer function: has_role(check_user_id uuid, check_role text) returns boolean.
+              {"\n\n"}RLS policies:
+              {"\n\n"}- user_roles: a user can SELECT their own row only
+              {"\n\n"}- gyms: SELECT allowed if user is super_admin OR user has gym_admin role for that gym_id; UPDATE allowed only for that gym's admin
+              {"\n\n"}- fee_plans, members, attendance, payments: SELECT/INSERT/UPDATE/DELETE allowed only for the gym_admin whose role has the matching gym_id; members can SELECT their own row in members table
+              {"\n\n"}- Super Admin has NO SELECT policy on members, attendance, or payments (cannot read PII)
+
+              {"\n\n"}Grant table-level permissions to authenticated role. Add updated_at trigger to all tables.
+              {"\n\n"}After the migration runs, show me the schema in the Lovable Cloud UI and confirm RLS is enabled on every table.
+            </p>
+          </div>
+        </section>
+
         {/* Buttons & Primitives */}
         <section className="space-y-4">
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">UI Primitives</h3>
