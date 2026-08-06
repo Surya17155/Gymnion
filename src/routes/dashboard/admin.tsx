@@ -73,27 +73,30 @@ function AdminDashboard() {
         </div>
       </div>
 
-      {/* Actions */}
+      {/* Recent Transactions */}
       <div className="space-y-4">
-        <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">Live Activity</h3>
+        <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">Recent Transactions</h3>
         <div className="space-y-3">
           {[
-            { name: 'Arjun Singh', action: 'Checked In', time: '2m ago', active: true },
-            { name: 'Priya Sharma', action: 'Checked Out', time: '15m ago', active: false },
-          ].map((activity, i) => (
+            { name: 'Arjun Singh', action: 'Monthly Fee', amount: '₹2,500', time: '2m ago', status: 'paid' },
+            { name: 'Priya Sharma', action: 'Personal Training', amount: '₹5,000', time: '1h ago', status: 'pending' },
+          ].map((tx, i) => (
             <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-gym-surface-raised border border-white/5">
               <div className="flex items-center gap-3">
-                <div className={`w-2 h-2 rounded-full ${activity.active ? 'bg-gym-accent animate-pulse' : 'bg-muted-foreground'}`} />
+                <div className={`w-2 h-2 rounded-full ${tx.status === 'paid' ? 'bg-gym-accent' : 'bg-yellow-500'}`} />
                 <div>
-                  <div className="text-sm font-bold">{activity.name}</div>
-                  <div className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">{activity.action}</div>
+                  <div className="text-sm font-bold">{tx.name}</div>
+                  <div className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">{tx.action}</div>
                 </div>
               </div>
-              <span className="text-[10px] font-bold text-subtle">{activity.time}</span>
+              <div className="text-right">
+                <div className="text-sm font-bold text-foreground">{tx.amount}</div>
+                <div className="text-[10px] font-bold text-subtle uppercase">{tx.time}</div>
+              </div>
             </div>
           ))}
           <button className="w-full py-3 text-[10px] font-bold text-gym-accent uppercase tracking-widest border border-dashed border-gym-accent/20 rounded-2xl hover:bg-gym-accent/5 transition-colors">
-            View All Logs
+            View All Transactions
           </button>
         </div>
       </div>
