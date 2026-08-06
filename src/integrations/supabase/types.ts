@@ -138,6 +138,38 @@ export type Database = {
           },
         ]
       }
+      gym_admins: {
+        Row: {
+          created_at: string
+          gym_id: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          gym_id: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          gym_id?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gym_admins_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gyms: {
         Row: {
           created_at: string | null
@@ -349,7 +381,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "member" | "super_admin"
+      app_role: "admin" | "member" | "super_admin" | "gym_admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -477,7 +509,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "member", "super_admin"],
+      app_role: ["admin", "member", "super_admin", "gym_admin"],
     },
   },
 } as const
