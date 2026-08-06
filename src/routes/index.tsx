@@ -66,6 +66,7 @@ function Index() {
               {"\n\n"}- fee_plans, members, attendance, payments: SELECT/INSERT/UPDATE/DELETE allowed only for the gym_admin whose role has the matching gym_id; members can SELECT their own row in members table
               {"\n\n"}- Super Admin has NO SELECT policy on members, attendance, or payments (cannot read PII)
 
+              {"\n\n"}also add gym_admins: id (uuid PK), gym_id (uuid FK refs gyms), user_id (uuid refs auth.users), created_at in the RLS policies/ database tables
               {"\n\n"}Grant table-level permissions to authenticated role. Add updated_at trigger to all tables.
               {"\n\n"}After the migration runs, show me the schema in the Lovable Cloud UI and confirm RLS is enabled on every table.
             </p>
