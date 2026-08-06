@@ -14,16 +14,342 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      attendance: {
+        Row: {
+          check_in_at: string | null
+          check_out_at: string | null
+          created_at: string | null
+          gym_id: string
+          id: string
+          member_id: string
+          source: string | null
+        }
+        Insert: {
+          check_in_at?: string | null
+          check_out_at?: string | null
+          created_at?: string | null
+          gym_id: string
+          id?: string
+          member_id: string
+          source?: string | null
+        }
+        Update: {
+          check_in_at?: string | null
+          check_out_at?: string | null
+          created_at?: string | null
+          gym_id?: string
+          id?: string
+          member_id?: string
+          source?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      attendance_audit: {
+        Row: {
+          attendance_id: string
+          changed_by: string | null
+          created_at: string | null
+          id: string
+          new_data: Json | null
+          old_data: Json | null
+          reason: string | null
+        }
+        Insert: {
+          attendance_id: string
+          changed_by?: string | null
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          reason?: string | null
+        }
+        Update: {
+          attendance_id?: string
+          changed_by?: string | null
+          created_at?: string | null
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_audit_attendance_id_fkey"
+            columns: ["attendance_id"]
+            isOneToOne: false
+            referencedRelation: "attendance"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fee_plans: {
+        Row: {
+          amount: number
+          billing_cycle: string
+          created_at: string | null
+          description: string | null
+          gym_id: string
+          id: string
+          is_active: boolean | null
+          name: string
+        }
+        Insert: {
+          amount: number
+          billing_cycle?: string
+          created_at?: string | null
+          description?: string | null
+          gym_id: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+        }
+        Update: {
+          amount?: number
+          billing_cycle?: string
+          created_at?: string | null
+          description?: string | null
+          gym_id?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fee_plans_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gyms: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          owner_email: string
+          owner_name: string
+          owner_phone: string
+          razorpay_account_id: string | null
+          settings: Json | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          owner_email: string
+          owner_name: string
+          owner_phone: string
+          razorpay_account_id?: string | null
+          settings?: Json | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          owner_email?: string
+          owner_name?: string
+          owner_phone?: string
+          razorpay_account_id?: string | null
+          settings?: Json | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      members: {
+        Row: {
+          created_at: string | null
+          deleted_at: string | null
+          email: string
+          fee_plan_id: string | null
+          full_name: string
+          gym_id: string
+          id: string
+          join_date: string | null
+          phone: string
+          photo_url: string | null
+          status: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          deleted_at?: string | null
+          email: string
+          fee_plan_id?: string | null
+          full_name: string
+          gym_id: string
+          id?: string
+          join_date?: string | null
+          phone: string
+          photo_url?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          deleted_at?: string | null
+          email?: string
+          fee_plan_id?: string | null
+          full_name?: string
+          gym_id?: string
+          id?: string
+          join_date?: string | null
+          phone?: string
+          photo_url?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "members_fee_plan_id_fkey"
+            columns: ["fee_plan_id"]
+            isOneToOne: false
+            referencedRelation: "fee_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "members_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          gym_id: string
+          id: string
+          member_id: string
+          notes: string | null
+          payment_method: string | null
+          payment_month: string
+          razorpay_order_id: string | null
+          razorpay_payment_id: string | null
+          razorpay_signature: string | null
+          source: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          gym_id: string
+          id?: string
+          member_id: string
+          notes?: string | null
+          payment_method?: string | null
+          payment_month: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          razorpay_signature?: string | null
+          source: string
+          status: string
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          gym_id?: string
+          id?: string
+          member_id?: string
+          notes?: string | null
+          payment_method?: string | null
+          payment_month?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          razorpay_signature?: string | null
+          source?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          gym_id: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          gym_id?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          gym_id?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "member" | "super_admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +476,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "member", "super_admin"],
+    },
   },
 } as const
