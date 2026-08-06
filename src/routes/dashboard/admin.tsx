@@ -15,21 +15,21 @@ function AdminDashboard() {
         </p>
       </div>
       
-      {/* Attendance Stats */}
+      {/* Payment Stats */}
       <div className="grid grid-cols-2 gap-3">
         <div className="p-5 rounded-3xl bg-gym-surface-raised border border-white/5 space-y-1 relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-3 opacity-10 text-gym-accent group-hover:scale-110 transition-transform">
-             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
           </div>
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">In Gym Now</span>
-          <div className="text-3xl font-black">18</div>
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Pending</span>
+          <div className="text-3xl font-black">₹12,400</div>
         </div>
         <div className="p-5 rounded-3xl bg-gym-surface-raised border border-white/5 space-y-1 relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-3 opacity-10 text-gym-accent group-hover:scale-110 transition-transform">
-             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
+             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           </div>
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Today's Visits</span>
-          <div className="text-3xl font-black text-gym-accent">42</div>
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Received</span>
+          <div className="text-3xl font-black text-gym-accent">₹48,200</div>
         </div>
       </div>
 
