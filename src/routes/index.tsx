@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+start phase 1 now
 import { AppShell } from "@/components/AppShell";
 
 export const Route = createFileRoute("/")({
