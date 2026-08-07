@@ -1,52 +1,22 @@
 import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getFeePlans } from '@/lib/auth.functions';
 
 export const Route = createFileRoute('/dashboard/admin/plans')({
   component: AdminPlans,
 });
 
+
 function AdminPlans() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [plans, setPlans] = useState<any[]>([]);
+  const { data: plans = [], isLoading } = useQuery({
+    queryKey: ['fee_plans'],
+    queryFn: () => getFeePlans(),
+  });
 
-  useEffect(() => {
-    const savedPlans = localStorage.getItem('gym_plans');
-    if (savedPlans) {
-      setPlans(JSON.parse(savedPlans));
-    } else {
-      // Default dummy data if none exists
-      const initialPlans = [
-        {
-          id: '1',
-          name: 'Standard Monthly',
-          amount: '1000',
-          duration: '1',
-          description: 'Access to all gym equipment and locker rooms during standard operating hours.',
-          isActive: true
-        },
-        {
-          id: '2',
-          name: 'PT + Gym (3 Months)',
-          amount: '2500',
-          duration: '3',
-          description: 'Full gym access plus 12 personal training sessions per month. Includes diet plan.',
-          isActive: true
-        },
-        {
-          id: '3',
-          name: 'Annual VIP Pass',
-          amount: '10000',
-          duration: '12',
-          description: 'Premium 24/7 access, free guest passes, and priority booking for all classes.',
-          isActive: false
-        }
-      ];
-      localStorage.setItem('gym_plans', JSON.stringify(initialPlans));
-      setPlans(initialPlans);
-    }
-  }, [location.pathname]);
 
   // Check if we are precisely on the plans list page or a sub-route
   const isPlansList = location.pathname === '/dashboard/admin/plans' || location.pathname === '/dashboard/admin/plans/';
