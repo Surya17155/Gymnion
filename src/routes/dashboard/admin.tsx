@@ -152,18 +152,31 @@ function AdminDashboard() {
       <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] left-1/2 -translate-x-1/2">
         <Link 
           to="/dashboard/admin"
-          className={`flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200 ${activeTab === 'dashboard' ? 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' : 'text-[#C0C2B8]'}`}
+          activeOptions={{ exact: true }}
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
         >
-          <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: activeTab === 'dashboard' ? '"FILL" 1' : '"FILL" 0' }}>dashboard</span>
-          <span className="text-[11px] font-semibold leading-[14px]">Dashboard</span>
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>dashboard</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Dashboard</span>
+            </>
+          )}
         </Link>
         
         <Link 
           to="/dashboard/admin/members"
-          className={`flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200 ${activeTab === 'members' ? 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' : 'text-[#C0C2B8]'}`}
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
         >
-          <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: activeTab === 'members' ? '"FILL" 1' : '"FILL" 0' }}>group</span>
-          <span className="text-[11px] font-semibold leading-[14px]">Members</span>
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>group</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Members</span>
+            </>
+          )}
         </Link>
         
         <button 
