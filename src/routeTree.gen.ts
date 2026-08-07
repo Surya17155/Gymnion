@@ -26,6 +26,7 @@ import { Route as DashboardMAttendanceRouteImport } from './routes/dashboard/m.a
 import { Route as DashboardMPaymentsRouteImport } from './routes/dashboard/m.payments'
 import { Route as DashboardMProfileRouteImport } from './routes/dashboard/m.profile'
 import { Route as DashboardSuperAdminGymsRouteImport } from './routes/dashboard/super-admin.gyms'
+import { Route as DashboardSuperAdminPaymentsRouteImport } from './routes/dashboard/super-admin.payments'
 import { Route as DashboardAdminPlansNewRouteImport } from './routes/dashboard/admin.plans.new'
 import { Route as DashboardAdminPlansEditPlanIdRouteImport } from './routes/dashboard/admin.plans.edit.$planId'
 
@@ -115,6 +116,12 @@ const DashboardSuperAdminGymsRoute = DashboardSuperAdminGymsRouteImport.update({
   path: '/gyms',
   getParentRoute: () => DashboardSuperAdminRoute,
 } as any)
+const DashboardSuperAdminPaymentsRoute =
+  DashboardSuperAdminPaymentsRouteImport.update({
+    id: '/payments',
+    path: '/payments',
+    getParentRoute: () => DashboardSuperAdminRoute,
+  } as any)
 const DashboardAdminPlansNewRoute = DashboardAdminPlansNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -144,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/m/payments': typeof DashboardMPaymentsRoute
   '/dashboard/m/profile': typeof DashboardMProfileRoute
   '/dashboard/super-admin/gyms': typeof DashboardSuperAdminGymsRoute
+  '/dashboard/super-admin/payments': typeof DashboardSuperAdminPaymentsRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
@@ -164,6 +172,7 @@ export interface FileRoutesByTo {
   '/dashboard/m/payments': typeof DashboardMPaymentsRoute
   '/dashboard/m/profile': typeof DashboardMProfileRoute
   '/dashboard/super-admin/gyms': typeof DashboardSuperAdminGymsRoute
+  '/dashboard/super-admin/payments': typeof DashboardSuperAdminPaymentsRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
@@ -186,6 +195,7 @@ export interface FileRoutesById {
   '/dashboard/m/payments': typeof DashboardMPaymentsRoute
   '/dashboard/m/profile': typeof DashboardMProfileRoute
   '/dashboard/super-admin/gyms': typeof DashboardSuperAdminGymsRoute
+  '/dashboard/super-admin/payments': typeof DashboardSuperAdminPaymentsRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/dashboard/m/payments'
     | '/dashboard/m/profile'
     | '/dashboard/super-admin/gyms'
+    | '/dashboard/super-admin/payments'
     | '/auth/login/'
     | '/dashboard/admin/plans/new'
     | '/dashboard/admin/plans/edit/$planId'
@@ -229,6 +240,7 @@ export interface FileRouteTypes {
     | '/dashboard/m/payments'
     | '/dashboard/m/profile'
     | '/dashboard/super-admin/gyms'
+    | '/dashboard/super-admin/payments'
     | '/auth/login'
     | '/dashboard/admin/plans/new'
     | '/dashboard/admin/plans/edit/$planId'
@@ -250,6 +262,7 @@ export interface FileRouteTypes {
     | '/dashboard/m/payments'
     | '/dashboard/m/profile'
     | '/dashboard/super-admin/gyms'
+    | '/dashboard/super-admin/payments'
     | '/auth/login/'
     | '/dashboard/admin/plans/new'
     | '/dashboard/admin/plans/edit/$planId'
@@ -383,6 +396,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSuperAdminGymsRouteImport
       parentRoute: typeof DashboardSuperAdminRoute
     }
+    '/dashboard/super-admin/payments': {
+      id: '/dashboard/super-admin/payments'
+      path: '/payments'
+      fullPath: '/dashboard/super-admin/payments'
+      preLoaderRoute: typeof DashboardSuperAdminPaymentsRouteImport
+      parentRoute: typeof DashboardSuperAdminRoute
+    }
     '/dashboard/admin/plans/new': {
       id: '/dashboard/admin/plans/new'
       path: '/new'
@@ -451,10 +471,12 @@ const DashboardMRouteWithChildren = DashboardMRoute._addFileChildren(
 
 interface DashboardSuperAdminRouteChildren {
   DashboardSuperAdminGymsRoute: typeof DashboardSuperAdminGymsRoute
+  DashboardSuperAdminPaymentsRoute: typeof DashboardSuperAdminPaymentsRoute
 }
 
 const DashboardSuperAdminRouteChildren: DashboardSuperAdminRouteChildren = {
   DashboardSuperAdminGymsRoute: DashboardSuperAdminGymsRoute,
+  DashboardSuperAdminPaymentsRoute: DashboardSuperAdminPaymentsRoute,
 }
 
 const DashboardSuperAdminRouteWithChildren =
