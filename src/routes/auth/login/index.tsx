@@ -25,6 +25,8 @@ function AuthPage() {
     gymCode: ''
   });
 
+  console.log('AuthPage render, formData:', formData);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
     const name = e.target.name;
