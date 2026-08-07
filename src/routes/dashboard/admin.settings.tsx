@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from '@tanstack/react-router';
+import { useState, useEffect } from 'react';
+import { getGymDetails, updateGymCode } from '@/lib/auth.functions';
 
 export const Route = createFileRoute('/dashboard/admin/settings')({
   component: AdminSettings,
@@ -8,17 +10,49 @@ export const Route = createFileRoute('/dashboard/admin/settings')({
 
 function AdminSettings() {
   const navigate = useNavigate();
+  const [gym, setGym] = useState<any>(null);
+  const [gymCode, setGymCode] = useState('');
+  const [isEditingCode, setIsEditingCode] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ type: '', text: '' });
+
+  useEffect(() => {
+    loadGymDetails();
+  }, []);
+
+  const loadGymDetails = async () => {
+    const data = await getGymDetails();
+    if (data) {
+      setGym(data);
+      setGymCode(data.gym_code || '');
+    }
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate({ to: '/auth/login' });
   };
 
+  const handleUpdateCode = async () => {
+    if (!gymCode.trim()) return;
+    setLoading(true);
+    setMessage({ type: '', text: '' });
+    try {
+      await updateGymCode({ data: { gym_id: gym.id, gym_code: gymCode } });
+      setMessage({ type: 'success', text: 'GYM code updated successfully!' });
+      setIsEditingCode(false);
+      loadGymDetails();
+    } catch (err: any) {
+      setMessage({ type: 'error', text: err.message || 'Failed to update GYM code' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins']">
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       
-      {/* Atmospheric Glow */}
       <div 
         className="fixed top-0 left-0 right-0 h-[300px] z-0 pointer-events-none"
         style={{
@@ -26,18 +60,66 @@ function AdminSettings() {
         }}
       />
 
-      {/* Main Mobile Container */}
       <div className="max-w-[480px] mx-auto min-h-screen pb-24 relative z-10 flex flex-col">
         <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-8">
-          {/* Header Section */}
           <section className="flex flex-col gap-1">
             <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white">Settings</h1>
             <p className="text-[14px] leading-[20px] text-[#858A7D]">Manage your gym's operations.</p>
           </section>
 
-          {/* Settings List */}
+          {message.text && (
+            <div className={`p-4 rounded-2xl text-xs border ${message.type === 'success' ? 'bg-[#B7FF1E]/10 border-[#B7FF1E]/20 text-[#B7FF1E]' : 'bg-[#FF5964]/10 border-[#FF5964]/20 text-[#FF5964]'}`}>
+              {message.text}
+            </div>
+          )}
+
           <div className="flex flex-col gap-[12px]">
-            {/* Fee Plans */}
+            {/* Gym Code Setting */}
+            <div className="flex flex-col p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 gap-4">
+              <div className="flex items-center w-full">
+                <div className="w-12 h-12 rounded-full bg-[#25340D] flex items-center justify-center mr-4">
+                  <span className="material-symbols-outlined text-[#B7FF1E]" style={{ fontVariationSettings: '"FILL" 1' }}>qr_code</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-[18px] font-semibold text-[#e3e3dd]">GYM Code</h3>
+                  <p className="text-[12px] text-[#858A7D] mt-1">Shared code for member registration.</p>
+                </div>
+                {!isEditingCode && (
+                  <button onClick={() => setIsEditingCode(true)} className="text-[#B7FF1E] text-xs font-bold uppercase">Edit</button>
+                )}
+              </div>
+              
+              {isEditingCode ? (
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    value={gymCode}
+                    onChange={(e) => setGymCode(e.target.value.toUpperCase())}
+                    className="flex-1 bg-[#121411] border border-white/10 rounded-xl px-4 py-2 text-sm focus:border-[#B7FF1E] focus:outline-none"
+                    placeholder="Enter code (e.g. GYM123)"
+                  />
+                  <button 
+                    disabled={loading}
+                    onClick={handleUpdateCode}
+                    className="bg-[#B7FF1E] text-[#293500] px-4 py-2 rounded-xl text-xs font-bold uppercase disabled:opacity-50"
+                  >
+                    Save
+                  </button>
+                  <button 
+                    onClick={() => { setIsEditingCode(false); setGymCode(gym?.gym_code || ''); }}
+                    className="bg-[#333532] text-[#e3e3dd] px-4 py-2 rounded-xl text-xs font-bold uppercase"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <div className="bg-[#121411] rounded-xl px-4 py-3 flex items-center justify-between border border-white/5">
+                  <span className="text-[14px] font-mono tracking-wider text-[#B7FF1E]">{gymCode || 'NOT SET'}</span>
+                  <span className="text-[10px] text-[#858A7D] uppercase">Active Code</span>
+                </div>
+              )}
+            </div>
+
             <Link 
               to="/dashboard/admin/plans"
               className="flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-[#B7FF1E]/30 transition-colors group text-left w-full"
@@ -52,7 +134,6 @@ function AdminSettings() {
               <span className="material-symbols-outlined text-[#858A7D] group-hover:text-[#B7FF1E] transition-colors">chevron_right</span>
             </Link>
 
-            {/* QR Management */}
             <button className="flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-[#B7FF1E]/30 transition-colors group text-left w-full">
               <div className="w-12 h-12 rounded-full bg-[#25340D] flex items-center justify-center mr-4 group-hover:bg-[#B7FF1E]/20 transition-colors">
                 <span className="material-symbols-outlined text-[#B7FF1E]" style={{ fontVariationSettings: '"FILL" 1' }}>qr_code_scanner</span>
@@ -64,7 +145,6 @@ function AdminSettings() {
               <span className="material-symbols-outlined text-[#858A7D] group-hover:text-[#B7FF1E] transition-colors">chevron_right</span>
             </button>
 
-            {/* Gym Profile */}
             <button className="w-full flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-white/10 transition-colors text-left">
               <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center mr-4">
                 <span className="material-symbols-outlined text-[#e3e3dd]">storefront</span>
@@ -76,7 +156,6 @@ function AdminSettings() {
               <span className="material-symbols-outlined text-[#858A7D]">chevron_right</span>
             </button>
 
-            {/* Account */}
             <button className="w-full flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-white/10 transition-colors text-left">
               <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center mr-4">
                 <span className="material-symbols-outlined text-[#e3e3dd]">manage_accounts</span>
@@ -88,7 +167,6 @@ function AdminSettings() {
               <span className="material-symbols-outlined text-[#858A7D]">chevron_right</span>
             </button>
 
-            {/* Notifications */}
             <div className="flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5">
               <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center mr-4">
                 <span className="material-symbols-outlined text-[#e3e3dd]">notifications_active</span>
@@ -97,14 +175,12 @@ function AdminSettings() {
                 <h3 className="text-[18px] font-semibold text-[#e3e3dd]">Notifications</h3>
                 <p className="text-[12px] text-[#858A7D] mt-1">Alerts for payments and check-ins.</p>
               </div>
-              {/* Toggle Switch */}
               <button aria-checked="true" className="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-[#83A51B] transition-colors duration-200 ease-in-out focus:outline-none" role="switch" type="button">
                 <span aria-hidden="true" className="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
               </button>
             </div>
           </div>
 
-          {/* Logout Button */}
           <div className="mt-8">
             <button 
               onClick={handleLogout}
