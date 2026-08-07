@@ -109,7 +109,7 @@ function AttendanceHistory() {
             <div className="bg-[#151714] rounded-xl p-4 border border-white/5 flex items-center justify-between hover:bg-[#1e201d] transition-colors backdrop-blur-sm relative overflow-hidden group">
               <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(213,255,64,0.03),transparent)] pointer-events-none rounded-xl"></div>
               <div className="flex items-center gap-4 relative z-10">
-                <div className="w-12 h-12 rounded-lg bg-[#1e201d] flex flex-col items-center justify-center border border-white/5">
+                <div className="w-12 h-12 rounded-xl bg-[#1e201d] flex flex-col items-center justify-center border border-white/5">
                   <span className="text-[11px] font-bold text-[#B7FF1E] uppercase font-['Poppins']">May</span>
                   <span className="text-[18px] font-bold text-white leading-none mt-1 font-['Poppins']">26</span>
                 </div>
