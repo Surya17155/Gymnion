@@ -1,9 +1,20 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-router';
 import { useState } from 'react';
 
 export const Route = createFileRoute('/dashboard/admin')({
-  component: AdminDashboard,
+  component: AdminLayout,
 });
+
+function AdminLayout() {
+  const { pathname } = useLocation();
+  const isExactAdmin = pathname === '/dashboard/admin';
+
+  if (!isExactAdmin) {
+    return <Outlet />;
+  }
+
+  return <AdminDashboard />;
+}
 
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
