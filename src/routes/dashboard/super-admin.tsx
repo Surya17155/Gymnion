@@ -5,6 +5,8 @@ export const Route = createFileRoute('/dashboard/super-admin')({
 });
 
 function SuperAdminDashboard() {
+  console.log('Mounting SuperAdminDashboard (Home)');
+
   return (
     <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden pb-16 font-sans">
       <div 
