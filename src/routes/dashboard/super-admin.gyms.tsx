@@ -57,15 +57,11 @@ function SuperAdminGyms() {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-lg bg-[#292A28] flex items-center justify-center overflow-hidden border border-white/5">
-                    {gym.logo_url ? (
-                      <img src={gym.logo_url} alt={gym.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <span className="material-symbols-outlined text-[#858A7D]">fitness_center</span>
-                    )}
+                    <span className="material-symbols-outlined text-[#858A7D]">fitness_center</span>
                   </div>
                   <div>
                     <h3 className="text-sm font-semibold text-white leading-tight">{gym.name}</h3>
-                    <p className="text-[11px] text-[#858A7D] mt-1">{gym.address || 'No address set'}</p>
+                    <p className="text-[11px] text-[#858A7D] mt-1">{gym.owner_email || 'No email set'}</p>
                   </div>
                 </div>
                 <span className="material-symbols-outlined text-[#858A7D] group-hover:text-[#B7FF1E] transition-colors">chevron_right</span>
