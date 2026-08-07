@@ -17,6 +17,7 @@ import { Route as DashboardAdminRouteImport } from './routes/dashboard/admin'
 import { Route as DashboardMRouteImport } from './routes/dashboard/m'
 import { Route as DashboardSuperAdminRouteImport } from './routes/dashboard/super-admin'
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
+import { Route as DashboardAdminAttendanceRouteImport } from './routes/dashboard/admin.attendance'
 import { Route as DashboardAdminMembersRouteImport } from './routes/dashboard/admin.members'
 import { Route as DashboardAdminPaymentsRouteImport } from './routes/dashboard/admin.payments'
 import { Route as DashboardMAttendanceRouteImport } from './routes/dashboard/m.attendance'
@@ -63,6 +64,12 @@ const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
   path: '/auth/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardAdminAttendanceRoute =
+  DashboardAdminAttendanceRouteImport.update({
+    id: '/attendance',
+    path: '/attendance',
+    getParentRoute: () => DashboardAdminRoute,
+  } as any)
 const DashboardAdminMembersRoute = DashboardAdminMembersRouteImport.update({
   id: '/members',
   path: '/members',
@@ -97,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
   '/dashboard/admin/payments': typeof DashboardAdminPaymentsRoute
   '/dashboard/m/attendance': typeof DashboardMAttendanceRoute
@@ -111,6 +119,7 @@ export interface FileRoutesByTo {
   '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
   '/dashboard/admin/payments': typeof DashboardAdminPaymentsRoute
   '/dashboard/m/attendance': typeof DashboardMAttendanceRoute
@@ -127,6 +136,7 @@ export interface FileRoutesById {
   '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
   '/dashboard/admin/payments': typeof DashboardAdminPaymentsRoute
   '/dashboard/m/attendance': typeof DashboardMAttendanceRoute
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/dashboard/'
+    | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
     | '/dashboard/admin/payments'
     | '/dashboard/m/attendance'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/dashboard'
+    | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
     | '/dashboard/admin/payments'
     | '/dashboard/m/attendance'
@@ -173,6 +185,7 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/dashboard/'
+    | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
     | '/dashboard/admin/payments'
     | '/dashboard/m/attendance'
@@ -246,6 +259,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/admin/attendance': {
+      id: '/dashboard/admin/attendance'
+      path: '/attendance'
+      fullPath: '/dashboard/admin/attendance'
+      preLoaderRoute: typeof DashboardAdminAttendanceRouteImport
+      parentRoute: typeof DashboardAdminRoute
+    }
     '/dashboard/admin/members': {
       id: '/dashboard/admin/members'
       path: '/members'
@@ -285,11 +305,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface DashboardAdminRouteChildren {
+  DashboardAdminAttendanceRoute: typeof DashboardAdminAttendanceRoute
   DashboardAdminMembersRoute: typeof DashboardAdminMembersRoute
   DashboardAdminPaymentsRoute: typeof DashboardAdminPaymentsRoute
 }
 
 const DashboardAdminRouteChildren: DashboardAdminRouteChildren = {
+  DashboardAdminAttendanceRoute: DashboardAdminAttendanceRoute,
   DashboardAdminMembersRoute: DashboardAdminMembersRoute,
   DashboardAdminPaymentsRoute: DashboardAdminPaymentsRoute,
 }
