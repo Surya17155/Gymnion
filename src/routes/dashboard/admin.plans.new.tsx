@@ -167,6 +167,6 @@ function AddPlanScreen() {
           </div>
         </form>
       </main>
-    </header>
+    </div>
   );
 }
