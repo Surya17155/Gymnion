@@ -206,7 +206,7 @@ function AuthPage() {
               <label className="text-xs text-[#C0C2B8] px-1 font-normal">Password</label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C0C2B8] material-symbols-outlined text-xl">lock</span>
-                <input name="password" autoComplete={authMode === 'signin' ? "current-password" : "new-password"} value={formData.password} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 pl-12 h-[48px] focus:outline-none focus:border-[#B7FF1E] focus:ring-1 focus:ring-[#B7FF1E]/50 transition-all placeholder:text-[#C0C2B8]" placeholder="Enter your password" required type="password" />
+                <input name="password" id="password" autoComplete={authMode === 'signin' ? "current-password" : "new-password"} value={formData.password} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 pl-12 h-[48px] focus:outline-none focus:border-[#B7FF1E] focus:ring-1 focus:ring-[#B7FF1E]/50 transition-all placeholder:text-[#C0C2B8]" placeholder="Enter your password" required type="password" />
               </div>
             </div>
 
