@@ -152,7 +152,7 @@ function AuthPage() {
         )}
 
         <div className="relative w-full z-10 space-y-4">
-          <form className="flex flex-col gap-3" onSubmit={(e) => { e.preventDefault(); authMode === 'signin' ? handleSignIn() : handleSignUp(); }}>
+          <form className="flex flex-col gap-3" onSubmit={(e) => { e.preventDefault(); console.log('Form submitted', formData); authMode === 'signin' ? handleSignIn() : handleSignUp(); }}>
             {authMode === 'signup' && (
               <>
                 {/* Order: Name, Email, Phone, DOB, Address, Password, Gym Code */}
