@@ -201,46 +201,39 @@ function SuperAdminGyms() {
         <Link 
           to="/dashboard/super-admin"
           activeOptions={{ exact: true }}
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>home</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Home</span>
+              <span className="material-symbols-outlined mb-1 transition-colors" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>home</span>
+              <span className="text-[11px] font-semibold leading-[14px] transition-colors" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Home</span>
             </>
           )}
         </Link>
         
         <Link 
           to="/dashboard/super-admin/payments"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>payments</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Payments</span>
+              <span className="material-symbols-outlined mb-1 transition-colors" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>payments</span>
+              <span className="text-[11px] font-semibold leading-[14px] transition-colors" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Payments</span>
             </>
           )}
         </Link>
         
         <Link 
           to="/dashboard/super-admin/gyms"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>fitness_center</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Gyms</span>
+              <span className="material-symbols-outlined mb-1 transition-colors" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>fitness_center</span>
+              <span className="text-[11px] font-semibold leading-[14px] transition-colors" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Gyms</span>
             </>
           )}
         </Link>
-        
       </nav>
     </div>
   );
