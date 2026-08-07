@@ -15,8 +15,11 @@ function AuthPage() {
       <div className="absolute top-0 left-0 w-full h-[300px] bg-gradient-to-b from-[#25340D]/20 to-transparent pointer-events-none z-0"></div>
       <main className="w-full max-w-[390px] relative z-10 flex flex-col min-h-full">
         <header className="flex flex-col items-center justify-center mb-8 mt-12 relative z-10">
-          <div className="w-16 h-16 rounded-2xl bg-[#333532] border border-white/10 flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(183,255,30,0.1)]">
-            <span className="material-symbols-outlined text-[#B7FF1E] text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>fitness_center</span>
+          <div className="w-20 h-20 mb-4 relative flex items-center justify-center">
+            {/* Logo placeholder - assuming logo should be above the name */}
+            <div className="w-16 h-16 rounded-2xl bg-[#333532] border border-white/10 flex items-center justify-center shadow-[0_0_20px_rgba(183,255,30,0.1)]">
+              <span className="material-symbols-outlined text-[#B7FF1E] text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>fitness_center</span>
+            </div>
           </div>
           <h1 className="text-3xl font-bold text-center">
             Gym<span className="text-[#B7FF1E]">Sync</span>
@@ -39,14 +42,14 @@ function AuthPage() {
             <div className="flex flex-col gap-2">
               <label className="text-xs text-[#C0C2B8] px-1 font-normal">Email Address</label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C0C2B8] material-symbols-outlined">mail</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C0C2B8] material-symbols-outlined text-xl">mail</span>
                 <input className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 pl-12 h-[48px] focus:outline-none focus:border-[#B7FF1E] focus:ring-1 focus:ring-[#B7FF1E]/50 transition-all placeholder:text-[#C0C2B8]" placeholder="Enter your email" required type="email" />
               </div>
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-xs text-[#C0C2B8] px-1 font-normal">Password</label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C0C2B8] material-symbols-outlined">lock</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C0C2B8] material-symbols-outlined text-xl">lock</span>
                 <input className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 pl-12 h-[48px] focus:outline-none focus:border-[#B7FF1E] focus:ring-1 focus:ring-[#B7FF1E]/50 transition-all placeholder:text-[#C0C2B8]" placeholder="Enter your password" required type="password" />
                 <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[#B7FF1E] text-[11px] font-bold uppercase" type="button">Show</button>
               </div>
