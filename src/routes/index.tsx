@@ -6,7 +6,7 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  * 
-  * Recheck the Attendance screen UI across common mobile screen sizes and orientations to confirm there is no overflow or clipping. or proper width as given in the code file for the attendance screen.
+  * Increase the horizontal length of the Log section tiles. And instead of circular Date frames in those tiles, make them square with curved corners, just like in the code provided.
  */
 export const Route = createFileRoute("/")({
   head: () => ({
