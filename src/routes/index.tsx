@@ -1,9 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/AppShell";
 import { HomeContent } from "@/components/HomeContent";
-'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
 
-hello
+/**
+ * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+ * 
+ * hello
+ */
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
