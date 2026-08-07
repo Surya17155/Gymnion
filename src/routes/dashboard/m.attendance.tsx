@@ -7,7 +7,7 @@ export const Route = createFileRoute('/dashboard/m/attendance')({
 
 function AttendanceHistory() {
   return (
-    <div className="flex justify-center min-h-screen bg-[#121411] overflow-x-hidden">
+    <div className="flex justify-center min-h-screen bg-[#121411]">
       {/* Global ambient glow */}
       <div 
         className="fixed top-0 left-0 right-0 h-[40vh] z-0 pointer-events-none"
@@ -16,7 +16,7 @@ function AttendanceHistory() {
         }}
       />
       
-      <main className="w-full max-w-[480px] min-h-screen relative pb-[120px] flex flex-col z-10">
+      <main className="w-full max-w-[480px] min-h-screen relative pb-[120px] flex flex-col z-10 mx-auto">
         {/* Header Section */}
         <header className="flex justify-between items-center px-6 pt-8 pb-4 relative">
           <h1 className="text-[28px] leading-[32px] font-bold text-white font-['Poppins'] tracking-tight">Attendance</h1>
@@ -26,7 +26,7 @@ function AttendanceHistory() {
         </header>
 
         {/* Summary Stats Bento Grid */}
-        <section className="px-6 py-6 grid grid-cols-2 gap-3">
+        <section className="px-5 py-6 grid grid-cols-2 gap-3">
           <div className="bg-[#151714] rounded-xl p-4 border border-white/5 relative overflow-hidden group backdrop-blur-sm">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(213,255,64,0.05),transparent_70%)] pointer-events-none"></div>
             <div className="absolute inset-0 bg-gradient-to-br from-[#25340D]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -55,7 +55,7 @@ function AttendanceHistory() {
 
 
         {/* Recent Check-ins List */}
-        <section className="px-6 pb-6 flex-1">
+        <section className="px-5 pb-6 flex-1">
           <h2 className="text-[18px] leading-[24px] font-semibold text-white mb-3 flex items-center justify-between font-['Poppins']">
             Log
             <span className="text-[12px] text-[#B7FF1E] hover:underline cursor-pointer font-normal">View All</span>
