@@ -24,14 +24,14 @@ function AdminPlans() {
       <div className="max-w-[480px] mx-auto min-h-screen relative z-10 flex flex-col">
         
         {/* Top App Bar with Back Button and Centered Title */}
-        <header className="h-[64px] flex items-center px-[20px] fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-[60] pt-4">
+        <header className="flex justify-between items-center px-[20px] h-[64px] w-full sticky top-0 z-40 bg-[#0d0f0c]">
           <button 
             onClick={() => navigate({ to: '/dashboard/admin/settings' })}
-            className="w-8 h-8 rounded-full bg-[#1e201d] flex items-center justify-center hover:bg-[#333532] transition-colors active:scale-95"
+            className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity text-[#B7FF1E] bg-[#1e201d]/50"
           >
-            <span className="material-symbols-outlined text-[#e3e3dd] text-sm">arrow_back</span>
+            <span className="material-symbols-outlined text-sm">arrow_back</span>
           </button>
-          <div className="flex-1 flex justify-center pr-8">
+          <div className="flex-1 flex justify-center pr-10">
             <h2 className="text-[20px] font-semibold tracking-[-0.015em] text-[#e3e3dd]">Fee Plans</h2>
           </div>
         </header>
