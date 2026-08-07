@@ -8,13 +8,17 @@ export const Route = createFileRoute('/dashboard/m')({
 function MemberDashboard() {
   return (
     <div className="flex justify-center min-h-screen bg-[#121411]">
-      {/* Global ambient glow */}
-      <div 
-        className="fixed top-0 left-0 right-0 h-[40vh] z-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle at 50% -20%, rgba(183, 255, 30, 0.15), transparent 70%)'
-        }}
-      />
+      <Outlet />
+      
+      {/* Home screen layout follows */}
+      <div id="home-content" className="contents">
+        {/* Global ambient glow */}
+        <div 
+          className="fixed top-0 left-0 right-0 h-[40vh] z-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle at 50% -20%, rgba(183, 255, 30, 0.15), transparent 70%)'
+          }}
+        />
       
       <main className="w-full max-w-[480px] min-h-screen relative pb-[100px] flex flex-col z-10">
         {/* Top App Bar */}
