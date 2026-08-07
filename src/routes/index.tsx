@@ -1,9 +1,6 @@
 import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { getAuthUserRole } from "@/lib/auth.functions";
-'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
-                                            
-                                            The GYM screen is not available in Super Admin mode. Please check and fix the issue. I have already given you the gym screen code file, but it is not available when I click on the tab bar button for the gyms. It changes the app’s link, but it does not redirect to the GYM screen.
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
