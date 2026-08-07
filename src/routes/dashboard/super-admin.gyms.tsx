@@ -197,7 +197,7 @@ function SuperAdminGyms() {
       )}
 
       {/* Bottom Navigation */}
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] left-1/2 -translate-x-1/2">
+      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe rounded-t-[24px] max-w-[480px] left-1/2 -translate-x-1/2">
         <Link 
           to="/dashboard/super-admin"
           activeOptions={{ exact: true }}
@@ -207,7 +207,7 @@ function SuperAdminGyms() {
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>dashboard</span>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>dashboard</span>
               <span className="text-[11px] font-semibold leading-[14px]">Dashboard</span>
             </>
           )}
@@ -221,7 +221,7 @@ function SuperAdminGyms() {
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>payments</span>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>payments</span>
               <span className="text-[11px] font-semibold leading-[14px]">Payments</span>
             </>
           )}
@@ -235,7 +235,7 @@ function SuperAdminGyms() {
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>fitness_center</span>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>fitness_center</span>
               <span className="text-[11px] font-semibold leading-[14px]">Gyms</span>
             </>
           )}
