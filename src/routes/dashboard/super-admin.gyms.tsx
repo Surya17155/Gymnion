@@ -80,11 +80,7 @@ function SuperAdminGyms() {
             
             <div className="flex items-center gap-4 mb-8">
               <div className="w-16 h-16 rounded-2xl bg-[#292A28] flex items-center justify-center overflow-hidden border border-[#B7FF1E]/20">
-                {selectedGym.logo_url ? (
-                  <img src={selectedGym.logo_url} alt={selectedGym.name} className="w-full h-full object-cover" />
-                ) : (
-                  <span className="material-symbols-outlined text-[#B7FF1E] text-3xl">fitness_center</span>
-                )}
+                <span className="material-symbols-outlined text-[#B7FF1E] text-3xl">fitness_center</span>
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white">{selectedGym.name}</h2>
@@ -97,10 +93,20 @@ function SuperAdminGyms() {
 
             <div className="space-y-6">
               <div>
-                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Location</label>
-                <div className="bg-[#0d0f0c] rounded-2xl p-4 border border-white/5 flex items-start gap-3">
-                  <span className="material-symbols-outlined text-[#B7FF1E] text-xl">location_on</span>
-                  <p className="text-sm text-[#e3e3dd]">{selectedGym.address || 'Address not provided'}</p>
+                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Owner Info</label>
+                <div className="bg-[#0d0f0c] rounded-2xl p-4 border border-white/5 flex flex-col gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-[#B7FF1E] text-xl">person</span>
+                    <p className="text-sm text-[#e3e3dd]">{selectedGym.owner_name}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-[#B7FF1E] text-xl">mail</span>
+                    <p className="text-sm text-[#e3e3dd]">{selectedGym.owner_email}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-[#B7FF1E] text-xl">call</span>
+                    <p className="text-sm text-[#e3e3dd]">{selectedGym.owner_phone}</p>
+                  </div>
                 </div>
               </div>
 
