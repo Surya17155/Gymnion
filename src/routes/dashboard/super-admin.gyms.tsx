@@ -207,8 +207,8 @@ function SuperAdminGyms() {
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>dashboard</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Dashboard</span>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>home</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Home</span>
             </>
           )}
         </Link>
