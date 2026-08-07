@@ -266,5 +266,3 @@ function SuperAdminGyms() {
     </div>
   );
 }
-  );
-}
