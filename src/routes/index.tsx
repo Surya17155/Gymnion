@@ -6,7 +6,7 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                            
- * the problem is not fixed yet, the code is not fitting probably, and this code is supposed to be specifically made for the mobile screen, but you have expanded it for the tab or pc use unknowingly, make sure that this app is only for the mobile users and the screens of all the app is to be adjusted for the mobile users, check again the payments screen UI is not fitting in the mobile screen properly, and fix this issue
+ * Make the UI of the payments app consist of cards, fonts, frames, sections, icons, and tiles, with everything adjustable to the screen size, just like the Member Dashboard UI. Also make the elements adjustable according to the screen size, and implement this functionality on the Payments page UI.
  */
 export const Route = createFileRoute("/")({
   head: () => ({
