@@ -6,7 +6,7 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *
- * run layout check on attendance screen You have told that you have done all the changes which I have requested to you but nothing has changed, everything is same as it is. So please run a layout check in your sandbox environment and please fix the mistakes and fix all of those things in the attendance screen which I requested to you to do so.
+ * I gave you the code for a new screen. So far, what you have done is essentially correct; do not modify it. Now it’s time for the profile screen. I have provided you with the exact code file for the profile screen. Copy it exactly and make it functional so that each user can manually edit their profile. Ensure the screen works properly while copying it.
  */
 export const Route = createFileRoute("/")({
   head: () => ({
