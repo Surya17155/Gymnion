@@ -19,6 +19,7 @@ import { Route as DashboardSuperAdminRouteImport } from './routes/dashboard/supe
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
 import { Route as DashboardMAttendanceRouteImport } from './routes/dashboard/m.attendance'
 import { Route as DashboardMPaymentsRouteImport } from './routes/dashboard/m.payments'
+import { Route as DashboardMProfileRouteImport } from './routes/dashboard/m.profile'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -70,6 +71,11 @@ const DashboardMPaymentsRoute = DashboardMPaymentsRouteImport.update({
   path: '/payments',
   getParentRoute: () => DashboardMRoute,
 } as any)
+const DashboardMProfileRoute = DashboardMProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DashboardMRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/m/attendance': typeof DashboardMAttendanceRoute
   '/dashboard/m/payments': typeof DashboardMPaymentsRoute
+  '/dashboard/m/profile': typeof DashboardMProfileRoute
   '/auth/login/': typeof AuthLoginIndexRoute
 }
 export interface FileRoutesByTo {
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard/m/attendance': typeof DashboardMAttendanceRoute
   '/dashboard/m/payments': typeof DashboardMPaymentsRoute
+  '/dashboard/m/profile': typeof DashboardMProfileRoute
   '/auth/login': typeof AuthLoginIndexRoute
 }
 export interface FileRoutesById {
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/m/attendance': typeof DashboardMAttendanceRoute
   '/dashboard/m/payments': typeof DashboardMPaymentsRoute
+  '/dashboard/m/profile': typeof DashboardMProfileRoute
   '/auth/login/': typeof AuthLoginIndexRoute
 }
 export interface FileRouteTypes {
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/dashboard/m/attendance'
     | '/dashboard/m/payments'
+    | '/dashboard/m/profile'
     | '/auth/login/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -130,6 +140,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/m/attendance'
     | '/dashboard/m/payments'
+    | '/dashboard/m/profile'
     | '/auth/login'
   id:
     | '__root__'
@@ -142,6 +153,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/dashboard/m/attendance'
     | '/dashboard/m/payments'
+    | '/dashboard/m/profile'
     | '/auth/login/'
   fileRoutesById: FileRoutesById
 }
@@ -224,17 +236,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardMPaymentsRouteImport
       parentRoute: typeof DashboardMRoute
     }
+    '/dashboard/m/profile': {
+      id: '/dashboard/m/profile'
+      path: '/profile'
+      fullPath: '/dashboard/m/profile'
+      preLoaderRoute: typeof DashboardMProfileRouteImport
+      parentRoute: typeof DashboardMRoute
+    }
   }
 }
 
 interface DashboardMRouteChildren {
   DashboardMAttendanceRoute: typeof DashboardMAttendanceRoute
   DashboardMPaymentsRoute: typeof DashboardMPaymentsRoute
+  DashboardMProfileRoute: typeof DashboardMProfileRoute
 }
 
 const DashboardMRouteChildren: DashboardMRouteChildren = {
   DashboardMAttendanceRoute: DashboardMAttendanceRoute,
   DashboardMPaymentsRoute: DashboardMPaymentsRoute,
+  DashboardMProfileRoute: DashboardMProfileRoute,
 }
 
 const DashboardMRouteWithChildren = DashboardMRoute._addFileChildren(
