@@ -7,7 +7,7 @@ export const Route = createFileRoute('/dashboard/m/payments')({
 
 function MemberPayments() {
   return (
-    <div className="flex justify-center min-h-screen bg-[#121411]">
+    <div className="flex justify-center min-h-screen bg-[#121411] overflow-x-hidden">
       {/* Global ambient glow */}
       <div 
         className="fixed top-0 left-0 right-0 h-[40vh] z-0 pointer-events-none"
@@ -27,7 +27,7 @@ function MemberPayments() {
         <div className="flex-1 flex flex-col px-5 gap-6">
           {/* Header */}
           <div>
-            <h2 className="text-[clamp(24px,7vw,28px)] leading-tight font-bold text-white font-['Poppins'] tracking-tight">Payments</h2>
+            <h2 className="text-[clamp(24px,7vw,28px)] leading-tight font-bold text-white font-['Poppins'] tracking-tight break-words">Payments</h2>
             <p className="text-[clamp(11px,3.5vw,12px)] leading-relaxed text-[#858A7D] mt-1 font-['Poppins']">Manage your gym subscriptions and history</p>
           </div>
 
@@ -39,7 +39,7 @@ function MemberPayments() {
               <div className="flex justify-between items-start mb-4 relative z-10">
                 <div>
                   <p className="text-[clamp(9px,3vw,11px)] leading-none font-semibold text-[#B7FF1E] uppercase tracking-wider mb-1 font-['Poppins']">Upcoming Due</p>
-                  <h3 className="text-[clamp(32px,10vw,40px)] leading-none font-bold text-white font-['Poppins'] tracking-tighter">₹1,200</h3>
+                  <h3 className="text-[clamp(32px,10vw,40px)] leading-none font-bold text-white font-['Poppins'] tracking-tighter truncate">₹1,200</h3>
                 </div>
                 <div className="bg-[#333532] rounded-full w-10 h-10 flex items-center justify-center border border-white/5">
                   <LucideCalendarDays className="w-5 h-5 text-[#B7FF1E]" />

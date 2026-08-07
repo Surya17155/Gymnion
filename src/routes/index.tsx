@@ -6,7 +6,7 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                            
- * Make the UI of the payments app consist of cards, fonts, frames, sections, icons, and tiles, with everything adjustable to the screen size, just like the Member Dashboard UI. Also make the elements adjustable according to the screen size, and implement this functionality on the Payments page UI.
+ * Verify the Payments page UI renders correctly across common mobile screen sizes and orientations without overflow or clipping.
  */
 export const Route = createFileRoute("/")({
   head: () => ({
