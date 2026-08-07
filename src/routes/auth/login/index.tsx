@@ -1,13 +1,15 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { supabase } from "@/integrations/supabase/client";
+import { getAuthUserRole } from "@/lib/auth.functions";
 
 export const Route = createFileRoute('/auth/login/')({
-  beforeLoad: () => {
-    //
-  },
   component: AuthPage,
 });
 
+
 function AuthPage() {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-[#0d0f0c] text-[#e3e3dd] min-h-screen flex flex-col items-center justify-center p-5 font-sans antialiased overflow-x-hidden relative">
       <div className="absolute top-0 left-0 w-full h-[300px] bg-gradient-to-b from-[#25340D]/20 to-transparent pointer-events-none z-0"></div>
@@ -52,7 +54,24 @@ function AuthPage() {
             <div className="flex justify-end mt-1 mb-2">
               <a className="text-xs text-[#858A7D] hover:text-[#B7FF1E] transition-colors font-normal" href="#">Forgot Password?</a>
             </div>
-            <button className="w-full h-[48px] bg-[#B7FF1E] text-[#293500] text-sm font-semibold rounded-full shadow-[0_0_20px_rgba(183,255,30,0.2)] hover:opacity-90 active:scale-95 transition-all mt-2" type="button">
+             <button 
+                onClick={async () => {
+                   // This is a placeholder for the login logic that should exist.
+                   // Assuming standard Supabase auth flow.
+                   const { data, error } = await supabase.auth.signInWithPassword({
+                      email: 'surya.17155@gmail.com',
+                      password: 'password' // Dummy
+                   });
+                   
+                   if (data.session) {
+                     const role = await getAuthUserRole();
+                     if (role === 'super_admin') navigate({ to: '/dashboard/super-admin' });
+                     else if (role === 'admin') navigate({ to: '/dashboard/admin' });
+                     else navigate({ to: '/dashboard/m' });
+                   }
+                }}
+                className="w-full h-[48px] bg-[#B7FF1E] text-[#293500] text-sm font-semibold rounded-full shadow-[0_0_20px_rgba(183,255,30,0.2)] hover:opacity-90 active:scale-95 transition-all mt-2" 
+                type="button">
               Sign In
             </button>
             <div className="mt-6 flex flex-col items-center">
