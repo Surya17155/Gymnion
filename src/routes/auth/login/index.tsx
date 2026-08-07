@@ -50,8 +50,14 @@ function AuthPage() {
         <div className="relative w-full z-10 space-y-4">
           <form className="flex flex-col gap-3">
             {authMode === 'signup' && (
-            {authMode === 'signup' && (
               <>
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs text-[#C0C2B8] px-1 font-normal">Full Name</label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C0C2B8] material-symbols-outlined text-xl">person</span>
+                    <input className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 pl-12 h-[48px] focus:outline-none focus:border-[#B7FF1E] focus:ring-1 focus:ring-[#B7FF1E]/50 transition-all placeholder:text-[#C0C2B8]" placeholder="Enter your full name" required type="text" />
+                  </div>
+                </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-xs text-[#C0C2B8] px-1 font-normal">Phone Number</label>
                   <div className="relative">
@@ -74,14 +80,6 @@ function AuthPage() {
                   </div>
                 </div>
               </>
-            )}
-            <div className="flex flex-col gap-2">
-                <label className="text-xs text-[#C0C2B8] px-1 font-normal">Full Name</label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C0C2B8] material-symbols-outlined text-xl">person</span>
-                  <input className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 pl-12 h-[48px] focus:outline-none focus:border-[#B7FF1E] focus:ring-1 focus:ring-[#B7FF1E]/50 transition-all placeholder:text-[#C0C2B8]" placeholder="Enter your full name" required type="text" />
-                </div>
-              </div>
             )}
             <div className="flex flex-col gap-2">
               <label className="text-xs text-[#C0C2B8] px-1 font-normal">Email Address</label>
