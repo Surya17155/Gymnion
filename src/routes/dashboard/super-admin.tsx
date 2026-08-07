@@ -1,10 +1,10 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard/super-admin')({
-  component: SuperAdminDashboard,
+  component: SuperAdminLayout,
 });
 
-function SuperAdminDashboard() {
+export function SuperAdminDashboard() {
   console.log('Mounting SuperAdminDashboard (Home)');
 
   return (
@@ -254,4 +254,8 @@ function SuperAdminDashboard() {
       </nav>
     </div>
   );
+}
+
+function SuperAdminLayout() {
+  return <Outlet />;
 }
