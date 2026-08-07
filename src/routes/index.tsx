@@ -6,7 +6,9 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *
- * I created a red frame on “May 26” written on it. I’m referring to that frame. The “May 26” currently inside a circle should be placed inside a square frame. Please convert the circular frame into a rounded‑square shape.
+ * You said you updated the frame from circular to a rounded square shape, but nothing changed. Please check it again and fix it.
+ *
+ * And also, there are two icons for check-in and check-out. Their current positions are centered on the side, which is incorrect; they should be placed next to the time. Move them there and fix their positions. To the left of the “check-in time” label, a green check-in icon should appear. To the left of the gray check-out label (which has text below it), a gray check-out icon should appear.
  */
 export const Route = createFileRoute("/")({
   head: () => ({
