@@ -58,7 +58,7 @@ function AuthPage() {
     setErrorMsg('');
     try {
       // 1. Verify Gym Code
-      const gym = await getGymByCode({ gym_code: formData.gymCode });
+      const gym = await getGymByCode({ data: { gym_code: formData.gymCode } });
       if (!gym) {
         throw new Error('Invalid GYM code. Please check with your GYM admin.');
       }
