@@ -147,7 +147,7 @@ function MemberDashboard() {
                 </button>
               </div>
               
-              <Link to="/dashboard/m" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl min-w-[60px] transition-colors">
+              <Link to="/dashboard/m/attendance" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl min-w-[60px] transition-colors">
                 <LucideCalendarDays className="w-6 h-6 mb-1" />
                 <span className="text-[11px] leading-[14px] font-semibold font-['Poppins']">Attendance</span>
               </Link>
