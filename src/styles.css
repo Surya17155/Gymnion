@@ -83,4 +83,12 @@
   .hero-glow {
     background: radial-gradient(circle at 25% 0%, oklch(0.95 0.25 115 / 0.32), transparent 48%);
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
