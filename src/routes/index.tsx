@@ -6,7 +6,7 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *
- * Nothing has changed; everything is exactly as it was before. Run a test on the attendance screen and identify the issues that need fixing. There is a lot of empty space on the left and right sides of the screen because the elements and cards are compressed, minimized, or have reduced width. Consequently, a large amount of empty space remains on both sides of the attendance screen. Please fix this. The code I provided earlier for the attendance screen, the tiles, and other cards, including the metrics card, should have proper widths. It does not look bad, but please adjust all those cards and tiles again.
+ * run layout check on attendance screen You have told that you have done all the changes which I have requested to you but nothing has changed, everything is same as it is. So please run a layout check in your sandbox environment and please fix the mistakes and fix all of those things in the attendance screen which I requested to you to do so.
  */
 export const Route = createFileRoute("/")({
   head: () => ({
