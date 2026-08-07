@@ -23,19 +23,20 @@ function AddPlanScreen() {
     setLoading(true);
 
     try {
-      // For now, since we're using dummy data in the frontend, we'll just simulate a successful add
-      // In a real scenario, we'd fetch the current gym_id from the user's role
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) throw new Error('Not authenticated');
+      const newPlan = {
+        ...formData,
+        id: Math.random().toString(36).substr(2, 9),
+      };
 
-      // We'll simulate the "working condition" by showing a success toast and navigating back
-      // The parent component currently uses static dummy data, but this screen is ready for real DB integration
+      const savedPlans = localStorage.getItem('gym_plans');
+      const plans = savedPlans ? JSON.parse(savedPlans) : [];
+      plans.push(newPlan);
+      localStorage.setItem('gym_plans', JSON.stringify(plans));
       
       toast.success('Plan created successfully!');
       navigate({ to: '/dashboard/admin/plans' });
     } catch (error: any) {
-      toast.error(error.message || 'Failed to create plan');
+      toast.error('Failed to create plan');
     } finally {
       setLoading(false);
     }
