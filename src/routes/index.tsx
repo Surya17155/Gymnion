@@ -6,9 +6,7 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *
- * Add automated viewport screenshot tests for the Attendance screen to prevent future overflow or clipping across common mobile sizes and orientations.
- *
- * Now, first fix one thing in the Attendance screen before everything - the Date frame shape is a circle now; please create the frame in rounded square, do not touch anything other than that.
+ * I created a red frame on “May 26” written on it. I’m referring to that frame. The “May 26” currently inside a circle should be placed inside a square frame. Please convert the circular frame into a rounded‑square shape.
  */
 export const Route = createFileRoute("/")({
   head: () => ({
