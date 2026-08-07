@@ -117,17 +117,15 @@ function AttendanceHistory() {
                   <span className="text-[18px] font-semibold text-white font-['Poppins']">Tuesday</span>
                 </div>
               </div>
-              <div className="flex items-center gap-6 relative z-10">
-                <div className="flex flex-col items-end text-right">
-                  <span className="text-[14px] text-white flex items-center gap-1 font-['Poppins']">
-                    <LucideLogIn className="w-4 h-4 text-[#B7FF1E] fill-[#B7FF1E]" />
-                    &nbsp; 18:30
-                  </span>
-                  <span className="text-[12px] text-[#858A7D] flex items-center gap-1 mt-0.5 font-['Poppins']">
-                    <LucideLogOut className="w-4 h-4" />
-                    &nbsp; 20:00
-                  </span>
-                </div>
+              <div className="flex flex-col items-end text-right relative z-10">
+                <span className="text-[14px] text-white flex items-center gap-1 font-['Poppins']">
+                  <LucideLogIn className="w-4 h-4 text-[#B7FF1E] fill-[#B7FF1E]" />
+                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 18:30
+                </span>
+                <span className="text-[12px] text-[#858A7D] flex items-center gap-1 mt-0.5 font-['Poppins']">
+                  <LucideLogOut className="w-4 h-4" />
+                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 20:00
+                </span>
               </div>
             </div>
             {/* Log Item 2 */}
@@ -142,17 +140,15 @@ function AttendanceHistory() {
                   <span className="text-[18px] font-semibold text-white font-['Poppins']">Sunday</span>
                 </div>
               </div>
-              <div className="flex items-center gap-6 relative z-10">
-                <div className="flex flex-col items-end text-right">
-                  <span className="text-[14px] text-white flex items-center gap-1 font-['Poppins']">
-                    <LucideLogIn className="w-4 h-4 text-[#B7FF1E] fill-[#B7FF1E]" />
-                    &nbsp; 06:15
-                  </span>
-                  <span className="text-[12px] text-[#858A7D] flex items-center gap-1 mt-0.5 font-['Poppins']">
-                    <LucideLogOut className="w-4 h-4" />
-                    &nbsp; 07:20
-                  </span>
-                </div>
+              <div className="flex flex-col items-end text-right relative z-10">
+                <span className="text-[14px] text-white flex items-center gap-1 font-['Poppins']">
+                  <LucideLogIn className="w-4 h-4 text-[#B7FF1E] fill-[#B7FF1E]" />
+                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 06:15
+                </span>
+                <span className="text-[12px] text-[#858A7D] flex items-center gap-1 mt-0.5 font-['Poppins']">
+                  <LucideLogOut className="w-4 h-4" />
+                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 07:20
+                </span>
               </div>
             </div>
             {/* Log Item 3 */}
@@ -167,17 +163,15 @@ function AttendanceHistory() {
                   <span className="text-[18px] font-semibold text-[#858A7D] font-['Poppins']">Thursday</span>
                 </div>
               </div>
-              <div className="flex items-center gap-6 relative z-10 opacity-70">
-                <div className="flex flex-col items-end text-right">
-                  <span className="text-[14px] text-[#858A7D] flex items-center gap-1 font-['Poppins']">
-                    <LucideLogIn className="w-4 h-4" />
-                    &nbsp; 12:45
-                  </span>
-                  <span className="text-[12px] text-[#858A7D] flex items-center gap-1 mt-0.5 font-['Poppins']">
-                    <LucideLogOut className="w-4 h-4" />
-                    &nbsp; 13:30
-                  </span>
-                </div>
+              <div className="flex flex-col items-end text-right relative z-10 opacity-70">
+                <span className="text-[14px] text-[#858A7D] flex items-center gap-1 font-['Poppins']">
+                  <LucideLogIn className="w-4 h-4" />
+                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 12:45
+                </span>
+                <span className="text-[12px] text-[#858A7D] flex items-center gap-1 mt-0.5 font-['Poppins']">
+                  <LucideLogOut className="w-4 h-4" />
+                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 13:30
+                </span>
               </div>
             </div>
           </div>
