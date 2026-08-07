@@ -26,7 +26,27 @@ function AuthPage() {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    let value = e.target.value;
+    const name = e.target.name;
+
+    if (name === 'dob') {
+      // Remove non-digits
+      const digits = value.replace(/\D/g, '');
+      let formatted = '';
+      
+      if (digits.length > 0) {
+        formatted += digits.substring(0, 2);
+        if (digits.length > 2) {
+          formatted += '/' + digits.substring(2, 4);
+          if (digits.length > 4) {
+            formatted += '/' + digits.substring(4, 8);
+          }
+        }
+      }
+      value = formatted;
+    }
+
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSignIn = async () => {
