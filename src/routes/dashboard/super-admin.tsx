@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard/super-admin')({
   component: SuperAdminDashboard,
@@ -213,26 +213,26 @@ function SuperAdminDashboard() {
 
       {/* Bottom Navigation */}
       <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe bg-[#1e201d] border-t border-white/5 shadow-lg rounded-t-xl">
-        <a className="flex flex-col items-center justify-center text-[#B7FF1E] bg-[#25340D]/20 rounded-xl p-2 scale-90 transition-all duration-200" href="#">
+        <Link className="flex flex-col items-center justify-center text-[#B7FF1E] bg-[#25340D]/20 rounded-xl p-2 scale-90 transition-all duration-200" to="/dashboard/super-admin">
           <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>home</span>
           <span className="text-[11px] font-semibold mt-1">Home</span>
-        </a>
-        <a className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" href="#">
+        </Link>
+        <Link className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" to="/dashboard/super-admin">
           <span className="material-symbols-outlined">payments</span>
           <span className="text-[11px] font-semibold mt-1">Payments</span>
-        </a>
-        <a className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" href="#">
-          <span className="material-symbols-outlined">qr_code_scanner</span>
-          <span className="text-[11px] font-semibold mt-1">Scan</span>
-        </a>
-        <a className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" href="#">
+        </Link>
+        <Link className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" to="/dashboard/super-admin/gyms">
+          <span className="material-symbols-outlined">fitness_center</span>
+          <span className="text-[11px] font-semibold mt-1">Gyms</span>
+        </Link>
+        <Link className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" to="/dashboard/super-admin">
           <span className="material-symbols-outlined">calendar_today</span>
           <span className="text-[11px] font-semibold mt-1">Attendance</span>
-        </a>
-        <a className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" href="#">
+        </Link>
+        <Link className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" to="/dashboard/super-admin">
           <span className="material-symbols-outlined">person</span>
           <span className="text-[11px] font-semibold mt-1">Profile</span>
-        </a>
+        </Link>
       </nav>
     </div>
   );
