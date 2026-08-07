@@ -58,3 +58,60 @@ export const getMembers = createServerFn({ method: 'GET' })
     if (error) throw error;
     return data;
   });
+
+export const updateGymCode = createServerFn({ method: 'POST' })
+  .validator((data: any) => z.object({
+    gym_id: z.string(),
+    gym_code: z.string(),
+  }).parse(data))
+  .handler(async ({ data }) => {
+    const { error } = await supabaseAdmin
+      .from('gyms')
+      .update({ gym_code: data.gym_code })
+      .eq('id', data.gym_id);
+    
+    if (error) {
+      if (error.code === '23505') throw new Error('Gym code already exists');
+      throw error;
+    }
+    return { success: true };
+  });
+
+export const getGymByCode = createServerFn({ method: 'GET' })
+  .validator((data: any) => z.object({
+    gym_code: z.string(),
+  }).parse(data))
+  .handler(async ({ data }) => {
+    const { data: gym, error } = await supabaseAdmin
+      .from('gyms')
+      .select('id, name')
+      .eq('gym_code', data.gym_code)
+      .single();
+    
+    if (error || !gym) return null;
+    return gym;
+  });
+
+export const getGymDetails = createServerFn({ method: 'GET' })
+  .handler(async ({ context }) => {
+    const userId = (context as any).userId;
+    if (!userId) return null;
+
+    // First get the gym_id for the admin
+    const { data: roleData } = await supabaseAdmin
+      .from('user_roles')
+      .select('gym_id')
+      .eq('user_id', userId)
+      .eq('role', 'admin')
+      .single();
+    
+    if (!roleData?.gym_id) return null;
+
+    const { data: gym } = await supabaseAdmin
+      .from('gyms')
+      .select('*')
+      .eq('id', roleData.gym_id)
+      .single();
+    
+    return gym;
+  });

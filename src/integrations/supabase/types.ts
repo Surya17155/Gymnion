@@ -173,6 +173,7 @@ export type Database = {
       gyms: {
         Row: {
           created_at: string | null
+          gym_code: string | null
           id: string
           name: string
           owner_email: string
@@ -185,6 +186,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          gym_code?: string | null
           id?: string
           name: string
           owner_email: string
@@ -197,6 +199,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          gym_code?: string | null
           id?: string
           name?: string
           owner_email?: string
