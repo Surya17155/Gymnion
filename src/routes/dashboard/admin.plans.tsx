@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
+import { useState, useEffect } from 'react';
 
 export const Route = createFileRoute('/dashboard/admin/plans')({
   component: AdminPlans,
@@ -8,6 +9,44 @@ export const Route = createFileRoute('/dashboard/admin/plans')({
 function AdminPlans() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [plans, setPlans] = useState<any[]>([]);
+
+  useEffect(() => {
+    const savedPlans = localStorage.getItem('gym_plans');
+    if (savedPlans) {
+      setPlans(JSON.parse(savedPlans));
+    } else {
+      // Default dummy data if none exists
+      const initialPlans = [
+        {
+          id: '1',
+          name: 'Standard Monthly',
+          amount: '1000',
+          duration: '1',
+          description: 'Access to all gym equipment and locker rooms during standard operating hours.',
+          isActive: true
+        },
+        {
+          id: '2',
+          name: 'PT + Gym (3 Months)',
+          amount: '2500',
+          duration: '3',
+          description: 'Full gym access plus 12 personal training sessions per month. Includes diet plan.',
+          isActive: true
+        },
+        {
+          id: '3',
+          name: 'Annual VIP Pass',
+          amount: '10000',
+          duration: '12',
+          description: 'Premium 24/7 access, free guest passes, and priority booking for all classes.',
+          isActive: false
+        }
+      ];
+      localStorage.setItem('gym_plans', JSON.stringify(initialPlans));
+      setPlans(initialPlans);
+    }
+  }, [location.pathname]);
 
   // Check if we are precisely on the plans list page or a sub-route
   const isPlansList = location.pathname === '/dashboard/admin/plans' || location.pathname === '/dashboard/admin/plans/';
@@ -53,86 +92,45 @@ function AdminPlans() {
 
           {/* Plan Cards List */}
           <div className="flex flex-col gap-[12px]">
-            {/* Card 1: Standard Monthly */}
-            <div className="bg-[#121411] border border-white/5 rounded-[16px] p-[16px] flex flex-col gap-[8px] relative overflow-hidden group cursor-pointer hover:border-[#B7FF1E]/20 transition-all shadow-[inset_0_0_20px_rgba(183,255,30,0.02)]">
-              <div className="flex justify-between items-start w-full">
-                <div>
-                  <h2 className="text-[18px] font-semibold tracking-[-0.015em] text-[#e3e3dd] mb-1">Standard Monthly</h2>
-                  <p className="text-[12px] leading-[18px] text-[#858A7D] line-clamp-2 pr-8">Access to all gym equipment and locker rooms during standard operating hours.</p>
-                </div>
-                {/* Status Badge */}
-                <div className="bg-[#aed502]/10 border border-[#aed502]/20 rounded-full px-2 py-0.5 flex items-center gap-1 shrink-0">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#A7F52A]"></div>
-                  <span className="text-[9px] font-semibold text-[#A7F52A] uppercase tracking-wider">Active</span>
-                </div>
-              </div>
-              <div className="flex justify-between items-end mt-2 pt-3 border-t border-white/5">
-                <div className="flex flex-col">
-                  <span className="text-[11px] font-semibold text-[#C0C2B8] uppercase mb-1">Monthly Fee</span>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-[18px] font-semibold text-[#e3e3dd]">₹</span>
-                    <span className="text-[28px] leading-none text-[#B7FF1E] font-bold">1,000</span>
+            {plans.map((plan) => (
+              <div 
+                key={plan.id}
+                className={`bg-[#121411] border border-white/5 rounded-[16px] p-[16px] flex flex-col gap-[8px] relative overflow-hidden group cursor-pointer hover:border-[#B7FF1E]/20 transition-all shadow-[inset_0_0_20px_rgba(183,255,30,0.02)] ${!plan.isActive ? 'opacity-70' : ''}`}
+              >
+                <div className="flex justify-between items-start w-full">
+                  <div>
+                    <h2 className="text-[18px] font-semibold tracking-[-0.015em] text-[#e3e3dd] mb-1">{plan.name}</h2>
+                    <p className="text-[12px] leading-[18px] text-[#858A7D] line-clamp-2 pr-8">{plan.description}</p>
+                  </div>
+                  {/* Status Badge */}
+                  <div className={`${plan.isActive ? 'bg-[#aed502]/10 border border-[#aed502]/20' : 'bg-[#292b27] border border-white/10'} rounded-full px-2 py-0.5 flex items-center gap-1 shrink-0`}>
+                    <div className={`w-1.5 h-1.5 rounded-full ${plan.isActive ? 'bg-[#A7F52A]' : 'bg-[#C0C2B8]'}`}></div>
+                    <span className={`text-[9px] font-semibold ${plan.isActive ? 'text-[#A7F52A]' : 'text-[#C0C2B8]'} uppercase tracking-wider`}>
+                      {plan.isActive ? 'Active' : 'Draft'}
+                    </span>
                   </div>
                 </div>
-                <button className="w-8 h-8 rounded-full bg-[#292A28] flex items-center justify-center hover:bg-[#383a36] transition-colors">
-                  <span className="material-symbols-outlined text-[#e3e3dd] text-sm">edit</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Card 2: PT + Gym */}
-            <div className="bg-[#121411] border border-white/5 rounded-[16px] p-[16px] flex flex-col gap-[8px] relative overflow-hidden group cursor-pointer hover:border-[#B7FF1E]/20 transition-all shadow-[inset_0_0_20px_rgba(183,255,30,0.02)]">
-              <div className="flex justify-between items-start w-full">
-                <div>
-                  <h2 className="text-[18px] font-semibold tracking-[-0.015em] text-[#e3e3dd] mb-1">PT + Gym (3 Months)</h2>
-                  <p className="text-[12px] leading-[18px] text-[#858A7D] line-clamp-2 pr-8">Full gym access plus 12 personal training sessions per month. Includes diet plan.</p>
-                </div>
-                {/* Status Badge */}
-                <div className="bg-[#aed502]/10 border border-[#aed502]/20 rounded-full px-2 py-0.5 flex items-center gap-1 shrink-0">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#A7F52A]"></div>
-                  <span className="text-[9px] font-semibold text-[#A7F52A] uppercase tracking-wider">Active</span>
-                </div>
-              </div>
-              <div className="flex justify-between items-end mt-2 pt-3 border-t border-white/5">
-                <div className="flex flex-col">
-                  <span className="text-[11px] font-semibold text-[#C0C2B8] uppercase mb-1">Quarterly Fee</span>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-[18px] font-semibold text-[#e3e3dd]">₹</span>
-                    <span className="text-[28px] leading-none text-[#B7FF1E] font-bold">2,500</span>
+                <div className="flex justify-between items-end mt-2 pt-3 border-t border-white/5">
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-semibold text-[#C0C2B8] uppercase mb-1">
+                      {plan.duration === '1' ? 'Monthly' : plan.duration === '3' ? 'Quarterly' : plan.duration === '12' ? 'Annual' : `${plan.duration} Month`} Fee
+                    </span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-[18px] font-semibold text-[#e3e3dd]">₹</span>
+                      <span className={`text-[28px] leading-none font-bold ${plan.isActive ? 'text-[#B7FF1E]' : 'text-[#C0C2B8]'}`}>
+                        {Number(plan.amount).toLocaleString()}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <button className="w-8 h-8 rounded-full bg-[#292A28] flex items-center justify-center hover:bg-[#383a36] transition-colors">
-                  <span className="material-symbols-outlined text-[#e3e3dd] text-sm">edit</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Card 3: Annual Pass */}
-            <div className="bg-[#121411] border border-white/5 rounded-[16px] p-[16px] flex flex-col gap-[8px] relative overflow-hidden group cursor-pointer opacity-70 hover:border-[#B7FF1E]/20 transition-all shadow-[inset_0_0_20px_rgba(183,255,30,0.02)]">
-              <div className="flex justify-between items-start w-full">
-                <div>
-                  <h2 className="text-[18px] font-semibold tracking-[-0.015em] text-[#e3e3dd] mb-1">Annual VIP Pass</h2>
-                  <p className="text-[12px] leading-[18px] text-[#858A7D] line-clamp-2 pr-8">Premium 24/7 access, free guest passes, and priority booking for all classes.</p>
-                </div>
-                {/* Status Badge (Inactive) */}
-                <div className="bg-[#292b27] border border-white/10 rounded-full px-2 py-0.5 flex items-center gap-1 shrink-0">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#C0C2B8]"></div>
-                  <span className="text-[9px] font-semibold text-[#C0C2B8] uppercase tracking-wider">Draft</span>
+                  <Link 
+                    to={`/dashboard/admin/plans/edit/${plan.id}`}
+                    className="w-8 h-8 rounded-full bg-[#292A28] flex items-center justify-center hover:bg-[#383a36] transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[#e3e3dd] text-sm">edit</span>
+                  </Link>
                 </div>
               </div>
-              <div className="flex justify-between items-end mt-2 pt-3 border-t border-white/5">
-                <div className="flex flex-col">
-                  <span className="text-[11px] font-semibold text-[#C0C2B8] uppercase mb-1">Annual Fee</span>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-[18px] font-semibold text-[#e3e3dd]">₹</span>
-                    <span className="text-[28px] leading-none text-[#C0C2B8] font-bold">10,000</span>
-                  </div>
-                </div>
-                <button className="w-8 h-8 rounded-full bg-[#292A28] flex items-center justify-center hover:bg-[#383a36] transition-colors">
-                  <span className="material-symbols-outlined text-[#e3e3dd] text-sm">edit</span>
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
         </main>
 

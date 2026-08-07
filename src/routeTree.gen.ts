@@ -26,6 +26,7 @@ import { Route as DashboardMAttendanceRouteImport } from './routes/dashboard/m.a
 import { Route as DashboardMPaymentsRouteImport } from './routes/dashboard/m.payments'
 import { Route as DashboardMProfileRouteImport } from './routes/dashboard/m.profile'
 import { Route as DashboardAdminPlansNewRouteImport } from './routes/dashboard/admin.plans.new'
+import { Route as DashboardAdminPlansEditPlanIdRouteImport } from './routes/dashboard/admin.plans.edit.$planId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -113,6 +114,12 @@ const DashboardAdminPlansNewRoute = DashboardAdminPlansNewRouteImport.update({
   path: '/new',
   getParentRoute: () => DashboardAdminPlansRoute,
 } as any)
+const DashboardAdminPlansEditPlanIdRoute =
+  DashboardAdminPlansEditPlanIdRouteImport.update({
+    id: '/edit/$planId',
+    path: '/edit/$planId',
+    getParentRoute: () => DashboardAdminPlansRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -132,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/m/profile': typeof DashboardMProfileRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
+  '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -150,6 +158,7 @@ export interface FileRoutesByTo {
   '/dashboard/m/profile': typeof DashboardMProfileRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
+  '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -170,6 +179,7 @@ export interface FileRoutesById {
   '/dashboard/m/profile': typeof DashboardMProfileRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
+  '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -191,6 +201,7 @@ export interface FileRouteTypes {
     | '/dashboard/m/profile'
     | '/auth/login/'
     | '/dashboard/admin/plans/new'
+    | '/dashboard/admin/plans/edit/$planId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -209,6 +220,7 @@ export interface FileRouteTypes {
     | '/dashboard/m/profile'
     | '/auth/login'
     | '/dashboard/admin/plans/new'
+    | '/dashboard/admin/plans/edit/$planId'
   id:
     | '__root__'
     | '/'
@@ -228,6 +240,7 @@ export interface FileRouteTypes {
     | '/dashboard/m/profile'
     | '/auth/login/'
     | '/dashboard/admin/plans/new'
+    | '/dashboard/admin/plans/edit/$planId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -358,15 +371,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminPlansNewRouteImport
       parentRoute: typeof DashboardAdminPlansRoute
     }
+    '/dashboard/admin/plans/edit/$planId': {
+      id: '/dashboard/admin/plans/edit/$planId'
+      path: '/edit/$planId'
+      fullPath: '/dashboard/admin/plans/edit/$planId'
+      preLoaderRoute: typeof DashboardAdminPlansEditPlanIdRouteImport
+      parentRoute: typeof DashboardAdminPlansRoute
+    }
   }
 }
 
 interface DashboardAdminPlansRouteChildren {
   DashboardAdminPlansNewRoute: typeof DashboardAdminPlansNewRoute
+  DashboardAdminPlansEditPlanIdRoute: typeof DashboardAdminPlansEditPlanIdRoute
 }
 
 const DashboardAdminPlansRouteChildren: DashboardAdminPlansRouteChildren = {
   DashboardAdminPlansNewRoute: DashboardAdminPlansNewRoute,
+  DashboardAdminPlansEditPlanIdRoute: DashboardAdminPlansEditPlanIdRoute,
 }
 
 const DashboardAdminPlansRouteWithChildren =

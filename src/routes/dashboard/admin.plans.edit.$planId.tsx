@@ -1,14 +1,14 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
-export const Route = createFileRoute('/dashboard/admin/plans/new')({
-  component: AddPlanScreen,
+export const Route = createFileRoute('/dashboard/admin/plans/edit/$planId')({
+  component: EditPlanScreen,
 });
 
-function AddPlanScreen() {
+function EditPlanScreen() {
   const navigate = useNavigate();
+  const { planId } = useParams({ from: '/dashboard/admin/plans/edit/$planId' });
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -18,27 +18,63 @@ function AddPlanScreen() {
     isActive: true,
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    // Load plan data from localStorage
+    const savedPlans = localStorage.getItem('gym_plans');
+    if (savedPlans) {
+      const plans = JSON.parse(savedPlans);
+      const plan = plans.find((p: any) => p.id === planId);
+      if (plan) {
+        setFormData({
+          name: plan.name,
+          amount: plan.amount,
+          duration: plan.duration,
+          description: plan.description,
+          isActive: plan.isActive,
+        });
+      } else {
+        toast.error('Plan not found');
+        navigate({ to: '/dashboard/admin/plans' });
+      }
+    }
+  }, [planId, navigate]);
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const newPlan = {
-        ...formData,
-        id: Math.random().toString(36).substr(2, 9),
-      };
-
       const savedPlans = localStorage.getItem('gym_plans');
-      const plans = savedPlans ? JSON.parse(savedPlans) : [];
-      plans.push(newPlan);
-      localStorage.setItem('gym_plans', JSON.stringify(plans));
-      
-      toast.success('Plan created successfully!');
-      navigate({ to: '/dashboard/admin/plans' });
-    } catch (error: any) {
-      toast.error('Failed to create plan');
+      if (savedPlans) {
+        const plans = JSON.parse(savedPlans);
+        const updatedPlans = plans.map((p: any) => 
+          p.id === planId ? { ...formData, id: planId } : p
+        );
+        localStorage.setItem('gym_plans', JSON.stringify(updatedPlans));
+        toast.success('Plan updated successfully!');
+        navigate({ to: '/dashboard/admin/plans' });
+      }
+    } catch (error) {
+      toast.error('Failed to update plan');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this plan?')) {
+      try {
+        const savedPlans = localStorage.getItem('gym_plans');
+        if (savedPlans) {
+          const plans = JSON.parse(savedPlans);
+          const filteredPlans = plans.filter((p: any) => p.id !== planId);
+          localStorage.setItem('gym_plans', JSON.stringify(filteredPlans));
+          toast.success('Plan deleted successfully!');
+          navigate({ to: '/dashboard/admin/plans' });
+        }
+      } catch (error) {
+        toast.error('Failed to delete plan');
+      }
     }
   };
 
@@ -46,7 +82,6 @@ function AddPlanScreen() {
     <div className="bg-[#0d0f0c] text-[#e3e3dd] antialiased min-h-screen flex flex-col relative overflow-x-hidden font-['Poppins']">
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       
-      {/* Kinetic Noir Glow */}
       <div 
         className="fixed top-0 left-1/2 -translate-x-1/2 w-[150vw] h-[300px] z-0 pointer-events-none"
         style={{
@@ -54,7 +89,6 @@ function AddPlanScreen() {
         }}
       />
 
-      {/* Top App Bar */}
       <header className="flex justify-between items-center px-[20px] h-[64px] w-full sticky top-0 z-40 bg-transparent backdrop-blur-md">
         <button 
           onClick={() => navigate({ to: '/dashboard/admin/plans' })}
@@ -63,22 +97,18 @@ function AddPlanScreen() {
           <span className="material-symbols-outlined text-sm">arrow_back</span>
         </button>
         <div className="flex-1 flex justify-center pr-10">
-          <h2 className="text-[20px] font-semibold tracking-[-0.015em] text-[#e3e3dd]">New Plan</h2>
+          <h2 className="text-[20px] font-semibold tracking-[-0.015em] text-[#e3e3dd]">Edit Plan</h2>
         </div>
       </header>
 
-      {/* Main Content Canvas */}
       <main className="flex-1 pt-4 pb-safe px-[20px] w-full max-w-[480px] mx-auto relative z-10 flex flex-col">
         <form onSubmit={handleSubmit} className="flex flex-col gap-6 h-full flex-1">
-          {/* Form Fields Section */}
           <div className="flex flex-col gap-4">
-            {/* Plan Name */}
             <div className="flex flex-col gap-2">
               <label className="text-[11px] font-semibold text-[#C0C2B8] uppercase tracking-wider" htmlFor="plan-name">Plan Name</label>
               <input 
                 className="bg-[#151714] border border-white/5 w-full h-[48px] rounded-xl px-4 text-[#e3e3dd] focus:outline-none focus:border-[#d5ff40] focus:ring-1 focus:ring-[#d5ff40] transition-all placeholder:text-[#858A7D]" 
                 id="plan-name" 
-                placeholder="e.g., Annual Pro Membership" 
                 required 
                 type="text"
                 value={formData.name}
@@ -86,7 +116,6 @@ function AddPlanScreen() {
               />
             </div>
 
-            {/* Amount */}
             <div className="flex flex-col gap-2 relative">
               <label className="text-[11px] font-semibold text-[#C0C2B8] uppercase tracking-wider" htmlFor="amount">Amount (INR)</label>
               <div className="relative flex items-center">
@@ -95,7 +124,6 @@ function AddPlanScreen() {
                   className="bg-[#151714] border border-white/5 w-full h-[48px] rounded-xl pl-8 pr-4 text-[#e3e3dd] focus:outline-none focus:border-[#d5ff40] focus:ring-1 focus:ring-[#d5ff40] transition-all placeholder:text-[#858A7D]" 
                   id="amount" 
                   min="0" 
-                  placeholder="0.00" 
                   required 
                   type="number"
                   value={formData.amount}
@@ -104,7 +132,6 @@ function AddPlanScreen() {
               </div>
             </div>
 
-            {/* Duration */}
             <div className="flex flex-col gap-2 relative">
               <label className="text-[11px] font-semibold text-[#C0C2B8] uppercase tracking-wider" htmlFor="duration">Duration (Months)</label>
               <div className="relative">
@@ -123,19 +150,16 @@ function AddPlanScreen() {
               </div>
             </div>
 
-            {/* Description */}
             <div className="flex flex-col gap-2">
               <label className="text-[11px] font-semibold text-[#C0C2B8] uppercase tracking-wider" htmlFor="description">Description</label>
               <textarea 
                 className="bg-[#151714] border border-white/5 w-full rounded-xl p-4 text-[#e3e3dd] focus:outline-none focus:border-[#d5ff40] focus:ring-1 focus:ring-[#d5ff40] transition-all placeholder:text-[#858A7D] min-h-[120px] resize-none" 
                 id="description" 
-                placeholder="Plan details, perks, and access info..."
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               ></textarea>
             </div>
 
-            {/* Toggle: Active Status */}
             <div className="flex items-center justify-between p-4 bg-[#151714] border border-white/5 rounded-xl mt-2">
               <div className="flex flex-col">
                 <span className="text-[18px] font-semibold text-[#e3e3dd]">Set as Active</span>
@@ -155,15 +179,22 @@ function AddPlanScreen() {
 
           <div className="flex-grow"></div>
 
-          {/* Primary Action */}
-          <div className="pb-8 pt-6">
+          <div className="pb-8 pt-6 flex flex-col gap-3">
             <button 
               disabled={loading}
               className="w-full h-[48px] bg-[#d5ff40] text-[#121411] font-semibold rounded-full flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-[0_4px_20px_rgba(213,255,64,0.22)] uppercase tracking-wide disabled:opacity-50" 
               type="submit"
             >
               <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>save</span>
-              {loading ? 'Saving...' : 'Save Plan'}
+              {loading ? 'Saving...' : 'Update Plan'}
+            </button>
+            <button 
+              type="button"
+              onClick={handleDelete}
+              className="w-full h-[48px] bg-transparent text-[#FF5964] border border-[#FF5964]/30 font-semibold rounded-full flex items-center justify-center gap-2 hover:bg-[#FF5964]/10 active:scale-95 transition-all uppercase tracking-wide" 
+            >
+              <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 0' }}>delete</span>
+              Delete Plan
             </button>
           </div>
         </form>
