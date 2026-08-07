@@ -79,6 +79,7 @@ function AuthPage() {
   };
 
   const handleSignUp = async () => {
+    console.log("handleSignUp called", formData);
     setLoading(true);
     setErrorMsg('');
     try {
