@@ -212,7 +212,7 @@ function SuperAdminDashboard() {
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] left-1/2 -translate-x-1/2">
+      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe rounded-t-[24px] max-w-[480px] left-1/2 -translate-x-1/2">
         <Link 
           to="/dashboard/super-admin"
           activeOptions={{ exact: true }}
@@ -222,7 +222,7 @@ function SuperAdminDashboard() {
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>home</span>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>home</span>
               <span className="text-[11px] font-semibold leading-[14px]">Home</span>
             </>
           )}
@@ -236,7 +236,7 @@ function SuperAdminDashboard() {
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>payments</span>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>payments</span>
               <span className="text-[11px] font-semibold leading-[14px]">Payments</span>
             </>
           )}
@@ -250,39 +250,12 @@ function SuperAdminDashboard() {
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>fitness_center</span>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>fitness_center</span>
               <span className="text-[11px] font-semibold leading-[14px]">Gyms</span>
             </>
           )}
         </Link>
         
-        <Link 
-          to="/dashboard/super-admin"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>calendar_today</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Attendance</span>
-            </>
-          )}
-        </Link>
-        
-        <Link 
-          to="/dashboard/super-admin"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>person</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Profile</span>
-            </>
-          )}
-        </Link>
       </nav>
     </div>
   );
