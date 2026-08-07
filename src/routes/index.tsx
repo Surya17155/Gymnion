@@ -6,7 +6,7 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                            
- * check again, I am not redirecting to the payments screen after I click on the Payments button in the tab bar
+ * the payment screen is not fitting properly in the mobile screen, please check and make all the elements and the text of the payment screen adjustable according to the mobile screen
  */
 export const Route = createFileRoute("/")({
   head: () => ({
