@@ -32,14 +32,13 @@ function AdminPlans() {
             <span className="material-symbols-outlined text-[#e3e3dd] text-sm">arrow_back</span>
           </button>
           <div className="flex-1 flex justify-center pr-8">
-            <h2 className="text-[18px] font-semibold tracking-[-0.015em] text-[#e3e3dd]">Fee Plans</h2>
+            <h2 className="text-[20px] font-semibold tracking-[-0.015em] text-[#e3e3dd]">Fee Plans</h2>
           </div>
         </header>
 
         {/* Main Content Area */}
         <main className="flex-1 w-full px-[20px] pt-[80px] pb-[100px]">
           <div className="mb-[24px]">
-            <h1 className="text-[28px] leading-[32px] tracking-[-0.03em] text-[#e3e3dd] font-bold mb-2">Manage Plans</h1>
             <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Manage your gym's membership options and pricing tiers.</p>
           </div>
 
