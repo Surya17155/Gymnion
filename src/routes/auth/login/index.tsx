@@ -153,6 +153,8 @@ function AuthPage() {
 
         <div className="relative w-full z-10 space-y-4">
           <form className="flex flex-col gap-3" onSubmit={(e) => { e.preventDefault(); authMode === 'signin' ? handleSignIn() : handleSignUp(); }}>
+            {/* Hidden fields to help browser credential managers understand the form context */}
+            <input type="hidden" name="username" value={formData.email} />
             {authMode === 'signup' && (
               <>
                 {/* Order: Name, Email, Phone, DOB, Address, Password, Gym Code */}
