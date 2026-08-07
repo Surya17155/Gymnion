@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard/admin/plans')({
@@ -7,6 +7,15 @@ export const Route = createFileRoute('/dashboard/admin/plans')({
 
 function AdminPlans() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check if we are precisely on the plans list page or a sub-route
+  const isPlansList = location.pathname === '/dashboard/admin/plans' || location.pathname === '/dashboard/admin/plans/';
+
+  if (!isPlansList) {
+    return <Outlet />;
+  }
+
 
   return (
     <div className="bg-[#0d0f0c] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins']">
