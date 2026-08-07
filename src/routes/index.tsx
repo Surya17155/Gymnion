@@ -6,7 +6,7 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                            
- * teh problem is still not fixed, that scroll bar from the right side of the app is still there I can see that also on the member dashboard screen, please remove that scroll bar
+ * also create the Payment screen and connect this screen with the payments button in the tab bar in the app. use the same code to create the Payment screen, don't change anything
  */
 export const Route = createFileRoute("/")({
   head: () => ({
