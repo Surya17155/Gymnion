@@ -24,7 +24,7 @@ function AdminPlans() {
       <div className="max-w-[480px] mx-auto min-h-screen relative z-10 flex flex-col">
         
         {/* Top App Bar with Back Button and Centered Title */}
-        <header className="h-[64px] flex items-center px-[20px] fixed top-0 w-full max-w-[480px] z-50 pt-4">
+        <header className="h-[64px] flex items-center px-[20px] fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-[60] pt-4">
           <button 
             onClick={() => navigate({ to: '/dashboard/admin/settings' })}
             className="w-8 h-8 rounded-full bg-[#1e201d] flex items-center justify-center hover:bg-[#333532] transition-colors active:scale-95"
