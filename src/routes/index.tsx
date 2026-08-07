@@ -6,7 +6,7 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                            
- * also create the Payment screen and connect this screen with the payments button in the tab bar in the app. use the same code to create the Payment screen, don't change anything
+ * check again, I am not redirecting to the payments screen after I click on the Payments button in the tab bar
  */
 export const Route = createFileRoute("/")({
   head: () => ({
