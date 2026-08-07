@@ -212,26 +212,76 @@ function SuperAdminDashboard() {
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe bg-[#1e201d] border-t border-white/5 shadow-lg rounded-t-xl">
-        <Link className="flex flex-col items-center justify-center text-[#B7FF1E] bg-[#25340D]/20 rounded-xl p-2 scale-90 transition-all duration-200" to="/dashboard/super-admin">
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>home</span>
-          <span className="text-[11px] font-semibold mt-1">Home</span>
+      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] left-1/2 -translate-x-1/2">
+        <Link 
+          to="/dashboard/super-admin"
+          activeOptions={{ exact: true }}
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>home</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Home</span>
+            </>
+          )}
         </Link>
-        <Link className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" to="/dashboard/super-admin">
-          <span className="material-symbols-outlined">payments</span>
-          <span className="text-[11px] font-semibold mt-1">Payments</span>
+        
+        <Link 
+          to="/dashboard/super-admin"
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>payments</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Payments</span>
+            </>
+          )}
         </Link>
-        <Link className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" to="/dashboard/super-admin/gyms">
-          <span className="material-symbols-outlined">fitness_center</span>
-          <span className="text-[11px] font-semibold mt-1">Gyms</span>
+        
+        <Link 
+          to="/dashboard/super-admin/gyms"
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>fitness_center</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Gyms</span>
+            </>
+          )}
         </Link>
-        <Link className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" to="/dashboard/super-admin">
-          <span className="material-symbols-outlined">calendar_today</span>
-          <span className="text-[11px] font-semibold mt-1">Attendance</span>
+        
+        <Link 
+          to="/dashboard/super-admin"
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>calendar_today</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Attendance</span>
+            </>
+          )}
         </Link>
-        <Link className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" to="/dashboard/super-admin">
-          <span className="material-symbols-outlined">person</span>
-          <span className="text-[11px] font-semibold mt-1">Profile</span>
+        
+        <Link 
+          to="/dashboard/super-admin"
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>person</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Profile</span>
+            </>
+          )}
         </Link>
       </nav>
     </div>
