@@ -20,6 +20,7 @@ import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
 import { Route as DashboardAdminAttendanceRouteImport } from './routes/dashboard/admin.attendance'
 import { Route as DashboardAdminMembersRouteImport } from './routes/dashboard/admin.members'
 import { Route as DashboardAdminPaymentsRouteImport } from './routes/dashboard/admin.payments'
+import { Route as DashboardAdminSettingsRouteImport } from './routes/dashboard/admin.settings'
 import { Route as DashboardMAttendanceRouteImport } from './routes/dashboard/m.attendance'
 import { Route as DashboardMPaymentsRouteImport } from './routes/dashboard/m.payments'
 import { Route as DashboardMProfileRouteImport } from './routes/dashboard/m.profile'
@@ -80,6 +81,11 @@ const DashboardAdminPaymentsRoute = DashboardAdminPaymentsRouteImport.update({
   path: '/payments',
   getParentRoute: () => DashboardAdminRoute,
 } as any)
+const DashboardAdminSettingsRoute = DashboardAdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardAdminRoute,
+} as any)
 const DashboardMAttendanceRoute = DashboardMAttendanceRouteImport.update({
   id: '/attendance',
   path: '/attendance',
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
   '/dashboard/admin/payments': typeof DashboardAdminPaymentsRoute
+  '/dashboard/admin/settings': typeof DashboardAdminSettingsRoute
   '/dashboard/m/attendance': typeof DashboardMAttendanceRoute
   '/dashboard/m/payments': typeof DashboardMPaymentsRoute
   '/dashboard/m/profile': typeof DashboardMProfileRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
   '/dashboard/admin/payments': typeof DashboardAdminPaymentsRoute
+  '/dashboard/admin/settings': typeof DashboardAdminSettingsRoute
   '/dashboard/m/attendance': typeof DashboardMAttendanceRoute
   '/dashboard/m/payments': typeof DashboardMPaymentsRoute
   '/dashboard/m/profile': typeof DashboardMProfileRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
   '/dashboard/admin/payments': typeof DashboardAdminPaymentsRoute
+  '/dashboard/admin/settings': typeof DashboardAdminSettingsRoute
   '/dashboard/m/attendance': typeof DashboardMAttendanceRoute
   '/dashboard/m/payments': typeof DashboardMPaymentsRoute
   '/dashboard/m/profile': typeof DashboardMProfileRoute
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
     | '/dashboard/admin/payments'
+    | '/dashboard/admin/settings'
     | '/dashboard/m/attendance'
     | '/dashboard/m/payments'
     | '/dashboard/m/profile'
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
     | '/dashboard/admin/payments'
+    | '/dashboard/admin/settings'
     | '/dashboard/m/attendance'
     | '/dashboard/m/payments'
     | '/dashboard/m/profile'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
     | '/dashboard/admin/payments'
+    | '/dashboard/admin/settings'
     | '/dashboard/m/attendance'
     | '/dashboard/m/payments'
     | '/dashboard/m/profile'
@@ -280,6 +292,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminPaymentsRouteImport
       parentRoute: typeof DashboardAdminRoute
     }
+    '/dashboard/admin/settings': {
+      id: '/dashboard/admin/settings'
+      path: '/settings'
+      fullPath: '/dashboard/admin/settings'
+      preLoaderRoute: typeof DashboardAdminSettingsRouteImport
+      parentRoute: typeof DashboardAdminRoute
+    }
     '/dashboard/m/attendance': {
       id: '/dashboard/m/attendance'
       path: '/attendance'
@@ -308,12 +327,14 @@ interface DashboardAdminRouteChildren {
   DashboardAdminAttendanceRoute: typeof DashboardAdminAttendanceRoute
   DashboardAdminMembersRoute: typeof DashboardAdminMembersRoute
   DashboardAdminPaymentsRoute: typeof DashboardAdminPaymentsRoute
+  DashboardAdminSettingsRoute: typeof DashboardAdminSettingsRoute
 }
 
 const DashboardAdminRouteChildren: DashboardAdminRouteChildren = {
   DashboardAdminAttendanceRoute: DashboardAdminAttendanceRoute,
   DashboardAdminMembersRoute: DashboardAdminMembersRoute,
   DashboardAdminPaymentsRoute: DashboardAdminPaymentsRoute,
+  DashboardAdminSettingsRoute: DashboardAdminSettingsRoute,
 }
 
 const DashboardAdminRouteWithChildren = DashboardAdminRoute._addFileChildren(
