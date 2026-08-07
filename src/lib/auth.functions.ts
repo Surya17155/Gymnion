@@ -18,7 +18,7 @@ export const getAuthUserRole = createServerFn({ method: 'GET' })
   });
 
 export const getFeePlans = createServerFn({ method: 'GET' })
-  .handler(async ({ context }) => {
+  .handler(async () => {
     const { data, error } = await supabaseAdmin
       .from('fee_plans')
       .select('*')
@@ -29,13 +29,13 @@ export const getFeePlans = createServerFn({ method: 'GET' })
   });
 
 export const createFeePlan = createServerFn({ method: 'POST' })
-  .input(z.object({
+  .validator((data: any) => z.object({
     name: z.string(),
     amount: z.number(),
     description: z.string().optional(),
     billing_cycle: z.string(),
     gym_id: z.string(),
-  }))
+  }).parse(data))
   .handler(async ({ data }) => {
     const { error } = await supabaseAdmin
       .from('fee_plans')

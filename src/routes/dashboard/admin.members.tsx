@@ -1,9 +1,12 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getMembers } from '@/lib/auth.functions';
 
 export const Route = createFileRoute('/dashboard/admin/members')({
   component: AdminMembers,
 });
+
 
 interface Member {
   id: string;
@@ -71,7 +74,13 @@ const DUMMY_MEMBERS: Member[] = [
 ];
 
 function AdminMembers() {
-  const [selectedMember, setSelectedMember] = useState<Member | null>(null);
+  const [selectedMember, setSelectedMember] = useState<any | null>(null);
+  
+  const { data: members = [], isLoading } = useQuery({
+    queryKey: ['members'],
+    queryFn: () => getMembers(),
+  });
+
 
   return (
     <div className="bg-[#000000] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins']">
@@ -114,31 +123,33 @@ function AdminMembers() {
           </div>
 
           <div className="flex flex-col gap-[12px]">
-            {DUMMY_MEMBERS.map((member) => (
+            {members.map((member: any) => (
               <div 
                 key={member.id}
                 onClick={() => setSelectedMember(member)}
                 className="flex items-center p-[16px] bg-[#1e201d] border border-white/5 rounded-xl relative overflow-hidden group cursor-pointer active:scale-[0.98] transition-all"
               >
                 <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#D5FF40]/20 to-transparent"></div>
-                {member.image ? (
-                  <img className="w-12 h-12 rounded-full object-cover mr-4 border border-white/10" src={member.image} alt={member.name} />
+                {member.photo_url ? (
+                  <img className="w-12 h-12 rounded-full object-cover mr-4 border border-white/10" src={member.photo_url} alt={member.full_name} />
                 ) : (
                   <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center mr-4 border border-white/10">
-                    <span className="text-[18px] font-semibold text-white">{member.initials}</span>
+                    <span className="text-[18px] font-semibold text-white">{member.full_name?.charAt(0)}</span>
                   </div>
                 )}
                 <div className="flex-1">
-                  <h3 className="text-[18px] font-semibold text-white">{member.name}</h3>
-                  <p className="text-[12px] text-[#C0C2B8]">{member.plan}</p>
+                  <h3 className="text-[18px] font-semibold text-white">{member.full_name}</h3>
+                  <p className="text-[12px] text-[#C0C2B8]">{member.fee_plans?.name || 'No Plan'}</p>
                 </div>
+
                 <div className={`px-2 py-1 rounded border ${
-                  member.status === 'Active' ? 'bg-[#A7F52A]/10 border-[#A7F52A]/20 text-[#A7F52A]' :
-                  member.status === 'Overdue' ? 'bg-[#FF5964]/10 border-[#FF5964]/20 text-[#FF5964]' :
+                  member.status === 'active' ? 'bg-[#A7F52A]/10 border-[#A7F52A]/20 text-[#A7F52A]' :
+                  member.status === 'overdue' ? 'bg-[#FF5964]/10 border-[#FF5964]/20 text-[#FF5964]' :
                   'bg-[#D5FF40]/10 border-[#D5FF40]/20 text-[#D5FF40]'
                 }`}>
                   <span className="text-[11px] font-semibold uppercase">{member.status}</span>
                 </div>
+
               </div>
             ))}
           </div>

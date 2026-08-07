@@ -65,29 +65,32 @@ function AdminPlans() {
             {plans.map((plan) => (
               <div 
                 key={plan.id}
-                className={`bg-[#121411] border border-white/5 rounded-[16px] p-[16px] flex flex-col gap-[8px] relative overflow-hidden group cursor-pointer hover:border-[#B7FF1E]/20 transition-all shadow-[inset_0_0_20px_rgba(183,255,30,0.02)] ${!plan.isActive ? 'opacity-70' : ''}`}
+                className={`bg-[#121411] border border-white/5 rounded-[16px] p-[16px] flex flex-col gap-[8px] relative overflow-hidden group cursor-pointer hover:border-[#B7FF1E]/20 transition-all shadow-[inset_0_0_20px_rgba(183,255,30,0.02)] ${!plan.is_active ? 'opacity-70' : ''}`}
               >
+                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#B7FF1E]/10 to-transparent"></div>
                 <div className="flex justify-between items-start w-full">
                   <div>
                     <h2 className="text-[18px] font-semibold tracking-[-0.015em] text-[#e3e3dd] mb-1">{plan.name}</h2>
                     <p className="text-[12px] leading-[18px] text-[#858A7D] line-clamp-2 pr-8">{plan.description}</p>
                   </div>
                   {/* Status Badge */}
-                  <div className={`${plan.isActive ? 'bg-[#aed502]/10 border border-[#aed502]/20' : 'bg-[#292b27] border border-white/10'} rounded-full px-2 py-0.5 flex items-center gap-1 shrink-0`}>
-                    <div className={`w-1.5 h-1.5 rounded-full ${plan.isActive ? 'bg-[#A7F52A]' : 'bg-[#C0C2B8]'}`}></div>
-                    <span className={`text-[9px] font-semibold ${plan.isActive ? 'text-[#A7F52A]' : 'text-[#C0C2B8]'} uppercase tracking-wider`}>
-                      {plan.isActive ? 'Active' : 'Draft'}
+                  <div className={`${plan.is_active ? 'bg-[#aed502]/10 border border-[#aed502]/20' : 'bg-[#292b27] border border-white/10'} rounded-full px-2 py-0.5 flex items-center gap-1 shrink-0`}>
+                    <div className={`w-1.5 h-1.5 rounded-full ${plan.is_active ? 'bg-[#A7F52A]' : 'bg-[#C0C2B8]'}`}></div>
+                    <span className={`text-[9px] font-semibold ${plan.is_active ? 'text-[#A7F52A]' : 'text-[#C0C2B8]'} uppercase tracking-wider`}>
+                      {plan.is_active ? 'Active' : 'Draft'}
                     </span>
                   </div>
+
                 </div>
                 <div className="flex justify-between items-end mt-2 pt-3 border-t border-white/5">
                   <div className="flex flex-col">
                     <span className="text-[11px] font-semibold text-[#C0C2B8] uppercase mb-1">
-                      {plan.duration === '1' ? 'Monthly' : plan.duration === '3' ? 'Quarterly' : plan.duration === '12' ? 'Annual' : `${plan.duration} Month`} Fee
+                      {plan.billing_cycle} Fee
                     </span>
                     <div className="flex items-baseline gap-1">
                       <span className="text-[18px] font-semibold text-[#e3e3dd]">₹</span>
-                      <span className={`text-[28px] leading-none font-bold ${plan.isActive ? 'text-[#B7FF1E]' : 'text-[#C0C2B8]'}`}>
+                      <span className={`text-[28px] leading-none font-bold ${plan.is_active ? 'text-[#B7FF1E]' : 'text-[#C0C2B8]'}`}>
+
                         {Number(plan.amount).toLocaleString()}
                       </span>
                     </div>
