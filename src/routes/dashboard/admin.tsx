@@ -218,13 +218,19 @@ function AdminDashboard() {
           )}
         </Link>
         
-        <button 
-          onClick={() => setActiveTab('settings')}
-          className={`flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200 ${activeTab === 'settings' ? 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' : 'text-[#C0C2B8]'}`}
+        <Link 
+          to="/dashboard/admin/settings"
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
         >
-          <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: activeTab === 'settings' ? '"FILL" 1' : '"FILL" 0' }}>settings</span>
-          <span className="text-[11px] font-semibold leading-[14px]">Settings</span>
-        </button>
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>settings</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Settings</span>
+            </>
+          )}
+        </Link>
       </nav>
     </div>
   );
