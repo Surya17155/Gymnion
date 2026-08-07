@@ -8,7 +8,7 @@ export function SuperAdminDashboard() {
   console.log('Mounting SuperAdminDashboard (Home)');
 
   return (
-    <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden pb-16 font-sans">
+    <div className="pb-24">
       <div 
         className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[300px] h-[300px] pointer-events-none z-0"
         style={{
@@ -213,8 +213,17 @@ export function SuperAdminDashboard() {
         </div>
       </main>
 
-      {/* Bottom Navigation */}
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe rounded-t-[24px] max-w-[480px] left-1/2 -translate-x-1/2">
+    </div>
+  );
+}
+
+function SuperAdminLayout() {
+  return (
+    <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans">
+      <Outlet />
+      
+      {/* Global Super Admin Bottom Navigation */}
+      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-[100] flex justify-around items-center px-4 py-3 pb-safe rounded-t-[24px] max-w-[480px] left-1/2 -translate-x-1/2">
         <Link 
           to="/dashboard/super-admin"
           activeOptions={{ exact: true }}
@@ -254,8 +263,4 @@ export function SuperAdminDashboard() {
       </nav>
     </div>
   );
-}
-
-function SuperAdminLayout() {
-  return <Outlet />;
 }
