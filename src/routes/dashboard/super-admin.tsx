@@ -6,7 +6,15 @@ export const Route = createFileRoute('/dashboard/super-admin')({
 
 function SuperAdminDashboard() {
   return (
-    <div className="py-6 space-y-6">
+    <div className="flex justify-center min-h-screen bg-[#121411]">
+      <div 
+        className="fixed top-0 left-0 right-0 h-[40vh] z-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle at 50% -20%, rgba(183, 255, 30, 0.15), transparent 70%)'
+        }}
+      />
+      <main className="w-full max-w-[480px] min-h-screen relative flex flex-col z-10 px-5">
+        <div className="py-6 space-y-6">
       <div className="space-y-1">
         <h2 className="text-2xl font-bold">Phase 3 — Super Admin</h2>
         <p className="text-sm text-muted-foreground">
@@ -34,6 +42,8 @@ function SuperAdminDashboard() {
           </div>
         </div>
       </div>
+      </div>
+      </main>
     </div>
   );
 }
