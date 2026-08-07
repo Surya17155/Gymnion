@@ -53,50 +53,6 @@ function AttendanceHistory() {
           </div>
         </section>
 
-        {/* Contribution Graph (Calendar) */}
-        <section className="px-5 pb-6">
-          <div className="flex justify-between items-start mb-4">
-            <h2 className="text-[18px] leading-[24px] font-semibold text-white font-['Poppins']">This Month's Attendance</h2>
-            <div className="flex flex-col items-end">
-              <span className="text-[40px] leading-[40px] font-bold text-[#B7FF1E] font-['Poppins'] tracking-tighter leading-none">18</span>
-              <span className="text-[11px] leading-[14px] font-semibold text-[#B7FF1E] uppercase tracking-wider font-['Poppins']">Days</span>
-            </div>
-          </div>
-          <div className="bg-[#151714] rounded-[24px] p-6 border border-white/5">
-            <div className="grid grid-cols-7 gap-3 w-full">
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#333532]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#333532]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#333532]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#333532]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#333532]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#B7FF1E]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#333532]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#333532]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#333532]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#333532]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#333532]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#333532]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#333532]"></div>
-              <div className="w-full aspect-square rounded-lg bg-[#333532]"></div>
-            </div>
-          </div>
-        </section>
 
         {/* Recent Check-ins List */}
         <section className="px-5 pb-6 flex-1">
