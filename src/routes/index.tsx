@@ -6,7 +6,7 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  * 
- * also add the members page of the admin mode, but keep the tabbar of the app same as dashboard of the admin mode
+ * I am not redirecting to admin mode members tab when I click on the members button in the tabbar
  */
 export const Route = createFileRoute("/")({
   head: () => ({
