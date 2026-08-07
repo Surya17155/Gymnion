@@ -1,5 +1,7 @@
-import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-router';
-import { LucideReceiptText, LucideHistory, LucideScanQrCode, LucideHome, LucideCreditCard, LucideCalendarDays, LucideUser } from 'lucide-react';
+import { createFileRoute, Link, Outlet, useLocation, useNavigate } from '@tanstack/react-router';
+import { LucideReceiptText, LucideHistory, LucideScanQrCode, LucideHome, LucideCreditCard, LucideCalendarDays, LucideUser, LucideLogOut } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute('/dashboard/m')({
   component: MemberDashboard,
@@ -7,7 +9,25 @@ export const Route = createFileRoute('/dashboard/m')({
 
 function MemberDashboard() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const isHome = location.pathname === '/dashboard/m' || location.pathname === '/dashboard/m/';
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate({ to: '/auth/login' });
+  };
 
   return (
     <div className="flex justify-center min-h-screen bg-[#121411]">
@@ -39,12 +59,29 @@ function MemberDashboard() {
                 </div>
               </div>
 
-              <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10">
-                <img 
-                  alt="Profile avatar" 
-                  className="w-full h-full object-cover" 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuACajaR2PjILkSEOoatycCJ36DX_-AVsZnEodZIF4WU9HcJM2MkjXI2qDWN0odA1lIrrhCgSk2rNd_WNw8L5jOa3wK0ypjzmgHTwBjlD48-xJ7Pa4gnBHM6Dym0FJiTEYF42jQugxJ2xQWYX5HcwRUK-RGVETvhKLNOdwY5yW6j9rA8jlooFx5CczVg0yjGKDzyTd9_cqhGeblF-vY4--0YoxCJxwxrUmpx0lRH0Q4zriAz0tIGdA" 
-                />
+              <div className="relative" ref={dropdownRef}>
+                <button 
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="w-10 h-10 rounded-full overflow-hidden border border-white/10 hover:border-white/20 transition-colors focus:outline-none"
+                >
+                  <img 
+                    alt="Profile avatar" 
+                    className="w-full h-full object-cover" 
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuACajaR2PjILkSEOoatycCJ36DX_-AVsZnEodZIF4WU9HcJM2MkjXI2qDWN0odA1lIrrhCgSk2rNd_WNw8L5jOa3wK0ypjzmgHTwBjlD48-xJ7Pa4gnBHM6Dym0FJiTEYF42jQugxJ2xQWYX5HcwRUK-RGVETvhKLNOdwY5yW6j9rA8jlooFx5CczVg0yjGKDzyTd9_cqhGeblF-vY4--0YoxCJxwxrUmpx0lRH0Q4zriAz0tIGdA" 
+                  />
+                </button>
+
+                {showDropdown && (
+                  <div className="absolute right-0 mt-2 w-48 bg-[#1e201d] border border-white/10 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200">
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-left text-red-400 hover:bg-white/5 transition-colors font-['Poppins'] text-[14px]"
+                    >
+                      <LucideLogOut className="w-4 h-4" />
+                      Log out
+                    </button>
+                  </div>
+                )}
               </div>
             </header>
 
