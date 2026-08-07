@@ -151,21 +151,21 @@ function AdminDashboard() {
 
       {/* BottomNavBar */}
       <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] left-1/2 -translate-x-1/2">
-        <button 
-          onClick={() => setActiveTab('dashboard')}
+        <a 
+          href="/dashboard/admin"
           className={`flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200 ${activeTab === 'dashboard' ? 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' : 'text-[#C0C2B8]'}`}
         >
           <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: activeTab === 'dashboard' ? '"FILL" 1' : '"FILL" 0' }}>dashboard</span>
           <span className="text-[11px] font-semibold leading-[14px]">Dashboard</span>
-        </button>
+        </a>
         
-        <button 
-          onClick={() => setActiveTab('members')}
+        <a 
+          href="/dashboard/admin/members"
           className={`flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200 ${activeTab === 'members' ? 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' : 'text-[#C0C2B8]'}`}
         >
           <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: activeTab === 'members' ? '"FILL" 1' : '"FILL" 0' }}>group</span>
           <span className="text-[11px] font-semibold leading-[14px]">Members</span>
-        </button>
+        </a>
         
         <button 
           onClick={() => setActiveTab('payments')}
