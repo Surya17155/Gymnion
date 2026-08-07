@@ -1,118 +1,196 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { useState } from 'react';
 
 export const Route = createFileRoute('/dashboard/admin')({
   component: AdminDashboard,
 });
 
 function AdminDashboard() {
+  const [activeTab, setActiveTab] = useState('dashboard');
+
   return (
-    <div className="flex justify-center min-h-screen bg-[#121411]">
+    <div className="bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins']">
+      {/* Top Glow Effect */}
       <div 
-        className="fixed top-0 left-0 right-0 h-[40vh] z-0 pointer-events-none"
+        className="fixed top-0 left-0 right-0 h-[300px] z-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle at 50% -20%, rgba(183, 255, 30, 0.15), transparent 70%)'
+          background: 'radial-gradient(circle at 50% 0%, rgba(183, 255, 30, 0.15) 0%, rgba(18, 20, 17, 0) 70%)'
         }}
       />
-      <main className="w-full max-w-[480px] min-h-screen relative flex flex-col z-10 px-5">
-        <div className="py-6 space-y-8">
-      {/* Phase Heading */}
-      <div className="space-y-1">
-        <h2 className="text-2xl font-bold tracking-tight">Phase 8 — Reminders, exports, polish</h2>
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          Single + bulk payment reminders, CSV exports (members / payments / attendance with date range), in-app notification bell, empty/loading/error states, accessibility pass, SEO metadata per route.
-        </p>
-      </div>
-      
-      {/* Payment Stats */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="p-5 rounded-3xl bg-gym-surface-raised border border-white/5 space-y-1 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-3 opacity-10 text-gym-accent group-hover:scale-110 transition-transform">
-             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+
+      {/* Main Mobile Container */}
+      <div className="max-w-[480px] mx-auto min-h-screen pb-24 relative z-10 flex flex-col">
+        {/* TopAppBar */}
+        <header className="flex justify-between items-center px-5 h-16 w-full sticky top-0 z-40">
+          <div className="flex items-center gap-3">
+            {/* Logo or Back button could go here */}
           </div>
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Pending</span>
-          <div className="text-3xl font-black">₹12,400</div>
-        </div>
-        <div className="p-5 rounded-3xl bg-gym-surface-raised border border-white/5 space-y-1 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-3 opacity-10 text-gym-accent group-hover:scale-110 transition-transform">
-             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          </div>
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Received</span>
-          <div className="text-3xl font-black text-gym-accent">₹48,200</div>
-        </div>
-      </div>
-
-      {/* Admin Quick Actions */}
-      <div className="space-y-4">
-        <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">Reports & Tools</h3>
-        <div className="grid grid-cols-1 gap-3">
-          <button className="flex items-center justify-between p-5 rounded-3xl bg-gym-surface-raised border border-white/5 hover:bg-gym-surface-muted transition-colors text-left group">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-gym-accent/10 flex items-center justify-center text-gym-accent">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>
-                </svg>
-              </div>
-              <div>
-                <div className="font-bold group-hover:text-gym-accent transition-colors">Export CSV</div>
-                <div className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">Members / Payments / Attendance</div>
-              </div>
-            </div>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-subtle">
-              <path d="m9 18 6-6-6-6"/>
-            </svg>
+          <button className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity text-[#B7FF1E] bg-[#1e201d]/50">
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 0' }}>person</span>
           </button>
+        </header>
 
+        <main className="flex-1 px-5 flex flex-col gap-6 py-2">
+          {/* Page Title */}
+          <section className="-mt-4">
+            <h2 className="text-[28px] font-bold leading-8 tracking-[-0.03em] text-white">Dashboard</h2>
+            <p className="text-sm text-[#C0C2B8]">Good morning, Admin</p>
+          </section>
 
-          <button className="flex items-center justify-between p-5 rounded-3xl bg-gym-surface-raised border border-white/5 hover:bg-gym-surface-muted transition-colors text-left group">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-gym-accent/10 flex items-center justify-center text-gym-accent">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                </svg>
+          {/* KPI Grid */}
+          <section className="grid grid-cols-2 gap-3">
+            {/* Revenue Card (Full width) */}
+            <div className="col-span-2 bg-[#121411] rounded-xl p-4 border border-white/5 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-[#B7FF1E]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="flex justify-between items-start mb-2">
+                <span className="text-[12px] text-[#858A7D] uppercase tracking-wider">Revenue (This Month)</span>
+                <span className="material-symbols-outlined text-[#B7FF1E] opacity-50" style={{ fontVariationSettings: '"FILL" 0' }}>payments</span>
               </div>
-              <div>
-                <div className="font-bold group-hover:text-gym-accent transition-colors">Send Reminders</div>
-                <div className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">WhatsApp / Email Notifications</div>
-              </div>
-            </div>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-subtle">
-              <path d="m9 18 6-6-6-6"/>
-            </svg>
-          </button>
-
-        </div>
-      </div>
-
-      {/* Recent Transactions */}
-      <div className="space-y-4">
-        <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">Recent Transactions</h3>
-        <div className="space-y-3">
-          {[
-            { name: 'Arjun Singh', action: 'Monthly Fee', amount: '₹2,500', time: '2m ago', status: 'paid' },
-            { name: 'Priya Sharma', action: 'Personal Training', amount: '₹5,000', time: '1h ago', status: 'pending' },
-          ].map((tx, i) => (
-            <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-gym-surface-raised border border-white/5">
-              <div className="flex items-center gap-3">
-                <div className={`w-2 h-2 rounded-full ${tx.status === 'paid' ? 'bg-gym-accent' : 'bg-yellow-500'}`} />
-                <div>
-                  <div className="text-sm font-bold">{tx.name}</div>
-                  <div className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">{tx.action}</div>
+              <div className="flex items-end gap-3 mt-1">
+                <span className="text-[40px] font-bold leading-10 tracking-[-0.04em] text-[#B7FF1E]">₹45,200</span>
+                <div className="flex items-center text-[#A7F52A] text-[11px] font-semibold pb-2">
+                  <span className="material-symbols-outlined text-sm">trending_up</span>
+                  <span>+12%</span>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-sm font-bold text-foreground">{tx.amount}</div>
-                <div className="text-[10px] font-bold text-subtle uppercase">{tx.time}</div>
+            </div>
+
+            {/* Member Status Card */}
+            <div className="bg-[#121411] rounded-xl p-4 border border-white/5 flex flex-col items-center justify-center text-center">
+              <span className="text-[12px] text-[#858A7D] mb-3">Member Status</span>
+              {/* Progress Ring */}
+              <div className="relative w-20 h-20 mb-3">
+                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                  {/* Background track */}
+                  <circle className="text-[#292A28]" cx="50" cy="50" fill="none" r="40" stroke="currentColor" strokeWidth="8"></circle>
+                  {/* Progress track (Paid vs Pending) */}
+                  <circle className="text-[#B7FF1E]" cx="50" cy="50" fill="none" r="40" stroke="currentColor" strokeDasharray="251.2" strokeDashoffset="60" strokeLinecap="round" strokeWidth="8"></circle>
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-[18px] font-semibold text-white">85%</span>
+                </div>
+              </div>
+              <div className="flex justify-between w-full text-[11px] font-semibold">
+                <span className="text-[#C0C2B8]">210 Paid</span>
+                <span className="text-[#B7FF1E]">32 Pend</span>
               </div>
             </div>
-          ))}
-          <button className="w-full py-3 text-[10px] font-bold text-gym-accent uppercase tracking-widest border border-dashed border-gym-accent/20 rounded-2xl hover:bg-gym-accent/5 transition-colors">
-            View All Transactions
-          </button>
-        </div>
+
+            {/* Overdue Members Card */}
+            <div className="bg-[#121411] rounded-xl p-4 border border-[#FF5964]/30 flex flex-col items-start justify-between relative overflow-hidden animate-pulse">
+              <div className="absolute inset-0 bg-[#FF5964]/5"></div>
+              <div className="relative z-10 w-full">
+                <div className="flex justify-between items-start mb-4">
+                  <span className="text-[12px] text-[#FF5964]">Overdue</span>
+                  <span className="material-symbols-outlined text-[#FF5964] opacity-80" style={{ fontVariationSettings: '"FILL" 1' }}>warning</span>
+                </div>
+                <span className="text-[40px] font-bold leading-10 tracking-[-0.04em] text-white block mb-1">14</span>
+                <span className="text-[11px] font-semibold text-[#C0C2B8]">Members unpaid</span>
+              </div>
+            </div>
+          </section>
+
+          {/* Quick Actions */}
+          <section>
+            <h3 className="text-[18px] font-semibold text-white mb-3">Quick Actions</h3>
+            <div className="bg-[#B7FF1E] rounded-xl p-4 flex items-center justify-between shadow-[0_0_20px_rgba(183,255,30,0.1)] hover:scale-[0.98] transition-transform cursor-pointer">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center">
+                  <span className="material-symbols-outlined text-[#B7FF1E] text-3xl" style={{ fontVariationSettings: '"FILL" 0' }}>qr_code_2</span>
+                </div>
+                <div>
+                  <h4 className="text-[18px] font-semibold text-black">Gym QR Code</h4>
+                  <p className="text-[12px] text-black/70">Show to members for check-in</p>
+                </div>
+              </div>
+              <span className="material-symbols-outlined text-black">chevron_right</span>
+            </div>
+          </section>
+
+          {/* Recent Activity */}
+          <section>
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-[18px] font-semibold text-white">Recent Activity</h3>
+              <span className="text-[11px] font-semibold text-[#B7FF1E] cursor-pointer">View All</span>
+            </div>
+            <div className="bg-[#121411] rounded-xl border border-white/5 overflow-hidden">
+              {/* Item 1 */}
+              <div className="p-4 border-b border-white/5 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center text-[#C0C2B8]">
+                  <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: '"FILL" 1' }}>login</span>
+                </div>
+                <div className="flex-1">
+                  <p className="text-[12px] text-white"><span className="font-semibold">Aman Gupta</span> checked in</p>
+                  <p className="text-[11px] font-semibold text-[#858A7D]">2 mins ago</p>
+                </div>
+              </div>
+              {/* Item 2 */}
+              <div className="p-4 border-b border-white/5 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center text-[#B7FF1E]">
+                  <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: '"FILL" 1' }}>payments</span>
+                </div>
+                <div className="flex-1">
+                  <p className="text-[12px] text-white"><span className="font-semibold">Sarah J.</span> paid ₹1,000</p>
+                  <p className="text-[11px] font-semibold text-[#858A7D]">15 mins ago</p>
+                </div>
+              </div>
+              {/* Item 3 */}
+              <div className="p-4 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center text-[#C0C2B8]">
+                  <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: '"FILL" 1' }}>login</span>
+                </div>
+                <div className="flex-1">
+                  <p className="text-[12px] text-white"><span className="font-semibold">Rohan Sharma</span> checked in</p>
+                  <p className="text-[11px] font-semibold text-[#858A7D]">45 mins ago</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
       </div>
-      </div>
-      </main>
+
+      {/* BottomNavBar */}
+      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] left-1/2 -translate-x-1/2">
+        <button 
+          onClick={() => setActiveTab('dashboard')}
+          className={`flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-200 ${activeTab === 'dashboard' ? 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' : 'text-[#C0C2B8]'}`}
+        >
+          <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: activeTab === 'dashboard' ? '"FILL" 1' : '"FILL" 0' }}>dashboard</span>
+          <span className="text-[11px] font-semibold">Dashboard</span>
+        </button>
+        
+        <button 
+          onClick={() => setActiveTab('members')}
+          className={`flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-200 ${activeTab === 'members' ? 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' : 'text-[#C0C2B8]'}`}
+        >
+          <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: activeTab === 'members' ? '"FILL" 1' : '"FILL" 0' }}>group</span>
+          <span className="text-[11px] font-semibold">Members</span>
+        </button>
+        
+        <button 
+          onClick={() => setActiveTab('payments')}
+          className={`flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-200 ${activeTab === 'payments' ? 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' : 'text-[#C0C2B8]'}`}
+        >
+          <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: activeTab === 'payments' ? '"FILL" 1' : '"FILL" 0' }}>receipt_long</span>
+          <span className="text-[11px] font-semibold">Payments</span>
+        </button>
+        
+        <button 
+          onClick={() => setActiveTab('attendance')}
+          className={`flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-200 ${activeTab === 'attendance' ? 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' : 'text-[#C0C2B8]'}`}
+        >
+          <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: activeTab === 'attendance' ? '"FILL" 1' : '"FILL" 0' }}>how_to_reg</span>
+          <span className="text-[11px] font-semibold">Attendance</span>
+        </button>
+        
+        <button 
+          onClick={() => setActiveTab('settings')}
+          className={`flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-200 ${activeTab === 'settings' ? 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' : 'text-[#C0C2B8]'}`}
+        >
+          <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: activeTab === 'settings' ? '"FILL" 1' : '"FILL" 0' }}>settings</span>
+          <span className="text-[11px] font-semibold">Settings</span>
+        </button>
+      </nav>
     </div>
   );
 }
-
