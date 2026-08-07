@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard/admin/members')({
   component: AdminMembers,
@@ -114,14 +114,14 @@ function AdminMembers() {
 
       {/* Bottom Navigation */}
       <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] left-1/2 -translate-x-1/2">
-        <a href="/dashboard/admin" className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200 text-[#C0C2B8] hover:text-white">
+        <Link to="/dashboard/admin" className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200 text-[#C0C2B8] hover:text-white">
           <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: '"FILL" 0' }}>dashboard</span>
           <span className="text-[11px] font-semibold leading-[14px]">Dashboard</span>
-        </a>
-        <a href="/dashboard/admin/members" className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200 text-[#B7FF1E] bg-[#25340D]/20 scale-90">
+        </Link>
+        <Link to="/dashboard/admin/members" className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200 text-[#B7FF1E] bg-[#25340D]/20 scale-90">
           <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: '"FILL" 1' }}>group</span>
           <span className="text-[11px] font-semibold leading-[14px]">Members</span>
-        </a>
+        </Link>
         <button className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200 text-[#C0C2B8] hover:text-white">
           <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: '"FILL" 0' }}>receipt_long</span>
           <span className="text-[11px] font-semibold leading-[14px]">Payments</span>
