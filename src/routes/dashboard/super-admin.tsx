@@ -221,10 +221,10 @@ function SuperAdminDashboard() {
           <span className="material-symbols-outlined">payments</span>
           <span className="text-[11px] font-semibold mt-1">Payments</span>
         </a>
-        <a className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" href="#">
-          <span className="material-symbols-outlined">qr_code_scanner</span>
-          <span className="text-[11px] font-semibold mt-1">Scan</span>
-        </a>
+        <Link className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" to="/dashboard/super-admin/gyms">
+          <span className="material-symbols-outlined">fitness_center</span>
+          <span className="text-[11px] font-semibold mt-1">Gyms</span>
+        </Link>
         <a className="flex flex-col items-center justify-center text-[#C0C2B8] p-2 hover:bg-[#333532] rounded-xl transition-colors" href="#">
           <span className="material-symbols-outlined">calendar_today</span>
           <span className="text-[11px] font-semibold mt-1">Attendance</span>
