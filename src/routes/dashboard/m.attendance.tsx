@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { LucideCalendarDays, LucideHome, LucideCreditCard, LucideScanQrCode, LucideUser, LucideFlame, LucideTimer, LucideLogIn, LucideLogOut } from 'lucide-react';
+import { LucideHome, LucideCreditCard, LucideScanQrCode, LucideCalendarDays, LucideUser, LucideFlame, LucideTimer, LucideLogIn, LucideLogOut } from 'lucide-react';
 
 export const Route = createFileRoute('/dashboard/m/attendance')({
   component: AttendanceHistory,
@@ -20,14 +20,14 @@ function AttendanceHistory() {
         {/* Header Section */}
         <header className="flex justify-between items-center px-5 pt-8 pb-4 relative">
           <h1 className="text-[28px] leading-[32px] font-bold text-white font-['Poppins'] tracking-tight">Attendance</h1>
-          <button className="w-10 h-10 flex items-center justify-center rounded-full bg-[#1e201d] hover:bg-[#333532] transition-colors border border-white/5 text-[#858A7D] hover:text-[#B7FF1E]">
+          <button className="w-10 h-10 flex items-center justify-center rounded-full bg-[#121411] hover:bg-[#333532] transition-colors border border-white/5 text-[#858A7D] hover:text-[#B7FF1E]">
             <LucideCalendarDays className="w-5 h-5" />
           </button>
         </header>
 
         {/* Summary Stats Bento Grid */}
         <section className="px-5 py-6 grid grid-cols-2 gap-3">
-          <div className="bg-[#1e201d] rounded-2xl p-4 border border-white/5 relative overflow-hidden group backdrop-blur-sm">
+          <div className="bg-[#151714] rounded-xl p-4 border border-white/5 relative overflow-hidden group backdrop-blur-sm">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(213,255,64,0.05),transparent_70%)] pointer-events-none"></div>
             <div className="absolute inset-0 bg-gradient-to-br from-[#25340D]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div className="flex justify-between items-start mb-4">
@@ -38,7 +38,7 @@ function AttendanceHistory() {
               <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] mt-1 uppercase tracking-wider font-['Poppins']">Total Days</span>
             </div>
           </div>
-          <div className="bg-[#1e201d] rounded-2xl p-4 border border-white/5 relative overflow-hidden group backdrop-blur-sm">
+          <div className="bg-[#151714] rounded-xl p-4 border border-white/5 relative overflow-hidden group backdrop-blur-sm">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(213,255,64,0.05),transparent_70%)] pointer-events-none"></div>
             <div className="absolute inset-0 bg-gradient-to-br from-[#25340D]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div className="flex justify-between items-start mb-4">
@@ -62,14 +62,38 @@ function AttendanceHistory() {
               <span className="text-[11px] leading-[14px] font-semibold text-[#B7FF1E] uppercase tracking-wider font-['Poppins']">Days</span>
             </div>
           </div>
-          <div className="bg-[#1e201d] rounded-2xl p-4 border border-white/5">
+          <div className="bg-[#151714] rounded-xl p-4 border border-white/5">
             <div className="grid grid-cols-7 gap-2 w-fit">
-              {[...Array(30)].map((_, i) => (
-                <div 
-                  key={i} 
-                  className={`w-[14px] h-[14px] rounded-sm ${i < 3 || (i > 3 && i < 7) || (i > 7 && i < 11) || (i > 11 && i < 15) || (i > 15 && i < 19) || (i > 19 && i < 23) ? 'bg-[#B7FF1E]' : 'bg-[#333532]'}`}
-                />
-              ))}
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#333532]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#333532]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#333532]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#333532]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#333532]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#B7FF1E]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#333532]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#333532]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#333532]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#333532]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#333532]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#333532]"></div>
+              <div className="w-[14px] h-[14px] rounded-sm bg-[#333532]"></div>
             </div>
           </div>
         </section>
@@ -82,10 +106,10 @@ function AttendanceHistory() {
           </h2>
           <div className="flex flex-col gap-2">
             {/* Log Item 1 */}
-            <div className="bg-[#1e201d] rounded-2xl p-4 border border-white/5 flex items-center justify-between hover:bg-[#333532] transition-colors backdrop-blur-sm relative overflow-hidden group">
+            <div className="bg-[#121411] rounded-xl p-4 border border-white/5 flex items-center justify-between hover:bg-[#333532] transition-colors backdrop-blur-sm relative overflow-hidden group">
               <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(213,255,64,0.03),transparent)] pointer-events-none rounded-xl"></div>
               <div className="flex items-center gap-4 relative z-10">
-                <div className="w-12 h-12 rounded-lg bg-[#121411] flex flex-col items-center justify-center border border-white/5">
+                <div className="w-12 h-12 rounded-lg bg-[#1e201d] flex flex-col items-center justify-center border border-white/5">
                   <span className="text-[11px] font-semibold text-[#B7FF1E] uppercase font-['Poppins']">May</span>
                   <span className="text-[18px] font-semibold text-white leading-none mt-1 font-['Poppins']">26</span>
                 </div>
@@ -105,10 +129,10 @@ function AttendanceHistory() {
               </div>
             </div>
             {/* Log Item 2 */}
-            <div className="bg-[#1e201d] rounded-2xl p-4 border border-white/5 flex items-center justify-between hover:bg-[#333532] transition-colors backdrop-blur-sm relative overflow-hidden group">
+            <div className="bg-[#121411] rounded-xl p-4 border border-white/5 flex items-center justify-between hover:bg-[#333532] transition-colors backdrop-blur-sm relative overflow-hidden group">
               <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(213,255,64,0.03),transparent)] pointer-events-none rounded-xl"></div>
               <div className="flex items-center gap-4 relative z-10">
-                <div className="w-12 h-12 rounded-lg bg-[#121411] flex flex-col items-center justify-center border border-white/5">
+                <div className="w-12 h-12 rounded-lg bg-[#1e201d] flex flex-col items-center justify-center border border-white/5">
                   <span className="text-[11px] font-semibold text-[#B7FF1E] uppercase font-['Poppins']">May</span>
                   <span className="text-[18px] font-semibold text-white leading-none mt-1 font-['Poppins']">24</span>
                 </div>
@@ -128,10 +152,10 @@ function AttendanceHistory() {
               </div>
             </div>
             {/* Log Item 3 */}
-            <div className="bg-[#1e201d] rounded-2xl p-4 border border-white/5 flex items-center justify-between hover:bg-[#333532] transition-colors backdrop-blur-sm relative overflow-hidden group opacity-70">
+            <div className="bg-[#121411] rounded-xl p-4 border border-white/5 flex items-center justify-between hover:bg-[#333532] transition-colors backdrop-blur-sm relative overflow-hidden group">
               <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(213,255,64,0.03),transparent)] pointer-events-none rounded-xl"></div>
               <div className="flex items-center gap-4 relative z-10">
-                <div className="w-12 h-12 rounded-lg bg-[#121411] flex flex-col items-center justify-center border border-white/5">
+                <div className="w-12 h-12 rounded-lg bg-[#1e201d] flex flex-col items-center justify-center border border-white/5">
                   <span className="text-[11px] font-semibold text-[#C0C2B8] uppercase font-['Poppins']">May</span>
                   <span className="text-[18px] font-semibold text-[#C0C2B8] leading-none mt-1 font-['Poppins']">21</span>
                 </div>
@@ -139,7 +163,7 @@ function AttendanceHistory() {
                   <span className="text-[18px] font-semibold text-[#C0C2B8] font-['Poppins']">Thursday</span>
                 </div>
               </div>
-              <div className="flex flex-col items-end text-right relative z-10">
+              <div className="flex flex-col items-end text-right relative z-10 opacity-70">
                 <span className="text-[14px] text-[#C0C2B8] flex items-center gap-1 font-['Poppins']">
                   <LucideLogIn className="w-4 h-4" />
                   12:45
