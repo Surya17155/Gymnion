@@ -9,7 +9,11 @@ import {
   LucideUserCircle,
   LucideMail,
   LucidePhone,
-  LucideMapPin
+  LucideMapPin,
+  LucidePencil,
+  LucideCamera,
+  LucideCheck,
+  LucideX
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -25,8 +29,42 @@ function ProfilePage() {
     email: 'johan.smith@email.com',
     phone: '+91 98765 43210',
     address: '123 Fitness Lane, Sector 4, Bangalore, India',
-    bio: 'Fitness enthusiast & weekend marathon runner. Pushing limits every day.'
+    bio: 'Fitness enthusiast & weekend marathon runner. Pushing limits every day.',
+    profilePic: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop'
   });
+
+  const [isEditingHeader, setIsEditingHeader] = useState(false);
+  const [isEditingPersonal, setIsEditingPersonal] = useState(false);
+  const [isEditingContact, setIsEditingContact] = useState(false);
+  const [isEditingLocation, setIsEditingLocation] = useState(false);
+  
+  const [tempProfile, setTempProfile] = useState({...profile});
+
+  const handleSave = (section: string) => {
+    setProfile({...tempProfile});
+    if (section === 'header') setIsEditingHeader(false);
+    if (section === 'personal') setIsEditingPersonal(false);
+    if (section === 'contact') setIsEditingContact(false);
+    if (section === 'location') setIsEditingLocation(false);
+  };
+
+  const handleCancel = (section: string) => {
+    setTempProfile({...profile});
+    if (section === 'header') setIsEditingHeader(false);
+    if (section === 'personal') setIsEditingPersonal(false);
+    if (section === 'contact') setIsEditingContact(false);
+    if (section === 'location') setIsEditingLocation(false);
+  };
+
+  const handleProfilePicChange = () => {
+    // Demo functionality: toggle between two images
+    const newPic = profile.profilePic.includes('photo-1534438327276-14e5300c3a48') 
+      ? 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1470&auto=format&fit=crop'
+      : 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop';
+    
+    setProfile(prev => ({ ...prev, profilePic: newPic }));
+    setTempProfile(prev => ({ ...prev, profilePic: newPic }));
+  };
 
   return (
     <div className="flex justify-center min-h-screen bg-[#121411] w-full relative overflow-x-hidden font-['Poppins']">
@@ -49,76 +87,224 @@ function ProfilePage() {
         </header>
 
         {/* Top Section: Avatar & Bio */}
-        <section className="flex flex-col items-center text-center mt-4">
-          <div className="relative w-32 h-32 rounded-full p-1 bg-gradient-to-br from-[#B7FF1E] to-[#83A51B] mb-6 shadow-[0_0_20px_rgba(183,255,30,0.2)]">
+        <section className="flex flex-col items-center text-center mt-4 relative">
+          {!isEditingHeader && (
+            <button 
+              onClick={() => setIsEditingHeader(true)}
+              className="absolute top-0 right-0 w-8 h-8 rounded-full bg-[#333532] flex items-center justify-center border border-white/10 text-[#B7FF1E] shadow-lg z-20"
+            >
+              <LucidePencil className="w-4 h-4" />
+            </button>
+          )}
+
+          <div className="relative w-32 h-32 rounded-full p-1 bg-gradient-to-br from-[#B7FF1E] to-[#83A51B] mb-6 shadow-[0_0_20px_rgba(183,255,30,0.2)] group">
             <div className="w-full h-full rounded-full overflow-hidden bg-[#333532] border-4 border-[#121411]">
               <img 
                 alt="User Profile Picture" 
                 className="w-full h-full object-cover" 
-                src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop" 
+                src={profile.profilePic} 
               />
             </div>
+            <button 
+              onClick={handleProfilePicChange}
+              className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-[#B7FF1E] flex items-center justify-center border-2 border-[#121411] text-[#121411] shadow-lg transition-transform hover:scale-110"
+            >
+              <LucideCamera className="w-5 h-5" />
+            </button>
           </div>
-          <h2 className="text-[22px] leading-[26px] font-bold text-white mb-2">{profile.name}</h2>
-          <p className="text-[14px] leading-[20px] text-[#C0C2B8] max-w-[280px]">
-            {profile.bio}
-          </p>
+
+          {isEditingHeader ? (
+            <div className="w-full flex flex-col gap-3">
+              <input 
+                type="text"
+                value={tempProfile.name}
+                onChange={(e) => setTempProfile({...tempProfile, name: e.target.value})}
+                className="bg-[#1e201d] border border-[#B7FF1E]/30 rounded-xl px-4 py-2 text-white text-center font-bold text-[22px] focus:outline-none focus:border-[#B7FF1E]"
+              />
+              <textarea 
+                value={tempProfile.bio}
+                onChange={(e) => setTempProfile({...tempProfile, bio: e.target.value})}
+                className="bg-[#1e201d] border border-[#B7FF1E]/30 rounded-xl px-4 py-2 text-[#C0C2B8] text-center text-[14px] focus:outline-none focus:border-[#B7FF1E] resize-none h-20"
+              />
+              <div className="flex justify-center gap-2 mt-2">
+                <button onClick={() => handleSave('header')} className="bg-[#B7FF1E] text-[#121411] rounded-full px-4 py-1 font-bold text-sm flex items-center gap-1">
+                  <LucideCheck className="w-4 h-4" /> Save
+                </button>
+                <button onClick={() => handleCancel('header')} className="bg-[#333532] text-white rounded-full px-4 py-1 font-bold text-sm flex items-center gap-1">
+                  <LucideX className="w-4 h-4" /> Cancel
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <h2 className="text-[22px] leading-[26px] font-bold text-white mb-2">{profile.name}</h2>
+              <p className="text-[14px] leading-[20px] text-[#C0C2B8] max-w-[280px]">
+                {profile.bio}
+              </p>
+            </>
+          )}
         </section>
 
         {/* Information Cards */}
         <section className="flex flex-col gap-3 mt-4">
           {/* Card 1: Personal Details */}
           <div className="bg-[#121411] rounded-2xl p-4 border border-white/5 relative overflow-hidden group hover:border-[#B7FF1E]/30 transition-colors shadow-inner" style={{ boxShadow: 'inset 0 0 40px rgba(183, 255, 30, 0.05)' }}>
-            <div className="flex items-center gap-3 mb-4">
-              <LucideUserCircle className="w-5 h-5 text-[#B7FF1E]" />
-              <h3 className="text-[18px] leading-[24px] font-semibold text-white">Personal Details</h3>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <LucideUserCircle className="w-5 h-5 text-[#B7FF1E]" />
+                <h3 className="text-[18px] leading-[24px] font-semibold text-white">Personal Details</h3>
+              </div>
+              {!isEditingPersonal && (
+                <button onClick={() => setIsEditingPersonal(true)} className="text-[#B7FF1E] p-1">
+                  <LucidePencil className="w-4 h-4" />
+                </button>
+              )}
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1">
-                <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] uppercase tracking-wider">Name</span>
-                <span className="text-[14px] leading-[20px] text-white font-medium">{profile.name}</span>
+
+            {isEditingPersonal ? (
+              <div className="flex flex-col gap-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[11px] text-[#C0C2B8] uppercase font-bold">Name</label>
+                    <input 
+                      type="text" 
+                      value={tempProfile.name} 
+                      onChange={(e) => setTempProfile({...tempProfile, name: e.target.value})}
+                      className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[11px] text-[#C0C2B8] uppercase font-bold">Age</label>
+                    <input 
+                      type="text" 
+                      value={tempProfile.age} 
+                      onChange={(e) => setTempProfile({...tempProfile, age: e.target.value})}
+                      className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[11px] text-[#C0C2B8] uppercase font-bold">Date of Birth</label>
+                  <input 
+                    type="text" 
+                    value={tempProfile.dob} 
+                    onChange={(e) => setTempProfile({...tempProfile, dob: e.target.value})}
+                    className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none"
+                  />
+                </div>
+                <div className="flex justify-end gap-2 mt-2">
+                  <button onClick={() => handleCancel('personal')} className="text-white text-xs font-bold px-3 py-1 bg-[#333532] rounded-lg">Cancel</button>
+                  <button onClick={() => handleSave('personal')} className="text-[#121411] text-xs font-bold px-3 py-1 bg-[#B7FF1E] rounded-lg">Save</button>
+                </div>
               </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] uppercase tracking-wider">Age</span>
-                <span className="text-[14px] leading-[20px] text-white font-medium">{profile.age}</span>
+            ) : (
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] uppercase tracking-wider">Name</span>
+                  <span className="text-[14px] leading-[20px] text-white font-medium">{profile.name}</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] uppercase tracking-wider">Age</span>
+                  <span className="text-[14px] leading-[20px] text-white font-medium">{profile.age}</span>
+                </div>
+                <div className="flex flex-col gap-1 col-span-2">
+                  <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] uppercase tracking-wider">Date of Birth</span>
+                  <span className="text-[14px] leading-[20px] text-white font-medium">{profile.dob}</span>
+                </div>
               </div>
-              <div className="flex flex-col gap-1 col-span-2">
-                <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] uppercase tracking-wider">Date of Birth</span>
-                <span className="text-[14px] leading-[20px] text-white font-medium">{profile.dob}</span>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Card 2: Contact Information */}
           <div className="bg-[#121411] rounded-2xl p-4 border border-white/5 relative overflow-hidden group hover:border-[#B7FF1E]/30 transition-colors shadow-inner" style={{ boxShadow: 'inset 0 0 40px rgba(183, 255, 30, 0.05)' }}>
-            <div className="flex items-center gap-3 mb-4">
-              <LucideMail className="w-5 h-5 text-[#B7FF1E]" />
-              <h3 className="text-[18px] leading-[24px] font-semibold text-white">Contact Information</h3>
-            </div>
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-1">
-                <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] uppercase tracking-wider">Email</span>
-                <span className="text-[14px] leading-[20px] text-white font-medium">{profile.email}</span>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <LucideMail className="w-5 h-5 text-[#B7FF1E]" />
+                <h3 className="text-[18px] leading-[24px] font-semibold text-white">Contact Information</h3>
               </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] uppercase tracking-wider">Phone No.</span>
-                <span className="text-[14px] leading-[20px] text-white font-medium">{profile.phone}</span>
-              </div>
+              {!isEditingContact && (
+                <button onClick={() => setIsEditingContact(true)} className="text-[#B7FF1E] p-1">
+                  <LucidePencil className="w-4 h-4" />
+                </button>
+              )}
             </div>
+            
+            {isEditingContact ? (
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[11px] text-[#C0C2B8] uppercase font-bold">Email</label>
+                  <input 
+                    type="email" 
+                    value={tempProfile.email} 
+                    onChange={(e) => setTempProfile({...tempProfile, email: e.target.value})}
+                    className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[11px] text-[#C0C2B8] uppercase font-bold">Phone No.</label>
+                  <input 
+                    type="text" 
+                    value={tempProfile.phone} 
+                    onChange={(e) => setTempProfile({...tempProfile, phone: e.target.value})}
+                    className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none"
+                  />
+                </div>
+                <div className="flex justify-end gap-2 mt-2">
+                  <button onClick={() => handleCancel('contact')} className="text-white text-xs font-bold px-3 py-1 bg-[#333532] rounded-lg">Cancel</button>
+                  <button onClick={() => handleSave('contact')} className="text-[#121411] text-xs font-bold px-3 py-1 bg-[#B7FF1E] rounded-lg">Save</button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] uppercase tracking-wider">Email</span>
+                  <span className="text-[14px] leading-[20px] text-white font-medium">{profile.email}</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] uppercase tracking-wider">Phone No.</span>
+                  <span className="text-[14px] leading-[20px] text-white font-medium">{profile.phone}</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Card 3: Location */}
           <div className="bg-[#121411] rounded-2xl p-4 border border-white/5 relative overflow-hidden group hover:border-[#B7FF1E]/30 transition-colors shadow-inner" style={{ boxShadow: 'inset 0 0 40px rgba(183, 255, 30, 0.05)' }}>
-            <div className="flex items-center gap-3 mb-4">
-              <LucideMapPin className="w-5 h-5 text-[#B7FF1E]" />
-              <h3 className="text-[18px] leading-[24px] font-semibold text-white">Location</h3>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <LucideMapPin className="w-5 h-5 text-[#B7FF1E]" />
+                <h3 className="text-[18px] leading-[24px] font-semibold text-white">Location</h3>
+              </div>
+              {!isEditingLocation && (
+                <button onClick={() => setIsEditingLocation(true)} className="text-[#B7FF1E] p-1">
+                  <LucidePencil className="w-4 h-4" />
+                </button>
+              )}
             </div>
-            <div className="flex flex-col gap-1">
-              <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] uppercase tracking-wider">Address</span>
-              <span className="text-[14px] leading-[20px] text-white font-medium leading-relaxed">
-                {profile.address}
-              </span>
-            </div>
+
+            {isEditingLocation ? (
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[11px] text-[#C0C2B8] uppercase font-bold">Address</label>
+                  <textarea 
+                    value={tempProfile.address} 
+                    onChange={(e) => setTempProfile({...tempProfile, address: e.target.value})}
+                    className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-[#B7FF1E] outline-none resize-none h-20"
+                  />
+                </div>
+                <div className="flex justify-end gap-2 mt-2">
+                  <button onClick={() => handleCancel('location')} className="text-white text-xs font-bold px-3 py-1 bg-[#333532] rounded-lg">Cancel</button>
+                  <button onClick={() => handleSave('location')} className="text-[#121411] text-xs font-bold px-3 py-1 bg-[#B7FF1E] rounded-lg">Save</button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-1">
+                <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] uppercase tracking-wider">Address</span>
+                <span className="text-[14px] leading-[20px] text-white font-medium leading-relaxed">
+                  {profile.address}
+                </span>
+              </div>
+            )}
           </div>
         </section>
       </main>
