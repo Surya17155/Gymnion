@@ -128,9 +128,12 @@ function AdminPlans() {
         </main>
 
         {/* Floating Action Button (FAB) */}
-        <button className="fixed rounded-full bg-[#B7FF1E] text-[#121411] shadow-[0_4px_20px_rgba(183,255,30,0.3)] flex items-center justify-center z-40 active:scale-95 transition-transform hover:opacity-90 bottom-24 right-6 w-14 h-14">
+        <Link 
+          to="/dashboard/admin/plans/new"
+          className="fixed rounded-full bg-[#B7FF1E] text-[#121411] shadow-[0_4px_20px_rgba(183,255,30,0.3)] flex items-center justify-center z-40 active:scale-95 transition-transform hover:opacity-90 bottom-24 right-6 w-14 h-14"
+        >
           <span className="material-symbols-outlined text-[24px]" style={{ fontVariationSettings: '"FILL" 1' }}>add</span>
-        </button>
+        </Link>
 
         <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px]">
           <Link 
