@@ -32,18 +32,22 @@ export const createFeePlan = createServerFn({ method: 'POST' })
   .validator((data: any) => z.object({
     name: z.string(),
     amount: z.number(),
-    description: z.string().optional(),
+    description: z.string().optional().nullable(),
     billing_cycle: z.string(),
     gym_id: z.string(),
   }).parse(data))
   .handler(async ({ data }) => {
     const { error } = await supabaseAdmin
       .from('fee_plans')
-      .insert([data]);
+      .insert([{
+        ...data,
+        description: data.description ?? null
+      }]);
     
     if (error) throw error;
     return { success: true };
   });
+
 
 export const getMembers = createServerFn({ method: 'GET' })
   .handler(async () => {
