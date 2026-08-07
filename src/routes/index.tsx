@@ -5,8 +5,8 @@ import { useEffect } from "react";
 
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- * 
- * remove the main home screen for now and open straight to the member dashboard screen
+ *                                            
+ * Also, remove the right-side scroll bar on the screen, its annoying in the UI, so please remove the scroll bar from the right side of the screen in this app
  */
 export const Route = createFileRoute("/")({
   head: () => ({
