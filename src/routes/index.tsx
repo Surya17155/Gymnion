@@ -6,7 +6,7 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                            
- * On the member dashboard screen, shift the greeting “Hi, John” and its subtext “Ready to crush it today?” slightly downward, along with the other elements, to maintain the same gap between the heading and the other components. This is necessary because the greeting message - “Hi, user_first_name” - is positioned close to the top of the screen.
+ * now create the Attendance screen exactly same as given in the code file. and also connect this page with the Attendance button in the app tabbar
  */
 export const Route = createFileRoute("/")({
   head: () => ({
