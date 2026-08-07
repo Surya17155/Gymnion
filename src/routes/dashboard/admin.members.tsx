@@ -174,22 +174,23 @@ function AdminMembers() {
             <div className="px-[20px] pb-safe pt-2 overflow-y-auto no-scrollbar flex-1">
               <div className="flex flex-col items-center mb-6">
                 <div className="w-24 h-24 rounded-full overflow-hidden bg-[#1e201d] border-2 border-[#D5FF40] shadow-[0_0_16px_rgba(213,255,64,0.2)] mb-4">
-                  {selectedMember.image ? (
-                    <img className="w-full h-full object-cover" src={selectedMember.image} alt={selectedMember.name} />
+                  {selectedMember.photo_url ? (
+                    <img className="w-full h-full object-cover" src={selectedMember.photo_url} alt={selectedMember.full_name} />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-[#333532]">
-                      <span className="text-[32px] font-bold text-white">{selectedMember.initials}</span>
+                      <span className="text-[32px] font-bold text-white">{selectedMember.full_name?.charAt(0)}</span>
                     </div>
                   )}
                 </div>
-                <h2 className="text-[22px] font-bold text-white text-center leading-[26px] tracking-[-0.025em]">{selectedMember.name}</h2>
+                <h2 className="text-[22px] font-bold text-white text-center leading-[26px] tracking-[-0.025em]">{selectedMember.full_name}</h2>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className={`w-2 h-2 rounded-full animate-pulse ${selectedMember.status === 'Active' ? 'bg-[#A7F52A]' : 'bg-[#FF5964]'}`}></span>
-                  <span className={`text-[11px] font-semibold uppercase tracking-wide ${selectedMember.status === 'Active' ? 'text-[#A7F52A]' : 'text-[#FF5964]'}`}>
+                  <span className={`w-2 h-2 rounded-full animate-pulse ${selectedMember.status === 'active' ? 'bg-[#A7F52A]' : 'bg-[#FF5964]'}`}></span>
+                  <span className={`text-[11px] font-semibold uppercase tracking-wide ${selectedMember.status === 'active' ? 'text-[#A7F52A]' : 'text-[#FF5964]'}`}>
                     {selectedMember.status} Member
                   </span>
                 </div>
               </div>
+
 
               <div className="space-y-[12px] mb-6">
                 <div className="p-4 bg-[#121411] border border-white/5 rounded-xl relative overflow-hidden group">
