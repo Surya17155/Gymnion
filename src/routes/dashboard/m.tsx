@@ -1,5 +1,4 @@
 import { createFileRoute, Link, Outlet, useLocation, useNavigate } from '@tanstack/react-router';
-import { LucideReceiptText, LucideHistory, LucideScanQrCode, LucideHome, LucideCreditCard, LucideCalendarDays, LucideUser, LucideLogOut } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 
@@ -30,12 +29,9 @@ function MemberDashboard() {
   };
 
   return (
-    <div className="flex justify-center min-h-screen bg-[#121411]">
-      {/* 
-          This route acts as a layout for its children (like /payments).
-          If we are at the base path (/dashboard/m), we show the home content.
-          Otherwise, we show the Outlet (the child route).
-      */}
+    <div className="flex justify-center min-h-screen bg-[#121411] text-[#e3e3dd] antialiased font-['Poppins']">
+      {/* Ensure Google Material Symbols are loaded */}
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       
       {!isHome ? (
         <Outlet />
@@ -54,8 +50,8 @@ function MemberDashboard() {
             <header className="flex justify-between items-center px-5 h-[80px] w-full sticky top-0 z-40 bg-transparent pt-6">
               <div className="flex items-center gap-3">
                 <div>
-                  <h1 className="text-[18px] leading-[24px] font-semibold text-white font-['Poppins']">Hi, Johan</h1>
-                  <p className="text-[14px] leading-[20px] text-[#C0C2B8] font-['Poppins']">Ready to crush it today?</p>
+                  <h1 className="text-[18px] leading-[24px] font-semibold text-white">Hi, Johan</h1>
+                  <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Ready to crush it today?</p>
                 </div>
               </div>
 
@@ -75,9 +71,9 @@ function MemberDashboard() {
                   <div className="absolute right-0 mt-2 w-48 bg-[#1e201d] border border-white/10 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200">
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-left text-red-400 hover:bg-white/5 transition-colors font-['Poppins'] text-[14px]"
+                      className="w-full flex items-center gap-3 px-4 py-3 text-left text-red-400 hover:bg-white/5 transition-colors text-[14px]"
                     >
-                      <LucideLogOut className="w-4 h-4" />
+                      <span className="material-symbols-outlined text-[18px]">logout</span>
                       Log out
                     </button>
                   </div>
@@ -88,28 +84,27 @@ function MemberDashboard() {
             <div className="px-5 flex flex-col gap-6 mt-6">
               {/* Primary Payment Card */}
               <section className="bg-[#1e201d] rounded-2xl p-5 border border-white/5 relative overflow-hidden group">
-                {/* Inner glow effect for card */}
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#aed502]/10 rounded-full blur-2xl"></div>
                 
                 <div className="flex justify-between items-start mb-6 relative z-10">
                   <div>
-                    <h2 className="text-[12px] leading-[18px] text-[#C0C2B8] uppercase tracking-wider mb-1 font-['Poppins']">Last Payment</h2>
+                    <h2 className="text-[12px] leading-[18px] text-[#C0C2B8] uppercase tracking-wider mb-1">Last Payment</h2>
                     <div className="flex items-end gap-2">
-                      <span className="text-[40px] leading-[40px] font-bold text-white font-['Poppins'] tracking-tight">₹1,200</span>
-                      <span className="text-[12px] leading-[18px] text-[#C0C2B8] mb-1 font-['Poppins']">/ May 1st</span>
+                      <span className="text-[40px] leading-[40px] font-bold text-white tracking-tight">₹1,200</span>
+                      <span className="text-[12px] leading-[18px] text-[#C0C2B8] mb-1">/ May 1st</span>
                     </div>
                   </div>
-                  <div className="bg-[#333532] rounded-full p-2 border border-white/5">
-                    <LucideReceiptText className="w-6 h-6 text-[#B7FF1E]" />
+                  <div className="bg-[#333532] rounded-full p-2 border border-white/5 flex items-center justify-center w-10 h-10">
+                    <span className="material-symbols-outlined text-[#B7FF1E]">receipt_long</span>
                   </div>
                 </div>
 
                 <div className="bg-[#121411] rounded-xl p-4 flex justify-between items-center border border-white/5 relative z-10">
                   <div>
-                    <h3 className="text-[12px] leading-[18px] text-[#C0C2B8] mb-0.5 font-['Poppins']">Next Due</h3>
-                    <p className="text-[18px] leading-[24px] font-semibold text-white font-['Poppins']">June 1st</p>
+                    <h3 className="text-[12px] leading-[18px] text-[#C0C2B8] mb-0.5">Next Due</h3>
+                    <p className="text-[18px] leading-[24px] font-semibold text-white">June 1st</p>
                   </div>
-                  <button className="bg-[#B7FF1E] text-[#293500] text-[18px] leading-[24px] font-semibold px-6 py-2.5 rounded-full hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(183,255,30,0.3)] font-['Poppins']">
+                  <button className="bg-[#B7FF1E] text-[#293500] text-[18px] leading-[24px] font-semibold px-6 py-2.5 rounded-full hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(183,255,30,0.3)]">
                     Pay Now
                   </button>
                 </div>
@@ -118,10 +113,10 @@ function MemberDashboard() {
               {/* Attendance Section */}
               <section className="bg-[#1e201d] rounded-2xl p-5 border border-white/5">
                 <div className="flex justify-between items-start mb-4">
-                  <h2 className="text-[18px] leading-[24px] font-semibold text-white font-['Poppins']">This Month's Attendance</h2>
+                  <h2 className="text-[18px] leading-[24px] font-semibold text-white">This Month's Attendance</h2>
                   <div className="flex flex-col items-end">
-                    <span className="text-[40px] leading-[40px] font-bold text-[#B7FF1E] font-['Poppins'] tracking-tight">18</span>
-                    <span className="text-[11px] leading-[14px] font-semibold text-[#B7FF1E] uppercase tracking-wider font-['Poppins']">Days</span>
+                    <span className="text-[40px] leading-[40px] font-bold text-[#B7FF1E] tracking-tight">18</span>
+                    <span className="text-[11px] leading-[14px] font-semibold text-[#B7FF1E] uppercase tracking-wider">Days</span>
                   </div>
                 </div>
                 
@@ -140,27 +135,27 @@ function MemberDashboard() {
               {/* Recent Activity List */}
               <section className="flex flex-col gap-3">
                 <div className="flex justify-between items-center mb-2">
-                  <h2 className="text-[18px] leading-[24px] font-semibold text-white font-['Poppins']">Recent Activity</h2>
-                  <button className="text-[12px] leading-[18px] text-[#B7FF1E] hover:underline font-['Poppins']">View All</button>
+                  <h2 className="text-[18px] leading-[24px] font-semibold text-white">Recent Activity</h2>
+                  <button className="text-[12px] leading-[18px] text-[#B7FF1E] hover:underline">View All</button>
                 </div>
 
                 <div className="bg-[#1e201d] rounded-xl p-4 flex items-center gap-4 border border-white/5">
                   <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center text-[#B7FF1E]">
-                    <LucideHistory className="w-6 h-6" />
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>history</span>
                   </div>
                   <div>
-                    <h3 className="text-[18px] leading-[24px] font-semibold text-white font-['Poppins']">Today</h3>
-                    <p className="text-[12px] leading-[18px] text-[#C0C2B8] font-['Poppins']">06:45 PM Check-in</p>
+                    <h3 className="text-[18px] leading-[24px] font-semibold text-white">Today</h3>
+                    <p className="text-[12px] leading-[18px] text-[#C0C2B8]">06:45 PM Check-in</p>
                   </div>
                 </div>
 
                 <div className="bg-[#1e201d] rounded-xl p-4 flex items-center gap-4 border border-white/5">
                   <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center text-[#C0C2B8]">
-                    <LucideHistory className="w-6 h-6" />
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>history</span>
                   </div>
                   <div>
-                    <h3 className="text-[18px] leading-[24px] font-semibold text-white font-['Poppins']">Yesterday</h3>
-                    <p className="text-[12px] leading-[18px] text-[#C0C2B8] font-['Poppins']">07:12 AM Check-in</p>
+                    <h3 className="text-[18px] leading-[24px] font-semibold text-white">Yesterday</h3>
+                    <p className="text-[12px] leading-[18px] text-[#C0C2B8]">07:12 AM Check-in</p>
                   </div>
                 </div>
               </section>
@@ -168,30 +163,30 @@ function MemberDashboard() {
 
             {/* Bottom Nav Bar */}
             <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-40 bg-[#1e201d] border-t border-white/5 shadow-lg px-2 py-2 pb-safe flex justify-around items-center h-[64px] rounded-t-2xl">
-              <Link to="/dashboard/m" className="flex flex-col items-center justify-center text-[#B7FF1E] bg-[#25340D]/20 rounded-xl p-1 min-w-[60px] scale-90 transition-all duration-200">
-                <LucideHome className="w-6 h-6 mb-1" />
-                <span className="text-[11px] leading-[14px] font-semibold font-['Poppins']">Home</span>
+              <Link to="/dashboard/m" className="flex flex-col items-center justify-center text-[#B7FF1E] bg-[#25340D]/20 rounded-xl p-1 w-[72px] h-[64px] scale-90 transition-all duration-200">
+                <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: '"FILL" 1' }}>home</span>
+                <span className="text-[11px] leading-[14px] font-semibold">Home</span>
               </Link>
               
-              <Link to="/dashboard/m/payments" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl min-w-[60px] transition-colors">
-                <LucideCreditCard className="w-6 h-6 mb-1" />
-                <span className="text-[11px] leading-[14px] font-semibold font-['Poppins']">Payments</span>
+              <Link to="/dashboard/m/payments" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl w-[72px] h-[64px] transition-colors">
+                <span className="material-symbols-outlined mb-1">credit_card</span>
+                <span className="text-[11px] leading-[14px] font-semibold">Payments</span>
               </Link>
               
               <div className="relative -top-6">
                 <button className="w-16 h-16 bg-[#B7FF1E] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgba(213,255,64,0.3)] border-4 border-[#1e201d] hover:scale-105 transition-transform">
-                  <LucideScanQrCode className="w-[30px] h-[30px] text-[#293500]" />
+                  <span className="material-symbols-outlined text-[30px] text-[#293500]">qr_code_scanner</span>
                 </button>
               </div>
               
-              <Link to="/dashboard/m/attendance" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl min-w-[60px] transition-colors">
-                <LucideCalendarDays className="w-6 h-6 mb-1" />
-                <span className="text-[11px] leading-[14px] font-semibold font-['Poppins']">Attendance</span>
+              <Link to="/dashboard/m/attendance" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl w-[72px] h-[64px] transition-colors">
+                <span className="material-symbols-outlined mb-1">calendar_month</span>
+                <span className="text-[11px] leading-[14px] font-semibold">Attendance</span>
               </Link>
               
-              <Link to="/dashboard/m/profile" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl min-w-[60px] transition-colors">
-                <LucideUser className="w-6 h-6 mb-1" />
-                <span className="text-[11px] leading-[14px] font-semibold font-['Poppins']">Profile</span>
+              <Link to="/dashboard/m/profile" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl w-[72px] h-[64px] transition-colors">
+                <span className="material-symbols-outlined mb-1">person</span>
+                <span className="text-[11px] leading-[14px] font-semibold">Profile</span>
               </Link>
             </nav>
           </main>
