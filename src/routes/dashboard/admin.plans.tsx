@@ -37,7 +37,7 @@ function AdminPlans() {
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 w-full px-[20px] pt-[80px] pb-[100px]">
+        <main className="flex-1 w-full px-[20px] pt-[20px] pb-[100px]">
           <div className="mb-[24px]">
             <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Manage your gym's membership options and pricing tiers.</p>
           </div>
