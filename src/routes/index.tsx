@@ -1,11 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AppShell } from "@/components/AppShell";
 import { HomeContent } from "@/components/HomeContent";
+import { useEffect } from "react";
 
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  * 
- * hello
+ * remove the main home screen for now and open straight to the member dashboard screen
  */
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,9 +23,11 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  return (
-    <AppShell showNav={false}>
-      <HomeContent />
-    </AppShell>
-  );
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate({ to: "/dashboard/m" });
+  }, [navigate]);
+
+  return null;
 }
