@@ -38,7 +38,10 @@ function AdminSettings() {
           {/* Settings List */}
           <div className="flex flex-col gap-[12px]">
             {/* Fee Plans */}
-            <button className="flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-[#B7FF1E]/30 transition-colors group text-left w-full">
+            <Link 
+              to="/dashboard/admin/plans"
+              className="flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-[#B7FF1E]/30 transition-colors group text-left w-full"
+            >
               <div className="w-12 h-12 rounded-full bg-[#25340D] flex items-center justify-center mr-4 group-hover:bg-[#B7FF1E]/20 transition-colors">
                 <span className="material-symbols-outlined text-[#B7FF1E]" style={{ fontVariationSettings: '"FILL" 1' }}>receipt_long</span>
               </div>
@@ -47,7 +50,7 @@ function AdminSettings() {
                 <p className="text-[12px] text-[#858A7D] mt-1">Manage membership pricing and tiers.</p>
               </div>
               <span className="material-symbols-outlined text-[#858A7D] group-hover:text-[#B7FF1E] transition-colors">chevron_right</span>
-            </button>
+            </Link>
 
             {/* QR Management */}
             <button className="flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-[#B7FF1E]/30 transition-colors group text-left w-full">
