@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { LucideCalendarDays, LucideChevronRight, LucideCreditCard, LucideHome, LucideNotifications, LucideScanQrCode, LucideUser, LucideCheckCircle2 } from 'lucide-react';
+import { LucideCalendarDays, LucideChevronRight, LucideCreditCard, LucideHome, Bell, LucideScanQrCode, LucideUser, LucideCheckCircle2 } from 'lucide-react';
 
 export const Route = createFileRoute('/dashboard/m/payments')({
   component: MemberPayments,

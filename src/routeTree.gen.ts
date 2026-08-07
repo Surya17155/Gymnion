@@ -17,6 +17,7 @@ import { Route as DashboardAdminRouteImport } from './routes/dashboard/admin'
 import { Route as DashboardMRouteImport } from './routes/dashboard/m'
 import { Route as DashboardSuperAdminRouteImport } from './routes/dashboard/super-admin'
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
+import { Route as DashboardMPaymentsRouteImport } from './routes/dashboard/m.payments'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,24 +59,31 @@ const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
   path: '/auth/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardMPaymentsRoute = DashboardMPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => DashboardMRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/checkin': typeof CheckinRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/admin': typeof DashboardAdminRoute
-  '/dashboard/m': typeof DashboardMRoute
+  '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/m/payments': typeof DashboardMPaymentsRoute
   '/auth/login/': typeof AuthLoginIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/checkin': typeof CheckinRoute
   '/dashboard/admin': typeof DashboardAdminRoute
-  '/dashboard/m': typeof DashboardMRoute
+  '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/m/payments': typeof DashboardMPaymentsRoute
   '/auth/login': typeof AuthLoginIndexRoute
 }
 export interface FileRoutesById {
@@ -84,9 +92,10 @@ export interface FileRoutesById {
   '/checkin': typeof CheckinRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/admin': typeof DashboardAdminRoute
-  '/dashboard/m': typeof DashboardMRoute
+  '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/m/payments': typeof DashboardMPaymentsRoute
   '/auth/login/': typeof AuthLoginIndexRoute
 }
 export interface FileRouteTypes {
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/dashboard/'
+    | '/dashboard/m/payments'
     | '/auth/login/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/dashboard'
+    | '/dashboard/m/payments'
     | '/auth/login'
   id:
     | '__root__'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/dashboard/'
+    | '/dashboard/m/payments'
     | '/auth/login/'
   fileRoutesById: FileRoutesById
 }
@@ -186,19 +198,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/m/payments': {
+      id: '/dashboard/m/payments'
+      path: '/payments'
+      fullPath: '/dashboard/m/payments'
+      preLoaderRoute: typeof DashboardMPaymentsRouteImport
+      parentRoute: typeof DashboardMRoute
+    }
   }
 }
 
+interface DashboardMRouteChildren {
+  DashboardMPaymentsRoute: typeof DashboardMPaymentsRoute
+}
+
+const DashboardMRouteChildren: DashboardMRouteChildren = {
+  DashboardMPaymentsRoute: DashboardMPaymentsRoute,
+}
+
+const DashboardMRouteWithChildren = DashboardMRoute._addFileChildren(
+  DashboardMRouteChildren,
+)
+
 interface DashboardRouteChildren {
   DashboardAdminRoute: typeof DashboardAdminRoute
-  DashboardMRoute: typeof DashboardMRoute
+  DashboardMRoute: typeof DashboardMRouteWithChildren
   DashboardSuperAdminRoute: typeof DashboardSuperAdminRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAdminRoute: DashboardAdminRoute,
-  DashboardMRoute: DashboardMRoute,
+  DashboardMRoute: DashboardMRouteWithChildren,
   DashboardSuperAdminRoute: DashboardSuperAdminRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
@@ -216,3 +247,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
