@@ -50,6 +50,7 @@ function AuthPage() {
   };
 
   const handleSignIn = async () => {
+    console.log("handleSignIn called", formData);
     setLoading(true);
     setErrorMsg('');
     try {
