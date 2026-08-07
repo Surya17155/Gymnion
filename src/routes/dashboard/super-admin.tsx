@@ -203,10 +203,10 @@ function SuperAdminDashboard() {
                 </button>
               </div>
             </div>
-            <button className="w-full mt-2 py-3 rounded-xl border border-white/10 text-white text-sm font-semibold hover:bg-[#333532] transition-colors flex items-center justify-center gap-2">
+            <Link to="/dashboard/super-admin/gyms" className="w-full mt-2 py-3 rounded-xl border border-white/10 text-white text-sm font-semibold hover:bg-[#333532] transition-colors flex items-center justify-center gap-2">
               View All Gyms
               <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-            </button>
+            </Link>
           </section>
         </div>
       </main>
