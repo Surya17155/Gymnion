@@ -20,7 +20,7 @@ function MemberPayments() {
         {/* Top App Bar (Mobile View) */}
         <div className="flex justify-end px-5 w-full sticky top-0 z-40 h-12 items-center">
           <button className="w-10 h-10 rounded-full flex items-center justify-center bg-[#1e201d] border border-white/5 text-[#B7FF1E] hover:opacity-80 transition-opacity active:scale-95 transition-transform mt-2 relative z-10">
-            <LucideNotifications className="w-5 h-5" />
+            <Bell className="w-5 h-5" />
           </button>
         </div>
 
