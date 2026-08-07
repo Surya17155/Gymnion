@@ -6,9 +6,7 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *
- * You said you updated the frame from circular to a rounded square shape, but nothing changed. Please check it again and fix it.
- *
- * And also, there are two icons for check-in and check-out. Their current positions are centered on the side, which is incorrect; they should be placed next to the time. Move them there and fix their positions. To the left of the “check-in time” label, a green check-in icon should appear. To the left of the gray check-out label (which has text below it), a gray check-out icon should appear.
+ * Please remove this section, this month's attendance and the dots calendar and also 18 days which is written in the green color along with the month's attendance section and keep everything same as it is.
  */
 export const Route = createFileRoute("/")({
   head: () => ({
