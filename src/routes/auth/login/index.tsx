@@ -172,7 +172,7 @@ function AuthPage() {
               <label className="text-xs text-[#C0C2B8] px-1 font-normal">Email Address</label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C0C2B8] material-symbols-outlined text-xl">mail</span>
-                <input name="email" autoComplete="email" value={formData.email} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 pl-12 h-[48px] focus:outline-none focus:border-[#B7FF1E] focus:ring-1 focus:ring-[#B7FF1E]/50 transition-all placeholder:text-[#C0C2B8]" placeholder="Enter your email" required type="email" />
+                <input name="email" id="email" autoComplete="username" value={formData.email} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 pl-12 h-[48px] focus:outline-none focus:border-[#B7FF1E] focus:ring-1 focus:ring-[#B7FF1E]/50 transition-all placeholder:text-[#C0C2B8]" placeholder="Enter your email" required type="email" />
               </div>
             </div>
 
