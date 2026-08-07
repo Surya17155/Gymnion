@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
 import { LucideReceiptText, LucideHistory, LucideScanQrCode, LucideHome, LucideCreditCard, LucideCalendarDays, LucideUser } from 'lucide-react';
 
 export const Route = createFileRoute('/dashboard/m')({
