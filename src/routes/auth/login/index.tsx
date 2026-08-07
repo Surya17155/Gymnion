@@ -8,6 +8,8 @@ export const Route = createFileRoute('/auth/login/')({
 
 
 function AuthPage() {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-[#0d0f0c] text-[#e3e3dd] min-h-screen flex flex-col items-center justify-center p-5 font-sans antialiased overflow-x-hidden relative">
       <div className="absolute top-0 left-0 w-full h-[300px] bg-gradient-to-b from-[#25340D]/20 to-transparent pointer-events-none z-0"></div>
