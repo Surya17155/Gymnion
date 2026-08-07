@@ -6,7 +6,7 @@ import { useEffect } from "react";
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                            
- * Also, remove the right-side scroll bar on the screen, its annoying in the UI, so please remove the scroll bar from the right side of the screen in this app
+ * teh problem is still not fixed, that scroll bar from the right side of the app is still there I can see that also on the member dashboard screen, please remove that scroll bar
  */
 export const Route = createFileRoute("/")({
   head: () => ({
