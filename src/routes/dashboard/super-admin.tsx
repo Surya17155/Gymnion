@@ -81,9 +81,9 @@ function SuperAdminDashboard() {
               </button>
             </div>
 
-            <div className="flex overflow-x-auto gap-4 scrollbar-hide snap-x snap-mandatory -mx-5 px-5 md:mx-0 md:px-0">
+            <div className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-x-visible gap-4 scrollbar-hide snap-x snap-mandatory -mx-5 px-5 md:mx-0 md:px-0">
               {/* Pending Approvals */}
-              <div className="snap-start shrink-0 w-[280px] bg-[#151714]/80 backdrop-blur-md rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden border border-white/5">
+              <div className="snap-start shrink-0 w-[280px] md:w-auto bg-[#151714]/80 backdrop-blur-md rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden border border-white/5">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-[#B7FF1E]/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
                 <div className="flex justify-between items-start z-10">
                   <div className="w-10 h-10 rounded-full bg-[#292A28] flex items-center justify-center border border-[#B7FF1E]/30">
@@ -101,7 +101,7 @@ function SuperAdminDashboard() {
               </div>
 
               {/* Overdue Subscriptions */}
-              <div className="snap-start shrink-0 w-[280px] bg-[#151714]/80 backdrop-blur-md rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden border border-white/5">
+              <div className="snap-start shrink-0 w-[280px] md:w-auto bg-[#151714]/80 backdrop-blur-md rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden border border-white/5">
                 <div className="flex justify-between items-start z-10">
                   <div className="w-10 h-10 rounded-full bg-[#292A28] flex items-center justify-center border border-white/10">
                     <span className="material-symbols-outlined text-[#FF5964]">warning</span>
@@ -113,6 +113,23 @@ function SuperAdminDashboard() {
                 </div>
                 <div className="mt-2 pt-3 border-t border-white/10 z-10">
                   <p className="text-[11px] font-semibold text-[#858A7D] truncate">Action needed to prevent churn</p>
+                </div>
+              </div>
+
+              {/* Unpaid This Month */}
+              <div className="snap-start shrink-0 w-[280px] md:w-auto bg-[#151714]/80 backdrop-blur-md rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden border border-[#FF5964]/30">
+                <div className="flex justify-between items-start z-10">
+                  <div className="w-10 h-10 rounded-full bg-[#292A28] flex items-center justify-center border border-[#FF5964]/30">
+                    <span className="material-symbols-outlined text-[#FF5964]">payments</span>
+                  </div>
+                  <span className="bg-[#FF5964]/20 text-[#FF5964] px-2 py-1 rounded text-[10px] font-bold tracking-wide uppercase border border-[#FF5964]/20">Urgent</span>
+                </div>
+                <div className="z-10">
+                  <p className="text-[40px] font-bold leading-none text-[#FF5964]">8</p>
+                  <p className="text-sm text-[#C0C2B8] mt-1">Unpaid Subscriptions</p>
+                </div>
+                <div className="mt-2 pt-3 border-t border-white/10 z-10">
+                  <p className="text-[11px] font-semibold text-[#858A7D] truncate">Current month collection pending</p>
                 </div>
               </div>
             </div>
