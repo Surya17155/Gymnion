@@ -1,6 +1,18 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
+import { getAuthUserRole } from "@/lib/auth.functions";
+
 
 export const Route = createFileRoute("/")({
+  beforeLoad: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      const role = await getAuthUserRole();
+      if (role === 'super_admin') throw redirect({ to: '/dashboard/super-admin' });
+      if (role === 'admin') throw redirect({ to: '/dashboard/admin' });
+      throw redirect({ to: '/dashboard/m' });
+    }
+  },
   component: HomePage,
 });
 

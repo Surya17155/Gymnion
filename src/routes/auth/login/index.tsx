@@ -62,9 +62,13 @@ function AuthPage() {
 
       if (data.session) {
         const role = await getAuthUserRole();
-        if (role === 'super_admin') navigate({ to: '/dashboard/super-admin' });
-        else if (role === 'admin') navigate({ to: '/dashboard/admin' });
-        else navigate({ to: '/dashboard/m' });
+        if (role === 'super_admin') {
+          await navigate({ to: '/dashboard/super-admin' });
+        } else if (role === 'admin') {
+          await navigate({ to: '/dashboard/admin' });
+        } else {
+          await navigate({ to: '/dashboard/m' });
+        }
       }
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to sign in');

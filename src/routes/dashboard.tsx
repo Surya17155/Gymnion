@@ -18,12 +18,12 @@ export const Route = createFileRoute('/dashboard')({
     const role = await getAuthUserRole();
     
     // Redirect logic based on role if they are at the base /dashboard path
-    if (location.pathname === '/dashboard' || location.pathname === '/dashboard/') {
+    if (location.pathname === '/dashboard' || location.pathname === '/dashboard/' || location.pathname === '/dashboard/m' || location.pathname === '/dashboard/m/') {
       if (role === 'super_admin') {
         throw redirect({ to: '/dashboard/super-admin' });
       } else if (role === 'admin') {
         throw redirect({ to: '/dashboard/admin' });
-      } else {
+      } else if (location.pathname === '/dashboard' || location.pathname === '/dashboard/') {
         throw redirect({ to: '/dashboard/m' });
       }
     }

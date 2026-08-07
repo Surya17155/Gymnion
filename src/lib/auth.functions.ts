@@ -1,10 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const getAuthUserRole = createServerFn({ method: 'GET' })
+  .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const userId = (context as any).userId;
+    const userId = context.userId;
     if (!userId) return null;
 
     const { data, error } = await supabaseAdmin
