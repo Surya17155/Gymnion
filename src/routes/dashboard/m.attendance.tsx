@@ -164,13 +164,13 @@ function AttendanceHistory() {
                 </div>
               </div>
               <div className="flex flex-col items-end text-right relative z-10 opacity-70">
-                <span className="text-[14px] text-[#858A7D] flex items-center gap-1 font-['Poppins']">
+                <span className="text-[14px] text-[#858A7D] flex items-center gap-2 font-['Poppins']">
                   <LucideLogIn className="w-4 h-4" />
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 12:45
+                  12:45
                 </span>
-                <span className="text-[12px] text-[#858A7D] flex items-center gap-1 mt-0.5 font-['Poppins']">
+                <span className="text-[12px] text-[#858A7D] flex items-center gap-2 mt-0.5 font-['Poppins']">
                   <LucideLogOut className="w-4 h-4" />
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 13:30
+                  13:30
                 </span>
               </div>
             </div>
