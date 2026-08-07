@@ -30,7 +30,7 @@ function SuperAdminGyms() {
   );
 
   return (
-    <div className="bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins'] pb-[96px] glow-top">
+    <div className="antialiased overflow-x-hidden pb-[96px] glow-top">
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       
       <style>{`
@@ -198,45 +198,6 @@ function SuperAdminGyms() {
         </div>
       )}
 
-      {/* Bottom Navigation */}
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe rounded-t-[24px] max-w-[480px] left-1/2 -translate-x-1/2">
-        <Link 
-          to="/dashboard/super-admin"
-          activeOptions={{ exact: true }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1 transition-colors" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>home</span>
-              <span className="text-[11px] font-semibold leading-[14px] transition-colors" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Home</span>
-            </>
-          )}
-        </Link>
-        
-        <Link 
-          to="/dashboard/super-admin/payments"
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1 transition-colors" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>payments</span>
-              <span className="text-[11px] font-semibold leading-[14px] transition-colors" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Payments</span>
-            </>
-          )}
-        </Link>
-        
-        <Link 
-          to="/dashboard/super-admin/gyms"
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1 transition-colors" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>fitness_center</span>
-              <span className="text-[11px] font-semibold leading-[14px] transition-colors" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Gyms</span>
-            </>
-          )}
-        </Link>
-      </nav>
     </div>
   );
 }
