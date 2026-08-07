@@ -109,7 +109,7 @@ function AttendanceHistory() {
             <div className="bg-[#151714] rounded-xl p-4 border border-white/5 flex items-center justify-between hover:bg-[#1e201d] transition-colors backdrop-blur-sm relative overflow-hidden group">
               <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(213,255,64,0.03),transparent)] pointer-events-none rounded-xl"></div>
               <div className="flex items-center gap-4 relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-[#1e201d] flex flex-col items-center justify-center border border-white/5">
+                <div className="w-12 h-12 rounded-[14px] bg-[#1e201d] flex flex-col items-center justify-center border border-white/5">
                   <span className="text-[11px] font-bold text-[#B7FF1E] uppercase font-['Poppins']">May</span>
                   <span className="text-[18px] font-bold text-white leading-none mt-1 font-['Poppins']">26</span>
                 </div>
@@ -118,13 +118,13 @@ function AttendanceHistory() {
                 </div>
               </div>
               <div className="flex flex-col items-end text-right relative z-10">
-                <span className="text-[14px] text-white flex items-center gap-1 font-['Poppins']">
+                <span className="text-[14px] text-white flex items-center gap-2 font-['Poppins']">
                   <LucideLogIn className="w-4 h-4 text-[#B7FF1E] fill-[#B7FF1E]" />
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 18:30
+                  18:30
                 </span>
-                <span className="text-[12px] text-[#858A7D] flex items-center gap-1 mt-0.5 font-['Poppins']">
+                <span className="text-[12px] text-[#858A7D] flex items-center gap-2 mt-0.5 font-['Poppins']">
                   <LucideLogOut className="w-4 h-4" />
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 20:00
+                  20:00
                 </span>
               </div>
             </div>
@@ -132,7 +132,7 @@ function AttendanceHistory() {
             <div className="bg-[#151714] rounded-xl p-4 border border-white/5 flex items-center justify-between hover:bg-[#1e201d] transition-colors backdrop-blur-sm relative overflow-hidden group">
               <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(213,255,64,0.03),transparent)] pointer-events-none rounded-xl"></div>
               <div className="flex items-center gap-4 relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-[#1e201d] flex flex-col items-center justify-center border border-white/5">
+                <div className="w-12 h-12 rounded-[14px] bg-[#1e201d] flex flex-col items-center justify-center border border-white/5">
                   <span className="text-[11px] font-bold text-[#B7FF1E] uppercase font-['Poppins']">May</span>
                   <span className="text-[18px] font-bold text-white leading-none mt-1 font-['Poppins']">24</span>
                 </div>
@@ -141,13 +141,13 @@ function AttendanceHistory() {
                 </div>
               </div>
               <div className="flex flex-col items-end text-right relative z-10">
-                <span className="text-[14px] text-white flex items-center gap-1 font-['Poppins']">
+                <span className="text-[14px] text-white flex items-center gap-2 font-['Poppins']">
                   <LucideLogIn className="w-4 h-4 text-[#B7FF1E] fill-[#B7FF1E]" />
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 06:15
+                  06:15
                 </span>
-                <span className="text-[12px] text-[#858A7D] flex items-center gap-1 mt-0.5 font-['Poppins']">
+                <span className="text-[12px] text-[#858A7D] flex items-center gap-2 mt-0.5 font-['Poppins']">
                   <LucideLogOut className="w-4 h-4" />
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 07:20
+                  07:20
                 </span>
               </div>
             </div>
@@ -155,7 +155,7 @@ function AttendanceHistory() {
             <div className="bg-[#151714] rounded-xl p-4 border border-white/5 flex items-center justify-between hover:bg-[#1e201d] transition-colors backdrop-blur-sm relative overflow-hidden group">
               <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(213,255,64,0.03),transparent)] pointer-events-none rounded-xl"></div>
               <div className="flex items-center gap-4 relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-[#1e201d] flex flex-col items-center justify-center border border-white/5">
+                <div className="w-12 h-12 rounded-[14px] bg-[#1e201d] flex flex-col items-center justify-center border border-white/5">
                   <span className="text-[11px] font-bold text-[#858A7D] uppercase font-['Poppins']">May</span>
                   <span className="text-[18px] font-bold text-[#858A7D] leading-none mt-1 font-['Poppins']">21</span>
                 </div>
@@ -164,13 +164,13 @@ function AttendanceHistory() {
                 </div>
               </div>
               <div className="flex flex-col items-end text-right relative z-10 opacity-70">
-                <span className="text-[14px] text-[#858A7D] flex items-center gap-1 font-['Poppins']">
+                <span className="text-[14px] text-[#858A7D] flex items-center gap-2 font-['Poppins']">
                   <LucideLogIn className="w-4 h-4" />
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 12:45
+                  12:45
                 </span>
-                <span className="text-[12px] text-[#858A7D] flex items-center gap-1 mt-0.5 font-['Poppins']">
+                <span className="text-[12px] text-[#858A7D] flex items-center gap-2 mt-0.5 font-['Poppins']">
                   <LucideLogOut className="w-4 h-4" />
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 13:30
+                  13:30
                 </span>
               </div>
             </div>
