@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useState } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { getAuthUserRole } from "@/lib/auth.functions";
 
@@ -9,6 +10,7 @@ export const Route = createFileRoute('/auth/login/')({
 
 function AuthPage() {
   const navigate = useNavigate();
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
 
   return (
     <div className="bg-[#0d0f0c] text-[#e3e3dd] min-h-screen flex flex-col items-center justify-center p-5 font-sans antialiased overflow-x-hidden relative">
@@ -28,17 +30,34 @@ function AuthPage() {
         </header>
 
         <div className="bg-[#333532] p-1 rounded-full flex relative w-full mb-6 border border-white/5 shadow-inner z-10">
-          <div className="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-[#B7FF1E] rounded-full transition-transform duration-300 ease-in-out"></div>
-          <button className="flex-1 py-3 text-center z-10 text-sm font-semibold transition-colors duration-300 text-[#293500]">
+          <div 
+            className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-[#B7FF1E] rounded-full transition-all duration-300 ease-in-out ${authMode === 'signin' ? 'left-1' : 'left-[calc(50%+1px)]'}`}
+          ></div>
+          <button 
+            onClick={() => setAuthMode('signin')}
+            className={`flex-1 py-3 text-center z-10 text-sm font-semibold transition-colors duration-300 ${authMode === 'signin' ? 'text-[#293500]' : 'text-[#C0C2B8]'}`}
+          >
             Sign In
           </button>
-          <button className="flex-1 py-3 text-center z-10 text-sm font-semibold transition-colors duration-300 text-[#C0C2B8]">
+          <button 
+            onClick={() => setAuthMode('signup')}
+            className={`flex-1 py-3 text-center z-10 text-sm font-semibold transition-colors duration-300 ${authMode === 'signup' ? 'text-[#293500]' : 'text-[#C0C2B8]'}`}
+          >
             Sign Up
           </button>
         </div>
 
         <div className="relative w-full z-10 space-y-4">
           <form className="flex flex-col gap-3">
+            {authMode === 'signup' && (
+              <div className="flex flex-col gap-2">
+                <label className="text-xs text-[#C0C2B8] px-1 font-normal">Full Name</label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C0C2B8] material-symbols-outlined text-xl">person</span>
+                  <input className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 pl-12 h-[48px] focus:outline-none focus:border-[#B7FF1E] focus:ring-1 focus:ring-[#B7FF1E]/50 transition-all placeholder:text-[#C0C2B8]" placeholder="Enter your full name" required type="text" />
+                </div>
+              </div>
+            )}
             <div className="flex flex-col gap-2">
               <label className="text-xs text-[#C0C2B8] px-1 font-normal">Email Address</label>
               <div className="relative">
@@ -54,11 +73,14 @@ function AuthPage() {
                 <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[#B7FF1E] text-[11px] font-bold uppercase" type="button">Show</button>
               </div>
             </div>
-            <div className="flex justify-end mt-1 mb-2">
-              <a className="text-xs text-[#858A7D] hover:text-[#B7FF1E] transition-colors font-normal" href="#">Forgot Password?</a>
-            </div>
+            {authMode === 'signin' && (
+              <div className="flex justify-end mt-1 mb-2">
+                <a className="text-xs text-[#858A7D] hover:text-[#B7FF1E] transition-colors font-normal" href="#">Forgot Password?</a>
+              </div>
+            )}
              <button 
                 onClick={async () => {
+                  if (authMode === 'signin') {
                    // This is a placeholder for the login logic that should exist.
                    // Assuming standard Supabase auth flow.
                    const { data, error } = await supabase.auth.signInWithPassword({
@@ -70,12 +92,16 @@ function AuthPage() {
                      const role = await getAuthUserRole();
                      if (role === 'super_admin') navigate({ to: '/dashboard/super-admin' });
                      else if (role === 'admin') navigate({ to: '/dashboard/admin' });
-                     else navigate({ to: '/dashboard/m' });
-                   }
+                      else navigate({ to: '/dashboard/m' });
+                    }
+                  } else {
+                    // Placeholder for signup logic
+                    console.log('Signup clicked');
+                  }
                 }}
                 className="w-full h-[48px] bg-[#B7FF1E] text-[#293500] text-sm font-semibold rounded-full shadow-[0_0_20px_rgba(183,255,30,0.2)] hover:opacity-90 active:scale-95 transition-all mt-2" 
                 type="button">
-              Sign In
+              {authMode === 'signin' ? 'Sign In' : 'Sign Up'}
             </button>
             <div className="mt-6 flex flex-col items-center">
               <div className="flex items-center w-full mb-6">
