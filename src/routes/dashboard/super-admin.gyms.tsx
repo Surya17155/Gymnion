@@ -90,19 +90,18 @@ function SuperAdminGyms() {
               <div 
                 key={gym.id}
                 onClick={() => setSelectedGym(gym)}
-                className="bg-[#121411] border border-white/5 rounded-xl p-4 flex items-center gap-4 hover:border-[#B7FF1E]/30 transition-colors cursor-pointer group"
+                className="bg-[#121411] border border-white/5 rounded-xl p-3 flex items-center gap-3 hover:border-[#B7FF1E]/30 transition-colors cursor-pointer group"
               >
-                <div className="w-16 h-16 rounded-xl bg-[#333532] flex-shrink-0 overflow-hidden border border-white/5 relative">
+                <div className="w-12 h-12 rounded-lg bg-[#333532] flex-shrink-0 overflow-hidden border border-white/5 relative">
                   <div className="w-full h-full bg-[#1e201d] flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[#858A7D] text-[32px]">fitness_center</span>
+                    <span className="material-symbols-outlined text-[#858A7D] text-[24px]">fitness_center</span>
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                 </div>
                 <div className="flex-1 flex flex-col justify-center">
-                  <h3 className="text-[18px] font-semibold text-[#e3e3dd]">{gym.name}</h3>
-                  <div className="flex items-center gap-1.5 mt-1">
-                    <div className="w-2 h-2 rounded-full bg-[#B7FF1E]"></div>
-                    <span className="text-[12px] text-[#C0C2B8]">Code: {gym.gym_code || '---'}</span>
+                  <h3 className="text-[16px] font-semibold text-[#e3e3dd]">{gym.name}</h3>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#B7FF1E]"></div>
+                    <span className="text-[11px] text-[#C0C2B8]">Code: {gym.gym_code || '---'}</span>
                   </div>
                 </div>
                 <div className="text-[#858A7D] group-hover:text-[#B7FF1E] transition-colors">
