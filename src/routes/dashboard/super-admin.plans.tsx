@@ -27,7 +27,7 @@ function SuperAdminPlans() {
     queryKey: ['global-plans'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('global_plans')
+        .from('global_plans' as any)
         .select('*')
         .order('price', { ascending: true });
       if (error) throw error;
