@@ -3,6 +3,11 @@ import { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute('/auth/login')({
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      redirect: search.redirect as string | undefined
+    }
+  },
   component: AuthPage,
 });
 

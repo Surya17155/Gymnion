@@ -32,6 +32,17 @@ export const Route = createFileRoute('/dashboard')({
       } else if (role === 'member') {
         throw redirect({ to: '/dashboard/m' });
       }
+    } else {
+      // If we have a role and we are not redirected to login, but we are not on the right path
+      if (role === 'super_admin' && !location.pathname.startsWith('/dashboard/super-admin')) {
+        throw redirect({ to: '/dashboard/super-admin' });
+      }
+      if (role === 'gym_admin' && !location.pathname.startsWith('/dashboard/admin')) {
+        throw redirect({ to: '/dashboard/admin' });
+      }
+      if (role === 'member' && !location.pathname.startsWith('/dashboard/m')) {
+        throw redirect({ to: '/dashboard/m' });
+      }
     }
 
     // Protect specific sub-routes
