@@ -41,9 +41,43 @@ function AuthPage() {
     gymCode: ''
   });
 
+  const [gymCodeError, setGymCodeError] = useState('');
+  const [gymName, setGymName] = useState('');
+
+  const lookupGym = async (code: string) => {
+    const trimmed = code.trim();
+    if (!trimmed) {
+      setGymCodeError('');
+      setGymName('');
+      return null;
+    }
+    const { data } = await supabase
+      .from('gyms')
+      .select('id, name')
+      .ilike('gym_code', trimmed)
+      .maybeSingle();
+    if (!data) {
+      setGymCodeError('Invalid code');
+      setGymName('');
+      return null;
+    }
+    setGymCodeError('');
+    setGymName(data.name);
+    return data;
+  };
+
+  const validateGymCode = async () => {
+    await lookupGym(formData.gymCode);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
     const name = e.target.name;
+
+    if (name === 'gymCode') {
+      setGymCodeError('');
+      setGymName('');
+    }
 
     if (name === 'dob') {
       const digits = value.replace(/\D/g, '');
@@ -61,6 +95,7 @@ function AuthPage() {
     }
     setFormData({ ...formData, [name]: value });
   };
+
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,6 +124,12 @@ function AuthPage() {
     setErrorMsg('');
 
     try {
+      const gym = await lookupGym(formData.gymCode);
+      if (!gym) {
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -98,11 +139,13 @@ function AuthPage() {
             phone: formData.phone,
             dob: formData.dob,
             address: formData.address,
-            gym_code: formData.gymCode,
+            gym_code: formData.gymCode.trim(),
+            gym_id: gym.id,
             role: 'member' // Default role for public signups
           }
         }
       });
+
 
       if (error) throw error;
       if (data.session) {
@@ -147,6 +190,10 @@ function AuthPage() {
                 <input name="fullName" value={formData.fullName} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your full name" required type="text" />
               </div>
               <div className="flex flex-col gap-2">
+                <label className="text-xs text-[#C0C2B8] px-1 font-normal">Email Address</label>
+                <input name="email" id="email" autoComplete="username" value={formData.email} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your email" required type="email" />
+              </div>
+              <div className="flex flex-col gap-2">
                 <label className="text-xs text-[#C0C2B8] px-1 font-normal">Phone Number</label>
                 <input name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your phone number" required type="tel" />
               </div>
@@ -160,14 +207,19 @@ function AuthPage() {
               </div>
               <div className="flex flex-col gap-2">
                 <label className="text-xs text-[#C0C2B8] px-1 font-normal">Gym Code</label>
-                <input name="gymCode" value={formData.gymCode} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter gym code" required type="text" />
+                <input name="gymCode" value={formData.gymCode} onChange={handleChange} onBlur={validateGymCode} className={`w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border rounded-xl px-4 py-3 h-[48px] focus:outline-none transition-all ${gymCodeError ? 'border-[#FF5964] focus:border-[#FF5964]' : 'border-white/10 focus:border-[#B7FF1E]'}`} placeholder="Enter gym code" required type="text" />
+                {gymCodeError && <span className="text-[11px] text-[#FF5964] px-1">{gymCodeError}</span>}
+                {gymName && !gymCodeError && <span className="text-[11px] text-[#B7FF1E] px-1">{gymName}</span>}
               </div>
             </>
           )}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs text-[#C0C2B8] px-1 font-normal">Email Address</label>
-            <input name="email" id="email" autoComplete="username" value={formData.email} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your email" required type="email" />
-          </div>
+          {authMode === 'signin' && (
+            <div className="flex flex-col gap-2">
+              <label className="text-xs text-[#C0C2B8] px-1 font-normal">Email Address</label>
+              <input name="email" id="email" autoComplete="username" value={formData.email} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your email" required type="email" />
+            </div>
+          )}
+
           <div className="flex flex-col gap-2">
             <label className="text-xs text-[#C0C2B8] px-1 font-normal">Password</label>
             <input name="password" id="password" autoComplete={authMode === 'signin' ? 'current-password' : 'new-password'} value={formData.password} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your password" required type="password" />
