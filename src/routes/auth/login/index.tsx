@@ -101,6 +101,7 @@ function AuthPage() {
         throw new Error('Invalid GYM code. Please check with your GYM admin.');
       }
 
+
       // 2. Auth Sign Up
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
