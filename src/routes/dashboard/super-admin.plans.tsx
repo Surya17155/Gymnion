@@ -18,7 +18,7 @@ function SuperAdminPlans() {
   const [isEditingPlan, setIsEditingPlan] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGymForOverride, setSelectedGymForOverride] = useState<any>(null);
+  const [selectedGymForOverride, setSelectedGymForOverride] = useState<Gym | null>(null);
   const [customMonthlyPrice, setCustomMonthlyPrice] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [manualFeatures, setManualFeatures] = useState<string[]>(['']);
