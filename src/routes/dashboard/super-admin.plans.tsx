@@ -182,81 +182,73 @@ function SuperAdminPlans() {
             </button>
           </div>
           <div className="space-y-3">
-            {/* Standard Plan Card */}
-            <div className="bg-[#121411] border border-white/5 rounded-xl p-4 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#383a36]/20 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none"></div>
-              <div className="flex justify-between items-start mb-4 relative z-10">
-                <div>
-                  <h3 className="text-[22px] font-bold text-[#e3e3dd]">Standard</h3>
-                  <div className="flex items-baseline gap-1 mt-1">
-                    <span className="text-[40px] font-bold text-[#c9f232] tracking-tighter">₹500</span>
-                    <span className="text-xs text-[#C0C2B8]">/mo</span>
+            {isLoadingPlans ? (
+              <div className="space-y-3">
+                {[1, 2].map(i => (
+                  <div key={i} className="h-48 bg-[#121411] border border-white/5 rounded-xl animate-pulse"></div>
+                ))}
+              </div>
+            ) : globalPlans?.map((plan: any) => (
+              <div 
+                key={plan.id}
+                className={`bg-[#121411] border border-white/5 rounded-xl p-4 relative overflow-hidden group ${
+                  plan.name.toLowerCase() === 'unlimited' ? 'bg-[#c9f232]/10 border-[#c9f232]/30' : ''
+                }`}
+              >
+                {plan.name.toLowerCase() === 'unlimited' && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#c9f232]/20 to-transparent pointer-events-none"></div>
+                )}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#383a36]/20 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none"></div>
+                
+                <div className="flex justify-between items-start mb-4 relative z-10">
+                  <div>
+                    <h3 className={`text-[22px] font-bold ${plan.name.toLowerCase() === 'unlimited' ? 'text-[#c9f232]' : 'text-[#e3e3dd]'}`}>
+                      {plan.name}
+                    </h3>
+                    <div className="flex items-baseline gap-1 mt-1">
+                      <span className={`text-[40px] font-bold tracking-tighter ${plan.name.toLowerCase() === 'unlimited' ? 'text-[#e3e3dd]' : 'text-[#c9f232]'}`}>
+                        ₹{plan.price / 100}
+                      </span>
+                      <span className="text-xs text-[#C0C2B8]">/mo</span>
+                    </div>
+                  </div>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    plan.name.toLowerCase() === 'unlimited' 
+                      ? 'bg-[#c9f232] shadow-[0_0_15px_rgba(201,242,50,0.3)]' 
+                      : 'bg-[#1e201d] border border-white/10'
+                  }`}>
+                    <span className={`material-symbols-outlined ${
+                      plan.name.toLowerCase() === 'unlimited' ? 'text-[#576c00]' : 'text-[#C0C2B8]'
+                    }`} style={{ fontVariationSettings: "'FILL' 1" }}>
+                      {plan.name.toLowerCase() === 'unlimited' ? 'bolt' : 'star'}
+                    </span>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center border border-white/10">
-                  <span className="material-symbols-outlined text-[#C0C2B8]" style={{ fontVariationSettings: "'FILL' 0" }}>star</span>
-                </div>
+
+                <ul className="space-y-2 mb-6 relative z-10">
+                  {plan.features?.map((feature: string, idx: number) => (
+                    <li key={idx} className={`flex items-center gap-3 text-sm ${
+                      plan.name.toLowerCase() === 'unlimited' ? 'text-[#e3e3dd]' : 'text-[#C0C2B8]'
+                    }`}>
+                      <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <button 
+                  onClick={() => handleEditPlan({ ...plan, price: (plan.price / 100).toString() })}
+                  className={`w-full h-12 text-xs font-bold rounded-full transition-colors flex items-center justify-center gap-2 relative z-10 ${
+                    plan.name.toLowerCase() === 'unlimited'
+                      ? 'bg-[#c9f232] text-[#576c00] hover:bg-[#aed502] shadow-[0_4px_20px_rgba(201,242,50,0.2)]'
+                      : 'bg-[#383a36] text-[#c9f232] hover:bg-[#333532] border border-[#c9f232]/20'
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-sm">edit</span>
+                  Edit Plan
+                </button>
               </div>
-              <ul className="space-y-2 mb-6 relative z-10">
-                <li className="flex items-center gap-3 text-sm text-[#C0C2B8]">
-                  <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  Attendance Tracking
-                </li>
-                <li className="flex items-center gap-3 text-sm text-[#C0C2B8]">
-                  <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  Payment Management
-                </li>
-                <li className="flex items-center gap-3 text-sm text-[#C0C2B8]">
-                  <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  Member Directory
-                </li>
-              </ul>
-              <button 
-                onClick={() => handleEditPlan({ id: 'standard', name: 'Standard', price: 500, features: ['Attendance Tracking', 'Payment Management', 'Member Directory'] })}
-                className="w-full h-12 bg-[#383a36] text-[#c9f232] text-xs font-bold rounded-full hover:bg-[#333532] transition-colors flex items-center justify-center gap-2 relative z-10 border border-[#c9f232]/20"
-              >
-                <span className="material-symbols-outlined text-sm">edit</span>
-                Edit Plan
-              </button>
-            </div>
-            
-            {/* Unlimited Plan Card */}
-            <div className="bg-[#c9f232]/10 border border-[#c9f232]/30 rounded-xl p-4 relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#c9f232]/20 to-transparent pointer-events-none"></div>
-              <div className="flex justify-between items-start mb-4 relative z-10">
-                <div>
-                  <h3 className="text-[22px] font-bold text-[#c9f232]">Unlimited</h3>
-                  <div className="flex items-baseline gap-1 mt-1">
-                    <span className="text-[40px] font-bold text-[#e3e3dd] tracking-tighter">₹999</span>
-                    <span className="text-xs text-[#C0C2B8]">/mo</span>
-                  </div>
-                </div>
-                <div className="w-10 h-10 rounded-full bg-[#c9f232] flex items-center justify-center shadow-[0_0_15px_rgba(201,242,50,0.3)]">
-                  <span className="material-symbols-outlined text-[#576c00]" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-                </div>
-              </div>
-              <ul className="space-y-2 mb-6 relative z-10">
-                <li className="flex items-center gap-3 text-sm text-[#e3e3dd]">
-                  <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  All Standard Features
-                </li>
-                <li className="flex items-center gap-3 text-sm text-[#e3e3dd]">
-                  <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  AI Diet & Workout Plans
-                </li>
-                <li className="flex items-center gap-3 text-sm text-[#e3e3dd]">
-                  <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  Priority Support
-                </li>
-              </ul>
-              <button 
-                onClick={() => handleEditPlan({ id: 'unlimited', name: 'Unlimited', price: 999, features: ['All Standard Features', 'AI Diet & Workout Plans', 'Priority Support'] })}
-                className="w-full h-12 bg-[#c9f232] text-[#576c00] text-xs font-bold rounded-full hover:bg-[#aed502] transition-colors flex items-center justify-center gap-2 relative z-10 shadow-[0_4px_20px_rgba(201,242,50,0.2)]"
-              >
-                <span className="material-symbols-outlined text-sm">edit</span>
-                Edit Plan
-              </button>
-            </div>
+            ))}
           </div>
         </section>
 
