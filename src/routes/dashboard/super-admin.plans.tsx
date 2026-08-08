@@ -47,7 +47,7 @@ function SuperAdminPlans() {
     }
   });
 
-  const filteredGymsForSearch = gyms?.filter(gym => 
+  const filteredGymsForSearch = gyms?.filter((gym: Gym) => 
     gym.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
     gym.gym_code?.toLowerCase().includes(searchQuery.toLowerCase())
   );
