@@ -137,7 +137,8 @@ function SuperAdminPlans() {
             <button 
               data-testid="add-new-plan-btn"
               onClick={() => {
-                setSelectedPlan({ name: '', price: '', features: [''] });
+                setSelectedPlan({ name: '', price: '' });
+                setManualFeatures(['']);
                 setIsEditingPlan(true);
               }}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-[#c9f232] rounded-full text-black text-[10px] font-bold uppercase tracking-wider hover:bg-[#aed502] transition-colors shadow-[0_4px_12px_rgba(201,242,50,0.2)]"
