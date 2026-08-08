@@ -32,6 +32,17 @@ export const Route = createFileRoute('/dashboard')({
       } else if (role === 'member') {
         throw redirect({ to: '/dashboard/m' });
       }
+    } else {
+      // If we have a role and we are not redirected to login, but we are not on the right path
+      if (role === 'super_admin' && !location.pathname.startsWith('/dashboard/super-admin')) {
+        throw redirect({ to: '/dashboard/super-admin' });
+      }
+      if (role === 'gym_admin' && !location.pathname.startsWith('/dashboard/admin')) {
+        throw redirect({ to: '/dashboard/admin' });
+      }
+      if (role === 'member' && !location.pathname.startsWith('/dashboard/m')) {
+        throw redirect({ to: '/dashboard/m' });
+      }
     }
 
     // Protect specific sub-routes
@@ -53,6 +64,21 @@ export const Route = createFileRoute('/dashboard')({
     </div>
   ),
   component: DashboardLayout,
+  errorComponent: ({ error }) => {
+    console.error('Dashboard Error:', error);
+    return (
+      <div className="min-h-screen bg-[#0D0F0C] text-white flex flex-col items-center justify-center p-4">
+        <h1 className="text-xl font-bold mb-2">Something went wrong</h1>
+        <p className="text-gray-400 mb-4">{error?.message || 'Unauthorized or role mismatch'}</p>
+        <button 
+          onClick={() => window.location.href = '/auth/login'}
+          className="bg-[#B7FF1E] text-black px-4 py-2 rounded-full font-bold"
+        >
+          Return to Login
+        </button>
+      </div>
+    );
+  }
 });
 
 function DashboardLayout() {

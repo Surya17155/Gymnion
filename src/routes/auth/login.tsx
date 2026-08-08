@@ -3,14 +3,33 @@ import { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute('/auth/login')({
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      redirect: (search['redirect'] as string) || undefined
+    }
+  },
   component: AuthPage,
 });
 
 function AuthPage() {
   const navigate = useNavigate();
+  const search = Route.useSearch();
+  const redirectPath = search['redirect'] || '/dashboard';
+
+
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate({ to: redirectPath });
+      }
+    };
+    checkSession();
+  }, [navigate, redirectPath]);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -56,7 +75,7 @@ function AuthPage() {
 
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      if (data.session) navigate({ to: '/dashboard' });
+      if (data.session) navigate({ to: redirectPath });
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to sign in');
     } finally {

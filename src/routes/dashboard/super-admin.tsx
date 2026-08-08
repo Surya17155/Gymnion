@@ -11,7 +11,7 @@ function SuperAdminLayout() {
 
   return (
     <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans">
-      <Outlet />
+      {isExact ? <SuperAdminDashboard /> : <Outlet />}
       
       {/* Global Super Admin Bottom Navigation */}
       <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-[100] flex justify-around items-center px-4 py-2 pb-safe rounded-t-[20px] max-w-[480px] left-1/2 -translate-x-1/2">

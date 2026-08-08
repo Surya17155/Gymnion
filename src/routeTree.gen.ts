@@ -15,7 +15,6 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardAdminRouteImport } from './routes/dashboard/admin'
 import { Route as DashboardMRouteImport } from './routes/dashboard/m'
 import { Route as DashboardSuperAdminRouteImport } from './routes/dashboard/super-admin'
@@ -63,11 +62,6 @@ const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
   id: '/auth/reset-password',
   path: '/auth/reset-password',
   getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardAdminRoute = DashboardAdminRouteImport.update({
   id: '/admin',
@@ -170,7 +164,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/admin': typeof DashboardAdminRouteWithChildren
   '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRouteWithChildren
-  '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
   '/dashboard/admin/payments': typeof DashboardAdminPaymentsRoute
@@ -189,12 +182,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/checkin': typeof CheckinRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/dashboard/admin': typeof DashboardAdminRouteWithChildren
   '/dashboard/m': typeof DashboardMRouteWithChildren
-  '/dashboard': typeof DashboardIndexRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
   '/dashboard/admin/payments': typeof DashboardAdminPaymentsRoute
@@ -221,7 +214,6 @@ export interface FileRoutesById {
   '/dashboard/admin': typeof DashboardAdminRouteWithChildren
   '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRouteWithChildren
-  '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
   '/dashboard/admin/payments': typeof DashboardAdminPaymentsRoute
@@ -249,7 +241,6 @@ export interface FileRouteTypes {
     | '/dashboard/admin'
     | '/dashboard/m'
     | '/dashboard/super-admin'
-    | '/dashboard/'
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
     | '/dashboard/admin/payments'
@@ -268,12 +259,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/checkin'
+    | '/dashboard'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
     | '/dashboard/admin'
     | '/dashboard/m'
-    | '/dashboard'
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
     | '/dashboard/admin/payments'
@@ -299,7 +290,6 @@ export interface FileRouteTypes {
     | '/dashboard/admin'
     | '/dashboard/m'
     | '/dashboard/super-admin'
-    | '/dashboard/'
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
     | '/dashboard/admin/payments'
@@ -368,13 +358,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/reset-password'
       preLoaderRoute: typeof AuthResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof DashboardRoute
     }
     '/dashboard/admin': {
       id: '/dashboard/admin'
@@ -568,14 +551,12 @@ interface DashboardRouteChildren {
   DashboardAdminRoute: typeof DashboardAdminRouteWithChildren
   DashboardMRoute: typeof DashboardMRouteWithChildren
   DashboardSuperAdminRoute: typeof DashboardSuperAdminRouteWithChildren
-  DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAdminRoute: DashboardAdminRouteWithChildren,
   DashboardMRoute: DashboardMRouteWithChildren,
   DashboardSuperAdminRoute: DashboardSuperAdminRouteWithChildren,
-  DashboardIndexRoute: DashboardIndexRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
