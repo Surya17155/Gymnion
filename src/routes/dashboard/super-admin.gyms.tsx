@@ -103,7 +103,10 @@ function SuperAdminGyms() {
               <h2 className="text-[14px] font-semibold text-[#858A7D]">Total Connected Gyms</h2>
               <div className="text-[32px] font-bold text-[#e3e3dd] leading-none">{gyms?.length || 0}</div>
             </div>
-            <button className="w-10 h-10 rounded-full bg-[#B7FF1E] text-black flex items-center justify-center transition-colors shadow-[0_0_15px_rgba(183,255,30,0.3)] active:scale-95 shrink-0">
+            <button 
+              onClick={() => setIsAddingGym(true)}
+              className="w-10 h-10 rounded-full bg-[#B7FF1E] text-black flex items-center justify-center transition-colors shadow-[0_0_15px_rgba(183,255,30,0.3)] active:scale-95 shrink-0"
+            >
               <span className="material-symbols-outlined font-bold text-[24px]">add</span>
             </button>
           </div>
@@ -162,6 +165,108 @@ function SuperAdminGyms() {
         </section>
       </main>
 
+      {/* Add Gym Modal */}
+      {isAddingGym && (
+        <div className="fixed inset-0 z-[110] flex flex-col justify-end">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !isSubmitting && setIsAddingGym(false)}></div>
+          <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 pb-12 w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300 overflow-y-auto max-h-[90vh]">
+            <div className="w-12 h-1.5 bg-[#1e201d] rounded-full mx-auto mb-6"></div>
+            
+            <h2 className="text-[20px] font-bold text-white mb-6">Add New Gym</h2>
+
+            <form onSubmit={handleAddGym} className="space-y-5">
+              <div className="space-y-4">
+                <div>
+                  <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Gym Information</label>
+                  <input 
+                    required
+                    placeholder="Gym Name"
+                    className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#e3e3dd] focus:border-[#B7FF1E] outline-none transition-colors"
+                    value={newGym.name}
+                    onChange={e => setNewGym(prev => ({ ...prev, name: e.target.value }))}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="relative">
+                    <input 
+                      required
+                      placeholder="Gym Code"
+                      className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#B7FF1E] font-mono font-bold tracking-widest focus:border-[#B7FF1E] outline-none transition-colors"
+                      value={newGym.gymCode}
+                      onChange={e => setNewGym(prev => ({ ...prev, gymCode: e.target.value.toUpperCase() }))}
+                    />
+                    <button 
+                      type="button"
+                      onClick={generateGymCode}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-[#B7FF1E] hover:bg-[#B7FF1E]/10 rounded-lg transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[20px]">refresh</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Admin Details</label>
+                  <div className="space-y-3">
+                    <input 
+                      required
+                      placeholder="Admin Full Name"
+                      className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#e3e3dd] focus:border-[#B7FF1E] outline-none transition-colors"
+                      value={newGym.ownerName}
+                      onChange={e => setNewGym(prev => ({ ...prev, ownerName: e.target.value }))}
+                    />
+                    <input 
+                      required
+                      type="email"
+                      placeholder="Admin Email"
+                      className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#e3e3dd] focus:border-[#B7FF1E] outline-none transition-colors"
+                      value={newGym.ownerEmail}
+                      onChange={e => setNewGym(prev => ({ ...prev, ownerEmail: e.target.value }))}
+                    />
+                    <input 
+                      required
+                      type="tel"
+                      placeholder="Admin Phone"
+                      className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#e3e3dd] focus:border-[#B7FF1E] outline-none transition-colors"
+                      value={newGym.ownerPhone}
+                      onChange={e => setNewGym(prev => ({ ...prev, ownerPhone: e.target.value }))}
+                    />
+                    <input 
+                      required
+                      type="password"
+                      placeholder="Admin Password"
+                      className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#e3e3dd] focus:border-[#B7FF1E] outline-none transition-colors"
+                      value={newGym.ownerPassword}
+                      onChange={e => setNewGym(prev => ({ ...prev, ownerPassword: e.target.value }))}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-4">
+                <button 
+                  type="button"
+                  disabled={isSubmitting}
+                  onClick={() => setIsAddingGym(false)}
+                  className="flex-1 py-4 bg-[#1e201d] text-[#858A7D] text-[15px] font-bold rounded-2xl active:scale-95 transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex-[2] py-4 bg-[#B7FF1E] text-black text-[15px] font-bold rounded-2xl shadow-[0_12px_24px_rgba(183,255,30,0.15)] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {isSubmitting && <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin"></span>}
+                  Create Gym
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Detail Drawer */}
       {selectedGym && (
         <div className="fixed inset-0 z-[100] flex flex-col justify-end">
@@ -204,6 +309,17 @@ function SuperAdminGyms() {
                       <p className="text-[14px] text-white font-medium">{selectedGym.owner_email || 'Not provided'}</p>
                     </div>
                   </div>
+                  {selectedGym.owner_phone && (
+                    <div className="flex items-center gap-4">
+                      <div className="w-8 h-8 rounded-full bg-[#B7FF1E]/10 flex items-center justify-center text-[#B7FF1E]">
+                        <span className="material-symbols-outlined text-[18px]">call</span>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-[#858A7D] uppercase font-bold">Phone</p>
+                        <p className="text-[14px] text-white font-medium">{selectedGym.owner_phone}</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -216,7 +332,7 @@ function SuperAdminGyms() {
                   </div>
                   <div>
                     <p className="text-[10px] text-[#858A7D] uppercase font-bold mb-1">Join Date</p>
-                    <p className="text-[14px] text-white font-medium">{new Date(selectedGym.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                    <p className="text-[14px] text-white font-medium">{selectedGym.created_at ? new Date(selectedGym.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '---'}</p>
                   </div>
                 </div>
               </div>
