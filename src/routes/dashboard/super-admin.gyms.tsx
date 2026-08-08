@@ -39,37 +39,23 @@ function SuperAdminGyms() {
         }
       `}</style>
 
-      {/* TopAppBar */}
-      <header className="fixed top-0 w-full z-50 border-b border-white/5 bg-[#121411] max-w-[480px] mx-auto left-0 right-0">
-        <div className="flex justify-between items-center px-5 h-16">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#333532] overflow-hidden border border-white/10">
-              <img 
-                alt="Admin Profile" 
-                className="w-full h-full object-cover" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFJ9tldG3zq9aiXfnJObpWRNrC7c5uCu8MSeZQL9M08-g3tgM66h5Pmu7rOgskdaQdX6DH75MJYKn-NxlLOJsyn2qc9DLtDb1GejaOW4j1W9Y06IPPkqZBoMPRxKGddRc6TtIMCnc_bf035OZslm_0EQGqoHg0YKV7sBs3eTUZno-ehogQBEbrJwwjS4EWJHfiw6AeoYFnrEbdwyKXvGxcoDSWJh5mABbmtBqJpnxRHnbPIgZrKw" 
-              />
-            </div>
-            <h1 className="text-[22px] font-bold tracking-tighter text-[#B7FF1E]">GymSync</h1>
-          </div>
-          <button aria-label="Notifications" className="w-10 h-10 flex items-center justify-center text-[#B7FF1E] transition-all active:scale-95">
-            <span className="material-symbols-outlined">notifications</span>
-          </button>
-        </div>
-      </header>
-
       {/* Main Canvas */}
-      <main className="max-w-[480px] mx-auto pt-16 px-5 flex flex-col gap-6 mt-6">
+      <main className="max-w-[480px] mx-auto pt-6 px-5 flex flex-col gap-5">
+        {/* Header Section */}
+        <section>
+          <h1 className="text-[24px] font-bold text-white leading-tight">Gym Network</h1>
+        </section>
+
         {/* Hero Metric Card */}
-        <section className="bg-[#121411] border border-white/5 rounded-xl p-4 relative overflow-hidden">
-          <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#B7FF1E]/10 rounded-full blur-2xl"></div>
+        <section className="bg-[#121411] border border-white/5 rounded-xl p-3 relative overflow-hidden">
+          <div className="absolute -right-10 -top-10 w-24 h-24 bg-[#B7FF1E]/10 rounded-full blur-2xl"></div>
           <div className="flex justify-between items-start z-10 relative">
-            <div className="flex flex-col gap-2">
-              <h2 className="text-[18px] font-semibold text-[#858A7D]">Total Connected Gyms</h2>
-              <div className="text-[40px] font-bold text-[#e3e3dd]">{gyms?.length || 0}</div>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-[14px] font-semibold text-[#858A7D]">Total Connected Gyms</h2>
+              <div className="text-[32px] font-bold text-[#e3e3dd] leading-none">{gyms?.length || 0}</div>
             </div>
-            <button className="w-12 h-12 rounded-full bg-[#B7FF1E] text-black flex items-center justify-center transition-colors shadow-[0_0_15px_rgba(183,255,30,0.3)] active:scale-95">
-              <span className="material-symbols-outlined font-bold text-[28px]">add</span>
+            <button className="w-10 h-10 rounded-full bg-[#B7FF1E] text-black flex items-center justify-center transition-colors shadow-[0_0_15px_rgba(183,255,30,0.3)] active:scale-95 shrink-0">
+              <span className="material-symbols-outlined font-bold text-[24px]">add</span>
             </button>
           </div>
         </section>
