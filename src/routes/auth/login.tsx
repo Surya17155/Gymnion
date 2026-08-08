@@ -124,6 +124,12 @@ function AuthPage() {
     setErrorMsg('');
 
     try {
+      const gym = await lookupGym(formData.gymCode);
+      if (!gym) {
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -133,11 +139,13 @@ function AuthPage() {
             phone: formData.phone,
             dob: formData.dob,
             address: formData.address,
-            gym_code: formData.gymCode,
+            gym_code: formData.gymCode.trim(),
+            gym_id: gym.id,
             role: 'member' // Default role for public signups
           }
         }
       });
+
 
       if (error) throw error;
       if (data.session) {
