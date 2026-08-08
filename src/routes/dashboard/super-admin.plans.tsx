@@ -60,7 +60,7 @@ function SuperAdminPlans() {
 
     setIsSubmitting(true);
     try {
-      const currentSettings = selectedGymForOverride.settings || {};
+      const currentSettings = (selectedGymForOverride.settings as Record<string, any>) || {};
       const newSettings = { 
         ...currentSettings, 
         manual_pricing: parseFloat(customMonthlyPrice) 
