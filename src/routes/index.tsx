@@ -9,7 +9,7 @@ export const Route = createFileRoute("/")({
       const role = await getAuthUserRole();
       if (role === 'super_admin') throw redirect({ to: '/dashboard/super-admin' });
       if (role === 'admin') throw redirect({ to: '/dashboard/admin' });
-      throw redirect({ to: '/dashboard/m' });
+      if (role) throw redirect({ to: '/dashboard/m' });
     }
   },
   component: HomePage,
