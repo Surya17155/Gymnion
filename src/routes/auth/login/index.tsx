@@ -49,13 +49,27 @@ function AuthPage() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSignIn = async () => {
+  const handleSignIn = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    
+    // Capture values directly from the form elements to avoid stale state issues with browser autofill
+    const emailInput = document.getElementById('email') as HTMLInputElement;
+    const passwordInput = document.getElementById('password') as HTMLInputElement;
+    
+    const email = emailInput?.value || formData.email;
+    const password = passwordInput?.value || formData.password;
+
+    if (!email || !password) {
+      setErrorMsg('Please enter both email and password');
+      return;
+    }
+
     setLoading(true);
     setErrorMsg('');
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password
+        email,
+        password
       });
       
       if (error) throw error;
@@ -152,7 +166,7 @@ function AuthPage() {
         )}
 
         <div className="relative w-full z-10 space-y-4">
-          <form className="flex flex-col gap-3" onSubmit={(e) => { e.preventDefault(); authMode === 'signin' ? handleSignIn() : handleSignUp(); }}>
+          <form className="flex flex-col gap-3" onSubmit={(e) => { authMode === 'signin' ? handleSignIn(e) : handleSignUp(); }}>
             {/* Hidden fields to help browser credential managers understand the form context */}
             <input type="hidden" name="username" value={formData.email} />
             {authMode === 'signup' && (
