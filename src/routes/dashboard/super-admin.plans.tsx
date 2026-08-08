@@ -121,7 +121,16 @@ function SuperAdminPlans() {
         <section className="mb-8">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold text-[#e3e3dd]">Global Plans</h2>
-            <button className="text-[11px] font-bold text-[#c9f232] hover:opacity-80 transition-opacity uppercase tracking-wider">Add New</button>
+            <button 
+              onClick={() => {
+                setSelectedPlan({ name: '', price: '', features: [''] });
+                setIsEditingPlan(true);
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#c9f232]/10 border border-[#c9f232]/30 rounded-full text-[#c9f232] text-[10px] font-bold uppercase tracking-wider hover:bg-[#c9f232]/20 transition-colors"
+            >
+              <span className="material-symbols-outlined text-[14px]">add</span>
+              Add New
+            </button>
           </div>
           <div className="space-y-3">
             {/* Standard Plan Card */}
