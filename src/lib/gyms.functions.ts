@@ -5,10 +5,10 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 export const createGymWithAdmin = createServerFn({ method: "POST" })
   .validator((data: unknown) => z.object({
     name: z.string().min(1),
-    address: z.string().optional(),
     ownerName: z.string().min(1),
     ownerEmail: z.string().email(),
     ownerPassword: z.string().min(6),
+    ownerPhone: z.string().min(10),
     gymCode: z.string().min(3)
   }).parse(data))
   .handler(async ({ data }) => {
@@ -17,10 +17,11 @@ export const createGymWithAdmin = createServerFn({ method: "POST" })
       .from('gyms')
       .insert({
         name: data.name,
-        address: data.address,
         gym_code: data.gymCode,
         owner_name: data.ownerName,
-        owner_email: data.ownerEmail
+        owner_email: data.ownerEmail,
+        owner_phone: data.ownerPhone,
+        status: 'approved'
       })
       .select()
       .single();
@@ -56,3 +57,4 @@ export const createGymWithAdmin = createServerFn({ method: "POST" })
 
     return { success: true, gymId: gym.id };
   });
+
