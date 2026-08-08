@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router';
-
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -42,8 +41,6 @@ function SuperAdminPlans() {
 
     setIsSubmitting(true);
     try {
-      // In a real app, we'd have a specific table for this or update the 'gyms.settings' column.
-      // For now, let's update the gyms settings object with a manual_pricing field
       const currentSettings = selectedGymForOverride.settings || {};
       const newSettings = { 
         ...currentSettings, 
@@ -78,10 +75,10 @@ function SuperAdminPlans() {
         .select('*')
         .not('settings', 'is', null);
       if (error) throw error;
-      // Filter those that have manual_pricing in settings
       return data?.filter(g => (g.settings as any)?.manual_pricing !== undefined) || [];
     }
   });
+
   return (
     <div className="flex-1 overflow-y-auto h-full w-full relative z-10 pb-24 md:pb-8">
       {/* Atmospheric Glow */}
@@ -225,6 +222,7 @@ function SuperAdminPlans() {
                               settings: { ...(gym.settings as any), manual_pricing: newPrice }
                             }).eq('id', gym.id);
                             toast.success("Price updated");
+                            queryClient.invalidateQueries({ queryKey: ['gyms-with-overrides'] });
                           }
                         }}
                       />
@@ -334,8 +332,6 @@ function SuperAdminPlans() {
           </div>
         </div>
       )}
-        </section>
-      </div>
     </div>
   );
 }
