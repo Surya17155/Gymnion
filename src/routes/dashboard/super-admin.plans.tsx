@@ -378,9 +378,22 @@ function SuperAdminPlans() {
           <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 pb-24 w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300 max-h-[90vh] overflow-y-auto">
             <div className="w-12 h-1.5 bg-[#1e201d] rounded-full mx-auto mb-6"></div>
             
-            <h2 className="text-[20px] font-bold text-white mb-6">Edit {selectedPlan.name} Plan</h2>
+            <h2 className="text-[20px] font-bold text-white mb-6">
+              {selectedPlan.id ? `Edit ${selectedPlan.name} Plan` : 'Add New Plan'}
+            </h2>
 
             <div className="space-y-6">
+              <div>
+                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Plan Name</label>
+                <input 
+                  type="text"
+                  placeholder="e.g. Premium"
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#e3e3dd] font-bold focus:border-[#c9f232] outline-none"
+                  value={selectedPlan.name}
+                  onChange={e => setSelectedPlan({ ...selectedPlan, name: e.target.value })}
+                />
+              </div>
+
               <div>
                 <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Monthly Price (₹)</label>
                 <div className="relative">
@@ -402,13 +415,34 @@ function SuperAdminPlans() {
                   {selectedPlan.features.map((feature: string, idx: number) => (
                     <div key={idx} className="flex items-center gap-3 bg-[#1e201d] border border-white/5 p-3 rounded-xl">
                       <span className="material-symbols-outlined text-[#c9f232] text-sm">check_circle</span>
-                      <span className="text-sm text-[#e3e3dd] flex-1">{feature}</span>
-                      <button className="text-[#858A7D] hover:text-white">
+                      <input 
+                        type="text"
+                        className="text-sm text-[#e3e3dd] bg-transparent border-none outline-none flex-1"
+                        value={feature}
+                        placeholder="Feature name..."
+                        onChange={e => {
+                          const newFeatures = [...selectedPlan.features];
+                          newFeatures[idx] = e.target.value;
+                          setSelectedPlan({ ...selectedPlan, features: newFeatures });
+                        }}
+                      />
+                      <button 
+                        onClick={() => {
+                          const newFeatures = selectedPlan.features.filter((_: any, i: number) => i !== idx);
+                          setSelectedPlan({ ...selectedPlan, features: newFeatures });
+                        }}
+                        className="text-[#858A7D] hover:text-white"
+                      >
                         <span className="material-symbols-outlined text-sm">close</span>
                       </button>
                     </div>
                   ))}
-                  <button className="w-full py-2 border border-dashed border-white/10 rounded-xl text-[10px] font-bold text-[#858A7D] uppercase tracking-wider hover:border-[#c9f232]/30 transition-colors">
+                  <button 
+                    onClick={() => {
+                      setSelectedPlan({ ...selectedPlan, features: [...selectedPlan.features, ''] });
+                    }}
+                    className="w-full py-2 border border-dashed border-white/10 rounded-xl text-[10px] font-bold text-[#858A7D] uppercase tracking-wider hover:border-[#c9f232]/30 transition-colors"
+                  >
                     + Add Feature
                   </button>
                 </div>
