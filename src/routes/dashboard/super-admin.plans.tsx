@@ -72,6 +72,7 @@ function SuperAdminPlans() {
 
   const handleEditPlan = (plan: any) => {
     setSelectedPlan(plan);
+    setManualFeatures(plan.features || ['']);
     setIsEditingPlan(true);
   };
 
