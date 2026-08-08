@@ -97,12 +97,31 @@ function SuperAdminPlans() {
         return;
       }
       
-      // Clean up empty features
       const cleanedFeatures = manualFeatures.filter((f: string) => f.trim() !== '');
+      const planData = {
+        name: selectedPlan.name,
+        price: Math.round(parseFloat(selectedPlan.price) * 100),
+        features: cleanedFeatures,
+        is_active: true
+      };
+
+      let error;
+      if (selectedPlan.id && isNaN(Number(selectedPlan.id)) && selectedPlan.id.length > 20) {
+        // Assume UUID if it's long and not a number string
+        const { error: updateError } = await supabase
+          .from('global_plans' as any)
+          .update(planData)
+          .eq('id', selectedPlan.id);
+        error = updateError;
+      } else {
+        const { error: insertError } = await supabase
+          .from('global_plans' as any)
+          .insert([planData]);
+        error = insertError;
+      }
+
+      if (error) throw error;
       
-      // Logic to update/create global plan in database would go here
-      console.log("Saving plan:", { ...selectedPlan, features: cleanedFeatures });
-      // For now, we'll simulate success and handle both create/update
       const message = selectedPlan.id ? 
         `${selectedPlan.name} plan updated successfully` : 
         `${selectedPlan.name} plan created successfully`;
@@ -110,6 +129,7 @@ function SuperAdminPlans() {
       toast.success(message);
       setIsEditingPlan(false);
       setSelectedPlan(null);
+      queryClient.invalidateQueries({ queryKey: ['global-plans'] });
     } catch (err: any) {
       toast.error(err.message || "Failed to save plan");
     } finally {
