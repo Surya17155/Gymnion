@@ -27,7 +27,7 @@ function SuperAdminPlans() {
     queryKey: ['global-plans'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('global_plans' as any)
+        .from('global_plans')
         .select('*')
         .order('price', { ascending: true });
       if (error) throw error;
@@ -110,16 +110,19 @@ function SuperAdminPlans() {
       };
 
       let error;
-      if (selectedPlan.id && isNaN(Number(selectedPlan.id)) && selectedPlan.id.length > 20) {
-        // Assume UUID if it's long and not a number string
+      const isNewPlan = !selectedPlan.id;
+      
+      if (!isNewPlan) {
+        // Update existing plan
         const { error: updateError } = await supabase
-          .from('global_plans' as any)
+          .from('global_plans')
           .update(planData)
           .eq('id', selectedPlan.id);
         error = updateError;
       } else {
+        // Insert new plan
         const { error: insertError } = await supabase
-          .from('global_plans' as any)
+          .from('global_plans')
           .insert([planData]);
         error = insertError;
       }

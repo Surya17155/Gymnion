@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 export const Route = createFileRoute('/dashboard/admin/plans/edit/$planId')({
@@ -19,61 +20,75 @@ function EditPlanScreen() {
   });
 
   useEffect(() => {
-    // Load plan data from localStorage
-    const savedPlans = localStorage.getItem('gym_plans');
-    if (savedPlans) {
-      const plans = JSON.parse(savedPlans);
-      const plan = plans.find((p: any) => p.id === planId);
-      if (plan) {
-        setFormData({
-          name: plan.name,
-          amount: plan.amount,
-          duration: plan.duration,
-          description: plan.description,
-          isActive: plan.isActive,
-        });
-      } else {
+    const fetchPlan = async () => {
+      const { data, error } = await supabase
+        .from('fee_plans')
+        .select('*')
+        .eq('id', planId)
+        .single();
+
+      if (error || !data) {
         toast.error('Plan not found');
         navigate({ to: '/dashboard/admin/plans' });
+        return;
       }
-    }
+
+      setFormData({
+        name: data.name,
+        amount: data.amount.toString(),
+        duration: data.billing_cycle === 'monthly' ? '1' : 
+                 data.billing_cycle === 'annual' ? '12' : '1',
+        description: data.description || '',
+        isActive: data.is_active ?? true,
+      });
+    };
+
+    fetchPlan();
   }, [planId, navigate]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const savedPlans = localStorage.getItem('gym_plans');
-      if (savedPlans) {
-        const plans = JSON.parse(savedPlans);
-        const updatedPlans = plans.map((p: any) => 
-          p.id === planId ? { ...formData, id: planId } : p
-        );
-        localStorage.setItem('gym_plans', JSON.stringify(updatedPlans));
-        toast.success('Plan updated successfully!');
-        navigate({ to: '/dashboard/admin/plans' });
-      }
-    } catch (error) {
-      toast.error('Failed to update plan');
+      const { error } = await supabase
+        .from('fee_plans')
+        .update({
+          name: formData.name,
+          amount: parseFloat(formData.amount),
+          description: formData.description,
+          billing_cycle: formData.duration === '1' ? 'monthly' : 
+                         formData.duration === '12' ? 'annual' : 
+                         `${formData.duration} months`,
+          is_active: formData.isActive
+        })
+        .eq('id', planId);
+
+      if (error) throw error;
+
+      toast.success('Plan updated successfully!');
+      navigate({ to: '/dashboard/admin/plans' });
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to update plan');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this plan?')) {
       try {
-        const savedPlans = localStorage.getItem('gym_plans');
-        if (savedPlans) {
-          const plans = JSON.parse(savedPlans);
-          const filteredPlans = plans.filter((p: any) => p.id !== planId);
-          localStorage.setItem('gym_plans', JSON.stringify(filteredPlans));
-          toast.success('Plan deleted successfully!');
-          navigate({ to: '/dashboard/admin/plans' });
-        }
-      } catch (error) {
-        toast.error('Failed to delete plan');
+        const { error } = await supabase
+          .from('fee_plans')
+          .delete()
+          .eq('id', planId);
+
+        if (error) throw error;
+
+        toast.success('Plan deleted successfully!');
+        navigate({ to: '/dashboard/admin/plans' });
+      } catch (error: any) {
+        toast.error(error.message || 'Failed to delete plan');
       }
     }
   };
