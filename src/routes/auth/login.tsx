@@ -1,6 +1,8 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
+import { getRoleForUser, clearRoleCache } from "@/routes/dashboard";
+
 
 export const Route = createFileRoute('/auth/login')({
   validateSearch: (search: Record<string, unknown>) => {
@@ -110,7 +112,19 @@ function AuthPage() {
 
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      if (data.session) navigate({ to: redirectPath });
+      if (data.session) {
+        clearRoleCache();
+        const role = await getRoleForUser(data.session.user.id);
+        const home = role === 'super_admin'
+          ? '/dashboard/super-admin'
+          : role === 'gym_admin'
+            ? '/dashboard/admin'
+            : role === 'member'
+              ? '/dashboard/m'
+              : null;
+        navigate({ to: home ?? redirectPath });
+      }
+
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to sign in');
     } finally {

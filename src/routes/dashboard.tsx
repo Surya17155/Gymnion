@@ -1,61 +1,76 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { supabase } from '@/integrations/supabase/client';
-import { getAuthUserRole } from '@/lib/auth.functions';
+
+type Role = 'super_admin' | 'gym_admin' | 'member' | null;
+
+const roleHome: Record<string, string> = {
+  super_admin: '/dashboard/super-admin',
+  gym_admin: '/dashboard/admin',
+  member: '/dashboard/m',
+};
+
+// In-memory cache so navigating between tabs never re-hits the network.
+let cachedRole: { userId: string; role: Role } | null = null;
+
+export async function getRoleForUser(userId: string): Promise<Role> {
+  if (cachedRole && cachedRole.userId === userId) return cachedRole.role;
+
+  if (typeof sessionStorage !== 'undefined') {
+    const stored = sessionStorage.getItem('gymsync_role');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (parsed?.userId === userId) {
+          cachedRole = parsed;
+          return parsed.role as Role;
+        }
+      } catch {
+        // ignore malformed cache
+      }
+    }
+  }
+
+  const { data } = await supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  const role = (data?.role as Role) ?? null;
+  cachedRole = { userId, role };
+  if (typeof sessionStorage !== 'undefined') {
+    sessionStorage.setItem('gymsync_role', JSON.stringify(cachedRole));
+  }
+  return role;
+}
+
+export function clearRoleCache() {
+  cachedRole = null;
+  if (typeof sessionStorage !== 'undefined') sessionStorage.removeItem('gymsync_role');
+}
 
 export const Route = createFileRoute('/dashboard')({
+  // Session lives in localStorage, so gate on the client only. This removes the
+  // SSR round-trip that made the first paint hang on a black screen.
+  ssr: false,
   beforeLoad: async ({ location }) => {
     const { data: { session } } = await supabase.auth.getSession();
-    
+
     if (!session) {
-      // Very short delay for session recovery
-      await new Promise(resolve => setTimeout(resolve, 5));
-      const { data: { session: retrySession } } = await supabase.auth.getSession();
-      
-      if (!retrySession) {
-        throw redirect({
-          to: '/auth/login',
-          search: {
-            redirect: location.href,
-          },
-        });
-      }
+      throw redirect({ to: '/auth/login', search: { redirect: location.href } });
     }
 
-    const role = await getAuthUserRole();
-    
-    // Redirect logic based on role if they are at the base /dashboard path
-    if (location.pathname === '/dashboard' || location.pathname === '/dashboard/') {
-      if (role === 'super_admin') {
-        throw redirect({ to: '/dashboard/super-admin' });
-      } else if (role === 'gym_admin') {
-        throw redirect({ to: '/dashboard/admin' });
-      } else if (role === 'member') {
-        throw redirect({ to: '/dashboard/m' });
-      }
-    } else {
-      // If we have a role and we are not redirected to login, but we are not on the right path
-      if (role === 'super_admin' && !location.pathname.startsWith('/dashboard/super-admin')) {
-        throw redirect({ to: '/dashboard/super-admin' });
-      }
-      if (role === 'gym_admin' && !location.pathname.startsWith('/dashboard/admin')) {
-        throw redirect({ to: '/dashboard/admin' });
-      }
-      if (role === 'member' && !location.pathname.startsWith('/dashboard/m')) {
-        throw redirect({ to: '/dashboard/m' });
-      }
+    const role = await getRoleForUser(session.user.id);
+    const home = role ? roleHome[role] : undefined;
+
+    if (!home) {
+      throw redirect({ to: '/auth/login', search: { redirect: location.href } });
     }
 
-    // Protect specific sub-routes
-    if (location.pathname.startsWith('/dashboard/super-admin') && role !== 'super_admin') {
-       throw redirect({ to: '/dashboard' });
+    if (!location.pathname.startsWith(home)) {
+      throw redirect({ to: home });
     }
-    if (location.pathname.startsWith('/dashboard/admin') && role !== 'gym_admin' && role !== 'super_admin') {
-       throw redirect({ to: '/dashboard' });
-    }
-    if (location.pathname.startsWith('/dashboard/m') && role !== 'member' && role !== 'super_admin' && role !== 'gym_admin') {
-       throw redirect({ to: '/dashboard' });
-    }
-    
+
     return { role };
   },
   pendingComponent: () => (
@@ -65,13 +80,12 @@ export const Route = createFileRoute('/dashboard')({
   ),
   component: DashboardLayout,
   errorComponent: ({ error }) => {
-    console.error('Dashboard Error:', error);
     return (
       <div className="min-h-screen bg-[#0D0F0C] text-white flex flex-col items-center justify-center p-4">
         <h1 className="text-xl font-bold mb-2">Something went wrong</h1>
         <p className="text-gray-400 mb-4">{error?.message || 'Unauthorized or role mismatch'}</p>
-        <button 
-          onClick={() => window.location.href = '/auth/login'}
+        <button
+          onClick={() => { window.location.href = '/auth/login'; }}
           className="bg-[#B7FF1E] text-black px-4 py-2 rounded-full font-bold"
         >
           Return to Login
@@ -82,8 +96,5 @@ export const Route = createFileRoute('/dashboard')({
 });
 
 function DashboardLayout() {
-  return (
-    <Outlet />
-  );
+  return <Outlet />;
 }
-
