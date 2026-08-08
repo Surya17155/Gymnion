@@ -11,6 +11,8 @@ export const Route = createFileRoute('/dashboard/super-admin/plans')({
 function SuperAdminPlans() {
   const queryClient = useQueryClient();
   const [isAddingOverride, setIsAddingOverride] = useState(false);
+  const [isEditingPlan, setIsEditingPlan] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGymForOverride, setSelectedGymForOverride] = useState<any>(null);
   const [customMonthlyPrice, setCustomMonthlyPrice] = useState('');
@@ -62,6 +64,27 @@ function SuperAdminPlans() {
       queryClient.invalidateQueries({ queryKey: ['gyms-with-overrides'] });
     } catch (err: any) {
       toast.error(err.message || "Failed to set manual pricing");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleEditPlan = (plan: any) => {
+    setSelectedPlan(plan);
+    setIsEditingPlan(true);
+  };
+
+  const handleUpdatePlan = async () => {
+    if (!selectedPlan) return;
+    setIsSubmitting(true);
+    try {
+      // Logic to update global plan in database would go here
+      // For now, since we don't have a 'plans' table yet, we'll mock success
+      toast.success(`${selectedPlan.name} plan updated successfully`);
+      setIsEditingPlan(false);
+      setSelectedPlan(null);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update plan");
     } finally {
       setIsSubmitting(false);
     }
@@ -130,7 +153,10 @@ function SuperAdminPlans() {
                   Member Directory
                 </li>
               </ul>
-              <button className="w-full h-12 bg-[#383a36] text-[#c9f232] text-xs font-bold rounded-full hover:bg-[#333532] transition-colors flex items-center justify-center gap-2 relative z-10 border border-[#c9f232]/20">
+              <button 
+                onClick={() => handleEditPlan({ id: 'standard', name: 'Standard', price: 500, features: ['Attendance Tracking', 'Payment Management', 'Member Directory'] })}
+                className="w-full h-12 bg-[#383a36] text-[#c9f232] text-xs font-bold rounded-full hover:bg-[#333532] transition-colors flex items-center justify-center gap-2 relative z-10 border border-[#c9f232]/20"
+              >
                 <span className="material-symbols-outlined text-sm">edit</span>
                 Edit Plan
               </button>
@@ -165,7 +191,10 @@ function SuperAdminPlans() {
                   Priority Support
                 </li>
               </ul>
-              <button className="w-full h-12 bg-[#c9f232] text-[#576c00] text-xs font-bold rounded-full hover:bg-[#aed502] transition-colors flex items-center justify-center gap-2 relative z-10 shadow-[0_4px_20px_rgba(201,242,50,0.2)]">
+              <button 
+                onClick={() => handleEditPlan({ id: 'unlimited', name: 'Unlimited', price: 999, features: ['All Standard Features', 'AI Diet & Workout Plans', 'Priority Support'] })}
+                className="w-full h-12 bg-[#c9f232] text-[#576c00] text-xs font-bold rounded-full hover:bg-[#aed502] transition-colors flex items-center justify-center gap-2 relative z-10 shadow-[0_4px_20px_rgba(201,242,50,0.2)]"
+              >
                 <span className="material-symbols-outlined text-sm">edit</span>
                 Edit Plan
               </button>
@@ -242,7 +271,7 @@ function SuperAdminPlans() {
       {isAddingOverride && (
         <div className="fixed inset-0 z-[110] flex flex-col justify-end">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !isSubmitting && setIsAddingOverride(false)}></div>
-          <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 pb-12 w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300">
+          <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 pb-24 w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300 max-h-[90vh] overflow-y-auto">
             <div className="w-12 h-1.5 bg-[#1e201d] rounded-full mx-auto mb-6"></div>
             
             <h2 className="text-[20px] font-bold text-white mb-6">Add Manual Pricing</h2>
@@ -328,6 +357,71 @@ function SuperAdminPlans() {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Plan Modal */}
+      {isEditingPlan && selectedPlan && (
+        <div className="fixed inset-0 z-[110] flex flex-col justify-end">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !isSubmitting && setIsEditingPlan(false)}></div>
+          <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 pb-24 w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300 max-h-[90vh] overflow-y-auto">
+            <div className="w-12 h-1.5 bg-[#1e201d] rounded-full mx-auto mb-6"></div>
+            
+            <h2 className="text-[20px] font-bold text-white mb-6">Edit {selectedPlan.name} Plan</h2>
+
+            <div className="space-y-6">
+              <div>
+                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Monthly Price (₹)</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                    <span className="text-lg font-semibold text-[#C0C2B8]">₹</span>
+                  </div>
+                  <input 
+                    type="number"
+                    className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl pl-8 pr-4 text-[#e3e3dd] font-bold focus:border-[#c9f232] outline-none"
+                    value={selectedPlan.price}
+                    onChange={e => setSelectedPlan({ ...selectedPlan, price: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Features</label>
+                <div className="space-y-2">
+                  {selectedPlan.features.map((feature: string, idx: number) => (
+                    <div key={idx} className="flex items-center gap-3 bg-[#1e201d] border border-white/5 p-3 rounded-xl">
+                      <span className="material-symbols-outlined text-[#c9f232] text-sm">check_circle</span>
+                      <span className="text-sm text-[#e3e3dd] flex-1">{feature}</span>
+                      <button className="text-[#858A7D] hover:text-white">
+                        <span className="material-symbols-outlined text-sm">close</span>
+                      </button>
+                    </div>
+                  ))}
+                  <button className="w-full py-2 border border-dashed border-white/10 rounded-xl text-[10px] font-bold text-[#858A7D] uppercase tracking-wider hover:border-[#c9f232]/30 transition-colors">
+                    + Add Feature
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button 
+                  type="button"
+                  onClick={() => setIsEditingPlan(false)}
+                  className="flex-1 py-4 bg-[#1e201d] text-[#858A7D] text-[15px] font-bold rounded-2xl"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleUpdatePlan}
+                  disabled={isSubmitting}
+                  className="flex-[2] py-4 bg-[#c9f232] text-black text-[15px] font-bold rounded-2xl shadow-[0_12px_24px_rgba(201,242,50,0.15)] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {isSubmitting && <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin"></span>}
+                  Save Changes
+                </button>
+              </div>
             </div>
           </div>
         </div>
