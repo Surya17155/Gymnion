@@ -17,6 +17,7 @@ function SuperAdminPlans() {
   const [selectedGymForOverride, setSelectedGymForOverride] = useState<any>(null);
   const [customMonthlyPrice, setCustomMonthlyPrice] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [manualFeatures, setManualFeatures] = useState<string[]>(['']);
 
   const { data: gyms } = useQuery({
     queryKey: ['super-admin-gyms-for-plans'],
@@ -71,6 +72,7 @@ function SuperAdminPlans() {
 
   const handleEditPlan = (plan: any) => {
     setSelectedPlan(plan);
+    setManualFeatures(plan.features || ['']);
     setIsEditingPlan(true);
   };
 
@@ -78,13 +80,26 @@ function SuperAdminPlans() {
     if (!selectedPlan) return;
     setIsSubmitting(true);
     try {
-      // Logic to update global plan in database would go here
-      // For now, since we don't have a 'plans' table yet, we'll mock success
-      toast.success(`${selectedPlan.name} plan updated successfully`);
+      if (!selectedPlan.name || !selectedPlan.price) {
+        toast.error("Please provide a plan name and price");
+        return;
+      }
+      
+      // Clean up empty features
+      const cleanedFeatures = manualFeatures.filter((f: string) => f.trim() !== '');
+      
+      // Logic to update/create global plan in database would go here
+      console.log("Saving plan:", { ...selectedPlan, features: cleanedFeatures });
+      // For now, we'll simulate success and handle both create/update
+      const message = selectedPlan.id ? 
+        `${selectedPlan.name} plan updated successfully` : 
+        `${selectedPlan.name} plan created successfully`;
+      
+      toast.success(message);
       setIsEditingPlan(false);
       setSelectedPlan(null);
     } catch (err: any) {
-      toast.error(err.message || "Failed to update plan");
+      toast.error(err.message || "Failed to save plan");
     } finally {
       setIsSubmitting(false);
     }
@@ -122,11 +137,13 @@ function SuperAdminPlans() {
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold text-[#e3e3dd]">Global Plans</h2>
             <button 
+              data-testid="add-new-plan-btn"
               onClick={() => {
-                setSelectedPlan({ name: '', price: '', features: [''] });
+                setSelectedPlan({ name: '', price: '' });
+                setManualFeatures(['']);
                 setIsEditingPlan(true);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#c9f232]/10 border border-[#c9f232]/30 rounded-full text-[#c9f232] text-[10px] font-bold uppercase tracking-wider hover:bg-[#c9f232]/20 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#c9f232] rounded-full text-black text-[10px] font-bold uppercase tracking-wider hover:bg-[#aed502] transition-colors shadow-[0_4px_12px_rgba(201,242,50,0.2)]"
             >
               <span className="material-symbols-outlined text-[14px]">add</span>
               Add New
@@ -378,9 +395,22 @@ function SuperAdminPlans() {
           <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 pb-24 w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300 max-h-[90vh] overflow-y-auto">
             <div className="w-12 h-1.5 bg-[#1e201d] rounded-full mx-auto mb-6"></div>
             
-            <h2 className="text-[20px] font-bold text-white mb-6">Edit {selectedPlan.name} Plan</h2>
+            <h2 className="text-[20px] font-bold text-white mb-6">
+              {selectedPlan.id ? `Edit ${selectedPlan.name} Plan` : 'Add New Plan'}
+            </h2>
 
             <div className="space-y-6">
+              <div>
+                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Plan Name</label>
+                <input 
+                  type="text"
+                  placeholder="e.g. Premium"
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#e3e3dd] font-bold focus:border-[#c9f232] outline-none"
+                  value={selectedPlan.name}
+                  onChange={e => setSelectedPlan({ ...selectedPlan, name: e.target.value })}
+                />
+              </div>
+
               <div>
                 <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Monthly Price (₹)</label>
                 <div className="relative">
@@ -399,16 +429,35 @@ function SuperAdminPlans() {
               <div>
                 <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Features</label>
                 <div className="space-y-2">
-                  {selectedPlan.features.map((feature: string, idx: number) => (
+                  {manualFeatures.map((feature: string, idx: number) => (
                     <div key={idx} className="flex items-center gap-3 bg-[#1e201d] border border-white/5 p-3 rounded-xl">
                       <span className="material-symbols-outlined text-[#c9f232] text-sm">check_circle</span>
-                      <span className="text-sm text-[#e3e3dd] flex-1">{feature}</span>
-                      <button className="text-[#858A7D] hover:text-white">
+                      <input 
+                        type="text"
+                        className="text-sm text-[#e3e3dd] bg-transparent border-none outline-none flex-1"
+                        value={feature}
+                        placeholder="Feature name..."
+                        onChange={e => {
+                          const newFeatures = [...manualFeatures];
+                          newFeatures[idx] = e.target.value;
+                          setManualFeatures(newFeatures);
+                        }}
+                      />
+                      <button 
+                        onClick={() => {
+                          const newFeatures = manualFeatures.filter((_, i) => i !== idx);
+                          setManualFeatures(newFeatures.length > 0 ? newFeatures : ['']);
+                        }}
+                        className="text-[#858A7D] hover:text-white"
+                      >
                         <span className="material-symbols-outlined text-sm">close</span>
                       </button>
                     </div>
                   ))}
-                  <button className="w-full py-2 border border-dashed border-white/10 rounded-xl text-[10px] font-bold text-[#858A7D] uppercase tracking-wider hover:border-[#c9f232]/30 transition-colors">
+                  <button 
+                    onClick={() => setManualFeatures([...manualFeatures, ''])}
+                    className="w-full py-2 border border-dashed border-white/10 rounded-xl text-[10px] font-bold text-[#858A7D] uppercase tracking-wider hover:border-[#c9f232]/30 transition-colors"
+                  >
                     + Add Feature
                   </button>
                 </div>
