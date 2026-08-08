@@ -47,6 +47,11 @@ export const Route = createFileRoute('/dashboard')({
     
     return { role };
   },
+  pendingComponent: () => (
+    <div className="min-h-screen bg-[#0D0F0C] flex items-center justify-center">
+      <div className="w-12 h-12 border-4 border-[#B7FF1E]/20 border-t-[#B7FF1E] rounded-full animate-spin"></div>
+    </div>
+  ),
   component: DashboardLayout,
 });
 
