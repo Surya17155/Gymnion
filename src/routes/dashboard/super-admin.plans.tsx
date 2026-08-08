@@ -86,9 +86,10 @@ function SuperAdminPlans() {
       }
       
       // Clean up empty features
-      const cleanedFeatures = selectedPlan.features.filter((f: string) => f.trim() !== '');
+      const cleanedFeatures = manualFeatures.filter((f: string) => f.trim() !== '');
       
       // Logic to update/create global plan in database would go here
+      console.log("Saving plan:", { ...selectedPlan, features: cleanedFeatures });
       // For now, we'll simulate success and handle both create/update
       const message = selectedPlan.id ? 
         `${selectedPlan.name} plan updated successfully` : 
