@@ -1,74 +1,109 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute('/auth/login')({
-  component: LoginPage,
+  component: AuthPage,
 });
 
-function LoginPage() {
+function AuthPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    dob: '',
+    address: '',
+    password: '',
+    gymCode: ''
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    const name = e.target.name;
+
+    if (name === 'dob') {
+      const digits = value.replace(/\D/g, '');
+      let formatted = '';
+      if (digits.length > 0) {
+        formatted += digits.substring(0, 2);
+        if (digits.length > 2) {
+          formatted += '/' + digits.substring(2, 4);
+          if (digits.length > 4) {
+            formatted += '/' + digits.substring(4, 8);
+          }
+        }
+      }
+      value = formatted;
+    }
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
-
+    setErrorMsg('');
+    
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const emailInput = document.getElementById('email') as HTMLInputElement;
+      const passwordInput = document.getElementById('password') as HTMLInputElement;
+      const email = emailInput?.value || formData.email;
+      const password = passwordInput?.value || formData.password;
 
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      
-      // The dashboard route handles role-based redirection
-      navigate({ to: '/dashboard' });
+      if (data.session) navigate({ to: '/dashboard' });
     } catch (err: any) {
-      setError(err.message || 'Failed to sign in');
+      setErrorMsg(err.message || 'Failed to sign in');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0D0F0C] p-4 font-sans">
-      <div className="w-full max-w-[400px] bg-[#1a1c19] p-8 rounded-3xl border border-white/10">
-        <h1 className="text-2xl font-bold text-white mb-6 text-center">Welcome Back</h1>
-        <form onSubmit={handleSignIn} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full bg-[#121411] border border-white/5 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-[#B7FF1E] outline-none"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full bg-[#121411] border border-white/5 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-[#B7FF1E] outline-none"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[#B7FF1E] text-black font-semibold py-3 rounded-xl hover:bg-[#a3e618] transition-colors"
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
-          <div className="text-center">
-            <a href="/auth/forgot-password" className="text-sm text-[#858A7D] hover:text-[#B7FF1E]">Forgot Password?</a>
+    <div className="bg-[#0d0f0c] text-[#e3e3dd] min-h-screen flex flex-col items-center justify-center p-5 font-sans antialiased overflow-x-hidden relative">
+      <div className="absolute top-0 left-0 w-full h-[300px] bg-gradient-to-b from-[#25340D]/20 to-transparent pointer-events-none z-0"></div>
+      <main className="w-full max-w-[390px] relative z-10 flex flex-col min-h-full">
+        <header className="flex flex-col items-center justify-center mb-8 mt-12 relative z-10">
+          <div className="w-20 h-20 mb-4 relative flex items-center justify-center">
+            <div className="w-16 h-16 rounded-2xl bg-[#333532] border border-white/10 flex items-center justify-center shadow-[0_0_20px_rgba(183,255,30,0.1)]">
+              <span className="material-symbols-outlined text-[#B7FF1E] text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>fitness_center</span>
+            </div>
           </div>
+          <h1 className="text-3xl font-bold text-center">Gym<span className="text-[#B7FF1E]">Sync</span></h1>
+        </header>
+
+        <div className="bg-[#333532] p-1 rounded-full flex relative w-full mb-6 border border-white/5 shadow-inner z-10">
+          <div className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-[#B7FF1E] rounded-full transition-all duration-300 ease-in-out ${authMode === 'signin' ? 'left-1' : 'left-[calc(50%+1px)]'}`}></div>
+          <button onClick={() => setAuthMode('signin')} className={`flex-1 py-3 text-center z-10 text-sm font-semibold transition-colors duration-300 ${authMode === 'signin' ? 'text-[#293500]' : 'text-[#C0C2B8]'}`}>Sign In</button>
+          <button onClick={() => setAuthMode('signup')} className={`flex-1 py-3 text-center z-10 text-sm font-semibold transition-colors duration-300 ${authMode === 'signup' ? 'text-[#293500]' : 'text-[#C0C2B8]'}`}>Sign Up</button>
+        </div>
+
+        {errorMsg && <div className="text-center text-xs mb-4 p-3 rounded-xl border text-[#FF5964] border-[#FF5964]/20 bg-[#FF5964]/5">{errorMsg}</div>}
+
+        <form className="flex flex-col gap-3" onSubmit={handleSignIn}>
+          <div className="flex flex-col gap-2">
+            <label className="text-xs text-[#C0C2B8] px-1 font-normal">Email Address</label>
+            <input name="email" id="email" autoComplete="username" value={formData.email} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your email" required type="email" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-xs text-[#C0C2B8] px-1 font-normal">Password</label>
+            <input name="password" id="password" autoComplete="current-password" value={formData.password} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your password" required type="password" />
+          </div>
+          {authMode === 'signin' && (
+            <div className="flex justify-end mt-1 mb-2">
+              <a className="text-xs text-[#858A7D] hover:text-[#B7FF1E] transition-colors font-normal" href="/auth/forgot-password">Forgot Password?</a>
+            </div>
+          )}
+          <button disabled={loading} className="w-full h-[48px] bg-[#B7FF1E] text-[#293500] text-sm font-semibold rounded-full shadow-[0_0_20px_rgba(183,255,30,0.2)] hover:opacity-90 active:scale-95 transition-all mt-2" type="submit">
+            {loading ? 'Processing...' : (authMode === 'signin' ? 'Sign In' : 'Sign Up')}
+          </button>
         </form>
-      </div>
+      </main>
     </div>
   );
 }
