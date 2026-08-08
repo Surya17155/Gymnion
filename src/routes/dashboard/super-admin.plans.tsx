@@ -429,7 +429,7 @@ function SuperAdminPlans() {
               <div>
                 <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Features</label>
                 <div className="space-y-2">
-                  {selectedPlan.features.map((feature: string, idx: number) => (
+                  {manualFeatures.map((feature: string, idx: number) => (
                     <div key={idx} className="flex items-center gap-3 bg-[#1e201d] border border-white/5 p-3 rounded-xl">
                       <span className="material-symbols-outlined text-[#c9f232] text-sm">check_circle</span>
                       <input 
@@ -438,15 +438,15 @@ function SuperAdminPlans() {
                         value={feature}
                         placeholder="Feature name..."
                         onChange={e => {
-                          const newFeatures = [...selectedPlan.features];
+                          const newFeatures = [...manualFeatures];
                           newFeatures[idx] = e.target.value;
-                          setSelectedPlan({ ...selectedPlan, features: newFeatures });
+                          setManualFeatures(newFeatures);
                         }}
                       />
                       <button 
                         onClick={() => {
-                          const newFeatures = selectedPlan.features.filter((_: any, i: number) => i !== idx);
-                          setSelectedPlan({ ...selectedPlan, features: newFeatures });
+                          const newFeatures = manualFeatures.filter((_, i) => i !== idx);
+                          setManualFeatures(newFeatures.length > 0 ? newFeatures : ['']);
                         }}
                         className="text-[#858A7D] hover:text-white"
                       >
@@ -455,9 +455,7 @@ function SuperAdminPlans() {
                     </div>
                   ))}
                   <button 
-                    onClick={() => {
-                      setSelectedPlan({ ...selectedPlan, features: [...selectedPlan.features, ''] });
-                    }}
+                    onClick={() => setManualFeatures([...manualFeatures, ''])}
                     className="w-full py-2 border border-dashed border-white/10 rounded-xl text-[10px] font-bold text-[#858A7D] uppercase tracking-wider hover:border-[#c9f232]/30 transition-colors"
                   >
                     + Add Feature
