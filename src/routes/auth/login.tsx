@@ -147,6 +147,10 @@ function AuthPage() {
                 <input name="fullName" value={formData.fullName} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your full name" required type="text" />
               </div>
               <div className="flex flex-col gap-2">
+                <label className="text-xs text-[#C0C2B8] px-1 font-normal">Email Address</label>
+                <input name="email" id="email" autoComplete="username" value={formData.email} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your email" required type="email" />
+              </div>
+              <div className="flex flex-col gap-2">
                 <label className="text-xs text-[#C0C2B8] px-1 font-normal">Phone Number</label>
                 <input name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your phone number" required type="tel" />
               </div>
@@ -160,14 +164,19 @@ function AuthPage() {
               </div>
               <div className="flex flex-col gap-2">
                 <label className="text-xs text-[#C0C2B8] px-1 font-normal">Gym Code</label>
-                <input name="gymCode" value={formData.gymCode} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter gym code" required type="text" />
+                <input name="gymCode" value={formData.gymCode} onChange={handleChange} onBlur={validateGymCode} className={`w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border rounded-xl px-4 py-3 h-[48px] focus:outline-none transition-all ${gymCodeError ? 'border-[#FF5964] focus:border-[#FF5964]' : 'border-white/10 focus:border-[#B7FF1E]'}`} placeholder="Enter gym code" required type="text" />
+                {gymCodeError && <span className="text-[11px] text-[#FF5964] px-1">{gymCodeError}</span>}
+                {gymName && !gymCodeError && <span className="text-[11px] text-[#B7FF1E] px-1">{gymName}</span>}
               </div>
             </>
           )}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs text-[#C0C2B8] px-1 font-normal">Email Address</label>
-            <input name="email" id="email" autoComplete="username" value={formData.email} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your email" required type="email" />
-          </div>
+          {authMode === 'signin' && (
+            <div className="flex flex-col gap-2">
+              <label className="text-xs text-[#C0C2B8] px-1 font-normal">Email Address</label>
+              <input name="email" id="email" autoComplete="username" value={formData.email} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your email" required type="email" />
+            </div>
+          )}
+
           <div className="flex flex-col gap-2">
             <label className="text-xs text-[#C0C2B8] px-1 font-normal">Password</label>
             <input name="password" id="password" autoComplete={authMode === 'signin' ? 'current-password' : 'new-password'} value={formData.password} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your password" required type="password" />
