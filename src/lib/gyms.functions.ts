@@ -44,12 +44,12 @@ export const createGymWithAdmin = createServerFn({ method: "POST" })
 
     if (authError) throw authError;
 
-    // 3. Assign 'admin' role
+    // 3. Assign 'gym_admin' role
     const { error: roleError } = await supabaseAdmin
       .from('user_roles')
       .insert({
         user_id: authUser.user.id,
-        role: 'admin',
+        role: 'gym_admin',
         gym_id: gym.id
       });
 

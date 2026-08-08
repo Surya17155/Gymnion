@@ -35,7 +35,7 @@ function AddPlanScreen() {
         .from('user_roles')
         .select('gym_id')
         .eq('user_id', userId)
-        .eq('role', 'admin')
+        .eq('role', 'gym_admin')
         .single();
 
       if (!gymData?.gym_id) {

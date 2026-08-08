@@ -27,9 +27,9 @@ export const Route = createFileRoute('/dashboard')({
     if (location.pathname === '/dashboard' || location.pathname === '/dashboard/') {
       if (role === 'super_admin') {
         throw redirect({ to: '/dashboard/super-admin' });
-      } else if (role === 'admin') {
+      } else if (role === 'gym_admin') {
         throw redirect({ to: '/dashboard/admin' });
-      } else {
+      } else if (role === 'member') {
         throw redirect({ to: '/dashboard/m' });
       }
     }
@@ -38,12 +38,20 @@ export const Route = createFileRoute('/dashboard')({
     if (location.pathname.startsWith('/dashboard/super-admin') && role !== 'super_admin') {
        throw redirect({ to: '/dashboard' });
     }
-    if (location.pathname.startsWith('/dashboard/admin') && role !== 'admin' && role !== 'super_admin') {
+    if (location.pathname.startsWith('/dashboard/admin') && role !== 'gym_admin' && role !== 'super_admin') {
+       throw redirect({ to: '/dashboard' });
+    }
+    if (location.pathname.startsWith('/dashboard/m') && role !== 'member' && role !== 'super_admin' && role !== 'gym_admin') {
        throw redirect({ to: '/dashboard' });
     }
     
     return { role };
   },
+  pendingComponent: () => (
+    <div className="min-h-screen bg-[#0D0F0C] flex items-center justify-center">
+      <div className="w-12 h-12 border-4 border-[#B7FF1E]/20 border-t-[#B7FF1E] rounded-full animate-spin"></div>
+    </div>
+  ),
   component: DashboardLayout,
 });
 

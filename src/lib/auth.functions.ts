@@ -104,7 +104,7 @@ export const getGymDetails = createServerFn({ method: 'GET' })
       .from('user_roles')
       .select('gym_id')
       .eq('user_id', userId)
-      .eq('role', 'admin')
+      .eq('role', 'gym_admin')
       .single();
     
     if (!roleData?.gym_id) return null;
@@ -116,4 +116,59 @@ export const getGymDetails = createServerFn({ method: 'GET' })
       .single();
     
     return gym;
+  });
+
+export const getCurrentGymId = createServerFn({ method: 'GET' })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const userId = context.userId;
+    if (!userId) return null;
+
+    const { data, error } = await supabaseAdmin
+      .from('user_roles')
+      .select('gym_id')
+      .eq('user_id', userId)
+      .eq('role', 'gym_admin')
+      .single();
+
+    if (error || !data) return null;
+    return data.gym_id;
+  });
+
+export const getSubscriptionPlan = createServerFn({ method: 'GET' })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const userId = context.userId;
+    if (!userId) return null;
+
+    // Get the gym_id first
+    const { data: roleData } = await supabaseAdmin
+      .from('user_roles')
+      .select('gym_id')
+      .eq('user_id', userId)
+      .eq('role', 'gym_admin')
+      .single();
+
+    if (!roleData?.gym_id) return null;
+
+    // Get gym settings to see if there's an override or a plan_id
+    const { data: gym } = await supabaseAdmin
+      .from('gyms')
+      .select('settings')
+      .eq('id', roleData.gym_id)
+      .single();
+
+    const settings = (gym?.settings as any) || {};
+    const planId = settings.plan_id;
+
+    if (planId) {
+      const { data: plan } = await supabaseAdmin
+        .from('global_plans')
+        .select('*')
+        .eq('id', planId)
+        .single();
+      return plan;
+    }
+
+    return null;
   });
