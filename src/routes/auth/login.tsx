@@ -139,14 +139,38 @@ function AuthPage() {
 
         {errorMsg && <div className="text-center text-xs mb-4 p-3 rounded-xl border text-[#FF5964] border-[#FF5964]/20 bg-[#FF5964]/5">{errorMsg}</div>}
 
-        <form className="flex flex-col gap-3" onSubmit={handleSignIn}>
+        <form className="flex flex-col gap-3" onSubmit={authMode === 'signin' ? handleSignIn : handleSignUp}>
+          {authMode === 'signup' && (
+            <>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs text-[#C0C2B8] px-1 font-normal">Full Name</label>
+                <input name="fullName" value={formData.fullName} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your full name" required type="text" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs text-[#C0C2B8] px-1 font-normal">Phone Number</label>
+                <input name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your phone number" required type="tel" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs text-[#C0C2B8] px-1 font-normal">Date of Birth (DD/MM/YYYY)</label>
+                <input name="dob" value={formData.dob} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="DD/MM/YYYY" required type="text" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs text-[#C0C2B8] px-1 font-normal">Address</label>
+                <input name="address" value={formData.address} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your address" required type="text" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs text-[#C0C2B8] px-1 font-normal">Gym Code</label>
+                <input name="gymCode" value={formData.gymCode} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter gym code" required type="text" />
+              </div>
+            </>
+          )}
           <div className="flex flex-col gap-2">
             <label className="text-xs text-[#C0C2B8] px-1 font-normal">Email Address</label>
             <input name="email" id="email" autoComplete="username" value={formData.email} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your email" required type="email" />
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-xs text-[#C0C2B8] px-1 font-normal">Password</label>
-            <input name="password" id="password" autoComplete="current-password" value={formData.password} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your password" required type="password" />
+            <input name="password" id="password" autoComplete={authMode === 'signin' ? 'current-password' : 'new-password'} value={formData.password} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your password" required type="password" />
           </div>
           {authMode === 'signin' && (
             <div className="flex justify-end mt-1 mb-2">
@@ -157,6 +181,7 @@ function AuthPage() {
             {loading ? 'Processing...' : (authMode === 'signin' ? 'Sign In' : 'Sign Up')}
           </button>
         </form>
+
       </main>
     </div>
   );
