@@ -23,10 +23,18 @@ function AddPlanScreen() {
     setLoading(true);
 
     try {
+      const { data: userData } = await supabase.auth.getUser();
+      const userId = userData.user?.id;
+      
+      if (!userId) {
+        toast.error('User not found');
+        return;
+      }
+
       const { data: gymData } = await supabase
         .from('user_roles')
         .select('gym_id')
-        .eq('user_id', (await supabase.auth.getUser()).data.user?.id)
+        .eq('user_id', userId)
         .eq('role', 'admin')
         .single();
 

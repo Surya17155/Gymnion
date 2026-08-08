@@ -39,7 +39,7 @@ function EditPlanScreen() {
         duration: data.billing_cycle === 'monthly' ? '1' : 
                  data.billing_cycle === 'annual' ? '12' : '1',
         description: data.description || '',
-        isActive: data.is_active,
+        isActive: data.is_active ?? true,
       });
     };
 
