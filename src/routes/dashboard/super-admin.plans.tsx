@@ -3,6 +3,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { Tables } from '@/integrations/supabase/types';
+
+type GlobalPlan = Tables<'global_plans'>;
+type Gym = Tables<'gyms'>;
 
 export const Route = createFileRoute('/dashboard/super-admin/plans')({
   component: SuperAdminPlans,
@@ -14,10 +18,22 @@ function SuperAdminPlans() {
   const [isEditingPlan, setIsEditingPlan] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGymForOverride, setSelectedGymForOverride] = useState<any>(null);
+  const [selectedGymForOverride, setSelectedGymForOverride] = useState<Gym | null>(null);
   const [customMonthlyPrice, setCustomMonthlyPrice] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [manualFeatures, setManualFeatures] = useState<string[]>(['']);
+
+  const { data: globalPlans, isLoading: isLoadingPlans } = useQuery({
+    queryKey: ['global-plans'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('global_plans' as any)
+        .select('*')
+        .order('price', { ascending: true });
+      if (error) throw error;
+      return data;
+    }
+  });
 
   const { data: gyms } = useQuery({
     queryKey: ['super-admin-gyms-for-plans'],
@@ -31,7 +47,7 @@ function SuperAdminPlans() {
     }
   });
 
-  const filteredGymsForSearch = gyms?.filter(gym => 
+  const filteredGymsForSearch = gyms?.filter((gym: Gym) => 
     gym.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
     gym.gym_code?.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -44,7 +60,7 @@ function SuperAdminPlans() {
 
     setIsSubmitting(true);
     try {
-      const currentSettings = selectedGymForOverride.settings || {};
+      const currentSettings = (selectedGymForOverride.settings as Record<string, any>) || {};
       const newSettings = { 
         ...currentSettings, 
         manual_pricing: parseFloat(customMonthlyPrice) 
@@ -85,12 +101,31 @@ function SuperAdminPlans() {
         return;
       }
       
-      // Clean up empty features
       const cleanedFeatures = manualFeatures.filter((f: string) => f.trim() !== '');
+      const planData = {
+        name: selectedPlan.name,
+        price: Math.round(parseFloat(selectedPlan.price) * 100),
+        features: cleanedFeatures,
+        is_active: true
+      };
+
+      let error;
+      if (selectedPlan.id && isNaN(Number(selectedPlan.id)) && selectedPlan.id.length > 20) {
+        // Assume UUID if it's long and not a number string
+        const { error: updateError } = await supabase
+          .from('global_plans' as any)
+          .update(planData)
+          .eq('id', selectedPlan.id);
+        error = updateError;
+      } else {
+        const { error: insertError } = await supabase
+          .from('global_plans' as any)
+          .insert([planData]);
+        error = insertError;
+      }
+
+      if (error) throw error;
       
-      // Logic to update/create global plan in database would go here
-      console.log("Saving plan:", { ...selectedPlan, features: cleanedFeatures });
-      // For now, we'll simulate success and handle both create/update
       const message = selectedPlan.id ? 
         `${selectedPlan.name} plan updated successfully` : 
         `${selectedPlan.name} plan created successfully`;
@@ -98,6 +133,7 @@ function SuperAdminPlans() {
       toast.success(message);
       setIsEditingPlan(false);
       setSelectedPlan(null);
+      queryClient.invalidateQueries({ queryKey: ['global-plans'] });
     } catch (err: any) {
       toast.error(err.message || "Failed to save plan");
     } finally {
@@ -113,7 +149,7 @@ function SuperAdminPlans() {
         .select('*')
         .not('settings', 'is', null);
       if (error) throw error;
-      return data?.filter(g => (g.settings as any)?.manual_pricing !== undefined) || [];
+      return data?.filter((g: Gym) => (g.settings as any)?.manual_pricing !== undefined) || [];
     }
   });
 
@@ -150,81 +186,73 @@ function SuperAdminPlans() {
             </button>
           </div>
           <div className="space-y-3">
-            {/* Standard Plan Card */}
-            <div className="bg-[#121411] border border-white/5 rounded-xl p-4 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#383a36]/20 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none"></div>
-              <div className="flex justify-between items-start mb-4 relative z-10">
-                <div>
-                  <h3 className="text-[22px] font-bold text-[#e3e3dd]">Standard</h3>
-                  <div className="flex items-baseline gap-1 mt-1">
-                    <span className="text-[40px] font-bold text-[#c9f232] tracking-tighter">₹500</span>
-                    <span className="text-xs text-[#C0C2B8]">/mo</span>
+            {isLoadingPlans ? (
+              <div className="space-y-3">
+                {[1, 2].map(i => (
+                  <div key={i} className="h-48 bg-[#121411] border border-white/5 rounded-xl animate-pulse"></div>
+                ))}
+              </div>
+            ) : globalPlans?.map((plan: any) => (
+              <div 
+                key={plan.id}
+                className={`bg-[#121411] border border-white/5 rounded-xl p-4 relative overflow-hidden group ${
+                  plan.name.toLowerCase() === 'unlimited' ? 'bg-[#c9f232]/10 border-[#c9f232]/30' : ''
+                }`}
+              >
+                {plan.name.toLowerCase() === 'unlimited' && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#c9f232]/20 to-transparent pointer-events-none"></div>
+                )}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#383a36]/20 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none"></div>
+                
+                <div className="flex justify-between items-start mb-4 relative z-10">
+                  <div>
+                    <h3 className={`text-[22px] font-bold ${plan.name.toLowerCase() === 'unlimited' ? 'text-[#c9f232]' : 'text-[#e3e3dd]'}`}>
+                      {plan.name}
+                    </h3>
+                    <div className="flex items-baseline gap-1 mt-1">
+                      <span className={`text-[40px] font-bold tracking-tighter ${plan.name.toLowerCase() === 'unlimited' ? 'text-[#e3e3dd]' : 'text-[#c9f232]'}`}>
+                        ₹{plan.price / 100}
+                      </span>
+                      <span className="text-xs text-[#C0C2B8]">/mo</span>
+                    </div>
+                  </div>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    plan.name.toLowerCase() === 'unlimited' 
+                      ? 'bg-[#c9f232] shadow-[0_0_15px_rgba(201,242,50,0.3)]' 
+                      : 'bg-[#1e201d] border border-white/10'
+                  }`}>
+                    <span className={`material-symbols-outlined ${
+                      plan.name.toLowerCase() === 'unlimited' ? 'text-[#576c00]' : 'text-[#C0C2B8]'
+                    }`} style={{ fontVariationSettings: "'FILL' 1" }}>
+                      {plan.name.toLowerCase() === 'unlimited' ? 'bolt' : 'star'}
+                    </span>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center border border-white/10">
-                  <span className="material-symbols-outlined text-[#C0C2B8]" style={{ fontVariationSettings: "'FILL' 0" }}>star</span>
-                </div>
+
+                <ul className="space-y-2 mb-6 relative z-10">
+                  {plan.features?.map((feature: string, idx: number) => (
+                    <li key={idx} className={`flex items-center gap-3 text-sm ${
+                      plan.name.toLowerCase() === 'unlimited' ? 'text-[#e3e3dd]' : 'text-[#C0C2B8]'
+                    }`}>
+                      <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <button 
+                  onClick={() => handleEditPlan({ ...plan, price: (plan.price / 100).toString() })}
+                  className={`w-full h-12 text-xs font-bold rounded-full transition-colors flex items-center justify-center gap-2 relative z-10 ${
+                    plan.name.toLowerCase() === 'unlimited'
+                      ? 'bg-[#c9f232] text-[#576c00] hover:bg-[#aed502] shadow-[0_4px_20px_rgba(201,242,50,0.2)]'
+                      : 'bg-[#383a36] text-[#c9f232] hover:bg-[#333532] border border-[#c9f232]/20'
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-sm">edit</span>
+                  Edit Plan
+                </button>
               </div>
-              <ul className="space-y-2 mb-6 relative z-10">
-                <li className="flex items-center gap-3 text-sm text-[#C0C2B8]">
-                  <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  Attendance Tracking
-                </li>
-                <li className="flex items-center gap-3 text-sm text-[#C0C2B8]">
-                  <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  Payment Management
-                </li>
-                <li className="flex items-center gap-3 text-sm text-[#C0C2B8]">
-                  <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  Member Directory
-                </li>
-              </ul>
-              <button 
-                onClick={() => handleEditPlan({ id: 'standard', name: 'Standard', price: 500, features: ['Attendance Tracking', 'Payment Management', 'Member Directory'] })}
-                className="w-full h-12 bg-[#383a36] text-[#c9f232] text-xs font-bold rounded-full hover:bg-[#333532] transition-colors flex items-center justify-center gap-2 relative z-10 border border-[#c9f232]/20"
-              >
-                <span className="material-symbols-outlined text-sm">edit</span>
-                Edit Plan
-              </button>
-            </div>
-            
-            {/* Unlimited Plan Card */}
-            <div className="bg-[#c9f232]/10 border border-[#c9f232]/30 rounded-xl p-4 relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#c9f232]/20 to-transparent pointer-events-none"></div>
-              <div className="flex justify-between items-start mb-4 relative z-10">
-                <div>
-                  <h3 className="text-[22px] font-bold text-[#c9f232]">Unlimited</h3>
-                  <div className="flex items-baseline gap-1 mt-1">
-                    <span className="text-[40px] font-bold text-[#e3e3dd] tracking-tighter">₹999</span>
-                    <span className="text-xs text-[#C0C2B8]">/mo</span>
-                  </div>
-                </div>
-                <div className="w-10 h-10 rounded-full bg-[#c9f232] flex items-center justify-center shadow-[0_0_15px_rgba(201,242,50,0.3)]">
-                  <span className="material-symbols-outlined text-[#576c00]" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-                </div>
-              </div>
-              <ul className="space-y-2 mb-6 relative z-10">
-                <li className="flex items-center gap-3 text-sm text-[#e3e3dd]">
-                  <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  All Standard Features
-                </li>
-                <li className="flex items-center gap-3 text-sm text-[#e3e3dd]">
-                  <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  AI Diet & Workout Plans
-                </li>
-                <li className="flex items-center gap-3 text-sm text-[#e3e3dd]">
-                  <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  Priority Support
-                </li>
-              </ul>
-              <button 
-                onClick={() => handleEditPlan({ id: 'unlimited', name: 'Unlimited', price: 999, features: ['All Standard Features', 'AI Diet & Workout Plans', 'Priority Support'] })}
-                className="w-full h-12 bg-[#c9f232] text-[#576c00] text-xs font-bold rounded-full hover:bg-[#aed502] transition-colors flex items-center justify-center gap-2 relative z-10 shadow-[0_4px_20px_rgba(201,242,50,0.2)]"
-              >
-                <span className="material-symbols-outlined text-sm">edit</span>
-                Edit Plan
-              </button>
-            </div>
+            ))}
           </div>
         </section>
 
