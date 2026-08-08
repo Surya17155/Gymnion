@@ -228,7 +228,7 @@ function SuperAdminLayout() {
           to="/dashboard/super-admin"
           activeOptions={{ exact: true }}
           preload="intent"
-          className="flex flex-col items-center justify-center w-[72px] h-[52px] rounded-xl"
+          className="flex flex-col items-center justify-center w-[64px] h-[52px] rounded-xl"
         >
           {({ isActive }) => (
             <>
@@ -241,7 +241,7 @@ function SuperAdminLayout() {
         <Link 
           to="/dashboard/super-admin/payments"
           preload="intent"
-          className="flex flex-col items-center justify-center w-[72px] h-[52px] rounded-xl"
+          className="flex flex-col items-center justify-center w-[64px] h-[52px] rounded-xl"
         >
           {({ isActive }) => (
             <>
@@ -252,9 +252,22 @@ function SuperAdminLayout() {
         </Link>
         
         <Link 
+          to="/dashboard/super-admin/plans"
+          preload="intent"
+          className="flex flex-col items-center justify-center w-[64px] h-[52px] rounded-xl"
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-0.5 text-[22px]" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>layers</span>
+              <span className="text-[10px] font-semibold leading-tight" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Plans</span>
+            </>
+          )}
+        </Link>
+
+        <Link 
           to="/dashboard/super-admin/gyms"
           preload="intent"
-          className="flex flex-col items-center justify-center w-[72px] h-[52px] rounded-xl"
+          className="flex flex-col items-center justify-center w-[64px] h-[52px] rounded-xl"
         >
           {({ isActive }) => (
             <>
