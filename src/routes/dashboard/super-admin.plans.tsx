@@ -19,6 +19,18 @@ function SuperAdminPlans() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [manualFeatures, setManualFeatures] = useState<string[]>(['']);
 
+  const { data: globalPlans, isLoading: isLoadingPlans } = useQuery({
+    queryKey: ['global-plans'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('global_plans')
+        .select('*')
+        .order('price', { ascending: true });
+      if (error) throw error;
+      return data;
+    }
+  });
+
   const { data: gyms } = useQuery({
     queryKey: ['super-admin-gyms-for-plans'],
     queryFn: async () => {
