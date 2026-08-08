@@ -78,13 +78,25 @@ function SuperAdminPlans() {
     if (!selectedPlan) return;
     setIsSubmitting(true);
     try {
-      // Logic to update global plan in database would go here
-      // For now, since we don't have a 'plans' table yet, we'll mock success
-      toast.success(`${selectedPlan.name} plan updated successfully`);
+      if (!selectedPlan.name || !selectedPlan.price) {
+        toast.error("Please provide a plan name and price");
+        return;
+      }
+      
+      // Clean up empty features
+      const cleanedFeatures = selectedPlan.features.filter((f: string) => f.trim() !== '');
+      
+      // Logic to update/create global plan in database would go here
+      // For now, we'll simulate success and handle both create/update
+      const message = selectedPlan.id ? 
+        `${selectedPlan.name} plan updated successfully` : 
+        `${selectedPlan.name} plan created successfully`;
+      
+      toast.success(message);
       setIsEditingPlan(false);
       setSelectedPlan(null);
     } catch (err: any) {
-      toast.error(err.message || "Failed to update plan");
+      toast.error(err.message || "Failed to save plan");
     } finally {
       setIsSubmitting(false);
     }
