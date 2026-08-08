@@ -41,9 +41,43 @@ function AuthPage() {
     gymCode: ''
   });
 
+  const [gymCodeError, setGymCodeError] = useState('');
+  const [gymName, setGymName] = useState('');
+
+  const lookupGym = async (code: string) => {
+    const trimmed = code.trim();
+    if (!trimmed) {
+      setGymCodeError('');
+      setGymName('');
+      return null;
+    }
+    const { data } = await supabase
+      .from('gyms')
+      .select('id, name')
+      .ilike('gym_code', trimmed)
+      .maybeSingle();
+    if (!data) {
+      setGymCodeError('Invalid code');
+      setGymName('');
+      return null;
+    }
+    setGymCodeError('');
+    setGymName(data.name);
+    return data;
+  };
+
+  const validateGymCode = async () => {
+    await lookupGym(formData.gymCode);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
     const name = e.target.name;
+
+    if (name === 'gymCode') {
+      setGymCodeError('');
+      setGymName('');
+    }
 
     if (name === 'dob') {
       const digits = value.replace(/\D/g, '');
@@ -61,6 +95,7 @@ function AuthPage() {
     }
     setFormData({ ...formData, [name]: value });
   };
+
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
