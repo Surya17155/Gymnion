@@ -134,11 +134,12 @@ function SuperAdminPlans() {
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold text-[#e3e3dd]">Global Plans</h2>
             <button 
+              data-testid="add-new-plan-btn"
               onClick={() => {
                 setSelectedPlan({ name: '', price: '', features: [''] });
                 setIsEditingPlan(true);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#c9f232]/10 border border-[#c9f232]/30 rounded-full text-[#c9f232] text-[10px] font-bold uppercase tracking-wider hover:bg-[#c9f232]/20 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#c9f232] rounded-full text-black text-[10px] font-bold uppercase tracking-wider hover:bg-[#aed502] transition-colors shadow-[0_4px_12px_rgba(201,242,50,0.2)]"
             >
               <span className="material-symbols-outlined text-[14px]">add</span>
               Add New
