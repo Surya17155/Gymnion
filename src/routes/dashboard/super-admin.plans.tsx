@@ -17,6 +17,7 @@ function SuperAdminPlans() {
   const [selectedGymForOverride, setSelectedGymForOverride] = useState<any>(null);
   const [customMonthlyPrice, setCustomMonthlyPrice] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [manualFeatures, setManualFeatures] = useState<string[]>(['']);
 
   const { data: gyms } = useQuery({
     queryKey: ['super-admin-gyms-for-plans'],
