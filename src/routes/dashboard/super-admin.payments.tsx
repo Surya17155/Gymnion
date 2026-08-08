@@ -26,65 +26,45 @@ function SuperAdminPayments() {
         }
       `}</style>
       
-      {/* TopAppBar */}
-      <header className="fixed top-0 w-full z-50 border-b border-white/5 bg-[#121411] max-w-[480px] mx-auto left-0 right-0">
-        <div className="flex justify-between items-center px-5 h-16">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#333532] overflow-hidden border border-white/10">
-              <img 
-                alt="Admin Profile" 
-                className="w-full h-full object-cover" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFJ9tldG3zq9aiXfnJObpWRNrC7c5uCu8MSeZQL9M08-g3tgM66h5Pmu7rOgskdaQdX6DH75MJYKn-NxlLOJsyn2qc9DLtDb1GejaOW4j1W9Y06IPPkqZBoMPRxKGddRc6TtIMCnc_bf035OZslm_0EQGqoHg0YKV7sBs3eTUZno-ehogQBEbrJwwjS4EWJHfiw6AeoYFnrEbdwyKXvGxcoDSWJh5mABbmtBqJpnxRHnbPIgZrKw" 
-              />
-            </div>
-            <h1 className="text-[22px] font-bold tracking-tighter text-[#B7FF1E]">GymSync</h1>
-          </div>
-          <button aria-label="Notifications" className="w-10 h-10 flex items-center justify-center text-[#B7FF1E] transition-all active:scale-95">
-            <span className="material-symbols-outlined">notifications</span>
-          </button>
-        </div>
-      </header>
-
       {/* Main Canvas */}
-      <main className="max-w-[480px] mx-auto pt-16 px-5 flex flex-col gap-6 mt-6">
+      <main className="max-w-[480px] mx-auto pt-6 px-5 flex flex-col gap-5">
         {/* Header Section */}
         <section>
-          <h1 className="text-[28px] font-bold text-white mb-1 leading-tight">Platform Revenue</h1>
-          <p className="text-[14px] text-[#858A7D]">August 2026 Collections</p>
+          <h1 className="text-[24px] font-bold text-white leading-tight">Platform Revenue</h1>
         </section>
 
         {/* Metrics Grid */}
         <section className="grid grid-cols-1 gap-3">
-          <div className="bg-[#121411] border border-white/5 rounded-xl p-4 flex flex-col justify-between min-h-[140px] relative overflow-hidden group">
-            <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#B7FF1E]/5 rounded-full blur-2xl group-hover:bg-[#B7FF1E]/10 transition-colors"></div>
+          <div className="bg-[#121411] border border-white/5 rounded-xl p-3 flex flex-col justify-between min-h-[110px] relative overflow-hidden group">
+            <div className="absolute -right-10 -top-10 w-24 h-24 bg-[#B7FF1E]/5 rounded-full blur-2xl group-hover:bg-[#B7FF1E]/10 transition-colors"></div>
             <div className="flex justify-between items-start w-full relative z-10">
-              <span className="text-[14px] text-[#858A7D]">Total Collected</span>
-              <div className="flex items-center gap-1 bg-[#B7FF1E]/10 px-2 py-1 rounded-full border border-[#B7FF1E]/20">
-                <span className="material-symbols-outlined text-[14px] text-[#B7FF1E]">trending_up</span>
-                <span className="text-[11px] font-semibold text-[#B7FF1E]">+15%</span>
+              <span className="text-[13px] text-[#858A7D]">Total Collected</span>
+              <div className="flex items-center gap-1 bg-[#B7FF1E]/10 px-2 py-0.5 rounded-full border border-[#B7FF1E]/20">
+                <span className="material-symbols-outlined text-[12px] text-[#B7FF1E]">trending_up</span>
+                <span className="text-[10px] font-semibold text-[#B7FF1E]">+15%</span>
               </div>
             </div>
-            <div className="mt-4 relative z-10">
-              <span className="text-[40px] font-bold text-white leading-none">₹42,500</span>
+            <div className="mt-2 relative z-10">
+              <span className="text-[32px] font-bold text-white leading-none">₹42,500</span>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-[#121411] border border-white/5 rounded-xl p-4 flex flex-col justify-center">
-              <div className="flex justify-between items-start mb-2">
-                <span className="text-[12px] text-[#858A7D]">Paid Gyms</span>
-                <span className="material-symbols-outlined text-[#858A7D] text-lg">check_circle</span>
+            <div className="bg-[#121411] border border-white/5 rounded-xl p-3 flex flex-col justify-center min-h-[80px]">
+              <div className="flex justify-between items-start mb-1">
+                <span className="text-[11px] text-[#858A7D]">Paid Gyms</span>
+                <span className="material-symbols-outlined text-[#858A7D] text-base">check_circle</span>
               </div>
-              <span className="text-[22px] font-bold text-white">38</span>
+              <span className="text-[20px] font-bold text-white">38</span>
             </div>
-            <div className="bg-[#121411] border border-[#FF5964]/30 rounded-xl p-4 flex flex-col justify-center relative overflow-hidden">
+            <div className="bg-[#121411] border border-[#FF5964]/30 rounded-xl p-3 flex flex-col justify-center relative overflow-hidden min-h-[80px]">
               <div className="absolute inset-0 bg-[#FF5964]/5"></div>
               <div className="relative z-10">
-                <div className="flex justify-between items-start mb-2">
-                  <span className="text-[12px] text-[#858A7D]">Overdue</span>
-                  <span className="material-symbols-outlined text-[#FF5964] text-lg">warning</span>
+                <div className="flex justify-between items-start mb-1">
+                  <span className="text-[11px] text-[#858A7D]">Overdue</span>
+                  <span className="material-symbols-outlined text-[#FF5964] text-base">warning</span>
                 </div>
-                <span className="text-[22px] font-bold text-[#FF5964]">4</span>
+                <span className="text-[20px] font-bold text-[#FF5964]">4</span>
               </div>
             </div>
           </div>
