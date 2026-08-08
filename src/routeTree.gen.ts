@@ -19,7 +19,6 @@ import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardAdminRouteImport } from './routes/dashboard/admin'
 import { Route as DashboardMRouteImport } from './routes/dashboard/m'
 import { Route as DashboardSuperAdminRouteImport } from './routes/dashboard/super-admin'
-import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
 import { Route as DashboardAdminAttendanceRouteImport } from './routes/dashboard/admin.attendance'
 import { Route as DashboardAdminMembersRouteImport } from './routes/dashboard/admin.members'
 import { Route as DashboardAdminPaymentsRouteImport } from './routes/dashboard/admin.payments'
@@ -84,11 +83,6 @@ const DashboardSuperAdminRoute = DashboardSuperAdminRouteImport.update({
   id: '/super-admin',
   path: '/super-admin',
   getParentRoute: () => DashboardRoute,
-} as any)
-const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthLoginRoute,
 } as any)
 const DashboardAdminAttendanceRoute =
   DashboardAdminAttendanceRouteImport.update({
@@ -171,7 +165,7 @@ export interface FileRoutesByFullPath {
   '/checkin': typeof CheckinRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
-  '/auth/login': typeof AuthLoginRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/dashboard/admin': typeof DashboardAdminRouteWithChildren
   '/dashboard/m': typeof DashboardMRouteWithChildren
@@ -188,7 +182,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/super-admin/gyms': typeof DashboardSuperAdminGymsRoute
   '/dashboard/super-admin/payments': typeof DashboardSuperAdminPaymentsRoute
   '/dashboard/super-admin/plans': typeof DashboardSuperAdminPlansRoute
-  '/auth/login/': typeof AuthLoginIndexRoute
   '/dashboard/super-admin/': typeof DashboardSuperAdminIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
@@ -197,6 +190,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/checkin': typeof CheckinRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/dashboard/admin': typeof DashboardAdminRouteWithChildren
   '/dashboard/m': typeof DashboardMRouteWithChildren
@@ -212,7 +206,6 @@ export interface FileRoutesByTo {
   '/dashboard/super-admin/gyms': typeof DashboardSuperAdminGymsRoute
   '/dashboard/super-admin/payments': typeof DashboardSuperAdminPaymentsRoute
   '/dashboard/super-admin/plans': typeof DashboardSuperAdminPlansRoute
-  '/auth/login': typeof AuthLoginIndexRoute
   '/dashboard/super-admin': typeof DashboardSuperAdminIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
@@ -223,7 +216,7 @@ export interface FileRoutesById {
   '/checkin': typeof CheckinRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
-  '/auth/login': typeof AuthLoginRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/dashboard/admin': typeof DashboardAdminRouteWithChildren
   '/dashboard/m': typeof DashboardMRouteWithChildren
@@ -240,7 +233,6 @@ export interface FileRoutesById {
   '/dashboard/super-admin/gyms': typeof DashboardSuperAdminGymsRoute
   '/dashboard/super-admin/payments': typeof DashboardSuperAdminPaymentsRoute
   '/dashboard/super-admin/plans': typeof DashboardSuperAdminPlansRoute
-  '/auth/login/': typeof AuthLoginIndexRoute
   '/dashboard/super-admin/': typeof DashboardSuperAdminIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
@@ -269,7 +261,6 @@ export interface FileRouteTypes {
     | '/dashboard/super-admin/gyms'
     | '/dashboard/super-admin/payments'
     | '/dashboard/super-admin/plans'
-    | '/auth/login/'
     | '/dashboard/super-admin/'
     | '/dashboard/admin/plans/new'
     | '/dashboard/admin/plans/edit/$planId'
@@ -278,6 +269,7 @@ export interface FileRouteTypes {
     | '/'
     | '/checkin'
     | '/auth/forgot-password'
+    | '/auth/login'
     | '/auth/reset-password'
     | '/dashboard/admin'
     | '/dashboard/m'
@@ -293,7 +285,6 @@ export interface FileRouteTypes {
     | '/dashboard/super-admin/gyms'
     | '/dashboard/super-admin/payments'
     | '/dashboard/super-admin/plans'
-    | '/auth/login'
     | '/dashboard/super-admin'
     | '/dashboard/admin/plans/new'
     | '/dashboard/admin/plans/edit/$planId'
@@ -320,7 +311,6 @@ export interface FileRouteTypes {
     | '/dashboard/super-admin/gyms'
     | '/dashboard/super-admin/payments'
     | '/dashboard/super-admin/plans'
-    | '/auth/login/'
     | '/dashboard/super-admin/'
     | '/dashboard/admin/plans/new'
     | '/dashboard/admin/plans/edit/$planId'
@@ -331,7 +321,7 @@ export interface RootRouteChildren {
   CheckinRoute: typeof CheckinRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
-  AuthLoginRoute: typeof AuthLoginRouteWithChildren
+  AuthLoginRoute: typeof AuthLoginRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
 }
 
@@ -406,13 +396,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/super-admin'
       preLoaderRoute: typeof DashboardSuperAdminRouteImport
       parentRoute: typeof DashboardRoute
-    }
-    '/auth/login/': {
-      id: '/auth/login/'
-      path: '/'
-      fullPath: '/auth/login/'
-      preLoaderRoute: typeof AuthLoginIndexRouteImport
-      parentRoute: typeof AuthLoginRoute
     }
     '/dashboard/admin/attendance': {
       id: '/dashboard/admin/attendance'
@@ -599,24 +582,12 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
   DashboardRouteChildren,
 )
 
-interface AuthLoginRouteChildren {
-  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
-}
-
-const AuthLoginRouteChildren: AuthLoginRouteChildren = {
-  AuthLoginIndexRoute: AuthLoginIndexRoute,
-}
-
-const AuthLoginRouteWithChildren = AuthLoginRoute._addFileChildren(
-  AuthLoginRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CheckinRoute: CheckinRoute,
   DashboardRoute: DashboardRouteWithChildren,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
-  AuthLoginRoute: AuthLoginRouteWithChildren,
+  AuthLoginRoute: AuthLoginRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
