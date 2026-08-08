@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
-import { getRoleForUser, clearRoleCache } from "@/routes/dashboard";
+import { getRoleForUser, clearRoleCache, homeForRole } from "@/lib/role";
 
 
 export const Route = createFileRoute('/auth/login')({
@@ -115,13 +115,7 @@ function AuthPage() {
       if (data.session) {
         clearRoleCache();
         const role = await getRoleForUser(data.session.user.id);
-        const home = role === 'super_admin'
-          ? '/dashboard/super-admin'
-          : role === 'gym_admin'
-            ? '/dashboard/admin'
-            : role === 'member'
-              ? '/dashboard/m'
-              : null;
+        const home = homeForRole(role);
         navigate({ to: home ?? redirectPath });
       }
 
