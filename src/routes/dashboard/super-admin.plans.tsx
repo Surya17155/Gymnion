@@ -149,7 +149,7 @@ function SuperAdminPlans() {
         .select('*')
         .not('settings', 'is', null);
       if (error) throw error;
-      return data?.filter(g => (g.settings as any)?.manual_pricing !== undefined) || [];
+      return data?.filter((g: Gym) => (g.settings as any)?.manual_pricing !== undefined) || [];
     }
   });
 
