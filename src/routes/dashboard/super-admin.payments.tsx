@@ -19,7 +19,7 @@ function SuperAdminPayments() {
   });
 
   return (
-    <div className="antialiased overflow-x-hidden pb-[96px] glow-top">
+    <div className="antialiased overflow-x-hidden pb-[72px] glow-top">
       <style>{`
         .glow-top {
           background: radial-gradient(circle at top, rgba(183, 255, 30, 0.1) 0%, transparent 50%);
