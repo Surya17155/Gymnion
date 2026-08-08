@@ -8,7 +8,7 @@ export function SuperAdminDashboard() {
   console.log('Mounting SuperAdminDashboard (Home)');
 
   return (
-    <div className="pb-24">
+    <div className="pb-16">
       <div 
         className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[300px] h-[300px] pointer-events-none z-0"
         style={{
