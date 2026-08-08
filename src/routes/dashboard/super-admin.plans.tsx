@@ -3,6 +3,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { Tables } from '@/integrations/supabase/types';
+
+type GlobalPlan = Tables<'global_plans'>;
+type Gym = Tables<'gyms'>;
 
 export const Route = createFileRoute('/dashboard/super-admin/plans')({
   component: SuperAdminPlans,
