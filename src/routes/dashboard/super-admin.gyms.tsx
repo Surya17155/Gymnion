@@ -8,7 +8,7 @@ export const Route = createFileRoute('/dashboard/super-admin/gyms')({
 });
 
 function SuperAdminGyms() {
-  console.log('Mounting SuperAdminGyms');
+
 
   const [selectedGym, setSelectedGym] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
