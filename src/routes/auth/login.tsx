@@ -14,7 +14,8 @@ export const Route = createFileRoute('/auth/login')({
 function AuthPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
-  const redirectPath = (search as any).redirect || '/dashboard';
+  const redirectPath = search['redirect'] || '/dashboard';
+
 
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [loading, setLoading] = useState(false);
