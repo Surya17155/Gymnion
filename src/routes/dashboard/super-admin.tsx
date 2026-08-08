@@ -227,6 +227,7 @@ function SuperAdminLayout() {
         <Link 
           to="/dashboard/super-admin"
           activeOptions={{ exact: true }}
+          preload="intent"
           className="flex flex-col items-center justify-center w-[72px] h-[52px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
@@ -239,6 +240,7 @@ function SuperAdminLayout() {
         
         <Link 
           to="/dashboard/super-admin/payments"
+          preload="intent"
           className="flex flex-col items-center justify-center w-[72px] h-[52px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
@@ -251,6 +253,7 @@ function SuperAdminLayout() {
         
         <Link 
           to="/dashboard/super-admin/gyms"
+          preload="intent"
           className="flex flex-col items-center justify-center w-[72px] h-[52px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
