@@ -26,23 +26,23 @@ export const Route = createFileRoute('/dashboard')({
     // Redirect logic based on role if they are at the base /dashboard path
     if (location.pathname === '/dashboard' || location.pathname === '/dashboard/') {
       if (role === 'super_admin') {
-        throw redirect({ to: '/dashboard/super-admin/' });
+        throw redirect({ to: '/dashboard/super-admin' });
       } else if (role === 'gym_admin') {
-        throw redirect({ to: '/dashboard/admin/' });
+        throw redirect({ to: '/dashboard/admin' });
       } else if (role === 'member') {
-        throw redirect({ to: '/dashboard/m/' });
+        throw redirect({ to: '/dashboard/m' });
       }
     }
 
     // Protect specific sub-routes
     if (location.pathname.startsWith('/dashboard/super-admin') && role !== 'super_admin') {
-       throw redirect({ to: '/dashboard/' });
+       throw redirect({ to: '/dashboard' });
     }
     if (location.pathname.startsWith('/dashboard/admin') && role !== 'gym_admin' && role !== 'super_admin') {
-       throw redirect({ to: '/dashboard/' });
+       throw redirect({ to: '/dashboard' });
     }
     if (location.pathname.startsWith('/dashboard/m') && role !== 'member' && role !== 'super_admin' && role !== 'gym_admin') {
-       throw redirect({ to: '/dashboard/' });
+       throw redirect({ to: '/dashboard' });
     }
     
     return { role };
