@@ -1,33 +1,82 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { supabase } from "@/integrations/supabase/client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from 'react';
+import { useServerFn } from "@tanstack/react-start";
+import { createGymWithAdmin } from "@/lib/gyms.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute('/dashboard/super-admin/gyms')({
   component: SuperAdminGyms,
 });
 
 function SuperAdminGyms() {
-
-
+  const queryClient = useQueryClient();
+  const createGymFn = useServerFn(createGymWithAdmin);
   const [selectedGym, setSelectedGym] = useState<any>(null);
+  const [isAddingGym, setIsAddingGym] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // New Gym Form State
+  const [newGym, setNewGym] = useState({
+    name: '',
+    ownerName: '',
+    ownerEmail: '',
+    ownerPassword: '',
+    ownerPhone: '',
+    gymCode: ''
+  });
 
   const { data: gyms, isLoading } = useQuery({
     queryKey: ['super-admin-gyms'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('gyms')
-        .select('*');
+        .select('*')
+        .order('created_at', { ascending: false });
       if (error) throw error;
       return data;
     }
   });
 
+  const generateGymCode = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = '';
+    for (let i = 0; i < 6; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setNewGym(prev => ({ ...prev, gymCode: code }));
+  };
+
+  const handleAddGym = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await createGymFn({ data: newGym });
+      toast.success("Gym and Admin created successfully!");
+      setIsAddingGym(false);
+      setNewGym({
+        name: '',
+        ownerName: '',
+        ownerEmail: '',
+        ownerPassword: '',
+        ownerPhone: '',
+        gymCode: ''
+      });
+      queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to create gym");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const filteredGyms = gyms?.filter(gym => 
     gym.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
     gym.gym_code?.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
 
   return (
     <div className="antialiased overflow-x-hidden pb-[72px] glow-top">
