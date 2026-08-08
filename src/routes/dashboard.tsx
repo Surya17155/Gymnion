@@ -36,13 +36,13 @@ export const Route = createFileRoute('/dashboard')({
 
     // Protect specific sub-routes
     if (location.pathname.startsWith('/dashboard/super-admin') && role !== 'super_admin') {
-       throw redirect({ to: '/dashboard' });
+       throw redirect({ to: '/dashboard/' });
     }
     if (location.pathname.startsWith('/dashboard/admin') && role !== 'gym_admin' && role !== 'super_admin') {
-       throw redirect({ to: '/dashboard' });
+       throw redirect({ to: '/dashboard/' });
     }
     if (location.pathname.startsWith('/dashboard/m') && role !== 'member' && role !== 'super_admin' && role !== 'gym_admin') {
-       throw redirect({ to: '/dashboard' });
+       throw redirect({ to: '/dashboard/' });
     }
     
     return { role };
