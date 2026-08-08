@@ -1,10 +1,87 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+import { supabase } from '@/integrations/supabase/client';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { toast } from 'sonner';
+
 export const Route = createFileRoute('/dashboard/super-admin/plans')({
   component: SuperAdminPlans,
 });
 
 function SuperAdminPlans() {
+  const queryClient = useQueryClient();
+  const [isAddingOverride, setIsAddingOverride] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedGymForOverride, setSelectedGymForOverride] = useState<any>(null);
+  const [customMonthlyPrice, setCustomMonthlyPrice] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { data: gyms } = useQuery({
+    queryKey: ['super-admin-gyms-for-plans'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('gyms')
+        .select('*')
+        .order('name');
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  const filteredGymsForSearch = gyms?.filter(gym => 
+    gym.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    gym.gym_code?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleAddOverride = async () => {
+    if (!selectedGymForOverride || !customMonthlyPrice) {
+      toast.error("Please select a gym and enter a price");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      // In a real app, we'd have a specific table for this or update the 'gyms.settings' column.
+      // For now, let's update the gyms settings object with a manual_pricing field
+      const currentSettings = selectedGymForOverride.settings || {};
+      const newSettings = { 
+        ...currentSettings, 
+        manual_pricing: parseFloat(customMonthlyPrice) 
+      };
+
+      const { error } = await supabase
+        .from('gyms')
+        .update({ settings: newSettings })
+        .eq('id', selectedGymForOverride.id);
+
+      if (error) throw error;
+
+      toast.success(`Manual pricing set for ${selectedGymForOverride.name}`);
+      setIsAddingOverride(false);
+      setSelectedGymForOverride(null);
+      setCustomMonthlyPrice('');
+      setSearchQuery('');
+      queryClient.invalidateQueries({ queryKey: ['gyms-with-overrides'] });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to set manual pricing");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const { data: gymsWithOverrides } = useQuery({
+    queryKey: ['gyms-with-overrides'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('gyms')
+        .select('*')
+        .not('settings', 'is', null);
+      if (error) throw error;
+      // Filter those that have manual_pricing in settings
+      return data?.filter(g => (g.settings as any)?.manual_pricing !== undefined) || [];
+    }
+  });
   return (
     <div className="flex-1 overflow-y-auto h-full w-full relative z-10 pb-24 md:pb-8">
       {/* Atmospheric Glow */}
@@ -103,50 +180,160 @@ function SuperAdminPlans() {
         <section className="mb-8">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold text-[#e3e3dd]">Gym Overrides</h2>
-            <span className="material-symbols-outlined text-[#C0C2B8] text-sm">filter_list</span>
+            <button 
+              onClick={() => setIsAddingOverride(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#c9f232]/10 border border-[#c9f232]/30 rounded-full text-[#c9f232] text-[10px] font-bold uppercase tracking-wider hover:bg-[#c9f232]/20 transition-colors"
+            >
+              <span className="material-symbols-outlined text-[14px]">add</span>
+              Add Manual Pricing
+            </button>
           </div>
           <div className="space-y-3">
-            {/* Gym 1 */}
-            <div className="bg-[#121411] border border-white/5 rounded-xl p-4">
-              <div className="flex items-center gap-3 mb-4 pb-4 border-b border-white/5">
-                <div className="w-12 h-12 rounded-lg bg-[#383a36] flex items-center justify-center overflow-hidden">
-                  <img className="w-full h-full object-cover opacity-80" alt="Iron Paradise" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAB2FBT_uUOVSJnbsHzlUYnHYfITXh47U3Ci08hoai9Ai8mxL6B0I3MQyaQEv2w6qe_Hq1LyTTAQil1UxvvxnsxaNFOz_8SuFoLVvzNp5xeZXryn_-uXZCLA0dDu-rk8vGz8iejk32AxVE2qRa3tvbw_69N8AnpuMNVI8yY0kC8B40lqmMEHRAfk3zEGfLyWXt0lb9XWUUraIvPauRj3kMmm83-ayUaC2Qk_tUQKxRZ_6kluh4gg" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-[#e3e3dd]">Iron Paradise</h3>
-                  <p className="text-xs text-[#C0C2B8]">Standard Plan</p>
-                </div>
+            {gymsWithOverrides?.length === 0 && (
+              <div className="bg-[#121411] border border-white/5 rounded-xl p-8 text-center">
+                <span className="material-symbols-outlined text-[#383a36] text-[40px] mb-2 block">receipt_long</span>
+                <p className="text-sm text-[#858A7D]">No manual pricing overrides set yet.</p>
               </div>
-              <div className="space-y-4 mb-5">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-[#C0C2B8]">Attendance Tracking</span>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input defaultChecked className="sr-only peer" type="checkbox" />
-                    <div className="w-11 h-6 bg-[#333532] rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#c9f232] peer-checked:after:bg-[#576c00]"></div>
-                  </label>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-[#C0C2B8]">Payments Module</span>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input defaultChecked className="sr-only peer" type="checkbox" />
-                    <div className="w-11 h-6 bg-[#333532] rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#c9f232] peer-checked:after:bg-[#576c00]"></div>
-                  </label>
-                </div>
-                <div>
-                  <label className="text-[11px] font-semibold text-[#858A7D] block mb-1 uppercase tracking-wider">Custom Price Override</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                      <span className="text-lg font-semibold text-[#C0C2B8]">₹</span>
-                    </div>
-                    <input className="w-full h-12 bg-[#1a1c19] border border-white/10 rounded-xl pl-8 pr-4 text-white font-bold focus:border-[#c9f232] outline-none" placeholder="500" type="number" />
+            )}
+            
+            {gymsWithOverrides?.map((gym) => (
+              <div key={gym.id} className="bg-[#121411] border border-white/5 rounded-xl p-4">
+                <div className="flex items-center gap-3 mb-4 pb-4 border-b border-white/5">
+                  <div className="w-12 h-12 rounded-lg bg-[#383a36] flex items-center justify-center overflow-hidden">
+                    <span className="material-symbols-outlined text-[#858A7D]">fitness_center</span>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-[#e3e3dd]">{gym.name}</h3>
+                    <p className="text-xs text-[#C0C2B8]">Manual Pricing Enabled</p>
                   </div>
                 </div>
+                <div className="space-y-4 mb-5">
+                  <div>
+                    <label className="text-[11px] font-semibold text-[#858A7D] block mb-1 uppercase tracking-wider">Manual Pricing (Monthly)</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                        <span className="text-lg font-semibold text-[#C0C2B8]">₹</span>
+                      </div>
+                      <input 
+                        className="w-full h-12 bg-[#1a1c19] border border-white/10 rounded-xl pl-8 pr-4 text-white font-bold focus:border-[#c9f232] outline-none" 
+                        defaultValue={(gym.settings as any)?.manual_pricing}
+                        type="number" 
+                        onBlur={async (e) => {
+                          const newPrice = parseFloat(e.target.value);
+                          if (!isNaN(newPrice)) {
+                            await supabase.from('gyms').update({
+                              settings: { ...(gym.settings as any), manual_pricing: newPrice }
+                            }).eq('id', gym.id);
+                            toast.success("Price updated");
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <button className="w-full py-3 bg-[#c9f232] text-[#576c00] text-xs font-bold rounded-xl hover:opacity-90 transition-opacity">
+                  Update Settings
+                </button>
               </div>
-              <button className="w-full py-3 bg-[#c9f232] text-[#576c00] text-xs font-bold rounded-xl hover:opacity-90 transition-opacity">
-                Update Settings
-              </button>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      {/* Manual Pricing Modal */}
+      {isAddingOverride && (
+        <div className="fixed inset-0 z-[110] flex flex-col justify-end">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !isSubmitting && setIsAddingOverride(false)}></div>
+          <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 pb-12 w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300">
+            <div className="w-12 h-1.5 bg-[#1e201d] rounded-full mx-auto mb-6"></div>
+            
+            <h2 className="text-[20px] font-bold text-white mb-6">Add Manual Pricing</h2>
+
+            <div className="space-y-5">
+              {!selectedGymForOverride ? (
+                <div className="space-y-4">
+                  <div className="relative">
+                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#858A7D]">search</span>
+                    <input 
+                      autoFocus
+                      className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl pl-10 pr-4 text-[#e3e3dd] focus:border-[#c9f232] outline-none transition-colors" 
+                      placeholder="Search existing gym..."
+                      value={searchQuery}
+                      onChange={e => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="max-h-[300px] overflow-y-auto space-y-2">
+                    {filteredGymsForSearch?.map(gym => (
+                      <button 
+                        key={gym.id}
+                        onClick={() => setSelectedGymForOverride(gym)}
+                        className="w-full p-3 bg-[#1e201d] border border-white/5 rounded-xl flex items-center justify-between text-left hover:border-[#c9f232]/30 transition-colors"
+                      >
+                        <div>
+                          <p className="text-sm font-bold text-white">{gym.name}</p>
+                          <p className="text-[10px] text-[#858A7D] uppercase tracking-wider">{gym.gym_code}</p>
+                        </div>
+                        <span className="material-symbols-outlined text-[#858A7D]">add_circle</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-5 animate-in fade-in duration-300">
+                  <div className="bg-[#c9f232]/10 border border-[#c9f232]/20 rounded-xl p-4 flex items-center justify-between">
+                    <div>
+                      <p className="text-[10px] text-[#c9f232] font-bold uppercase tracking-wider mb-0.5">Selected Gym</p>
+                      <p className="text-base font-bold text-white">{selectedGymForOverride.name}</p>
+                    </div>
+                    <button 
+                      onClick={() => setSelectedGymForOverride(null)}
+                      className="text-[#858A7D] hover:text-white"
+                    >
+                      <span className="material-symbols-outlined">close</span>
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Manual Monthly Price (₹)</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                        <span className="text-lg font-semibold text-[#C0C2B8]">₹</span>
+                      </div>
+                      <input 
+                        required
+                        type="number"
+                        placeholder="e.g. 750"
+                        className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl pl-8 pr-4 text-[#e3e3dd] font-bold focus:border-[#c9f232] outline-none"
+                        value={customMonthlyPrice}
+                        onChange={e => setCustomMonthlyPrice(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button 
+                      type="button"
+                      onClick={() => setIsAddingOverride(false)}
+                      className="flex-1 py-4 bg-[#1e201d] text-[#858A7D] text-[15px] font-bold rounded-2xl"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      onClick={handleAddOverride}
+                      disabled={isSubmitting || !customMonthlyPrice}
+                      className="flex-[2] py-4 bg-[#c9f232] text-black text-[15px] font-bold rounded-2xl shadow-[0_12px_24px_rgba(201,242,50,0.15)] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                    >
+                      {isSubmitting && <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin"></span>}
+                      Set Pricing
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
+        </div>
+      )}
         </section>
       </div>
     </div>
