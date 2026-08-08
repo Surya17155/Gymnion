@@ -8,7 +8,7 @@ export function SuperAdminDashboard() {
   console.log('Mounting SuperAdminDashboard (Home)');
 
   return (
-    <div className="pb-24">
+    <div className="pb-16">
       <div 
         className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[300px] h-[300px] pointer-events-none z-0"
         style={{
@@ -223,40 +223,40 @@ function SuperAdminLayout() {
       <Outlet />
       
       {/* Global Super Admin Bottom Navigation */}
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-[100] flex justify-around items-center px-4 py-3 pb-safe rounded-t-[24px] max-w-[480px] left-1/2 -translate-x-1/2">
+      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-[100] flex justify-around items-center px-4 py-2 pb-safe rounded-t-[20px] max-w-[480px] left-1/2 -translate-x-1/2">
         <Link 
           to="/dashboard/super-admin"
           activeOptions={{ exact: true }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          className="flex flex-col items-center justify-center w-[72px] h-[52px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1 transition-colors" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>home</span>
-              <span className="text-[11px] font-semibold leading-[14px] transition-colors" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Home</span>
+              <span className="material-symbols-outlined mb-0.5 transition-colors text-[22px]" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>home</span>
+              <span className="text-[10px] font-semibold leading-tight transition-colors" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Home</span>
             </>
           )}
         </Link>
         
         <Link 
           to="/dashboard/super-admin/payments"
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          className="flex flex-col items-center justify-center w-[72px] h-[52px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1 transition-colors" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>payments</span>
-              <span className="text-[11px] font-semibold leading-[14px] transition-colors" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Payments</span>
+              <span className="material-symbols-outlined mb-0.5 transition-colors text-[22px]" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>payments</span>
+              <span className="text-[10px] font-semibold leading-tight transition-colors" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Payments</span>
             </>
           )}
         </Link>
         
         <Link 
           to="/dashboard/super-admin/gyms"
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          className="flex flex-col items-center justify-center w-[72px] h-[52px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1 transition-colors" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>fitness_center</span>
-              <span className="text-[11px] font-semibold leading-[14px] transition-colors" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Gyms</span>
+              <span className="material-symbols-outlined mb-0.5 transition-colors text-[22px]" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>fitness_center</span>
+              <span className="text-[10px] font-semibold leading-tight transition-colors" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Gyms</span>
             </>
           )}
         </Link>

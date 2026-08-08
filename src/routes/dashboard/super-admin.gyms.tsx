@@ -30,7 +30,7 @@ function SuperAdminGyms() {
   );
 
   return (
-    <div className="antialiased overflow-x-hidden pb-[96px] glow-top">
+    <div className="antialiased overflow-x-hidden pb-[72px] glow-top">
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       
       <style>{`
