@@ -23,20 +23,38 @@ function AddPlanScreen() {
     setLoading(true);
 
     try {
-      const newPlan = {
-        ...formData,
-        id: Math.random().toString(36).substr(2, 9),
-      };
+      const { data: gymData } = await supabase
+        .from('user_roles')
+        .select('gym_id')
+        .eq('user_id', (await supabase.auth.getUser()).data.user?.id)
+        .eq('role', 'admin')
+        .single();
 
-      const savedPlans = localStorage.getItem('gym_plans');
-      const plans = savedPlans ? JSON.parse(savedPlans) : [];
-      plans.push(newPlan);
-      localStorage.setItem('gym_plans', JSON.stringify(plans));
+      if (!gymData?.gym_id) {
+        toast.error('Gym not found for this admin');
+        return;
+      }
+
+      const { error } = await supabase
+        .from('fee_plans')
+        .insert([{
+          name: formData.name,
+          amount: parseFloat(formData.amount),
+          description: formData.description,
+          billing_cycle: formData.duration === '1' ? 'monthly' : 
+                         formData.duration === '12' ? 'annual' : 
+                         `${formData.duration} months`,
+          gym_id: gymData.gym_id,
+          is_active: formData.isActive
+        }]);
+
+      if (error) throw error;
       
       toast.success('Plan created successfully!');
       navigate({ to: '/dashboard/admin/plans' });
     } catch (error: any) {
-      toast.error('Failed to create plan');
+      console.error('Error creating plan:', error);
+      toast.error(error.message || 'Failed to create plan');
     } finally {
       setLoading(false);
     }
