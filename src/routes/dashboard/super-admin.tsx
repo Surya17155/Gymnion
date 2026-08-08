@@ -1,12 +1,78 @@
-import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard/super-admin')({
   component: SuperAdminLayout,
 });
 
+function SuperAdminLayout() {
+  const { pathname } = useLocation();
+  // Handle both with and without trailing slash for the index check
+  const isExact = pathname === '/dashboard/super-admin' || pathname === '/dashboard/super-admin/';
+
+  return (
+    <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans">
+      {isExact ? <SuperAdminDashboard /> : <Outlet />}
+      
+      {/* Global Super Admin Bottom Navigation */}
+      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-[100] flex justify-around items-center px-4 py-2 pb-safe rounded-t-[20px] max-w-[480px] left-1/2 -translate-x-1/2">
+        <Link 
+          to="/dashboard/super-admin"
+          activeOptions={{ exact: true }}
+          preload="intent"
+          className="flex flex-col items-center justify-center w-[64px] h-[52px] rounded-xl"
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-0.5 text-[22px]" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>home</span>
+              <span className="text-[10px] font-semibold leading-tight" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Home</span>
+            </>
+          )}
+        </Link>
+        
+        <Link 
+          to="/dashboard/super-admin/payments"
+          preload="intent"
+          className="flex flex-col items-center justify-center w-[64px] h-[52px] rounded-xl"
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-0.5 text-[22px]" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>payments</span>
+              <span className="text-[10px] font-semibold leading-tight" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Payments</span>
+            </>
+          )}
+        </Link>
+        
+        <Link 
+          to="/dashboard/super-admin/plans"
+          preload="intent"
+          className="flex flex-col items-center justify-center w-[64px] h-[52px] rounded-xl"
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-0.5 text-[22px]" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>layers</span>
+              <span className="text-[10px] font-semibold leading-tight" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Plans</span>
+            </>
+          )}
+        </Link>
+
+        <Link 
+          to="/dashboard/super-admin/gyms"
+          preload="intent"
+          className="flex flex-col items-center justify-center w-[64px] h-[52px] rounded-xl"
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-0.5 text-[22px]" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>fitness_center</span>
+              <span className="text-[10px] font-semibold leading-tight" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Gyms</span>
+            </>
+          )}
+        </Link>
+      </nav>
+    </div>
+  );
+}
+
 export function SuperAdminDashboard() {
-
-
   return (
     <div className="pb-16">
       <div 
@@ -212,71 +278,6 @@ export function SuperAdminDashboard() {
           </section>
         </div>
       </main>
-
-    </div>
-  );
-}
-
-function SuperAdminLayout() {
-  return (
-    <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans">
-      <Outlet />
-      
-      {/* Global Super Admin Bottom Navigation */}
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-[100] flex justify-around items-center px-4 py-2 pb-safe rounded-t-[20px] max-w-[480px] left-1/2 -translate-x-1/2">
-        <Link 
-          to="/dashboard/super-admin"
-          activeOptions={{ exact: true }}
-          preload="intent"
-          className="flex flex-col items-center justify-center w-[64px] h-[52px] rounded-xl"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-0.5 text-[22px]" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>home</span>
-              <span className="text-[10px] font-semibold leading-tight" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Home</span>
-            </>
-          )}
-        </Link>
-        
-        <Link 
-          to="/dashboard/super-admin/payments"
-          preload="intent"
-          className="flex flex-col items-center justify-center w-[64px] h-[52px] rounded-xl"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-0.5 text-[22px]" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>payments</span>
-              <span className="text-[10px] font-semibold leading-tight" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Payments</span>
-            </>
-          )}
-        </Link>
-        
-        <Link 
-          to="/dashboard/super-admin/plans"
-          preload="intent"
-          className="flex flex-col items-center justify-center w-[64px] h-[52px] rounded-xl"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-0.5 text-[22px]" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>layers</span>
-              <span className="text-[10px] font-semibold leading-tight" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Plans</span>
-            </>
-          )}
-        </Link>
-
-        <Link 
-          to="/dashboard/super-admin/gyms"
-          preload="intent"
-          className="flex flex-col items-center justify-center w-[64px] h-[52px] rounded-xl"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-0.5 text-[22px]" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0', color: isActive ? '#B7FF1E' : '#C0C2B8' }}>fitness_center</span>
-              <span className="text-[10px] font-semibold leading-tight" style={{ color: isActive ? '#B7FF1E' : '#C0C2B8' }}>Gyms</span>
-            </>
-          )}
-        </Link>
-      </nav>
     </div>
   );
 }
