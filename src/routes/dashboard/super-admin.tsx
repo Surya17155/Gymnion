@@ -1,6 +1,14 @@
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/dashboard/super-admin')({
+  beforeLoad: ({ location }) => {
+    if (location.pathname === '/dashboard/super-admin' || location.pathname === '/dashboard/super-admin/') {
+      // If we are at the parent path exactly, the index route should be shown.
+      // TanStack Router handles this via the index.tsx file, but if it doesn't match
+      // due to slash issues, we can force it or just let the index route handle it.
+      // However, to avoid the "black screen" (empty Outlet), we ensure we are at the index.
+    }
+  },
   component: SuperAdminLayout,
 });
 
