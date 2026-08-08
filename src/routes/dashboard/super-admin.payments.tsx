@@ -7,7 +7,7 @@ export const Route = createFileRoute('/dashboard/super-admin/payments')({
 });
 
 function SuperAdminPayments() {
-  console.log('Mounting SuperAdminPayments');
+
 
   const { data: gyms } = useQuery({
     queryKey: ['super-admin-payments-gyms'],

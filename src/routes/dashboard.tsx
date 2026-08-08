@@ -7,8 +7,8 @@ export const Route = createFileRoute('/dashboard')({
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
-      // Small delay to allow session recovery if it's just a refresh
-      await new Promise(resolve => setTimeout(resolve, 10));
+      // Very short delay for session recovery
+      await new Promise(resolve => setTimeout(resolve, 5));
       const { data: { session: retrySession } } = await supabase.auth.getSession();
       
       if (!retrySession) {
