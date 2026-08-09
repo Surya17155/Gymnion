@@ -106,7 +106,7 @@ function GymPlans() {
       />
 
       <div className="max-w-[480px] mx-auto min-h-screen pb-24 relative z-10 flex flex-col">
-        <header className="flex items-center px-[20px] h-[64px] w-full sticky top-0 z-40 bg-[#121411]/80 backdrop-blur-md">
+        <header className="flex items-center px-[20px] h-[64px] w-full sticky top-0 z-40 bg-transparent">
           <button 
             onClick={() => navigate({ to: '/dashboard/admin/settings' })}
             className="w-10 h-10 rounded-full flex items-center justify-center bg-[#1e201d] border border-white/5 text-[#e3e3dd]"
