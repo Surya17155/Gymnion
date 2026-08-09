@@ -45,7 +45,7 @@ function MemberDashboard() {
             }}
           />
           
-          <main className="w-full max-w-[480px] min-h-screen relative pb-[100px] flex flex-col z-10">
+          <main className="w-full max-w-[480px] min-h-screen relative pb-[100px] flex flex-col z-10 no-scrollbar">
             {/* Top App Bar */}
             <header className="flex justify-between items-center px-5 h-[80px] w-full sticky top-0 z-40 bg-transparent pt-6">
               <div className="flex items-center gap-3">
