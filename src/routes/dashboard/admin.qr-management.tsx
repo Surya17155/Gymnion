@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useServerFn } from '@tanstack/react-start';
-import { getGymDetails, getGymAccessPoints, createAccessPoint, deleteAccessPoint } from '@/lib/auth.functions';
+import { getGymDetails, getGymAccessPointsFull, createAccessPoint, deleteAccessPoint } from '@/lib/auth.functions';
 import { regenerateGymQR } from '@/lib/gyms.functions';
 import { toast } from 'sonner';
 import QRCode from 'qrcode';
@@ -16,7 +16,7 @@ function QRManagement() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const getGymDetailsFn = useServerFn(getGymDetails);
-  const getAccessPointsFn = useServerFn(getGymAccessPoints);
+  const getAccessPointsFn = useServerFn(getGymAccessPointsFull);
   const createAccessPointFn = useServerFn(createAccessPoint);
   const deleteAccessPointFn = useServerFn(deleteAccessPoint);
   const regenerateQR = useServerFn(regenerateGymQR);
