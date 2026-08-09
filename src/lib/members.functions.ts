@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
@@ -15,7 +15,7 @@ const completeSignupSchema = z.object({
  * and assigning the 'member' role in the user_roles table.
  */
 export const completeSignup = createServerFn({ method: "POST" })
-  .input(completeSignupSchema)
+  .validator((data: unknown) => completeSignupSchema.parse(data))
   .handler(async ({ data }) => {
     const { userId, gymId, fullName, email, phone } = data;
 
@@ -32,7 +32,7 @@ export const completeSignup = createServerFn({ method: "POST" })
         join_date: new Date().toISOString().split('T')[0]
       })
       .select()
-      .single();
+      .maybeSingle();
 
     if (memberError) {
       console.error('Error creating member record:', memberError);
@@ -58,7 +58,7 @@ export const completeSignup = createServerFn({ method: "POST" })
     }
 
     return { 
-      memberId: member.id, 
+      memberId: member?.id || null, 
       gymId: gymId 
     };
   });
