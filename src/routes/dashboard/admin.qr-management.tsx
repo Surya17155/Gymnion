@@ -83,7 +83,14 @@ function QRManagement() {
     }
   }, [gym]);
 
-  if (isGymLoading) return null;
+  if (isGymLoading) {
+    return (
+      <div className="min-h-screen bg-[#0D0F0C] text-white flex flex-col items-center justify-center p-4">
+        <div className="w-8 h-8 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-[#858A7D]">Loading gym details...</p>
+      </div>
+    );
+  }
 
   if (!gym?.id) {
     return (
