@@ -252,8 +252,9 @@ export function AdminDashboard() {
 
           {/* QR Quick Action - Link to QR Management */}
           <section>
-            <div 
-              className="w-full bg-[#1e201d] border border-white/5 rounded-xl p-4 flex items-center justify-between group transition-colors"
+            <Link 
+              to="/dashboard/admin/qr-management"
+              className="w-full bg-[#1e201d] border border-white/5 rounded-xl p-4 flex items-center justify-between group hover:bg-[#252724] transition-colors"
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-[#B7FF1E]/10 flex items-center justify-center text-[#B7FF1E]">
@@ -264,8 +265,8 @@ export function AdminDashboard() {
                   <p className="text-[12px] text-[#858A7D]">Members scan this to check in</p>
                 </div>
               </div>
-              
-            </div>
+              <span className="material-symbols-outlined text-[#858A7D] group-hover:text-white transition-colors">arrow_forward_ios</span>
+            </Link>
           </section>
 
           {/* KPI Grid */}
