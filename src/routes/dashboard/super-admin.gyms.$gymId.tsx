@@ -278,11 +278,15 @@ function GymDetailScreen() {
                 <DetailRow icon="fingerprint" label="Gym Code" value={gym.gym_code} highlight />
               )}
               
-              <DetailRow icon="subscriptions" label="Current Plan" value={gym.global_plans?.name || 'no plan'} />
+              <DetailRow 
+                icon="subscriptions" 
+                label="Current Plan" 
+                value={gym.settings?.manual_pricing ? `Manual (₹${gym.settings.manual_pricing})` : (gym.global_plans?.name || 'no plan')} 
+              />
               <DetailRow 
                 icon="calendar_today" 
                 label="Subscription Ends" 
-                value={hasPlan && gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), 'PPP') : 'N/A'} 
+                value={(hasPlan || gym.settings?.manual_pricing) && gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), 'PPP') : 'N/A'} 
               />
             </div>
           </div>

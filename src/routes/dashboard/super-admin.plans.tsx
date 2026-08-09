@@ -21,10 +21,14 @@ function SuperAdminPlans() {
   const [isEditingPlan, setIsEditingPlan] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGymForOverride, setSelectedGymForOverride] = useState<Gym | null>(null);
+  const [selectedGymForOverride, setSelectedGymForOverride] = useState<any>(null);
   const [customMonthlyPrice, setCustomMonthlyPrice] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [manualFeatures, setManualFeatures] = useState<any[]>(['']);
+  const [overrideForm, setOverrideForm] = useState({
+    payment_management: false,
+    attendance_management: false
+  });
 
   const getPlansFn = useServerFn(getSubscriptionPlans);
   const createPlanFn = useServerFn(createSubscriptionPlan);
@@ -65,7 +69,11 @@ function SuperAdminPlans() {
       await setManualPricingFn({
         data: {
           gymId: selectedGymForOverride.id,
-          manualPricing: parseFloat(customMonthlyPrice)
+          manualPricing: parseFloat(customMonthlyPrice),
+          features: {
+            payment_management: overrideForm.payment_management,
+            attendance_management: overrideForm.attendance_management
+          }
         }
       });
 
@@ -75,6 +83,7 @@ function SuperAdminPlans() {
       setCustomMonthlyPrice('');
       setSearchQuery('');
       queryClient.invalidateQueries({ queryKey: ['gyms-with-overrides'] });
+      queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
     } catch (err: any) {
       toast.error(err.message || "Failed to set manual pricing");
     } finally {
@@ -321,70 +330,29 @@ function SuperAdminPlans() {
                       </div>
                     </div>
                     <button 
-                      onClick={async () => {
-                        if (confirm(`Remove manual pricing for ${gym.name}?`)) {
-                          try {
-                            await setManualPricingFn({
-                              data: {
-                                gymId: gym.id,
-                                manualPricing: null
-                              }
-                            });
-                            toast.success("Manual pricing removed");
-                            queryClient.invalidateQueries({ queryKey: ['gyms-with-overrides'] });
-                          } catch (err: any) {
-                            toast.error(err.message || "Failed to remove override");
-                          }
-                        }
+                      onClick={() => {
+                        setSelectedGymForOverride(gym);
+                        setCustomMonthlyPrice(currentPrice?.toString() || '');
+                        const settings = gym.settings as any;
+                        const features = settings?.features || {};
+                        setOverrideForm({
+                          payment_management: !!features.payment_management,
+                          attendance_management: !!features.attendance_management
+                        });
+                        setIsAddingOverride(true);
                       }}
-                      className="text-[#FF5964] p-2 hover:bg-[#FF5964]/10 rounded-lg transition-colors"
-                      title="Remove Override"
+                      className="text-[#B7FF1E] p-2 hover:bg-[#B7FF1E]/10 rounded-lg transition-colors"
+                      title="Edit Override"
                     >
-                      <span className="material-symbols-outlined text-sm">delete</span>
+                      <span className="material-symbols-outlined text-sm">edit</span>
                     </button>
                   </div>
                   <div className="space-y-4 mb-5">
                     <div>
                       <label className="text-[11px] font-semibold text-[#858A7D] block mb-1 uppercase tracking-wider">Manual Pricing (Monthly)</label>
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                          <span className="text-lg font-semibold text-[#C0C2B8]">₹</span>
-                        </div>
-                        <input 
-                          id={`price-${gym.id}`}
-                          className="w-full h-12 bg-[#1a1c19] border border-white/10 rounded-xl pl-8 pr-4 text-white font-bold focus:border-[#c9f232] outline-none" 
-                          defaultValue={currentPrice}
-                          type="number" 
-                          onBlur={async (e) => {
-                            const newPrice = parseFloat(e.target.value);
-                            if (!isNaN(newPrice) && newPrice !== currentPrice) {
-                              try {
-                                await setManualPricingFn({
-                                  data: {
-                                    gymId: gym.id,
-                                    manualPricing: newPrice
-                                  }
-                                });
-                                toast.success("Price updated");
-                                queryClient.invalidateQueries({ queryKey: ['gyms-with-overrides'] });
-                              } catch (err: any) {
-                                toast.error(err.message || "Update failed");
-                              }
-                            }
-                          }}
-                        />
-                      </div>
+                      <div className="text-lg font-bold text-white">₹{currentPrice}</div>
                     </div>
                   </div>
-                  <button 
-                    onClick={() => {
-                      const input = document.getElementById(`price-${gym.id}`) as HTMLInputElement;
-                      if (input) input.blur();
-                    }}
-                    className="w-full py-3 bg-[#c9f232] text-[#576c00] text-xs font-bold rounded-xl hover:opacity-90 transition-opacity"
-                  >
-                    Update Settings
-                  </button>
                 </div>
               );
             })}
