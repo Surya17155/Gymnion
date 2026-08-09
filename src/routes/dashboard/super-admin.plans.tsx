@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useServerFn } from '@tanstack/react-start';
 import { getSubscriptionPlans, createSubscriptionPlan, updateSubscriptionPlan, deleteSubscriptionPlan } from '@/lib/plans.functions';
+import { setGymManualPricing } from '@/lib/super-admin.functions';
 import { toast } from 'sonner';
 import { Tables } from '@/integrations/supabase/types';
 
