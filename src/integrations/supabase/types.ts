@@ -212,6 +212,9 @@ export type Database = {
           razorpay_account_id: string | null
           settings: Json | null
           status: string
+          subscription_ends_at: string | null
+          subscription_plan_id: string | null
+          subscription_started_at: string | null
           updated_at: string | null
         }
         Insert: {
@@ -225,6 +228,9 @@ export type Database = {
           razorpay_account_id?: string | null
           settings?: Json | null
           status?: string
+          subscription_ends_at?: string | null
+          subscription_plan_id?: string | null
+          subscription_started_at?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -238,9 +244,20 @@ export type Database = {
           razorpay_account_id?: string | null
           settings?: Json | null
           status?: string
+          subscription_ends_at?: string | null
+          subscription_plan_id?: string | null
+          subscription_started_at?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "gyms_subscription_plan_id_fkey"
+            columns: ["subscription_plan_id"]
+            isOneToOne: false
+            referencedRelation: "global_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       members: {
         Row: {
