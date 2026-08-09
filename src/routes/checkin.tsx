@@ -114,7 +114,7 @@ function CheckInPage() {
         disabled={mutation.isPending}
         className={`w-full max-w-sm ${isCheckedIn ? 'bg-white/10 text-white' : 'bg-gym-accent text-primary'} h-14 rounded-pill font-bold shadow-[0_8px_30px_rgba(213,255,64,0.3)] hover:scale-[1.02] transition-transform active:scale-95 disabled:opacity-50`}
       >
-        {isCheckedIn ? 'Check Out' : 'Check In Now'}
+        {mutation.isPending ? 'Processing...' : (isCheckedIn ? 'Check Out' : 'Check In Now')}
       </button>
 
       <Link to="/dashboard/m" className="text-sm text-muted-foreground hover:text-white transition-colors">

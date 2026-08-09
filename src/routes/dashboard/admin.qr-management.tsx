@@ -31,6 +31,48 @@ function QRManagement() {
     queryFn: () => getGymDetailsFn({ data: {} }),
   });
 
+  const { data: rawAccessPoints, isLoading: isPointsLoading } = useQuery({
+    queryKey: ['gym-access-points', gym?.id],
+    queryFn: () => getAccessPointsFn({ data: { gymId: gym!.id } }),
+    enabled: !!gym?.id
+  });
+
+  const { data: attendanceCount } = useQuery({
+    queryKey: ['gym-attendance-today', gym?.id],
+    queryFn: async () => {
+      if (!gym?.id) return 0;
+      const today = new Date().toISOString().split('T')[0];
+      const { count, error } = await supabase
+        .from('attendance')
+        .select('*', { count: 'exact', head: true })
+        .eq('gym_id', gym.id)
+        .gte('check_in_at', `${today}T00:00:00`);
+      if (error) throw error;
+      return count || 0;
+    },
+    enabled: !!gym?.id,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: (name: string) => createAccessPointFn({ data: { gymId: gym!.id, name } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['gym-access-points'] });
+      setIsDrawerOpen(false);
+      setNewPointName('');
+      toast.success('Access point created');
+    },
+    onError: () => toast.error('Failed to create access point')
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteAccessPointFn({ data: { id } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['gym-access-points'] });
+      toast.success('Access point deleted');
+    },
+    onError: () => toast.error('Failed to delete access point')
+  });
+
   useEffect(() => {
     if (gym?.id) {
       const checkinUrl = `${window.location.origin}/checkin?gym=${gym.id}&code=${gym.gym_code || ''}`;
@@ -44,6 +86,25 @@ function QRManagement() {
       }).then(setQrUrl);
     }
   }, [gym]);
+
+  if (isGymLoading || isPointsLoading) return null;
+
+  if (!gym?.id) {
+    return (
+      <div className="min-h-screen bg-[#0D0F0C] text-white flex flex-col items-center justify-center p-4">
+        <h1 className="text-xl font-bold mb-2">No Gym Found</h1>
+        <p className="text-gray-400 mb-4">We couldn't find a gym associated with your account.</p>
+        <button
+          onClick={() => navigate({ to: '/dashboard/admin' })}
+          className="bg-[#B7FF1E] text-black px-4 py-2 rounded-full font-bold"
+        >
+          Return to Dashboard
+        </button>
+      </div>
+    );
+  }
+
+  const accessPoints = rawAccessPoints || [];
 
   const handleDownload = () => {
     if (!qrUrl) return;
@@ -71,67 +132,6 @@ function QRManagement() {
       setIsRegenerating(false);
     }
   };
-
-  const { data: rawAccessPoints, isLoading: isPointsLoading } = useQuery({
-    queryKey: ['gym-access-points', gym?.id],
-    queryFn: () => getAccessPointsFn({ data: { gymId: gym!.id } }),
-    enabled: !!gym?.id
-  });
-
-  const { data: attendanceCount } = useQuery({
-    queryKey: ['gym-attendance-today', gym?.id],
-    queryFn: async () => {
-      if (!gym?.id) return 0;
-      const today = new Date().toISOString().split('T')[0];
-      const { count, error } = await supabase
-        .from('attendance')
-        .select('*', { count: 'exact', head: true })
-        .eq('gym_id', gym.id)
-        .gte('check_in_at', `${today}T00:00:00`);
-      if (error) throw error;
-      return count || 0;
-    },
-    enabled: !!gym?.id,
-  });
-
-  if (isGymLoading || isPointsLoading) return null;
-
-  if (!gym?.id) {
-    return (
-      <div className="min-h-screen bg-[#0D0F0C] text-white flex flex-col items-center justify-center p-4">
-        <h1 className="text-xl font-bold mb-2">No Gym Found</h1>
-        <p className="text-gray-400 mb-4">We couldn't find a gym associated with your account.</p>
-        <button
-          onClick={() => navigate({ to: '/dashboard/admin' })}
-          className="bg-[#B7FF1E] text-black px-4 py-2 rounded-full font-bold"
-        >
-          Return to Dashboard
-        </button>
-      </div>
-    );
-  }
-
-  const accessPoints = rawAccessPoints || [];
-
-  const createMutation = useMutation({
-    mutationFn: (name: string) => createAccessPointFn({ data: { gymId: gym!.id, name } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['gym-access-points'] });
-      setIsDrawerOpen(false);
-      setNewPointName('');
-      toast.success('Access point created');
-    },
-    onError: () => toast.error('Failed to create access point')
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: (id: string) => deleteAccessPointFn({ data: { id } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['gym-access-points'] });
-      toast.success('Access point deleted');
-    },
-    onError: () => toast.error('Failed to delete access point')
-  });
 
   const handleCreatePoint = (e: React.FormEvent) => {
     e.preventDefault();
