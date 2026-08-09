@@ -14,8 +14,9 @@ let cachedRole: { userId: string; role: Role } | null = null;
 export async function getRoleForUser(userId: string): Promise<Role> {
   if (cachedRole && cachedRole.userId === userId) return cachedRole.role;
 
-  if (typeof sessionStorage !== 'undefined') {
-    const stored = sessionStorage.getItem('gymsync_role');
+  // Optimized lookup: check persistent storage first to avoid blocking on network in route guards
+  if (typeof localStorage !== 'undefined') {
+    const stored = localStorage.getItem('gymsync_role_v2');
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
@@ -29,17 +30,18 @@ export async function getRoleForUser(userId: string): Promise<Role> {
     }
   }
 
-  // HARDCODED FALLBACK FOR SUPER ADMIN EMAIL
+  // Fallback to check hardcoded super admin email immediately if storage is empty
   const { data: { session } } = await supabase.auth.getSession();
   if (session?.user?.email === 'surya.17155@gmail.com') {
     const role: Role = 'super_admin';
     cachedRole = { userId, role };
-    if (typeof sessionStorage !== 'undefined') {
-      sessionStorage.setItem('gymsync_role', JSON.stringify(cachedRole));
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('gymsync_role_v2', JSON.stringify(cachedRole));
     }
     return role;
   }
 
+  // Final fallback to DB
   const { data } = await supabase
     .from('user_roles')
     .select('role')
@@ -48,15 +50,18 @@ export async function getRoleForUser(userId: string): Promise<Role> {
 
   const role = (data?.role as Role) ?? null;
   cachedRole = { userId, role };
-  if (typeof sessionStorage !== 'undefined') {
-    sessionStorage.setItem('gymsync_role', JSON.stringify(cachedRole));
+  
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('gymsync_role_v2', JSON.stringify(cachedRole));
   }
+  
   return role;
 }
 
 export function clearRoleCache() {
   cachedRole = null;
   if (typeof sessionStorage !== 'undefined') sessionStorage.removeItem('gymsync_role');
+  if (typeof localStorage !== 'undefined') localStorage.removeItem('gymsync_role_v2');
 }
 
 export function homeForRole(role: Role): string | null {
