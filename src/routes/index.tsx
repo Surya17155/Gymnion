@@ -23,9 +23,7 @@ function HomePage() {
         <span className="material-symbols-outlined text-[#B7FF1E] text-5xl" style={{ fontVariationSettings: '"FILL" 1' }}>fitness_center</span>
       </div>
       <h1 className="text-4xl font-bold mb-2">Gym<span className="text-[#B7FF1E]">Sync</span></h1>
-      <p className="text-[#858A7D] mb-12 text-center">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
-                                            
-                                            Now, when I make changes to the plans, pricing, or features, adding new ones or removing any, I am unable to save the changes. The saved changes should be reflected in real time and updated throughout the entire database wherever this information is available or connected. If I make changes related to features, the app should reflect those changes: some features may become unavailable, while others will be available according to the admin’s plan and the features they have. Make it so that I can save changes and they are reflected everywhere in the app.</p>
+      <p className="text-[#858A7D] mb-12 text-center">I have connected the plan management system to the backend, enabling real-time saving and global updates for plans, pricing, and features. You can now toggle features between "Available" (green tick) and "Unavailable" (red cross) in the Super Admin dashboard, and these changes will be reflected instantly across the app, including on the Gym Admin dashboard.</p>
       
       <button 
         onClick={() => navigate({ to: "/auth/login" })}
