@@ -80,7 +80,7 @@ export const updateSubscriptionPlan = createServerFn({ method: "POST" })
     const { id, ...updateData } = data;
     const { data: plan, error } = await supabaseAdmin
       .from('global_plans')
-      .update({ ...updateData, updated_at: new Date().toISOString() })
+      .update({ ...updateData, updated_at: new Date().toISOString() } as any)
       .eq('id', id)
       .select()
       .single();
