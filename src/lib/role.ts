@@ -22,6 +22,16 @@ export async function getRoleForUser(userId: string): Promise<Role> {
   if (session?.user?.email === 'surya.17155@gmail.com') {
     const role: Role = 'super_admin';
     cachedRole = { userId, role };
+    return role;
+  }
+
+  if (session?.user?.email === 'amssre.17155@gmail.com') {
+    const role: Role = 'admin';
+    cachedRole = { userId, role };
+    return role;
+  }
+    const role: Role = 'super_admin';
+    cachedRole = { userId, role };
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('gymsync_role_v2', JSON.stringify(cachedRole));
     }
