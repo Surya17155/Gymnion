@@ -228,10 +228,10 @@ export const updateGymDetails = createServerFn({ method: "POST" })
     if (!roleData) throw new Error("Unauthorized");
 
     const updateData: any = {};
-    if (data.name) updateData.name = data.name;
-    if (data.address) updateData.address = data.address;
-    if (data.gymCode) updateData.gym_code = data.gymCode;
-    if (data.ownerPhotoUrl) updateData.owner_photo_url = data.ownerPhotoUrl;
+    if (data.name !== undefined) updateData.name = data.name;
+    if (data.address !== undefined) updateData.address = data.address;
+    if (data.gymCode !== undefined) updateData.gym_code = data.gymCode;
+    if (data.ownerPhotoUrl !== undefined) updateData.owner_photo_url = data.ownerPhotoUrl;
 
     const { error } = await supabaseAdmin
       .from('gyms')
