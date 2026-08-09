@@ -165,7 +165,7 @@ export function AdminDashboard() {
         <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-2">
           {/* Page Title */}
           <section className="-mt-4">
-            <h2 className="text-[40px] font-bold leading-[44px] tracking-[-0.04em] text-white">Hi, {gymData?.owner_name || 'Admin'}</h2>
+            <h2 className="text-[40px] font-bold leading-[44px] tracking-[-0.04em] text-white">Hi, {gymData?.owner_first_name || gymData?.owner_name?.split(' ')[0] || 'Admin'}</h2>
           </section>
 
           {/* Revenue Card (Full width) */}
