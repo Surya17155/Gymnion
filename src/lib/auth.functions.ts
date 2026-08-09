@@ -623,3 +623,51 @@ export const deleteFeePlan = createServerFn({ method: 'POST' })
     if (error) throw error;
     return { success: true };
   });
+
+export const updateAdminAccount = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.object({
+    full_name: z.string().optional(),
+    email: z.string().email().optional(),
+    phone: z.string().optional(),
+    photo_url: z.string().optional(),
+  }).parse(data))
+  .handler(async ({ data, context }) => {
+    const userId = context.userId;
+    if (!userId) throw new Error("Unauthorized");
+
+    const updates: any = {};
+    if (data.full_name) updates.owner_name = data.full_name;
+    if (data.email) updates.owner_email = data.email;
+    if (data.phone) updates.owner_phone = data.phone;
+    if (data.photo_url !== undefined) updates.owner_photo_url = data.photo_url;
+
+    // Get the gym_id for this admin
+    const { data: roleData } = await supabaseAdmin
+      .from('user_roles')
+      .select('gym_id')
+      .eq('user_id', userId)
+      .eq('role', 'admin')
+      .single();
+
+    if (!roleData?.gym_id) throw new Error("No gym associated with this admin");
+
+    const { error } = await supabaseAdmin
+      .from('gyms')
+      .update(updates)
+      .eq('id', roleData.gym_id);
+
+    if (error) throw error;
+
+    // Also update Auth User metadata if name/phone changed
+    const authUpdates: any = {};
+    if (data.full_name || data.phone) {
+      authUpdates.user_metadata = {};
+      if (data.full_name) authUpdates.user_metadata.full_name = data.full_name;
+      if (data.phone) authUpdates.user_metadata.phone = data.phone;
+      
+      await supabaseAdmin.auth.admin.updateUserById(userId, authUpdates);
+    }
+
+    return { success: true };
+  });
