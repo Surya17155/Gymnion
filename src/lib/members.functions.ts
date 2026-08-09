@@ -103,28 +103,22 @@ export const recordAttendance = createServerFn({ method: "POST" })
 
     const today = new Date().toISOString().split('T')[0];
 
-    if (action === 'in') {
-      // Check if already checked in today (and not checked out)
-      const { data: existing } = await supabaseAdmin
-        .from('attendance')
-        .select('*')
-        .eq('member_id', member.id)
-        .eq('gym_id', gymId)
-        .gte('check_in_at', `${today}T00:00:00`)
-        .is('check_out_at', null)
-        .order('check_in_at', { ascending: false })
-        .limit(1)
-        .maybeSingle();
+    // Find the latest attendance entry for today
+    const { data: latestEntry } = await supabaseAdmin
+      .from('attendance')
+      .select('*')
+      .eq('member_id', member.id)
+      .eq('gym_id', gymId)
+      .gte('check_in_at', `${today}T00:00:00`)
+      .order('check_in_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
 
-      if (existing) {
-        return { 
-          success: true, 
-          message: "You are already checked in.", 
-          check_in_at: existing.check_in_at,
-          check_out_at: null
-        };
-      }
+    // Determine action: if latest entry is an open check-in, check out. 
+    // Otherwise, if no entry today OR latest was a completed session, check in.
+    const effectiveAction = (latestEntry && !latestEntry.check_out_at) ? 'out' : 'in';
 
+    if (effectiveAction === 'in') {
       const { data: newEntry, error } = await supabaseAdmin
         .from('attendance')
         .insert({
@@ -145,27 +139,13 @@ export const recordAttendance = createServerFn({ method: "POST" })
         check_out_at: null
       };
     } else {
-      // Find the latest open check-in
-      const { data: openCheckin } = await supabaseAdmin
-        .from('attendance')
-        .select('*')
-        .eq('member_id', member.id)
-        .eq('gym_id', gymId)
-        .is('check_out_at', null)
-        .order('check_in_at', { ascending: false })
-        .limit(1)
-        .maybeSingle();
-
-      if (!openCheckin) {
-        throw new Error("No active check-in found to check out from.");
-      }
-
+      // Must have latestEntry and it must be open
       const { data: updatedEntry, error } = await supabaseAdmin
         .from('attendance')
         .update({
           check_out_at: new Date().toISOString()
         })
-        .eq('id', openCheckin.id)
+        .eq('id', latestEntry!.id)
         .select()
         .single();
 
