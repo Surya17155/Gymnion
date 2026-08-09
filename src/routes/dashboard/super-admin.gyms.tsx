@@ -212,7 +212,7 @@ export function SuperAdminGyms() {
       {isAddingGym && (
         <div className="fixed inset-0 z-[110] flex flex-col justify-end">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !isSubmitting && setIsAddingGym(false)}></div>
-          <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 pb-12 w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300 overflow-y-auto max-h-[90vh]">
+          <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[16px] p-6 pb-12 w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300 overflow-y-auto max-h-[90vh]">
             <div className="w-12 h-1.5 bg-[#1e201d] rounded-full mx-auto mb-6"></div>
             
             <h2 className="text-[20px] font-bold text-white mb-6">Add New Gym</h2>
