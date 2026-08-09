@@ -150,7 +150,7 @@ function QRManagement() {
 
         <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-4">
           <div>
-            <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white mb-1">Facility Entry</h1>
+            <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white mb-1">{"\n"}</h1>
             <p className="text-[12px] text-[#858A7D]">Manage QR codes for facility entry points.</p>
           </div>
 
