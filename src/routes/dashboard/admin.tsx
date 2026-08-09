@@ -130,26 +130,58 @@ export function AdminDashboard() {
             )}
           </section>
 
-          {/* Subscription Banner */}
-          {currentPlan && (
+          {/* Subscription/Manual Features Banner */}
+          {(currentPlan || (gymData?.settings as any)?.manual_pricing) && (
             <section className="bg-[#B7FF1E]/10 border border-[#B7FF1E]/20 rounded-xl p-4 flex items-center justify-between">
               <div>
                 <p className="text-[10px] text-[#858A7D] uppercase font-bold">Current Plan</p>
-                <p className="text-white font-bold">{currentPlan.name}</p>
+                <p className="text-white font-bold">
+                  {currentPlan?.name || 'Manual Pricing'}
+                </p>
+                {(gymData?.settings as any)?.manual_pricing && (
+                  <p className="text-[12px] text-[#B7FF1E] font-medium mt-0.5">₹{(gymData?.settings as any).manual_pricing}/mo</p>
+                )}
               </div>
               <div className="flex gap-2">
-                {Array.isArray(currentPlan.features) && (currentPlan.features as any[]).slice(0, 3).map((f: any, i: number) => (
-                  <span 
-                    key={i} 
-                    className="material-symbols-outlined text-[16px]" 
-                    style={{ 
-                      fontVariationSettings: "'FILL' 1",
-                      color: (typeof f === 'string' ? true : f.enabled) ? '#B7FF1E' : '#FF5964'
-                    }}
-                  >
-                    {(typeof f === 'string' ? true : f.enabled) ? 'check_circle' : 'cancel'}
-                  </span>
-                ))}
+                {/* Check specific manual features if override exists, otherwise plan features */}
+                {(() => {
+                  const settings = (gymData?.settings as any) || {};
+                  const manualFeatures = settings.features;
+                  
+                  if (manualFeatures) {
+                    return (
+                      <>
+                        <span 
+                          className="material-symbols-outlined text-[16px]" 
+                          style={{ fontVariationSettings: "'FILL' 1", color: manualFeatures.payment_management ? '#B7FF1E' : '#FF5964' }}
+                          title="Payments"
+                        >
+                          {manualFeatures.payment_management ? 'check_circle' : 'cancel'}
+                        </span>
+                        <span 
+                          className="material-symbols-outlined text-[16px]" 
+                          style={{ fontVariationSettings: "'FILL' 1", color: manualFeatures.attendance_management ? '#B7FF1E' : '#FF5964' }}
+                          title="Attendance"
+                        >
+                          {manualFeatures.attendance_management ? 'check_circle' : 'cancel'}
+                        </span>
+                      </>
+                    );
+                  }
+                  
+                  return Array.isArray(currentPlan?.features) && (currentPlan.features as any[]).slice(0, 3).map((f: any, i: number) => (
+                    <span 
+                      key={i} 
+                      className="material-symbols-outlined text-[16px]" 
+                      style={{ 
+                        fontVariationSettings: "'FILL' 1",
+                        color: (typeof f === 'string' ? true : f.enabled) ? '#B7FF1E' : '#FF5964'
+                      }}
+                    >
+                      {(typeof f === 'string' ? true : f.enabled) ? 'check_circle' : 'cancel'}
+                    </span>
+                  ));
+                })()}
               </div>
             </section>
           )}
