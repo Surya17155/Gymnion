@@ -473,10 +473,14 @@ function SuperAdminPlans() {
               {selectedPlan.id ? `Edit ${selectedPlan.name} Plan` : 'Add New Plan'}
             </h2>
 
-            <div className="space-y-6">
+            <form 
+              onSubmit={handleUpdatePlan}
+              className="space-y-6"
+            >
               <div>
                 <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Plan Name</label>
                 <input 
+                  required
                   type="text"
                   placeholder="e.g. Premium"
                   className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#e3e3dd] font-bold focus:border-[#c9f232] outline-none"
@@ -492,7 +496,9 @@ function SuperAdminPlans() {
                     <span className="text-lg font-semibold text-[#C0C2B8]">₹</span>
                   </div>
                   <input 
+                    required
                     type="number"
+                    step="0.01"
                     className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl pl-8 pr-4 text-[#e3e3dd] font-bold focus:border-[#c9f232] outline-none"
                     value={selectedPlan.price}
                     onChange={e => setSelectedPlan({ ...selectedPlan, price: e.target.value })}
@@ -558,6 +564,7 @@ function SuperAdminPlans() {
                     );
                   })}
                   <button 
+                    type="button"
                     onClick={() => setManualFeatures([...manualFeatures, ''])}
                     className="w-full py-2 border border-dashed border-white/10 rounded-xl text-[10px] font-bold text-[#858A7D] uppercase tracking-wider hover:border-[#c9f232]/30 transition-colors"
                   >
@@ -575,7 +582,7 @@ function SuperAdminPlans() {
                   Cancel
                 </button>
                 <button 
-                  onClick={handleUpdatePlan}
+                  type="submit"
                   disabled={isSubmitting}
                   className="flex-[2] py-4 bg-[#c9f232] text-black text-[15px] font-bold rounded-2xl shadow-[0_12px_24px_rgba(201,242,50,0.15)] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                 >
@@ -583,7 +590,7 @@ function SuperAdminPlans() {
                   Save Changes
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       )}
