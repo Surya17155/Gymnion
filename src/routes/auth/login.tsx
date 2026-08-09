@@ -36,7 +36,8 @@ function AuthPage() {
   }, [navigate, redirectPath]);
 
   const [formData, setFormData] = useState({
-    fullName: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
     dob: '',
@@ -154,7 +155,9 @@ function AuthPage() {
         password: formData.password,
         options: {
           data: {
-            full_name: formData.fullName,
+            full_name: `${formData.firstName} ${formData.lastName}`.trim(),
+            first_name: formData.firstName,
+            last_name: formData.lastName,
             phone: formData.phone,
             dob: formData.dob,
             address: formData.address,
@@ -175,7 +178,8 @@ function AuthPage() {
             data: {
               userId: data.session.user.id,
               gymId: gym.id,
-              fullName: formData.fullName,
+              firstName: formData.firstName,
+              lastName: formData.lastName,
               email: formData.email,
               phone: formData.phone
             }
@@ -221,9 +225,15 @@ function AuthPage() {
         <form className="flex flex-col gap-3" onSubmit={authMode === 'signin' ? handleSignIn : handleSignUp}>
           {authMode === 'signup' && (
             <>
-              <div className="flex flex-col gap-2">
-                <label className="text-xs text-[#C0C2B8] px-1 font-normal">Full Name</label>
-                <input name="fullName" value={formData.fullName} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your full name" required type="text" />
+              <div className="flex gap-3">
+                <div className="flex flex-col gap-2 flex-1">
+                  <label className="text-xs text-[#C0C2B8] px-1 font-normal">First Name</label>
+                  <input name="firstName" value={formData.firstName} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="First Name" required type="text" />
+                </div>
+                <div className="flex flex-col gap-2 flex-1">
+                  <label className="text-xs text-[#C0C2B8] px-1 font-normal">Last Name</label>
+                  <input name="lastName" value={formData.lastName} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Last Name" type="text" />
+                </div>
               </div>
               <div className="flex flex-col gap-2">
                 <label className="text-xs text-[#C0C2B8] px-1 font-normal">Email Address</label>

@@ -93,7 +93,9 @@ export const updateMyProfile = createServerFn({ method: 'POST' })
     phone: z.string().optional(),
     email: z.string().optional(),
     photo_url: z.string().optional(),
-    full_name: z.string().optional()
+    full_name: z.string().optional(),
+    first_name: z.string().optional(),
+    last_name: z.string().optional()
   }).parse(data))
   .handler(async ({ data, context }) => {
     const userId = context.userId;
@@ -102,6 +104,8 @@ export const updateMyProfile = createServerFn({ method: 'POST' })
     if (data.email) updates.email = data.email;
     if (data.photo_url !== undefined) updates.photo_url = data.photo_url;
     if (data.full_name) updates.full_name = data.full_name;
+    if (data.first_name) updates.first_name = data.first_name;
+    if (data.last_name) updates.last_name = data.last_name;
 
     const { error } = await supabaseAdmin
       .from('members')
@@ -413,6 +417,8 @@ export const createMember = createServerFn({ method: 'POST' })
   .validator((data: any) => z.object({
     gym_id: z.string(),
     full_name: z.string(),
+    first_name: z.string().optional(),
+    last_name: z.string().optional(),
     email: z.string().email(),
     phone: z.string().optional(),
     fee_plan_id: z.string().optional(),
@@ -422,6 +428,8 @@ export const createMember = createServerFn({ method: 'POST' })
     const insertData: any = {
       gym_id: data.gym_id,
       full_name: data.full_name,
+      first_name: data.first_name || data.full_name.split(' ')[0],
+      last_name: data.last_name || (data.full_name.includes(' ') ? data.full_name.split(' ').slice(1).join(' ') : ''),
       email: data.email,
       status: data.status,
       phone: data.phone || ''
@@ -443,6 +451,8 @@ export const updateMember = createServerFn({ method: 'POST' })
   .validator((data: any) => z.object({
     id: z.string(),
     full_name: z.string().optional(),
+    first_name: z.string().optional(),
+    last_name: z.string().optional(),
     email: z.string().email().optional(),
     phone: z.string().optional(),
     fee_plan_id: z.string().optional(),
@@ -452,6 +462,8 @@ export const updateMember = createServerFn({ method: 'POST' })
     const { id, ...updates } = data;
     const finalUpdates: any = {};
     if (updates.full_name) finalUpdates.full_name = updates.full_name;
+    if (updates.first_name) finalUpdates.first_name = updates.first_name;
+    if (updates.last_name) finalUpdates.last_name = updates.last_name;
     if (updates.email) finalUpdates.email = updates.email;
     if (updates.phone) finalUpdates.phone = updates.phone;
     if (updates.fee_plan_id) finalUpdates.fee_plan_id = updates.fee_plan_id;
@@ -628,6 +640,8 @@ export const updateAdminAccount = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({
     full_name: z.string().optional(),
+    first_name: z.string().optional(),
+    last_name: z.string().optional(),
     email: z.string().email().optional(),
     phone: z.string().optional(),
     photo_url: z.string().optional(),
@@ -638,6 +652,8 @@ export const updateAdminAccount = createServerFn({ method: 'POST' })
 
     const updates: any = {};
     if (data.full_name) updates.owner_name = data.full_name;
+    if (data.first_name) updates.owner_first_name = data.first_name;
+    if (data.last_name) updates.owner_last_name = data.last_name;
     if (data.email) updates.owner_email = data.email;
     if (data.phone) updates.owner_phone = data.phone;
     if (data.photo_url !== undefined) updates.owner_photo_url = data.photo_url;

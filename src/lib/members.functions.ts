@@ -6,7 +6,8 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 const completeSignupSchema = z.object({
   userId: z.string(),
   gymId: z.string(),
-  fullName: z.string(),
+  firstName: z.string(),
+  lastName: z.string().optional(),
   email: z.string(),
   phone: z.string().optional(),
 });
@@ -18,7 +19,7 @@ const completeSignupSchema = z.object({
 export const completeSignup = createServerFn({ method: "POST" })
   .validator((data: unknown) => completeSignupSchema.parse(data))
   .handler(async ({ data }) => {
-    const { userId, gymId, fullName, email, phone } = data;
+    const { userId, gymId, firstName, lastName, email, phone } = data;
 
     // 1. Insert into members table
     const { data: member, error: memberError } = await supabaseAdmin
@@ -26,7 +27,9 @@ export const completeSignup = createServerFn({ method: "POST" })
       .insert({
         user_id: userId,
         gym_id: gymId,
-        full_name: fullName,
+        full_name: `${firstName} ${lastName || ''}`.trim(),
+        first_name: firstName,
+        last_name: lastName || '',
         email: email,
         phone: phone || '',
         status: 'active',

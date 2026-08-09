@@ -246,6 +246,8 @@ export const updateGymAdminDetails = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: unknown) => z.object({
     gymId: z.string(),
+    ownerFirstName: z.string().optional(),
+    ownerLastName: z.string().optional(),
     ownerName: z.string().optional(),
     ownerEmail: z.string().optional(),
     ownerPhone: z.string().optional(),
@@ -262,6 +264,8 @@ export const updateGymAdminDetails = createServerFn({ method: "POST" })
     if (!roleData) throw new Error("Unauthorized");
 
     const updateData: any = {};
+    if (data.ownerFirstName) updateData.owner_first_name = data.ownerFirstName;
+    if (data.ownerLastName) updateData.owner_last_name = data.ownerLastName;
     if (data.ownerName) updateData.owner_name = data.ownerName;
     if (data.ownerEmail) updateData.owner_email = data.ownerEmail;
     if (data.ownerPhone) updateData.owner_phone = data.ownerPhone;

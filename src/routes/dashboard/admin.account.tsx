@@ -21,6 +21,8 @@ function AdminAccount() {
   });
 
   const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
     full_name: '',
     email: '',
     phone: '',
@@ -34,6 +36,8 @@ function AdminAccount() {
   useEffect(() => {
     if (gym) {
       setFormData({
+        first_name: gym.owner_first_name || '',
+        last_name: gym.owner_last_name || '',
         full_name: gym.owner_name || '',
         email: gym.owner_email || '',
         phone: gym.owner_phone || '',
@@ -159,18 +163,39 @@ function AdminAccount() {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <div className="flex flex-col gap-4 bg-[#1e201d] p-6 rounded-2xl border border-white/5">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase tracking-wider font-bold text-[#858A7D] ml-1">Full Name</label>
-                <div className="relative">
-                  <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#858A7D] text-[20px]">person</span>
-                  <input 
-                    type="text" 
-                    disabled={!isEditing}
-                    value={formData.full_name}
-                    onChange={(e) => setFormData({...formData, full_name: e.target.value})}
-                    className="w-full bg-[#121411] border border-white/10 rounded-xl pl-12 pr-4 py-3 text-sm focus:border-[#B7FF1E] focus:outline-none disabled:opacity-60 transition-all"
-                    placeholder="Enter full name"
-                  />
+              <div className="flex gap-4">
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-[10px] uppercase tracking-wider font-bold text-[#858A7D] ml-1">First Name</label>
+                  <div className="relative">
+                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#858A7D] text-[20px]">person</span>
+                    <input 
+                      type="text" 
+                      disabled={!isEditing}
+                      value={formData.first_name}
+                      onChange={(e) => {
+                        const newFirstName = e.target.value;
+                        setFormData({...formData, first_name: newFirstName, full_name: `${newFirstName} ${formData.last_name}`.trim()});
+                      }}
+                      className="w-full bg-[#121411] border border-white/10 rounded-xl pl-12 pr-4 py-3 text-sm focus:border-[#B7FF1E] focus:outline-none disabled:opacity-60 transition-all"
+                      placeholder="First name"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-[10px] uppercase tracking-wider font-bold text-[#858A7D] ml-1">Last Name</label>
+                  <div className="relative">
+                    <input 
+                      type="text" 
+                      disabled={!isEditing}
+                      value={formData.last_name}
+                      onChange={(e) => {
+                        const newLastName = e.target.value;
+                        setFormData({...formData, last_name: newLastName, full_name: `${formData.first_name} ${newLastName}`.trim()});
+                      }}
+                      className="w-full bg-[#121411] border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-[#B7FF1E] focus:outline-none disabled:opacity-60 transition-all"
+                      placeholder="Last name"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -212,6 +237,8 @@ function AdminAccount() {
                   onClick={() => {
                     setIsEditing(false);
                     setFormData({
+                      first_name: gym.owner_first_name || '',
+                      last_name: gym.owner_last_name || '',
                       full_name: gym.owner_name || '',
                       email: gym.owner_email || '',
                       phone: gym.owner_phone || '',

@@ -82,7 +82,7 @@ export function MemberDashboard() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate({ to: '/auth/login', search: { redirect: undefined } });
+    navigate({ to: '/auth/login', search: { redirect: "" } });
   };
 
   return (
@@ -100,7 +100,7 @@ export function MemberDashboard() {
         <header className="flex justify-between items-center px-5 h-[80px] w-full sticky top-0 z-40 bg-transparent pt-6">
           <div className="flex items-center gap-3">
             <div>
-              <h1 className="text-[18px] leading-[24px] font-semibold text-white">Hi, {profile?.full_name?.split(' ')[0] || 'Member'}</h1>
+              <h1 className="text-[18px] leading-[24px] font-semibold text-white">Hi, {profile?.first_name || profile?.full_name?.split(' ')[0] || 'Member'}</h1>
               <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Ready to crush it today?</p>
             </div>
           </div>
