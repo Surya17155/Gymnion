@@ -24,7 +24,7 @@ export const Route = createFileRoute('/dashboard')({
     const home = homeForRole(role);
 
     if (!role || !home) {
-      throw redirect({ to: '/auth/login' });
+      throw redirect({ to: '/auth/login', search: { redirect: undefined } });
     }
 
     const path = location.pathname;
@@ -32,18 +32,18 @@ export const Route = createFileRoute('/dashboard')({
     // 3. Path validation
     // Restrict specific roles to their dashboard roots
     if (role === 'super_admin' && !path.startsWith('/dashboard/super-admin')) {
-      throw redirect({ to: '/dashboard/super-admin/' });
+      throw redirect({ to: '/dashboard/super-admin' });
     } 
 
-    if (role === 'gym_admin' && !path.startsWith('/dashboard/admin')) {
-      throw redirect({ to: '/dashboard/admin/' });
+    if (role === 'admin' && !path.startsWith('/dashboard/admin')) {
+      throw redirect({ to: '/dashboard/admin' });
     }
     if (role === 'member' && !path.startsWith('/dashboard/m')) {
-      throw redirect({ to: '/dashboard/m/' });
+      throw redirect({ to: '/dashboard/m' });
     }
 
     if (path === '/dashboard' || path === '/dashboard/') {
-      throw redirect({ to: home });
+      throw redirect({ to: home as any });
     }
 
     return { role };

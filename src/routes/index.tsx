@@ -8,7 +8,7 @@ export const Route = createFileRoute("/")({
     if (session) {
       const role = await getAuthUserRole();
       if (role === 'super_admin') throw redirect({ to: '/dashboard/super-admin' });
-      if (role === 'gym_admin') throw redirect({ to: '/dashboard/admin' });
+      if (role === 'admin') throw redirect({ to: '/dashboard/admin' });
       if (role) throw redirect({ to: '/dashboard/m' });
     }
   },
@@ -26,7 +26,7 @@ function HomePage() {
       <p className="text-[#858A7D] mb-12 text-center">I have connected the plan management system to the backend, enabling real-time saving and global updates for plans, pricing, and features. You can now toggle features between "Available" (green tick) and "Unavailable" (red cross) in the Super Admin dashboard, and these changes will be reflected instantly across the app, including on the Gym Admin dashboard.</p>
       
       <button 
-        onClick={() => navigate({ to: "/auth/login" })}
+        onClick={() => navigate({ to: "/auth/login", search: { redirect: undefined } })}
         className="w-full max-w-[300px] h-[52px] bg-[#B7FF1E] text-[#121411] font-bold rounded-full shadow-[0_0_20px_rgba(183,255,30,0.2)] hover:opacity-90 active:scale-95 transition-all"
       >
         Get Started

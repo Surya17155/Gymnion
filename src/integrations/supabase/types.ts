@@ -202,6 +202,7 @@ export type Database = {
       }
       gyms: {
         Row: {
+          address: string | null
           created_at: string | null
           gym_code: string | null
           id: string
@@ -209,6 +210,7 @@ export type Database = {
           owner_email: string
           owner_name: string
           owner_phone: string
+          owner_photo_url: string | null
           razorpay_account_id: string | null
           settings: Json | null
           status: string
@@ -218,6 +220,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          address?: string | null
           created_at?: string | null
           gym_code?: string | null
           id?: string
@@ -225,6 +228,7 @@ export type Database = {
           owner_email: string
           owner_name: string
           owner_phone: string
+          owner_photo_url?: string | null
           razorpay_account_id?: string | null
           settings?: Json | null
           status?: string
@@ -234,6 +238,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          address?: string | null
           created_at?: string | null
           gym_code?: string | null
           id?: string
@@ -241,6 +246,7 @@ export type Database = {
           owner_email?: string
           owner_name?: string
           owner_phone?: string
+          owner_photo_url?: string | null
           razorpay_account_id?: string | null
           settings?: Json | null
           status?: string

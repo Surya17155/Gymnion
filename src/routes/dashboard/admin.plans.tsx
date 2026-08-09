@@ -96,7 +96,7 @@ function AdminPlans() {
                     </div>
                   </div>
                   <Link 
-                    to={`/dashboard/admin/plans/edit/${plan.id}`}
+                    to={`/dashboard/admin/plans/edit/${plan.id}` as any}
                     className="w-8 h-8 rounded-full bg-[#292A28] flex items-center justify-center hover:bg-[#383a36] transition-colors"
                   >
                     <span className="material-symbols-outlined text-[#e3e3dd] text-sm">edit</span>
@@ -109,7 +109,8 @@ function AdminPlans() {
 
         {/* Floating Action Button (FAB) */}
         <Link 
-          to="/dashboard/admin/plans/new"
+          to="/dashboard/admin/plans"
+          search={{ mode: 'new' } as any}
           className="fixed rounded-full bg-[#B7FF1E] text-[#121411] shadow-[0_4px_20px_rgba(183,255,30,0.3)] flex items-center justify-center z-40 active:scale-95 transition-transform hover:opacity-90 bottom-24 right-6 w-14 h-14"
         >
           <span className="material-symbols-outlined text-[24px]" style={{ fontVariationSettings: '"FILL" 1' }}>add</span>

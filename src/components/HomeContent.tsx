@@ -25,6 +25,7 @@ export function LoginDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () 
         <div className="grid grid-cols-1 gap-4">
           <Link 
             to="/auth/login"
+            search={{ redirect: undefined }}
             className="group relative flex flex-col gap-1 p-5 bg-background border border-white/5 rounded-2xl hover:border-gym-accent/50 transition-all active:scale-[0.98]"
             onClick={onClose}
           >
@@ -34,6 +35,7 @@ export function LoginDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
           <Link 
             to="/auth/login"
+            search={{ redirect: undefined }}
             className="group relative flex flex-col gap-1 p-5 bg-background border border-white/5 rounded-2xl hover:border-gym-accent/50 transition-all active:scale-[0.98]"
             onClick={onClose}
           >

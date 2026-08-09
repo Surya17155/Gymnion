@@ -30,7 +30,7 @@ function AdminSettings() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate({ to: '/auth/login' });
+    navigate({ to: '/auth/login', search: { redirect: undefined } });
   };
 
   const handleUpdateCode = async () => {

@@ -18,7 +18,7 @@ function ResetPasswordPage() {
     if (error) alert(error.message);
     else {
       alert('Password updated successfully');
-      navigate({ to: '/auth/login' });
+      navigate({ to: '/auth/login', search: { redirect: undefined } });
     }
     setLoading(false);
   };
