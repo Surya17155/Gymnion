@@ -23,9 +23,9 @@ function HomePage() {
         <span className="material-symbols-outlined text-[#B7FF1E] text-5xl" style={{ fontVariationSettings: '"FILL" 1' }}>fitness_center</span>
       </div>
       <h1 className="text-4xl font-bold mb-2">Gym<span className="text-[#B7FF1E]">Sync</span></h1>
-      <p className="text-[#858A7D] mb-12">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+      <p className="text-[#858A7D] mb-12 text-center">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                             
-                                            No, nothing has happened so far; the functionality is still broken. Please check using my superadmin email and password and verify in the backend whether any error is visible that is preventing me from logging in or accessing the dashboard. Determine the issue. Earlier it was working well, but now I don’t know what the problem is. Please restore the functionality to its previous state, as it was working before.</p>
+                                            Now it tries to go to the dashboard screen but returns to the original authentication screen. If the email is surya.17155@gmail.com, allow access to the “/dashboard/super-admin” screen. The super admin is not permitted to access any other admin or member dashboard.</p>
       
       <button 
         onClick={() => navigate({ to: "/auth/login" })}

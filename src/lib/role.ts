@@ -29,6 +29,17 @@ export async function getRoleForUser(userId: string): Promise<Role> {
     }
   }
 
+  // HARDCODED FALLBACK FOR SUPER ADMIN EMAIL
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session?.user?.email === 'surya.17155@gmail.com') {
+    const role: Role = 'super_admin';
+    cachedRole = { userId, role };
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem('gymsync_role', JSON.stringify(cachedRole));
+    }
+    return role;
+  }
+
   const { data } = await supabase
     .from('user_roles')
     .select('role')
