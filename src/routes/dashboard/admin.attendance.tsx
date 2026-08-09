@@ -8,6 +8,18 @@ import { supabase } from '@/integrations/supabase/client';
 
 export const Route = createFileRoute('/dashboard/admin/attendance')({
   component: AttendanceDashboard,
+  loader: async ({ context }) => {
+    const gymId = await context.queryClient.ensureQueryData({
+      queryKey: ['current-gym-id'],
+      queryFn: () => getCurrentGymId({ data: {} })
+    });
+    if (gymId) {
+      await context.queryClient.ensureQueryData({
+        queryKey: ['admin-attendance', gymId],
+        queryFn: () => getAttendanceDashboard({ data: { gymId } })
+      });
+    }
+  }
 });
 
 function AttendanceDashboard() {

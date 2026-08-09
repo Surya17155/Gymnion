@@ -7,6 +7,24 @@ import { toast } from 'sonner';
 
 export const Route = createFileRoute('/dashboard/admin/members')({
   component: MembersDashboard,
+  loader: async ({ context }) => {
+    const gymId = await context.queryClient.ensureQueryData({
+      queryKey: ['current-gym-id'],
+      queryFn: () => getCurrentGymId({ data: {} })
+    });
+    if (gymId) {
+      await Promise.all([
+        context.queryClient.ensureQueryData({
+          queryKey: ['members', gymId],
+          queryFn: () => getMembers({ data: { gymId } })
+        }),
+        context.queryClient.ensureQueryData({
+          queryKey: ['gym-plans', gymId],
+          queryFn: () => getFeePlans({ data: { gymId } })
+        })
+      ]);
+    }
+  }
 });
 
 function MembersDashboard() {

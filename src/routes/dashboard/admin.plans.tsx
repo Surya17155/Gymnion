@@ -7,6 +7,18 @@ import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin/plans')({
   component: GymPlans,
+  loader: async ({ context }) => {
+    const gym = await context.queryClient.ensureQueryData({
+      queryKey: ['admin-gym-details'],
+      queryFn: () => getGymDetails({ data: {} }),
+    });
+    if (gym?.id) {
+      await context.queryClient.ensureQueryData({
+        queryKey: ['gym-fee-plans', gym.id],
+        queryFn: () => getFeePlans({ data: { gymId: gym.id } }),
+      });
+    }
+  }
 });
 
 function GymPlans() {

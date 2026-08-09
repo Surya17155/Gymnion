@@ -8,6 +8,24 @@ import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin/payments')({
   component: PaymentsDashboard,
+  loader: async ({ context }) => {
+    const gymId = await context.queryClient.ensureQueryData({
+      queryKey: ['current-gym-id'],
+      queryFn: () => getCurrentGymId({ data: {} })
+    });
+    if (gymId) {
+      await Promise.all([
+        context.queryClient.ensureQueryData({
+          queryKey: ['admin-payments', gymId, 'all'],
+          queryFn: () => getPaymentsDashboard({ data: { gymId, status: 'all' } })
+        }),
+        context.queryClient.ensureQueryData({
+          queryKey: ['members', gymId],
+          queryFn: () => getMembers({ data: { gymId } })
+        })
+      ]);
+    }
+  }
 });
 
 function PaymentsDashboard() {
