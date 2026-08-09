@@ -2,6 +2,8 @@ import { createFileRoute } from '@tanstack/react-router';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useServerFn } from '@tanstack/react-start';
+import { getSubscriptionPlans, createSubscriptionPlan, updateSubscriptionPlan, deleteSubscriptionPlan } from '@/lib/plans.functions';
 import { toast } from 'sonner';
 import { Tables } from '@/integrations/supabase/types';
 
@@ -23,16 +25,14 @@ function SuperAdminPlans() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [manualFeatures, setManualFeatures] = useState<any[]>(['']);
 
+  const getPlansFn = useServerFn(getSubscriptionPlans);
+  const createPlanFn = useServerFn(createSubscriptionPlan);
+  const updatePlanFn = useServerFn(updateSubscriptionPlan);
+  const deletePlanFn = useServerFn(deleteSubscriptionPlan);
+
   const { data: globalPlans, isLoading: isLoadingPlans } = useQuery({
     queryKey: ['global-plans'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('global_plans')
-        .select('*')
-        .order('price', { ascending: true });
-      if (error) throw error;
-      return data;
-    }
+    queryFn: () => getPlansFn(),
   });
 
   const { data: gyms } = useQuery({
@@ -129,27 +129,15 @@ function SuperAdminPlans() {
       
       if (!isNewPlan) {
         console.log('Updating existing plan', selectedPlan.id);
-        const { error: updateError } = await supabase
-          .from('global_plans')
-          .update(planData)
-          .eq('id', selectedPlan.id);
-        error = updateError;
+        await updatePlanFn({
+          data: {
+            id: selectedPlan.id,
+            ...planData
+          }
+        });
       } else {
         console.log('Inserting new plan');
-        const { error: insertError } = await supabase
-          .from('global_plans')
-          .insert([{
-            name: planData.name,
-            price: planData.price,
-            features: planData.features,
-            is_active: planData.is_active
-          }]);
-        error = insertError;
-      }
-
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+        await createPlanFn({ data: planData });
       }
       
       toast.success(isNewPlan ? "Plan created successfully" : "Plan updated successfully");

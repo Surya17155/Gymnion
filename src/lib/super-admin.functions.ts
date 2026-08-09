@@ -1,0 +1,155 @@
+import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+
+export const getPlatformStats = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    // Check if user is super_admin
+    const { data: roleData } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', context.userId)
+      .eq('role', 'super_admin')
+      .single();
+
+    if (!roleData) throw new Error("Unauthorized");
+
+    const { count: gymCount } = await supabaseAdmin
+      .from('gyms')
+      .select('*', { count: 'exact', head: true });
+
+    const { count: memberCount } = await supabaseAdmin
+      .from('members')
+      .select('*', { count: 'exact', head: true });
+
+    // MRR calculation (simplified)
+    const { data: gyms } = await supabaseAdmin
+      .from('gyms')
+      .select('subscription_plan_id, settings');
+    
+    const { data: plans } = await supabaseAdmin.from('global_plans').select('id, price');
+    const planPrices = Object.fromEntries(plans?.map(p => [p.id, p.price]) || []);
+
+    let mrr = 0;
+    gyms?.forEach(g => {
+        const manualPrice = (g.settings as any)?.manual_pricing;
+        if (manualPrice) {
+            mrr += manualPrice * 100; // in paise
+        } else if (g.subscription_plan_id && planPrices[g.subscription_plan_id]) {
+            mrr += planPrices[g.subscription_plan_id] as number;
+        }
+    });
+
+    const now = new Date();
+    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+    
+    const { count: newGymsThisMonth } = await supabaseAdmin
+      .from('gyms')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', firstOfMonth);
+
+    const { count: overdueCount } = await supabaseAdmin
+      .from('gyms')
+      .select('*', { count: 'exact', head: true })
+      .lt('subscription_ends_at', now.toISOString());
+
+    return {
+      totalGyms: gymCount || 0,
+      totalMembers: memberCount || 0,
+      mrr: Math.round(mrr / 100), // convert to rupees
+      newGymsThisMonth: newGymsThisMonth || 0,
+      overdueSubscriptions: overdueCount || 0
+    };
+  });
+
+export const getAllGymsServer = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .validator((data: unknown) => z.object({
+    search: z.string().optional(),
+    status: z.string().optional(),
+    page: z.number().optional().default(1),
+    limit: z.number().optional().default(10)
+  }).parse(data))
+  .handler(async ({ data, context }) => {
+     // Check if user is super_admin
+     const { data: roleData } = await supabaseAdmin
+     .from('user_roles')
+     .select('role')
+     .eq('user_id', context.userId)
+     .eq('role', 'super_admin')
+     .single();
+
+   if (!roleData) throw new Error("Unauthorized");
+
+   let query = supabaseAdmin
+     .from('gyms')
+     .select('*, global_plans(name)', { count: 'exact' });
+
+   if (data.search) {
+     query = query.or(`name.ilike.%${data.search}%,gym_code.ilike.%${data.search}%`);
+   }
+
+   if (data.status && data.status !== 'all') {
+     query = query.eq('status', data.status);
+   }
+
+   const from = (data.page - 1) * data.limit;
+   const to = from + data.limit - 1;
+
+   const { data: gyms, count, error } = await query
+     .order('created_at', { ascending: false })
+     .range(from, to);
+
+   if (error) throw error;
+
+   return {
+     gyms,
+     total: count || 0,
+     page: data.page,
+     limit: data.limit
+   };
+  });
+
+export const updateGymStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((data: unknown) => z.object({
+    gymId: z.string(),
+    status: z.enum(['approved', 'suspended', 'pending'])
+  }).parse(data))
+  .handler(async ({ data, context }) => {
+    const { error } = await supabaseAdmin
+      .from('gyms')
+      .update({ status: data.status })
+      .eq('id', data.gymId);
+
+    if (error) throw error;
+    return { success: true };
+  });
+
+export const extendSubscription = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((data: unknown) => z.object({
+    gymId: z.string(),
+    months: z.number().default(1)
+  }).parse(data))
+  .handler(async ({ data }) => {
+    const { data: gym } = await supabaseAdmin
+      .from('gyms')
+      .select('subscription_ends_at')
+      .eq('id', data.gymId)
+      .single();
+
+    const currentEnd = gym?.subscription_ends_at ? new Date(gym.subscription_ends_at) : new Date();
+    const newEnd = new Date(currentEnd);
+    newEnd.setMonth(newEnd.getMonth() + data.months);
+
+    const { error } = await supabaseAdmin
+      .from('gyms')
+      .update({ subscription_ends_at: newEnd.toISOString() })
+      .eq('id', data.gymId);
+
+    if (error) throw error;
+    return { success: true, newEndDate: newEnd.toISOString() };
+  });
