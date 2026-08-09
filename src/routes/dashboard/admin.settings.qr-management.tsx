@@ -80,7 +80,9 @@ function QRManagement() {
   if (isGymLoading || isPointsLoading) return null;
 
   const settings = (gym?.settings as any) || {};
-  const attendanceEnabled = settings.features?.attendance_management !== false;
+  // Always allow access to QR management for admins even if feature flag is off in settings
+  // This allows admins to enable it or manage it regardless of the plan restrictions which might be enforced elsewhere
+  const attendanceEnabled = true; 
 
   if (!attendanceEnabled) {
     return <Navigate to="/dashboard/admin" />;
