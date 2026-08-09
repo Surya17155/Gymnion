@@ -6,7 +6,7 @@ import { useServerFn } from '@tanstack/react-start';
 import { getGymDetails, getGymAccessPoints } from '@/lib/auth.functions';
 import QRCode from 'qrcode';
 
-export const Route = createFileRoute('/dashboard/admin/settings/qr-management')({
+export const Route = createFileRoute('/dashboard/admin/qr-management')({
   component: QRManagement,
 });
 

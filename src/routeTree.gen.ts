@@ -23,7 +23,7 @@ import { Route as DashboardAdminAttendanceRouteImport } from './routes/dashboard
 import { Route as DashboardAdminMembersRouteImport } from './routes/dashboard/admin.members'
 import { Route as DashboardAdminPaymentsRouteImport } from './routes/dashboard/admin.payments'
 import { Route as DashboardAdminPlansRouteImport } from './routes/dashboard/admin.plans'
-import { Route as DashboardAdminSettingsRouteImport } from './routes/dashboard/admin.settings'
+import { Route as DashboardAdminQrManagementRouteImport } from './routes/dashboard/admin.qr-management'
 import { Route as DashboardMIndexRouteImport } from './routes/dashboard/m.index'
 import { Route as DashboardMAttendanceRouteImport } from './routes/dashboard/m.attendance'
 import { Route as DashboardMPaymentsRouteImport } from './routes/dashboard/m.payments'
@@ -33,7 +33,7 @@ import { Route as DashboardSuperAdminGymsRouteImport } from './routes/dashboard/
 import { Route as DashboardSuperAdminPaymentsRouteImport } from './routes/dashboard/super-admin.payments'
 import { Route as DashboardSuperAdminPlansRouteImport } from './routes/dashboard/super-admin.plans'
 import { Route as DashboardAdminPlansNewRouteImport } from './routes/dashboard/admin.plans.new'
-import { Route as DashboardAdminSettingsQrManagementRouteImport } from './routes/dashboard/admin.settings.qr-management'
+import { Route as DashboardAdminSettingsIndexRouteImport } from './routes/dashboard/admin.settings/index'
 import { Route as DashboardSuperAdminGymsIndexRouteImport } from './routes/dashboard/super-admin.gyms.index'
 import { Route as DashboardSuperAdminGymsGymIdRouteImport } from './routes/dashboard/super-admin.gyms.$gymId'
 import { Route as DashboardSuperAdminGymsAddRouteImport } from './routes/dashboard/super-admin.gyms.add'
@@ -110,11 +110,12 @@ const DashboardAdminPlansRoute = DashboardAdminPlansRouteImport.update({
   path: '/plans',
   getParentRoute: () => DashboardAdminRoute,
 } as any)
-const DashboardAdminSettingsRoute = DashboardAdminSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => DashboardAdminRoute,
-} as any)
+const DashboardAdminQrManagementRoute =
+  DashboardAdminQrManagementRouteImport.update({
+    id: '/qr-management',
+    path: '/qr-management',
+    getParentRoute: () => DashboardAdminRoute,
+  } as any)
 const DashboardMIndexRoute = DashboardMIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -163,11 +164,11 @@ const DashboardAdminPlansNewRoute = DashboardAdminPlansNewRouteImport.update({
   path: '/new',
   getParentRoute: () => DashboardAdminPlansRoute,
 } as any)
-const DashboardAdminSettingsQrManagementRoute =
-  DashboardAdminSettingsQrManagementRouteImport.update({
-    id: '/qr-management',
-    path: '/qr-management',
-    getParentRoute: () => DashboardAdminSettingsRoute,
+const DashboardAdminSettingsIndexRoute =
+  DashboardAdminSettingsIndexRouteImport.update({
+    id: '/settings/',
+    path: '/settings/',
+    getParentRoute: () => DashboardAdminRoute,
   } as any)
 const DashboardSuperAdminGymsIndexRoute =
   DashboardSuperAdminGymsIndexRouteImport.update({
@@ -208,7 +209,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
   '/dashboard/admin/payments': typeof DashboardAdminPaymentsRoute
   '/dashboard/admin/plans': typeof DashboardAdminPlansRouteWithChildren
-  '/dashboard/admin/settings': typeof DashboardAdminSettingsRouteWithChildren
+  '/dashboard/admin/qr-management': typeof DashboardAdminQrManagementRoute
   '/dashboard/m/attendance': typeof DashboardMAttendanceRoute
   '/dashboard/m/payments': typeof DashboardMPaymentsRoute
   '/dashboard/m/profile': typeof DashboardMProfileRoute
@@ -219,9 +220,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/m/': typeof DashboardMIndexRoute
   '/dashboard/super-admin/': typeof DashboardSuperAdminIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
-  '/dashboard/admin/settings/qr-management': typeof DashboardAdminSettingsQrManagementRoute
   '/dashboard/super-admin/gyms/$gymId': typeof DashboardSuperAdminGymsGymIdRoute
   '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
+  '/dashboard/admin/settings/': typeof DashboardAdminSettingsIndexRoute
   '/dashboard/super-admin/gyms/': typeof DashboardSuperAdminGymsIndexRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
 }
@@ -236,7 +237,7 @@ export interface FileRoutesByTo {
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
   '/dashboard/admin/payments': typeof DashboardAdminPaymentsRoute
   '/dashboard/admin/plans': typeof DashboardAdminPlansRouteWithChildren
-  '/dashboard/admin/settings': typeof DashboardAdminSettingsRouteWithChildren
+  '/dashboard/admin/qr-management': typeof DashboardAdminQrManagementRoute
   '/dashboard/m/attendance': typeof DashboardMAttendanceRoute
   '/dashboard/m/payments': typeof DashboardMPaymentsRoute
   '/dashboard/m/profile': typeof DashboardMProfileRoute
@@ -246,9 +247,9 @@ export interface FileRoutesByTo {
   '/dashboard/m': typeof DashboardMIndexRoute
   '/dashboard/super-admin': typeof DashboardSuperAdminIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
-  '/dashboard/admin/settings/qr-management': typeof DashboardAdminSettingsQrManagementRoute
   '/dashboard/super-admin/gyms/$gymId': typeof DashboardSuperAdminGymsGymIdRoute
   '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
+  '/dashboard/admin/settings': typeof DashboardAdminSettingsIndexRoute
   '/dashboard/super-admin/gyms': typeof DashboardSuperAdminGymsIndexRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
 }
@@ -267,7 +268,7 @@ export interface FileRoutesById {
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
   '/dashboard/admin/payments': typeof DashboardAdminPaymentsRoute
   '/dashboard/admin/plans': typeof DashboardAdminPlansRouteWithChildren
-  '/dashboard/admin/settings': typeof DashboardAdminSettingsRouteWithChildren
+  '/dashboard/admin/qr-management': typeof DashboardAdminQrManagementRoute
   '/dashboard/m/attendance': typeof DashboardMAttendanceRoute
   '/dashboard/m/payments': typeof DashboardMPaymentsRoute
   '/dashboard/m/profile': typeof DashboardMProfileRoute
@@ -278,9 +279,9 @@ export interface FileRoutesById {
   '/dashboard/m/': typeof DashboardMIndexRoute
   '/dashboard/super-admin/': typeof DashboardSuperAdminIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
-  '/dashboard/admin/settings/qr-management': typeof DashboardAdminSettingsQrManagementRoute
   '/dashboard/super-admin/gyms/$gymId': typeof DashboardSuperAdminGymsGymIdRoute
   '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
+  '/dashboard/admin/settings/': typeof DashboardAdminSettingsIndexRoute
   '/dashboard/super-admin/gyms/': typeof DashboardSuperAdminGymsIndexRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
 }
@@ -300,7 +301,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/members'
     | '/dashboard/admin/payments'
     | '/dashboard/admin/plans'
-    | '/dashboard/admin/settings'
+    | '/dashboard/admin/qr-management'
     | '/dashboard/m/attendance'
     | '/dashboard/m/payments'
     | '/dashboard/m/profile'
@@ -311,9 +312,9 @@ export interface FileRouteTypes {
     | '/dashboard/m/'
     | '/dashboard/super-admin/'
     | '/dashboard/admin/plans/new'
-    | '/dashboard/admin/settings/qr-management'
     | '/dashboard/super-admin/gyms/$gymId'
     | '/dashboard/super-admin/gyms/add'
+    | '/dashboard/admin/settings/'
     | '/dashboard/super-admin/gyms/'
     | '/dashboard/admin/plans/edit/$planId'
   fileRoutesByTo: FileRoutesByTo
@@ -328,7 +329,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/members'
     | '/dashboard/admin/payments'
     | '/dashboard/admin/plans'
-    | '/dashboard/admin/settings'
+    | '/dashboard/admin/qr-management'
     | '/dashboard/m/attendance'
     | '/dashboard/m/payments'
     | '/dashboard/m/profile'
@@ -338,9 +339,9 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/dashboard/admin/plans/new'
-    | '/dashboard/admin/settings/qr-management'
     | '/dashboard/super-admin/gyms/$gymId'
     | '/dashboard/super-admin/gyms/add'
+    | '/dashboard/admin/settings'
     | '/dashboard/super-admin/gyms'
     | '/dashboard/admin/plans/edit/$planId'
   id:
@@ -358,7 +359,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/members'
     | '/dashboard/admin/payments'
     | '/dashboard/admin/plans'
-    | '/dashboard/admin/settings'
+    | '/dashboard/admin/qr-management'
     | '/dashboard/m/attendance'
     | '/dashboard/m/payments'
     | '/dashboard/m/profile'
@@ -369,9 +370,9 @@ export interface FileRouteTypes {
     | '/dashboard/m/'
     | '/dashboard/super-admin/'
     | '/dashboard/admin/plans/new'
-    | '/dashboard/admin/settings/qr-management'
     | '/dashboard/super-admin/gyms/$gymId'
     | '/dashboard/super-admin/gyms/add'
+    | '/dashboard/admin/settings/'
     | '/dashboard/super-admin/gyms/'
     | '/dashboard/admin/plans/edit/$planId'
   fileRoutesById: FileRoutesById
@@ -485,11 +486,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminPlansRouteImport
       parentRoute: typeof DashboardAdminRoute
     }
-    '/dashboard/admin/settings': {
-      id: '/dashboard/admin/settings'
-      path: '/settings'
-      fullPath: '/dashboard/admin/settings'
-      preLoaderRoute: typeof DashboardAdminSettingsRouteImport
+    '/dashboard/admin/qr-management': {
+      id: '/dashboard/admin/qr-management'
+      path: '/qr-management'
+      fullPath: '/dashboard/admin/qr-management'
+      preLoaderRoute: typeof DashboardAdminQrManagementRouteImport
       parentRoute: typeof DashboardAdminRoute
     }
     '/dashboard/m/': {
@@ -555,12 +556,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminPlansNewRouteImport
       parentRoute: typeof DashboardAdminPlansRoute
     }
-    '/dashboard/admin/settings/qr-management': {
-      id: '/dashboard/admin/settings/qr-management'
-      path: '/qr-management'
-      fullPath: '/dashboard/admin/settings/qr-management'
-      preLoaderRoute: typeof DashboardAdminSettingsQrManagementRouteImport
-      parentRoute: typeof DashboardAdminSettingsRoute
+    '/dashboard/admin/settings/': {
+      id: '/dashboard/admin/settings/'
+      path: '/settings'
+      fullPath: '/dashboard/admin/settings/'
+      preLoaderRoute: typeof DashboardAdminSettingsIndexRouteImport
+      parentRoute: typeof DashboardAdminRoute
     }
     '/dashboard/super-admin/gyms/': {
       id: '/dashboard/super-admin/gyms/'
@@ -606,28 +607,14 @@ const DashboardAdminPlansRouteChildren: DashboardAdminPlansRouteChildren = {
 const DashboardAdminPlansRouteWithChildren =
   DashboardAdminPlansRoute._addFileChildren(DashboardAdminPlansRouteChildren)
 
-interface DashboardAdminSettingsRouteChildren {
-  DashboardAdminSettingsQrManagementRoute: typeof DashboardAdminSettingsQrManagementRoute
-}
-
-const DashboardAdminSettingsRouteChildren: DashboardAdminSettingsRouteChildren =
-  {
-    DashboardAdminSettingsQrManagementRoute:
-      DashboardAdminSettingsQrManagementRoute,
-  }
-
-const DashboardAdminSettingsRouteWithChildren =
-  DashboardAdminSettingsRoute._addFileChildren(
-    DashboardAdminSettingsRouteChildren,
-  )
-
 interface DashboardAdminRouteChildren {
   DashboardAdminAttendanceRoute: typeof DashboardAdminAttendanceRoute
   DashboardAdminMembersRoute: typeof DashboardAdminMembersRoute
   DashboardAdminPaymentsRoute: typeof DashboardAdminPaymentsRoute
   DashboardAdminPlansRoute: typeof DashboardAdminPlansRouteWithChildren
-  DashboardAdminSettingsRoute: typeof DashboardAdminSettingsRouteWithChildren
+  DashboardAdminQrManagementRoute: typeof DashboardAdminQrManagementRoute
   DashboardAdminIndexRoute: typeof DashboardAdminIndexRoute
+  DashboardAdminSettingsIndexRoute: typeof DashboardAdminSettingsIndexRoute
 }
 
 const DashboardAdminRouteChildren: DashboardAdminRouteChildren = {
@@ -635,8 +622,9 @@ const DashboardAdminRouteChildren: DashboardAdminRouteChildren = {
   DashboardAdminMembersRoute: DashboardAdminMembersRoute,
   DashboardAdminPaymentsRoute: DashboardAdminPaymentsRoute,
   DashboardAdminPlansRoute: DashboardAdminPlansRouteWithChildren,
-  DashboardAdminSettingsRoute: DashboardAdminSettingsRouteWithChildren,
+  DashboardAdminQrManagementRoute: DashboardAdminQrManagementRoute,
   DashboardAdminIndexRoute: DashboardAdminIndexRoute,
+  DashboardAdminSettingsIndexRoute: DashboardAdminSettingsIndexRoute,
 }
 
 const DashboardAdminRouteWithChildren = DashboardAdminRoute._addFileChildren(
