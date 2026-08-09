@@ -16,7 +16,7 @@ function QRManagement() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const getGymDetailsFn = useServerFn(getGymDetails);
-  const getAccessPointsFn = useServerFn(getGymAccessPoints);
+  const getAccessPointsFn = useServerFn(getGymAccessPointsFull);
   const createAccessPointFn = useServerFn(createAccessPoint);
   const deleteAccessPointFn = useServerFn(deleteAccessPoint);
   const regenerateQR = useServerFn(regenerateGymQR);
