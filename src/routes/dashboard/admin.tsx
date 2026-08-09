@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Outlet, useNavigate } from '@tanstack/react-router';
 import { useState, useRef, useEffect, useMemo } from 'react';
+import QRCode from 'qrcode';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useServerFn } from '@tanstack/react-start';
@@ -18,6 +19,8 @@ export function AdminDashboard() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [qrUrl, setQrUrl] = useState<string>('');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -55,6 +58,21 @@ export function AdminDashboard() {
     queryFn: () => getActivityFn({ data: { gymId: gymData!.id } }),
     enabled: !!gymData?.id
   });
+
+  useEffect(() => {
+    if (gymData?.id) {
+      const checkinUrl = `${window.location.origin}/checkin?gym=${gymData.id}`;
+      QRCode.toDataURL(checkinUrl, { width: 400, margin: 2 }).then(setQrUrl);
+    }
+  }, [gymData]);
+
+  const handleDownloadQR = () => {
+    if (!qrUrl) return;
+    const link = document.createElement('a');
+    link.href = qrUrl;
+    link.download = `${gymData?.name || 'gym'}-qr.png`;
+    link.click();
+  };
 
   const { data: activePlans } = useQuery({
     queryKey: ['global-plans-for-admin'],
@@ -148,6 +166,25 @@ export function AdminDashboard() {
           {/* Page Title */}
           <section className="-mt-4">
             <h2 className="text-[40px] font-bold leading-[44px] tracking-[-0.04em] text-white">Hi, {gymData?.owner_name || 'Admin'}</h2>
+          </section>
+
+          {/* QR Quick Action */}
+          <section>
+            <button 
+              onClick={() => setShowQRModal(true)}
+              className="w-full bg-[#1e201d] border border-white/5 rounded-xl p-4 flex items-center justify-between group hover:bg-[#252724] transition-colors"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#B7FF1E]/10 flex items-center justify-center text-[#B7FF1E]">
+                  <span className="material-symbols-outlined">qr_code_2</span>
+                </div>
+                <div className="text-left">
+                  <h3 className="text-white font-bold">Gym QR Code</h3>
+                  <p className="text-[12px] text-[#858A7D]">Members scan this to check in</p>
+                </div>
+              </div>
+              <span className="material-symbols-outlined text-[#858A7D] group-hover:text-white transition-colors">arrow_forward_ios</span>
+            </button>
           </section>
 
           {/* Subscription/Manual Features Banner */}
@@ -289,6 +326,47 @@ export function AdminDashboard() {
             </div>
           </section>
         </main>
+
+        {/* QR Modal */}
+        {showQRModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setShowQRModal(false)}></div>
+            <div className="bg-[#1e201d] w-full max-w-sm rounded-3xl border border-white/10 p-6 relative z-10 animate-in fade-in zoom-in duration-300">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-white">Gym QR Code</h3>
+                <button onClick={() => setShowQRModal(false)} className="text-[#858A7D] hover:text-white">
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              
+              <div className="bg-white p-4 rounded-2xl mb-6">
+                {qrUrl ? (
+                  <img src={qrUrl} alt="Gym QR" className="w-full aspect-square object-contain" />
+                ) : (
+                  <div className="w-full aspect-square flex items-center justify-center">
+                    <div className="w-8 h-8 border-4 border-gym-accent border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <button 
+                  onClick={handleDownloadQR}
+                  className="w-full bg-[#B7FF1E] text-[#293500] h-12 rounded-full font-bold flex items-center justify-center gap-2"
+                >
+                  <span className="material-symbols-outlined">download</span>
+                  Download PNG
+                </button>
+                <button 
+                  onClick={() => setShowQRModal(false)}
+                  className="w-full text-[#858A7D] h-10 font-bold"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-md max-w-[480px] left-1/2 -translate-x-1/2">

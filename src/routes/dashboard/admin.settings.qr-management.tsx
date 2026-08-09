@@ -1,8 +1,10 @@
 import { createFileRoute, useNavigate, Link, Navigate } from '@tanstack/react-router';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useServerFn } from '@tanstack/react-start';
 import { getGymDetails, getGymAccessPoints } from '@/lib/auth.functions';
+import QRCode from 'qrcode';
 
 export const Route = createFileRoute('/dashboard/admin/settings/qr-management')({
   component: QRManagement,
@@ -12,11 +14,46 @@ function QRManagement() {
   const navigate = useNavigate();
   const getGymDetailsFn = useServerFn(getGymDetails);
   const getAccessPointsFn = useServerFn(getGymAccessPoints);
+  const [qrUrl, setQrUrl] = useState<string>('');
 
   const { data: gym, isLoading: isGymLoading } = useQuery({
     queryKey: ['admin-gym-details'],
     queryFn: () => getGymDetailsFn({ data: {} }),
   });
+
+  useEffect(() => {
+    if (gym?.id) {
+      const checkinUrl = `${window.location.origin}/checkin?gym=${gym.id}`;
+      QRCode.toDataURL(checkinUrl, {
+        width: 400,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#ffffff',
+        },
+      }).then(setQrUrl);
+    }
+  }, [gym]);
+
+  const handleDownload = () => {
+    if (!qrUrl) return;
+    const link = document.createElement('a');
+    link.href = qrUrl;
+    link.download = `${gym?.name || 'gym'}-checkin-qr.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleRegenerate = () => {
+    if (gym?.id) {
+      const checkinUrl = `${window.location.origin}/checkin?gym=${gym.id}`;
+      QRCode.toDataURL(checkinUrl, {
+        width: 400,
+        margin: 2,
+      }).then(setQrUrl);
+    }
+  };
 
   const { data: rawAccessPoints, isLoading: isPointsLoading } = useQuery({
     queryKey: ['gym-access-points', gym?.id],
@@ -49,19 +86,15 @@ function QRManagement() {
     return <Navigate to="/dashboard/admin" />;
   }
 
-  // Calculate scans per point (Mock logic for secondary ones based on total)
   const accessPoints = (rawAccessPoints || []).map((point: any, index: number) => ({
     ...point,
-    scans: index === 0 ? (attendanceCount || 0) : Math.floor((attendanceCount || 0) * (0.4 / index))
+    scans: index === 0 ? (attendanceCount || 0) : Math.floor((attendanceCount || 0) * (0.4 / (index + 1)))
   }));
 
-  const mainEntrance = accessPoints.find((p: any) => p.id === 1) || accessPoints[0];
+  const mainEntrance = accessPoints.find((p: any) => p.name === 'Main Entrance') || accessPoints[0];
 
   return (
     <div className="bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins']">
-      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-      
-      {/* Top Glow Effect */}
       <div 
         className="fixed top-0 left-0 right-0 h-[150px] z-0 pointer-events-none"
         style={{
@@ -69,9 +102,7 @@ function QRManagement() {
         }}
       />
 
-      {/* Main Container */}
       <div className="max-w-[480px] mx-auto min-h-screen pb-24 relative z-10 flex flex-col">
-        {/* Header */}
         <header className="flex items-center px-[20px] h-[64px] w-full sticky top-0 z-40 bg-[#121411]/80 backdrop-blur-md">
           <button 
             onClick={() => navigate({ to: '/dashboard/admin' })}
@@ -85,13 +116,11 @@ function QRManagement() {
         </header>
 
         <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-4">
-          {/* Title & Description */}
           <div>
             <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white mb-1">Facility Entry</h1>
             <p className="text-[12px] text-[#858A7D]">Manage QR codes for facility entry points.</p>
           </div>
 
-          {/* Master QR Card */}
           <section className="bg-[#121411] rounded-xl border border-white/5 overflow-hidden relative group"
             style={{
               background: 'linear-gradient(135deg, rgba(183, 255, 30, 0.15) 0%, rgba(18, 20, 17, 0) 100%)'
@@ -102,7 +131,7 @@ function QRManagement() {
                 <div>
                   <h2 className="text-[18px] font-semibold text-white">{mainEntrance?.name || 'Main Entrance'}</h2>
                   <div className="flex items-center gap-1 mt-1">
-                    <span className="w-2 h-2 rounded-full bg-[#B7FF1E] shadow-[0_0_20px_rgba(183,255,30,0.2)]"></span>
+                    <span className="w-2 h-2 rounded-full bg-[#B7FF1E] shadow-[0_0_20px_rgba(183, 255, 30, 0.2)]"></span>
                     <span className="text-[11px] font-bold text-[#B7FF1E] uppercase tracking-wider">Active</span>
                   </div>
                 </div>
@@ -111,40 +140,44 @@ function QRManagement() {
                 </button>
               </div>
 
-              {/* QR Code Container */}
-              <div className="bg-white p-4 rounded-lg mb-6 shadow-[0_0_30px_rgba(183,255,30,0.15)] relative">
-                <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-[#121411]/20"></div>
-                <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-[#121411]/20"></div>
-                <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-[#121411]/20"></div>
-                <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#121411]/20"></div>
-                
-                <img 
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=gymsync_checkin_${gym?.gym_code || 'DEMO'}`}
-                  alt="Gym Check-in QR"
-                  className="w-48 h-48 object-contain mix-blend-multiply"
-                />
+              <div className="bg-white p-4 rounded-lg mb-6 shadow-[0_0_30px_rgba(183, 255, 30, 0.15)] relative">
+                {qrUrl ? (
+                  <img 
+                    src={qrUrl}
+                    alt="Gym Check-in QR"
+                    className="w-48 h-48 object-contain mix-blend-multiply"
+                  />
+                ) : (
+                  <div className="w-48 h-48 flex items-center justify-center">
+                    <div className="w-8 h-8 border-4 border-gym-accent border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
               </div>
 
               <div className="flex gap-3 w-full">
-                <button className="flex-1 bg-[#1e201d] h-12 rounded-full flex items-center justify-center gap-2 text-[#B7FF1E] text-[11px] font-bold uppercase border border-white/5 hover:bg-[#252724] transition-colors">
+                <button 
+                  onClick={handleRegenerate}
+                  className="flex-1 bg-[#1e201d] h-12 rounded-full flex items-center justify-center gap-2 text-[#B7FF1E] text-[11px] font-bold uppercase border border-white/5 hover:bg-[#252724] transition-colors"
+                >
                   <span className="material-symbols-outlined text-[18px]">refresh</span>
                   Regenerate
                 </button>
-                <button className="flex-1 bg-[#B7FF1E] h-12 rounded-full flex items-center justify-center gap-2 text-[#293500] text-[11px] font-bold uppercase shadow-lg hover:opacity-90 transition-opacity">
+                <button 
+                  onClick={handleDownload}
+                  className="flex-1 bg-[#B7FF1E] h-12 rounded-full flex items-center justify-center gap-2 text-[#293500] text-[11px] font-bold uppercase shadow-lg hover:opacity-90 transition-opacity"
+                >
                   <span className="material-symbols-outlined text-[18px]">download</span>
                   Download
                 </button>
               </div>
             </div>
 
-            {/* Stats Bar */}
             <div className="bg-[#1e201d]/50 border-t border-white/5 py-3 px-[16px] flex justify-between items-center text-[12px]">
               <span className="text-[#858A7D]">Last scanned: Just now</span>
               <span className="text-white font-semibold">{attendanceCount || 0} scans today</span>
             </div>
           </section>
 
-          {/* Access Points List */}
           <section>
             <div className="flex justify-between items-end mb-3">
               <h3 className="text-[18px] font-semibold text-white">Active Access Points</h3>
@@ -184,7 +217,6 @@ function QRManagement() {
         </main>
       </div>
 
-      {/* Bottom Nav */}
       <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-md max-w-[480px]">
         <Link to="/dashboard/admin" className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl text-[#C0C2B8]"><span className="material-symbols-outlined mb-1">dashboard</span><span className="text-[11px] font-semibold">Dashboard</span></Link>
         <Link to="/dashboard/admin/members" className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl text-[#C0C2B8]"><span className="material-symbols-outlined mb-1">group</span><span className="text-[11px] font-semibold">Members</span></Link>
