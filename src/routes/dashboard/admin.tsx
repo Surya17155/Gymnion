@@ -351,7 +351,7 @@ export function AdminDashboard() {
         {showQRModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setShowQRModal(false)}></div>
-            <div className="bg-[#1e201d] w-full max-w-sm rounded-3xl border border-white/10 p-6 relative z-10 animate-in fade-in zoom-in duration-300">
+            <div className="bg-[#1e201d] w-full max-w-sm rounded-3xl border border-white/10 p-6 relative z-10">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-white">Gym QR Code</h3>
                 <button onClick={() => setShowQRModal(false)} className="text-[#858A7D] hover:text-white">

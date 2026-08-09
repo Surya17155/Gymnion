@@ -171,7 +171,7 @@ function PaymentsDashboard() {
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" 
             onClick={() => setIsRecording(false)}
           />
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[70] p-6 border-t border-white/10 animate-in slide-in-from-bottom duration-300">
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[70] p-6 border-t border-white/10">
             <h2 className="text-[22px] font-bold text-white mb-6">Record Payment</h2>
             <div className="space-y-4">
               <div className="space-y-1">

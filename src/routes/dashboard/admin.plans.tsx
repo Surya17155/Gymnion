@@ -189,7 +189,7 @@ function GymPlans() {
       {isDrawerOpen && (
         <div className="fixed inset-0 z-[100] flex items-end justify-center px-4 pb-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsDrawerOpen(false)}></div>
-          <div className="bg-[#1e201d] w-full max-w-[480px] rounded-3xl border border-white/10 relative z-10 animate-in slide-in-from-bottom duration-300 overflow-hidden">
+          <div className="bg-[#1e201d] w-full max-w-[480px] rounded-3xl border border-white/10 relative z-10 overflow-hidden">
             <div className="p-6">
               <h3 className="text-xl font-bold text-white mb-6">{editingPlan ? 'Edit Plan' : 'Create New Plan'}</h3>
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
