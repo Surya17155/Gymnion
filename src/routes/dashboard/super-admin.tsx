@@ -8,10 +8,12 @@ export const Route = createFileRoute('/dashboard/super-admin')({
 });
 
 function SuperAdminLayout() {
-  const { pathname } = useLocation();
-  const isHome = pathname === '/dashboard/super-admin' || pathname === '/dashboard/super-admin/';
+  return (
+    <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans no-scrollbar">
+      <Outlet />
+    </div>
+  );
 
-  if (!isHome) return null; // Only show dashboard content at the specific URL
 
 
 
