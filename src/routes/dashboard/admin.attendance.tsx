@@ -14,6 +14,7 @@ function AttendanceDashboard() {
   const [tab, setTab] = useState<'today' | 'currently_in' | 'all'>('today');
   const getAttendanceFn = useServerFn(getAttendanceDashboard);
   const getGymIdFn = useServerFn(getCurrentGymId);
+  const queryClient = useQueryClient();
 
   const { data: gymId } = useQuery({
     queryKey: ['current-gym-id'],
@@ -25,6 +26,31 @@ function AttendanceDashboard() {
     queryFn: () => getAttendanceFn({ data: { gymId: gymId! } }),
     enabled: !!gymId
   });
+
+  useEffect(() => {
+    if (!gymId) return;
+
+    const channel = supabase
+      .channel('admin-attendance-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'attendance',
+          filter: `gym_id=eq.${gymId}`
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['admin-attendance', gymId] });
+          queryClient.invalidateQueries({ queryKey: ['admin-stats', gymId] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [gymId, queryClient]);
 
   const getList = () => {
     if (!attendanceData) return [];
