@@ -74,8 +74,8 @@ export const getMyAttendance = createServerFn({ method: 'GET' })
 
     if (data.month) {
       const parts = data.month.split('-');
-      const year = parseInt(parts[0]);
-      const month = parseInt(parts[1]);
+      const year = parseInt(parts[0] || '0');
+      const month = parseInt(parts[1] || '0');
       const startDate = new Date(year, month - 1, 1).toISOString();
       const endDate = new Date(year, month, 0, 23, 59, 59).toISOString();
       query = query.gte('check_in_at', startDate).lte('check_in_at', endDate);
@@ -222,7 +222,7 @@ export const getGymDetails = createServerFn({ method: 'GET' })
       .eq('id', gymId)
       .single();
     
-    return gym;
+    return gym as any;
   });
 
 export const getCurrentGymId = createServerFn({ method: 'GET' })
@@ -457,12 +457,15 @@ export const recordManualPayment = createServerFn({ method: 'POST' })
     source: z.string().default('manual')
   }).parse(data))
   .handler(async ({ data }) => {
+    const insertData: any = {
+      ...data,
+      status: 'paid'
+    };
+    if (insertData.notes === undefined) delete insertData.notes;
+
     const { error } = await supabaseAdmin
       .from('payments')
-      .insert([{
-        ...data,
-        status: 'paid'
-      }]);
+      .insert([insertData]);
     
     if (error) throw error;
     return { success: true };
