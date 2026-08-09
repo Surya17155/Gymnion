@@ -155,7 +155,7 @@ function GymDetailScreen() {
   );
 }
 
-function DetailRow({ icon, label, value, highlight }: { icon: string, label: string, value: string, highlight?: boolean }) {
+function DetailRow({ icon, label, value, highlight }: { icon: string, label: string, value: string | null | undefined, highlight?: boolean }) {
   return (
     <div className="flex items-center gap-4">
       <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-[#858A7D]">
