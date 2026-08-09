@@ -189,8 +189,9 @@ export const getPlatformRevenue = createServerFn({ method: "GET" })
         }
         
         const isOverdue = g.subscription_ends_at ? new Date(g.subscription_ends_at) < now : true;
+        const isPaid = g.settings?.payment_status === 'paid' || !isOverdue;
         
-        if (!isOverdue) {
+        if (isPaid) {
           totalCollected += monthlyPaise;
           paidCount++;
         } else {
