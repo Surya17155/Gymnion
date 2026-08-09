@@ -640,6 +640,8 @@ export const updateAdminAccount = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({
     full_name: z.string().optional(),
+    first_name: z.string().optional(),
+    last_name: z.string().optional(),
     email: z.string().email().optional(),
     phone: z.string().optional(),
     photo_url: z.string().optional(),
@@ -650,6 +652,8 @@ export const updateAdminAccount = createServerFn({ method: 'POST' })
 
     const updates: any = {};
     if (data.full_name) updates.owner_name = data.full_name;
+    if (data.first_name) updates.owner_first_name = data.first_name;
+    if (data.last_name) updates.owner_last_name = data.last_name;
     if (data.email) updates.owner_email = data.email;
     if (data.phone) updates.owner_phone = data.phone;
     if (data.photo_url !== undefined) updates.owner_photo_url = data.photo_url;
