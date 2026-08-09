@@ -10,7 +10,7 @@ export const Route = createFileRoute('/dashboard/admin/account')({
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData({
       queryKey: ['admin-gym-details'],
-      queryFn: () => getGymDetails({ data: {} }),
+      queryFn: () => getGymDetails({ data: undefined }),
     });
   }
 });
@@ -23,7 +23,7 @@ function AdminAccount() {
 
   const { data: gym, isLoading } = useQuery({
     queryKey: ['admin-gym-details'],
-    queryFn: () => getGymDetailsFn({ data: {} }),
+    queryFn: () => getGymDetailsFn({ data: undefined }),
   });
 
   const [formData, setFormData] = useState({

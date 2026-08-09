@@ -13,7 +13,7 @@ export const Route = createFileRoute('/dashboard/admin/qr-management')({
   loader: async ({ context }) => {
     const gym = await context.queryClient.ensureQueryData({
       queryKey: ['admin-gym-details'],
-      queryFn: () => getGymDetails({ data: {} })
+      queryFn: () => getGymDetails({ data: undefined })
     });
     if (gym?.id) {
       const today = new Date().toISOString().split('T')[0];
@@ -43,7 +43,7 @@ function QRManagement() {
 
   const { data: gym, isPending: isGymPending, error: gymError } = useQuery({
     queryKey: ['admin-gym-details'],
-    queryFn: () => getGymDetailsFn({ data: {} }),
+    queryFn: () => getGymDetailsFn({ data: undefined }),
     retry: false,
     staleTime: 60000,
   });

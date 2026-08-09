@@ -10,7 +10,7 @@ export const Route = createFileRoute('/dashboard/admin/plans')({
   loader: async ({ context }) => {
     const gym = await context.queryClient.ensureQueryData({
       queryKey: ['admin-gym-details'],
-      queryFn: () => getGymDetails({ data: {} }),
+      queryFn: () => getGymDetails({ data: undefined }),
     });
     if (gym?.id) {
       await context.queryClient.ensureQueryData({
@@ -42,7 +42,7 @@ function GymPlans() {
 
   const { data: gym } = useQuery({
     queryKey: ['admin-gym-details'],
-    queryFn: () => getGymDetailsFn({ data: {} }),
+    queryFn: () => getGymDetailsFn({ data: undefined }),
   });
 
   const { data: plans, isLoading } = useQuery({

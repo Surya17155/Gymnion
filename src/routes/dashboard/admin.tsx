@@ -44,7 +44,7 @@ export function AdminDashboard() {
 
   const { data: gymData, isLoading: isGymLoading } = useQuery({
     queryKey: ['admin-gym-settings'],
-    queryFn: () => getGymDetailsFn({ data: {} }),
+    queryFn: () => getGymDetailsFn({ data: undefined }),
     staleTime: Infinity, // Keep in memory
   });
 

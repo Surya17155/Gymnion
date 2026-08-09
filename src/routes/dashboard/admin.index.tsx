@@ -8,7 +8,7 @@ export const Route = createFileRoute('/dashboard/admin/')({
     // Preload data needed for the dashboard
     const gym = await context.queryClient.ensureQueryData({
       queryKey: ['admin-gym-settings'],
-      queryFn: () => getGymDetails({ data: {} })
+      queryFn: () => getGymDetails({ data: undefined })
     });
     
     if (gym?.id) {
