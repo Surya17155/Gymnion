@@ -124,12 +124,6 @@ function GymPlans() {
             <div>
               <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white mb-1">{"\n"}</h1>
             </div>
-            <button 
-              onClick={() => { resetForm(); setIsDrawerOpen(true); }}
-              className="bg-[#B7FF1E] w-12 h-12 rounded-full flex items-center justify-center text-[#293500] shadow-lg hover:scale-105 transition-transform"
-            >
-              <span className="material-symbols-outlined text-[24px]">add</span>
-            </button>
           </div>
 
           <div className="flex flex-col gap-3">
@@ -171,6 +165,13 @@ function GymPlans() {
             )}
           </div>
         </main>
+        
+        <button 
+          onClick={() => { resetForm(); setIsDrawerOpen(true); }}
+          className="fixed bottom-[90px] right-6 bg-[#B7FF1E] w-14 h-14 rounded-full flex items-center justify-center text-[#293500] shadow-[0_8px_24px_rgba(183,255,30,0.3)] hover:scale-105 active:scale-95 transition-all z-[60]"
+        >
+          <span className="material-symbols-outlined text-[28px]">add</span>
+        </button>
       </div>
 
       {/* Add/Edit Drawer */}
