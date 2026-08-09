@@ -271,9 +271,46 @@ export const updateGymAdminDetails = createServerFn({ method: "POST" })
       .eq('id', data.gymId);
 
     if (error) throw error;
+    return { success: true };
+  });
 
-    // Optional: If email changed, we should probably update auth user too
-    // But for now let's keep it simple as requested
+export const setGymManualPricing = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((data: unknown) => z.object({
+    gymId: z.string(),
+    manualPricing: z.number().nullable(),
+  }).parse(data))
+  .handler(async ({ data, context }) => {
+    // Check if user is super_admin
+    const { data: roleData } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', context.userId)
+      .eq('role', 'super_admin')
+      .single();
+
+    if (!roleData) throw new Error("Unauthorized");
+
+    // Fetch current settings
+    const { data: gym } = await supabaseAdmin
+      .from('gyms')
+      .select('settings')
+      .eq('id', data.gymId)
+      .single();
+
+    const currentSettings = (gym?.settings as any) || {};
     
+    if (data.manualPricing === null) {
+      delete currentSettings.manual_pricing;
+    } else {
+      currentSettings.manual_pricing = data.manualPricing;
+    }
+
+    const { error } = await supabaseAdmin
+      .from('gyms')
+      .update({ settings: currentSettings })
+      .eq('id', data.gymId);
+
+    if (error) throw error;
     return { success: true };
   });
