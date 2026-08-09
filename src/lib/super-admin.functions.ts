@@ -29,7 +29,6 @@ export const getPlatformStats = createServerFn({ method: "GET" })
       .from('gyms')
       .select('subscription_plan_id, settings');
     
-    // We would need to join with global_plans but for now a simple approach:
     const { data: plans } = await supabaseAdmin.from('global_plans').select('id, price');
     const planPrices = Object.fromEntries(plans?.map(p => [p.id, p.price]) || []);
 
@@ -39,7 +38,7 @@ export const getPlatformStats = createServerFn({ method: "GET" })
         if (manualPrice) {
             mrr += manualPrice * 100; // in paise
         } else if (g.subscription_plan_id && planPrices[g.subscription_plan_id]) {
-            mrr += planPrices[g.subscription_plan_id];
+            mrr += planPrices[g.subscription_plan_id] as number;
         }
     });
 
