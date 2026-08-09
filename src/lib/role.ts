@@ -1,10 +1,10 @@
 import { supabase } from '@/integrations/supabase/client';
 
-export type Role = 'super_admin' | 'gym_admin' | 'member' | null;
+export type Role = 'super_admin' | 'admin' | 'member' | null;
 
 export const roleHome: Record<string, string> = {
   super_admin: '/dashboard/super-admin',
-  gym_admin: '/dashboard/admin',
+  admin: '/dashboard/admin',
   member: '/dashboard/m',
 };
 
