@@ -256,7 +256,6 @@ function GymPlans() {
                           deleteMutation.mutate(editingPlan.id);
                         } else {
                           setIsDeleting(true);
-                          setTimeout(() => setIsDeleting(false), 3000);
                         }
                       }}
                       className={`w-full flex items-center justify-center gap-2 py-3 text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all ${
