@@ -4,6 +4,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from 'react';
 import { useServerFn } from "@tanstack/react-start";
 import { createGymWithAdmin } from "@/lib/gyms.functions";
+import { getAllGymsServer, updateGymStatus, extendSubscription } from "@/lib/super-admin.functions";
+import { getSubscriptionPlans } from "@/lib/plans.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute('/dashboard/super-admin/gyms')({
