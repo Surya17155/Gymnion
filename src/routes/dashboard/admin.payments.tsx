@@ -64,9 +64,6 @@ function PaymentsDashboard() {
             <h1 className="text-[32px] font-bold leading-[32px] tracking-[-0.04em] text-white mb-2">Payments</h1>
             <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Manage gym revenue</p>
           </div>
-          <Link to="/dashboard/admin" className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center border border-white/5">
-            <span className="material-symbols-outlined text-[20px]">close</span>
-          </Link>
         </div>
 
         {/* Filter and Actions */}
