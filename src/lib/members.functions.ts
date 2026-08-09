@@ -185,7 +185,7 @@ export const getMyAttendanceStatus = createServerFn({ method: "GET" })
       .eq('gym_id', gymId)
       .single();
 
-    if (!member) return { status: 'none' };
+    if (!member) return { status: 'none' as const };
 
     const { data: latest } = await supabaseAdmin
       .from('attendance')
@@ -197,8 +197,8 @@ export const getMyAttendanceStatus = createServerFn({ method: "GET" })
       .maybeSingle();
 
     if (latest && !latest.check_out_at) {
-      return { status: 'in', check_in_at: latest.check_in_at };
+      return { status: 'in' as const, check_in_at: latest.check_in_at };
     }
 
-    return { status: 'none' };
+    return { status: 'none' as const };
   });
