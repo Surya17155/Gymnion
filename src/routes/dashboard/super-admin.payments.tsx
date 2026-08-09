@@ -148,7 +148,7 @@ function SuperAdminPayments() {
                         {isPaid ? 'PAID' : 'PENDING'}
                       </span>
                     </div>
-                    <p className="text-[12px] text-[#C0C2B8] truncate">{planName} ({price})</p>
+                    <p className="text-[12px] text-[#C0C2B8] truncate">{planName}</p>
                     <p className={`text-[11px] font-semibold mt-1 ${!isPaid ? 'text-[#FF5964]' : 'text-[#858A7D]'}`}>
                       {!isPaid 
                         ? `Due: ${gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), "MMM dd, yyyy") : 'Immediate'}` 
