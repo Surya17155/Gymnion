@@ -211,7 +211,7 @@ export const getGymDetails = createServerFn({ method: 'GET' })
         .eq('user_id', userId)
         .eq('role', 'gym_admin')
         .single();
-      gymId = roleData?.gym_id;
+      gymId = roleData?.gym_id || undefined;
     }
     
     if (!gymId) return null;
