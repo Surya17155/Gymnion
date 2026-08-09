@@ -1,85 +1,69 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getMembers } from '@/lib/auth.functions';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useServerFn } from '@tanstack/react-start';
+import { getMembers, getCurrentGymId, createMember, updateMember, deleteMember, getFeePlans } from '@/lib/auth.functions';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/dashboard/admin/members')({
   component: AdminMembers,
 });
 
 
-interface Member {
-  id: string;
-  name: string;
-  plan: string;
-  status: 'Active' | 'Overdue' | 'Pending';
-  image?: string;
-  initials?: string;
-  email: string;
-  phone: string;
-  age: number;
-  dob: string;
-  address: string;
-}
-
-const DUMMY_MEMBERS: Member[] = [
-  {
-    id: '1',
-    name: 'Aman Gupta',
-    plan: 'Annual Pro Plan',
-    status: 'Active',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCt3aoaHw9zAi0mZ5ng_BUkvX67DgJTDioId_IIe5NWUfNPO2WomkLP_dJ0LoLhTXj5Gt8H9bA-2oVroOdlI7UNLaKD-zl7xGkWiyDIvZwxfp7KthwAEd2zUqqozSlns2lFlX82i4A-bHsyRyyNTyNimOYKCGcP4UTeToDsMTGOJaxH6b7IaUIaSkeHkfWrC04y1QqCgx-pAGs_iCCMWiqVQejhKfkzDcbPqPVve0PGWCSBCMf6XA',
-    email: 'aman.gupta@example.com',
-    phone: '+91 98765 43210',
-    age: 28,
-    dob: '14 May 1995',
-    address: '42, Horizon Towers, Cyber City, Phase 2, Gurugram',
-  },
-  {
-    id: '2',
-    name: 'Sarah Rogers',
-    plan: 'Monthly Basic',
-    status: 'Overdue',
-    initials: 'SR',
-    email: 'sarah.r@example.com',
-    phone: '+91 99988 77766',
-    age: 24,
-    dob: '22 Aug 2000',
-    address: '15, Lotus Apartments, Saket, New Delhi',
-  },
-  {
-    id: '3',
-    name: 'Priya Sharma',
-    plan: 'Quarterly Elite',
-    status: 'Active',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBBMjJN_vnBHvBtY7WdsVcVf59Ti6HI-2HCgSCXSjVwXhwlQKYiUtfrZpUB3798BMZfrtv5LT83x7xOJjOhVsOX1Pb4MwUimnMhW9lEUiAxox9CDOXjWS6YJyBccuTSCIka12l6_T85qwolTfQVbusNGefs_aogZUY9U6o4JRMmDtglDaCbCBADrr2sgXXbCbng5BjWm_mWfkoCymaOesemkaZywvcCDlkLwGqbgPP1GLfrbqehMg',
-    email: 'priya.s@example.com',
-    phone: '+91 91234 56789',
-    age: 26,
-    dob: '10 Jan 1998',
-    address: 'Green Park Ext, Block B, New Delhi',
-  },
-  {
-    id: '4',
-    name: 'Michael Kim',
-    plan: 'Day Pass',
-    status: 'Pending',
-    initials: 'MK',
-    email: 'm.kim@example.com',
-    phone: '+91 90000 11111',
-    age: 30,
-    dob: '05 Mar 1994',
-    address: 'Sector 44, Noida, Uttar Pradesh',
-  },
-];
-
 function AdminMembers() {
+  const queryClient = useQueryClient();
   const [selectedMember, setSelectedMember] = useState<any | null>(null);
-  
-  const { data: members = [], isLoading } = useQuery({
-    queryKey: ['members'],
-    queryFn: () => getMembers(),
+  const [isAdding, setIsAdding] = useState(false);
+  const [newMember, setNewMember] = useState({ full_name: '', email: '', phone: '', fee_plan_id: '' });
+
+  const getMembersFn = useServerFn(getMembers);
+  const getGymIdFn = useServerFn(getCurrentGymId);
+  const createMemberFn = useServerFn(createMember);
+  const updateMemberFn = useServerFn(updateMember);
+  const deleteMemberFn = useServerFn(deleteMember);
+  const getPlansFn = useServerFn(getFeePlans);
+
+  const { data: gymId } = useQuery({
+    queryKey: ['current-gym-id'],
+    queryFn: () => getGymIdFn(),
   });
+
+  const { data: members = [], isLoading } = useQuery({
+    queryKey: ['members', gymId],
+    queryFn: () => getMembersFn({ data: { gymId: gymId! } }),
+    enabled: !!gymId
+  });
+
+  const { data: plans = [] } = useQuery({
+    queryKey: ['gym-plans', gymId],
+    queryFn: () => getPlansFn(),
+    enabled: !!gymId
+  });
+
+  const handleAddMember = async () => {
+    if (!newMember.full_name || !newMember.email || !gymId) return;
+    try {
+      await createMemberFn({ data: { ...newMember, gym_id: gymId } });
+      toast.success('Member added successfully');
+      setIsAdding(false);
+      setNewMember({ full_name: '', email: '', phone: '', fee_plan_id: '' });
+      queryClient.invalidateQueries({ queryKey: ['members'] });
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to add member');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this member?')) return;
+    try {
+      await deleteMemberFn({ data: { id } });
+      toast.success('Member deleted');
+      setSelectedMember(null);
+      queryClient.invalidateQueries({ queryKey: ['members'] });
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to delete member');
+    }
+  };
 
 
   return (
@@ -98,7 +82,7 @@ function AdminMembers() {
         <main className="flex-1 px-[20px] pt-8 flex flex-col">
           <header className="mb-[24px]">
             <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white mb-1">Members</h1>
-            <p className="text-[14px] leading-[20px] text-[#C0C2B8]">214 Total Active</p>
+            <p className="text-[14px] leading-[20px] text-[#C0C2B8]">{members.length} Total Members</p>
           </header>
 
           <div className="flex gap-[12px] mb-[24px]">
@@ -110,8 +94,11 @@ function AdminMembers() {
                 type="text"
               />
             </div>
-            <button className="h-12 w-12 flex items-center justify-center bg-[#1e201d] border border-white/5 rounded-xl hover:border-[#D5FF40] transition-colors">
-              <span className="material-symbols-outlined text-[#e3e3dd]" style={{ fontVariationSettings: "'FILL' 0" }}>tune</span>
+            <button 
+              onClick={() => setIsAdding(true)}
+              className="h-12 w-12 flex items-center justify-center bg-[#D5FF40] rounded-xl active:scale-95 transition-all"
+            >
+              <span className="material-symbols-outlined text-black font-bold">add</span>
             </button>
           </div>
 
