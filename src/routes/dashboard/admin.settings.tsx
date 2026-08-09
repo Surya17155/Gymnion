@@ -134,7 +134,10 @@ function AdminSettings() {
               <span className="material-symbols-outlined text-[#858A7D] group-hover:text-[#B7FF1E] transition-colors">chevron_right</span>
             </Link>
 
-            <button className="flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-[#B7FF1E]/30 transition-colors group text-left w-full">
+            <Link 
+              to="/dashboard/admin/settings/qr-management"
+              className="flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-[#B7FF1E]/30 transition-colors group text-left w-full"
+            >
               <div className="w-12 h-12 rounded-full bg-[#25340D] flex items-center justify-center mr-4 group-hover:bg-[#B7FF1E]/20 transition-colors">
                 <span className="material-symbols-outlined text-[#B7FF1E]" style={{ fontVariationSettings: '"FILL" 1' }}>qr_code_scanner</span>
               </div>
@@ -143,7 +146,7 @@ function AdminSettings() {
                 <p className="text-[12px] text-[#858A7D] mt-1">Access control and facility entry points.</p>
               </div>
               <span className="material-symbols-outlined text-[#858A7D] group-hover:text-[#B7FF1E] transition-colors">chevron_right</span>
-            </button>
+            </Link>
 
             <button className="w-full flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-white/10 transition-colors text-left">
               <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center mr-4">
