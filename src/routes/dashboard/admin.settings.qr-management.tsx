@@ -222,6 +222,7 @@ function QRManagement() {
         <Link to="/dashboard/admin/members" className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl text-[#C0C2B8]"><span className="material-symbols-outlined mb-1">group</span><span className="text-[11px] font-semibold">Members</span></Link>
         <Link to="/dashboard/admin/payments" className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl text-[#C0C2B8]"><span className="material-symbols-outlined mb-1">receipt_long</span><span className="text-[11px] font-semibold">Payments</span></Link>
         <Link to="/dashboard/admin/attendance" className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl text-[#C0C2B8]"><span className="material-symbols-outlined mb-1">event_available</span><span className="text-[11px] font-semibold">Attendance</span></Link>
+        <Link to="/dashboard/admin/settings" className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl text-[#C0C2B8] transition-all"><span className="material-symbols-outlined mb-1">settings</span><span className="text-[11px] font-semibold">Settings</span></Link>
       </nav>
     </div>
   );
