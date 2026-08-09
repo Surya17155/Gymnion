@@ -10,6 +10,26 @@ import QRCode from 'qrcode';
 
 export const Route = createFileRoute('/dashboard/admin/qr-management')({
   component: QRManagement,
+  loader: async ({ context }) => {
+    const gym = await context.queryClient.ensureQueryData({
+      queryKey: ['admin-gym-details'],
+      queryFn: () => getGymDetails({ data: undefined })
+    });
+    if (gym?.id) {
+      const today = new Date().toISOString().split('T')[0];
+      await context.queryClient.prefetchQuery({
+        queryKey: ['gym-attendance-today', gym.id],
+        queryFn: async () => {
+          const { count } = await supabase
+            .from('attendance')
+            .select('*', { count: 'exact', head: true })
+            .eq('gym_id', gym.id)
+            .gte('check_in_at', `${today}T00:00:00`);
+          return count || 0;
+        }
+      });
+    }
+  }
 });
 
 function QRManagement() {
@@ -23,7 +43,7 @@ function QRManagement() {
 
   const { data: gym, isPending: isGymPending, error: gymError } = useQuery({
     queryKey: ['admin-gym-details'],
-    queryFn: () => getGymDetailsFn({ data: {} }),
+    queryFn: () => getGymDetailsFn({ data: undefined }),
     retry: false,
     staleTime: 60000,
   });

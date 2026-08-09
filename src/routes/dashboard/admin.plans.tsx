@@ -7,6 +7,18 @@ import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin/plans')({
   component: GymPlans,
+  loader: async ({ context }) => {
+    const gym = await context.queryClient.ensureQueryData({
+      queryKey: ['admin-gym-details'],
+      queryFn: () => getGymDetails({ data: undefined }),
+    });
+    if (gym?.id) {
+      await context.queryClient.ensureQueryData({
+        queryKey: ['gym-fee-plans', gym.id],
+        queryFn: () => getFeePlans({ data: { gymId: gym.id } }),
+      });
+    }
+  }
 });
 
 function GymPlans() {
@@ -30,7 +42,7 @@ function GymPlans() {
 
   const { data: gym } = useQuery({
     queryKey: ['admin-gym-details'],
-    queryFn: () => getGymDetailsFn({ data: {} }),
+    queryFn: () => getGymDetailsFn({ data: undefined }),
   });
 
   const { data: plans, isLoading } = useQuery({
@@ -177,7 +189,7 @@ function GymPlans() {
       {isDrawerOpen && (
         <div className="fixed inset-0 z-[100] flex items-end justify-center px-4 pb-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsDrawerOpen(false)}></div>
-          <div className="bg-[#1e201d] w-full max-w-[480px] rounded-3xl border border-white/10 relative z-10 animate-in slide-in-from-bottom duration-300 overflow-hidden">
+          <div className="bg-[#1e201d] w-full max-w-[480px] rounded-3xl border border-white/10 relative z-10 overflow-hidden">
             <div className="p-6">
               <h3 className="text-xl font-bold text-white mb-6">{editingPlan ? 'Edit Plan' : 'Create New Plan'}</h3>
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">

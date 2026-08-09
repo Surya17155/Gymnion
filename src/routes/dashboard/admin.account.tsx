@@ -7,6 +7,12 @@ import { supabase } from '@/integrations/supabase/client';
 
 export const Route = createFileRoute('/dashboard/admin/account')({
   component: AdminAccount,
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData({
+      queryKey: ['admin-gym-details'],
+      queryFn: () => getGymDetails({ data: undefined }),
+    });
+  }
 });
 
 function AdminAccount() {
@@ -17,7 +23,7 @@ function AdminAccount() {
 
   const { data: gym, isLoading } = useQuery({
     queryKey: ['admin-gym-details'],
-    queryFn: () => getGymDetailsFn({ data: {} }),
+    queryFn: () => getGymDetailsFn({ data: undefined }),
   });
 
   const [formData, setFormData] = useState({

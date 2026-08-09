@@ -42,22 +42,34 @@ export function AdminDashboard() {
   const getActivityFn = useServerFn(getRecentActivity);
   const getGymDetailsFn = useServerFn(getGymDetails);
 
-  const { data: gymData } = useQuery({
+  const { data: gymData, isLoading: isGymLoading } = useQuery({
     queryKey: ['admin-gym-settings'],
-    queryFn: () => getGymDetailsFn({ data: {} })
+    queryFn: () => getGymDetailsFn({ data: undefined }),
+    staleTime: Infinity, // Keep in memory
   });
 
-  const { data: stats } = useQuery({
+  const { data: stats, isLoading: isStatsLoading } = useQuery({
     queryKey: ['admin-stats', gymData?.id],
     queryFn: () => getStatsFn({ data: { gymId: gymData!.id } }),
-    enabled: !!gymData?.id
+    enabled: !!gymData?.id,
+    staleTime: 30000, // Refresh every 30s
   });
 
-  const { data: recentActivity } = useQuery({
+  const { data: recentActivity, isLoading: isActivityLoading } = useQuery({
     queryKey: ['admin-activity', gymData?.id],
     queryFn: () => getActivityFn({ data: { gymId: gymData!.id } }),
-    enabled: !!gymData?.id
+    enabled: !!gymData?.id,
+    staleTime: 30000,
   });
+
+  if (isGymLoading || (gymData?.id && (isStatsLoading || isActivityLoading))) {
+    return (
+      <div className="bg-[#121411] text-[#e3e3dd] min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
 
   useEffect(() => {
     if (gymData?.id) {
@@ -161,7 +173,7 @@ export function AdminDashboard() {
         <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-2">
           {/* Page Title */}
           <section className="-mt-4">
-            <h2 className="text-[40px] font-bold leading-[44px] tracking-[-0.04em] text-white">Hi, {gymData?.owner_first_name || gymData?.owner_name?.split(' ')[0] || 'Admin'}</h2>
+            <h2 className="text-[40px] font-bold leading-[44px] tracking-[-0.04em] text-white">Hi, {gymData?.owner_first_name || gymData?.owner_name?.split(' ')[0] || ''}</h2>
           </section>
 
           {/* Revenue Card (Full width) */}
@@ -339,7 +351,7 @@ export function AdminDashboard() {
         {showQRModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setShowQRModal(false)}></div>
-            <div className="bg-[#1e201d] w-full max-w-sm rounded-3xl border border-white/10 p-6 relative z-10 animate-in fade-in zoom-in duration-300">
+            <div className="bg-[#1e201d] w-full max-w-sm rounded-3xl border border-white/10 p-6 relative z-10">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-white">Gym QR Code</h3>
                 <button onClick={() => setShowQRModal(false)} className="text-[#858A7D] hover:text-white">

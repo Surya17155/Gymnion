@@ -7,6 +7,24 @@ import { toast } from 'sonner';
 
 export const Route = createFileRoute('/dashboard/admin/members')({
   component: MembersDashboard,
+  loader: async ({ context }) => {
+    const gymId = await context.queryClient.ensureQueryData({
+      queryKey: ['current-gym-id'],
+      queryFn: () => getCurrentGymId({ data: undefined })
+    });
+    if (gymId) {
+      await Promise.all([
+        context.queryClient.ensureQueryData({
+          queryKey: ['members', gymId],
+          queryFn: () => getMembers({ data: { gymId } })
+        }),
+        context.queryClient.ensureQueryData({
+          queryKey: ['gym-plans', gymId],
+          queryFn: () => getFeePlans({ data: { gymId } })
+        })
+      ]);
+    }
+  }
 });
 
 function MembersDashboard() {
@@ -150,7 +168,7 @@ function MembersDashboard() {
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" 
             onClick={() => setSelectedMember(null)}
           />
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-[32px] z-[70] px-6 pt-2 pb-safe border-t border-white/10 animate-in slide-in-from-bottom duration-300">
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-[32px] z-[70] px-6 pt-2 pb-safe border-t border-white/10">
             <div className="w-12 h-1 bg-white/10 rounded-full mx-auto my-4" />
             
             <div className="flex flex-col items-center text-center mb-8">
@@ -221,7 +239,7 @@ function MembersDashboard() {
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" 
             onClick={() => setIsAdding(false)}
           />
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[70] p-6 border-t border-white/10 animate-in slide-in-from-bottom duration-300">
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[70] p-6 border-t border-white/10">
             <h2 className="text-[22px] font-bold text-white mb-6">Add New Member</h2>
             <div className="space-y-4">
               <div className="space-y-1">

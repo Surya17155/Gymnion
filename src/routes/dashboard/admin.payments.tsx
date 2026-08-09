@@ -8,6 +8,24 @@ import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin/payments')({
   component: PaymentsDashboard,
+  loader: async ({ context }) => {
+    const gymId = await context.queryClient.ensureQueryData({
+      queryKey: ['current-gym-id'],
+      queryFn: () => getCurrentGymId({ data: undefined })
+    });
+    if (gymId) {
+      await Promise.all([
+        context.queryClient.ensureQueryData({
+          queryKey: ['admin-payments', gymId, 'all'],
+          queryFn: () => getPaymentsDashboard({ data: { gymId, status: 'all' } })
+        }),
+        context.queryClient.ensureQueryData({
+          queryKey: ['members', gymId],
+          queryFn: () => getMembers({ data: { gymId } })
+        })
+      ]);
+    }
+  }
 });
 
 function PaymentsDashboard() {
@@ -153,7 +171,7 @@ function PaymentsDashboard() {
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" 
             onClick={() => setIsRecording(false)}
           />
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[70] p-6 border-t border-white/10 animate-in slide-in-from-bottom duration-300">
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[70] p-6 border-t border-white/10">
             <h2 className="text-[22px] font-bold text-white mb-6">Record Payment</h2>
             <div className="space-y-4">
               <div className="space-y-1">
