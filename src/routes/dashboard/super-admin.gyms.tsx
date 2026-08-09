@@ -19,6 +19,24 @@ function SuperAdminGyms() {
   const [isAddingGym, setIsAddingGym] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('all');
+
+  const getGymsFn = useServerFn(getAllGymsServer);
+  const getPlansFn = useServerFn(getSubscriptionPlans);
+  const updateStatusFn = useServerFn(updateGymStatus);
+  const extendSubFn = useServerFn(extendSubscription);
+
+  const { data: gymsData, isLoading } = useQuery({
+    queryKey: ['super-admin-gyms', searchQuery, statusFilter],
+    queryFn: () => getGymsFn({ search: searchQuery, status: statusFilter }),
+  });
+
+  const { data: plans } = useQuery({
+    queryKey: ['subscription-plans'],
+    queryFn: () => getPlansFn(),
+  });
+
+  const gyms = gymsData?.gyms;
 
   // New Gym Form State
   const [newGym, setNewGym] = useState({
@@ -27,19 +45,8 @@ function SuperAdminGyms() {
     ownerEmail: '',
     ownerPassword: '',
     ownerPhone: '',
-    gymCode: ''
-  });
-
-  const { data: gyms, isLoading } = useQuery({
-    queryKey: ['super-admin-gyms'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('gyms')
-        .select('*')
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      return data;
-    }
+    gymCode: '',
+    planId: ''
   });
 
   const generateGymCode = () => {
@@ -127,9 +134,30 @@ function SuperAdminGyms() {
             />
           </div>
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            <button className="px-4 py-1.5 rounded-full bg-[#B7FF1E] text-black text-[11px] font-semibold whitespace-nowrap">All Gyms</button>
-            <button className="px-4 py-1.5 rounded-full bg-[#1e201d] text-[#C0C2B8] text-[11px] font-semibold border border-white/5 whitespace-nowrap">Approved</button>
-            <button className="px-4 py-1.5 rounded-full bg-[#1e201d] text-[#C0C2B8] text-[11px] font-semibold border border-white/5 whitespace-nowrap">Pending Review</button>
+            <button 
+              onClick={() => setStatusFilter('all')}
+              className={`px-4 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-colors ${statusFilter === 'all' ? 'bg-[#B7FF1E] text-black' : 'bg-[#1e201d] text-[#C0C2B8] border border-white/5'}`}
+            >
+              All Gyms
+            </button>
+            <button 
+              onClick={() => setStatusFilter('approved')}
+              className={`px-4 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-colors ${statusFilter === 'approved' ? 'bg-[#B7FF1E] text-black' : 'bg-[#1e201d] text-[#C0C2B8] border border-white/5'}`}
+            >
+              Approved
+            </button>
+            <button 
+              onClick={() => setStatusFilter('pending')}
+              className={`px-4 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-colors ${statusFilter === 'pending' ? 'bg-[#B7FF1E] text-black' : 'bg-[#1e201d] text-[#C0C2B8] border border-white/5'}`}
+            >
+              Pending Review
+            </button>
+            <button 
+              onClick={() => setStatusFilter('suspended')}
+              className={`px-4 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-colors ${statusFilter === 'suspended' ? 'bg-[#B7FF1E] text-black' : 'bg-[#1e201d] text-[#C0C2B8] border border-white/5'}`}
+            >
+              Suspended
+            </button>
           </div>
         </section>
 
@@ -140,7 +168,7 @@ function SuperAdminGyms() {
               <div className="w-8 h-8 border-2 border-[#B7FF1E]/20 border-t-[#B7FF1E] rounded-full animate-spin"></div>
             </div>
           ) : (
-            filteredGyms?.map((gym) => (
+            gyms?.map((gym: any) => (
               <div 
                 key={gym.id}
                 onClick={() => setSelectedGym(gym)}
@@ -154,8 +182,8 @@ function SuperAdminGyms() {
                 <div className="flex-1 flex flex-col justify-center">
                   <h3 className="text-[16px] font-semibold text-[#e3e3dd]">{gym.name}</h3>
                   <div className="flex items-center gap-1.5 mt-0.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#B7FF1E]"></div>
-                    <span className="text-[11px] text-[#C0C2B8]">Code: {gym.gym_code || '---'}</span>
+                    <div className={`w-1.5 h-1.5 rounded-full ${gym.status === 'suspended' ? 'bg-[#FF5964]' : gym.status === 'pending' ? 'bg-yellow-500' : 'bg-[#B7FF1E]'}`}></div>
+                    <span className="text-[11px] text-[#C0C2B8]">Code: {gym.gym_code || '---'} • {gym.global_plans?.name || 'No Plan'}</span>
                   </div>
                 </div>
                 <div className="text-[#858A7D] group-hover:text-[#B7FF1E] transition-colors">
@@ -205,7 +233,22 @@ function SuperAdminGyms() {
                     >
                       <span className="material-symbols-outlined text-[20px]">refresh</span>
                     </button>
-                  </div>
+                </div>
+                
+                <div>
+                  <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Subscription Plan</label>
+                  <select 
+                    required
+                    className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#e3e3dd] focus:border-[#B7FF1E] outline-none transition-colors appearance-none"
+                    value={newGym.planId}
+                    onChange={e => setNewGym(prev => ({ ...prev, planId: e.target.value }))}
+                  >
+                    <option value="">Select a Plan</option>
+                    {plans?.map((plan: any) => (
+                      <option key={plan.id} value={plan.id}>{plan.name} - ₹{plan.price / 100}/mo</option>
+                    ))}
+                  </select>
+                </div>
                 </div>
 
                 <div>
@@ -322,6 +365,68 @@ function SuperAdminGyms() {
                       </div>
                     </div>
                   )}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-[0.15em] block mb-3">Subscription Status</label>
+                <div className="bg-[#1e201d]/30 rounded-2xl p-4 border border-white/5 flex flex-col gap-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-[#C0C2B8]">Ends At:</span>
+                    <span className="text-xs text-white font-medium">
+                      {selectedGym.subscription_ends_at ? new Date(selectedGym.subscription_ends_at).toLocaleDateString() : 'No subscription'}
+                    </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={async () => {
+                        try {
+                          await extendSubFn({ gymId: selectedGym.id, months: 1 });
+                          toast.success("Subscription extended by 1 month");
+                          queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
+                          setSelectedGym(null);
+                        } catch (err: any) {
+                          toast.error(err.message || "Failed to extend");
+                        }
+                      }}
+                      className="flex-1 py-2 bg-[#B7FF1E]/10 border border-[#B7FF1E]/30 rounded-xl text-[#B7FF1E] text-[10px] font-bold uppercase"
+                    >
+                      Extend 1 Mo
+                    </button>
+                    {selectedGym.status === 'approved' ? (
+                      <button 
+                        onClick={async () => {
+                          try {
+                            await updateStatusFn({ gymId: selectedGym.id, status: 'suspended' });
+                            toast.success("Gym suspended");
+                            queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
+                            setSelectedGym(null);
+                          } catch (err: any) {
+                            toast.error(err.message || "Failed to suspend");
+                          }
+                        }}
+                        className="flex-1 py-2 bg-[#FF5964]/10 border border-[#FF5964]/30 rounded-xl text-[#FF5964] text-[10px] font-bold uppercase"
+                      >
+                        Suspend
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={async () => {
+                          try {
+                            await updateStatusFn({ gymId: selectedGym.id, status: 'approved' });
+                            toast.success("Gym reactivated");
+                            queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
+                            setSelectedGym(null);
+                          } catch (err: any) {
+                            toast.error(err.message || "Failed to activate");
+                          }
+                        }}
+                        className="flex-1 py-2 bg-[#B7FF1E]/10 border border-[#B7FF1E]/30 rounded-xl text-[#B7FF1E] text-[10px] font-bold uppercase"
+                      >
+                        Reactivate
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
 

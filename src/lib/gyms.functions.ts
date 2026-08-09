@@ -9,10 +9,15 @@ export const createGymWithAdmin = createServerFn({ method: "POST" })
     ownerEmail: z.string().email(),
     ownerPassword: z.string().min(6),
     ownerPhone: z.string().min(10),
-    gymCode: z.string().min(3)
+    gymCode: z.string().min(3),
+    planId: z.string().optional()
   }).parse(data))
   .handler(async ({ data }) => {
     // 1. Create the Gym
+    const now = new Date();
+    const nextMonth = new Date(now);
+    nextMonth.setMonth(now.getMonth() + 1);
+
     const { data: gym, error: gymError } = await supabaseAdmin
       .from('gyms')
       .insert({
@@ -21,7 +26,10 @@ export const createGymWithAdmin = createServerFn({ method: "POST" })
         owner_name: data.ownerName,
         owner_email: data.ownerEmail,
         owner_phone: data.ownerPhone,
-        status: 'approved'
+        status: 'approved',
+        subscription_plan_id: data.planId || null,
+        subscription_started_at: now.toISOString(),
+        subscription_ends_at: nextMonth.toISOString()
       })
       .select()
       .single();
