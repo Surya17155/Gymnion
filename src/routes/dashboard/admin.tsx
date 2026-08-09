@@ -58,6 +58,8 @@ function AdminDashboard() {
     }
   });
 
+  const currentPlan = activePlans?.find((p: any) => p.id === (gymData?.settings as any)?.plan_id);
+
   return (
     <div className="bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins']">
       {/* Head link for icons is already in __root.tsx, but ensuring icons are available */}
