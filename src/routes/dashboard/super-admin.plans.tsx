@@ -347,12 +347,6 @@ function SuperAdminPlans() {
                       <span className="material-symbols-outlined text-sm">edit</span>
                     </button>
                   </div>
-                  <div className="space-y-4 mb-5">
-                    <div>
-                      <label className="text-[11px] font-semibold text-[#858A7D] block mb-1 uppercase tracking-wider">Manual Pricing (Monthly)</label>
-                      <div className="text-lg font-bold text-white">₹{currentPrice}</div>
-                    </div>
-                  </div>
                 </div>
               );
             })}
