@@ -573,19 +573,16 @@ export const getGymAccessPoints = createServerFn({ method: 'GET' })
     gymId: z.string()
   }).parse(data))
   .handler(async ({ data }) => {
-    const { data: gym } = await supabaseAdmin
-      .from('gyms')
-      .select('settings')
-      .eq('id', data.gymId)
-      .single();
+    const { data: points, error } = await supabaseAdmin
+      .from('gym_access_points')
+      .select('*')
+      .eq('gym_id', data.gymId);
     
-    const settings = (gym?.settings as any) || {};
-    return settings.access_points || [
-      { id: 1, name: 'Main Entrance', status: 'Active', icon: 'door_front' },
-      { id: 2, name: 'Cardio Zone', status: 'Active', icon: 'directions_run' },
-      { id: 3, name: 'VIP Lounge', status: 'Active', icon: 'workspace_premium' },
-      { id: 4, name: 'Pool Area', status: 'Offline', icon: 'warning', warning: true },
-    ];
+    if (error) {
+      if (error.code === '42P01') return [];
+      throw error;
+    }
+    return points || [];
   });
 
 export const updateFeePlan = createServerFn({ method: 'POST' })
