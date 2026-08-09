@@ -118,7 +118,7 @@ export const recordAttendance = createServerFn({ method: "POST" })
           gym_id: gymId,
           check_in_at: new Date().toISOString(),
           status: 'present'
-        })
+        } as any)
         .select()
         .single();
 
