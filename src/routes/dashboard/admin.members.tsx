@@ -47,7 +47,9 @@ function MembersDashboard() {
   const { data: members = [], isLoading } = useQuery({
     queryKey: ['members', gymId],
     queryFn: () => getMembersFn({ data: { gymId: gymId! } }),
-    enabled: !!gymId
+    enabled: !!gymId,
+    staleTime: 60000,
+    gcTime: Infinity,
   });
 
   const { data: plans = [] } = useQuery({

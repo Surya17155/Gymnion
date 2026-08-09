@@ -36,7 +36,9 @@ function AttendanceDashboard() {
   const { data: attendanceData, isLoading } = useQuery({
     queryKey: ['admin-attendance', gymId],
     queryFn: () => getAttendanceFn({ data: { gymId: gymId! } }),
-    enabled: !!gymId
+    enabled: !!gymId,
+    staleTime: 60000,
+    gcTime: Infinity,
   });
 
   useEffect(() => {
