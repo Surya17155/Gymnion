@@ -117,10 +117,9 @@ function SuperAdminPlans() {
         is_active: selectedPlan.is_active !== false,
         updated_at: new Date().toISOString()
       };
-      };
 
       let error;
-      const isNewPlan = !selectedPlan.id || selectedPlan.id.startsWith('new-');
+      const isNewPlan = !selectedPlan.id || (typeof selectedPlan.id === 'string' && selectedPlan.id.startsWith('new-'));
       
       if (!isNewPlan) {
         // Update existing plan
