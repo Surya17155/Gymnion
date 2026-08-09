@@ -25,7 +25,7 @@ function HomePage() {
       <h1 className="text-4xl font-bold mb-2">Gym<span className="text-[#B7FF1E]">Sync</span></h1>
       <p className="text-[#858A7D] mb-12 text-center">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                             
-                                            add a feature by which I can make them correct tick to wrong red mark in just one click, this is because some feature are not available in some plans, that's why I want to make some features not available but want to write as red mark</p>
+                                            Now, when I make changes to the plans, pricing, or features, adding new ones or removing any, I am unable to save the changes. The saved changes should be reflected in real time and updated throughout the entire database wherever this information is available or connected. If I make changes related to features, the app should reflect those changes: some features may become unavailable, while others will be available according to the admin’s plan and the features they have. Make it so that I can save changes and they are reflected everywhere in the app.</p>
       
       <button 
         onClick={() => navigate({ to: "/auth/login" })}

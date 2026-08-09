@@ -104,7 +104,12 @@ function SuperAdminPlans() {
       const cleanedFeatures = manualFeatures.filter((f: any) => {
         const text = typeof f === 'string' ? f : f.name;
         return text.trim() !== '';
+      }).map((f: any) => {
+        // Ensure features are saved as { name: string, enabled: boolean } objects
+        if (typeof f === 'string') return { name: f, enabled: true };
+        return { name: f.name, enabled: f.enabled !== false };
       });
+
       const planData = {
         name: selectedPlan.name,
         price: Math.round(parseFloat(selectedPlan.price) * 100),
