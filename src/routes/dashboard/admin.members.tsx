@@ -31,7 +31,7 @@ function MembersDashboard() {
   const queryClient = useQueryClient();
   const [selectedMember, setSelectedMember] = useState<any | null>(null);
   const [isAdding, setIsAdding] = useState(false);
-  const [newMember, setNewMember] = useState({ full_name: '', email: '', phone: '', fee_plan_id: '' });
+  const [newMember, setNewMember] = useState({ first_name: '', last_name: '', email: '', phone: '', fee_plan_id: '' });
 
   const getMembersFn = useServerFn(getMembers);
   const getGymIdFn = useServerFn(getCurrentGymId);
@@ -57,15 +57,21 @@ function MembersDashboard() {
   });
 
   const handleAddMember = async () => {
-    if (!newMember.full_name || !newMember.email || !gymId) {
+    if (!newMember.first_name || !newMember.email || !gymId) {
       toast.error('Please fill in required fields');
       return;
     }
     try {
-      await createMemberFn({ data: { ...newMember, gym_id: gymId } });
+      await createMemberFn({ 
+        data: { 
+          ...newMember, 
+          full_name: `${newMember.first_name} ${newMember.last_name}`.trim(),
+          gym_id: gymId 
+        } 
+      });
       toast.success('Member added successfully');
       setIsAdding(false);
-      setNewMember({ full_name: '', email: '', phone: '', fee_plan_id: '' });
+      setNewMember({ first_name: '', last_name: '', email: '', phone: '', fee_plan_id: '' });
       queryClient.invalidateQueries({ queryKey: ['members'] });
     } catch (err: any) {
       toast.error(err.message || 'Failed to add member');
@@ -242,13 +248,25 @@ function MembersDashboard() {
           <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[70] p-6 border-t border-white/10">
             <h2 className="text-[22px] font-bold text-white mb-6">Add New Member</h2>
             <div className="space-y-4">
-              <div className="space-y-1">
-                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Full Name</label>
-                <input 
-                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
-                  value={newMember.full_name}
-                  onChange={e => setNewMember(prev => ({ ...prev, full_name: e.target.value }))}
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">First Name</label>
+                  <input 
+                    className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
+                    placeholder="e.g. John"
+                    value={newMember.first_name}
+                    onChange={e => setNewMember(prev => ({ ...prev, first_name: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Last Name</label>
+                  <input 
+                    className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
+                    placeholder="e.g. Doe"
+                    value={newMember.last_name}
+                    onChange={e => setNewMember(prev => ({ ...prev, last_name: e.target.value }))}
+                  />
+                </div>
               </div>
               <div className="space-y-1">
                 <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Email Address</label>
