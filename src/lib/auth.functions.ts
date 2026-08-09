@@ -536,3 +536,36 @@ export const getGymAccessPoints = createServerFn({ method: 'GET' })
       { id: 4, name: 'Pool Area', status: 'Offline', icon: 'warning', warning: true },
     ];
   });
+
+export const updateFeePlan = createServerFn({ method: 'POST' })
+  .validator((data: any) => z.object({
+    id: z.string(),
+    name: z.string().optional(),
+    amount: z.number().optional(),
+    description: z.string().optional().nullable(),
+    billing_cycle: z.string().optional(),
+  }).parse(data))
+  .handler(async ({ data }) => {
+    const { id, ...updates } = data;
+    const { error } = await supabaseAdmin
+      .from('fee_plans')
+      .update(updates)
+      .eq('id', id);
+    
+    if (error) throw error;
+    return { success: true };
+  });
+
+export const deleteFeePlan = createServerFn({ method: 'POST' })
+  .validator((data: any) => z.object({
+    id: z.string()
+  }).parse(data))
+  .handler(async ({ data }) => {
+    const { error } = await supabaseAdmin
+      .from('fee_plans')
+      .update({ is_active: false })
+      .eq('id', data.id);
+    
+    if (error) throw error;
+    return { success: true };
+  });
