@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, useNavigate } from '@tanstack/react-router';
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import QRCode from 'qrcode';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
