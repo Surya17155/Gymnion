@@ -2,6 +2,8 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { getRoleForUser, clearRoleCache, homeForRole } from "@/lib/role";
+import { completeSignup } from "@/lib/members.functions";
+import { toast } from "sonner";
 
 
 export const Route = createFileRoute('/auth/login')({
@@ -159,9 +161,24 @@ function AuthPage() {
 
       if (error) throw error;
       if (data.session) {
-        navigate({ to: redirectPath });
+        // Call completeSignup as a fallback in case the trigger was slow or failed
+        // Belt + Suspenders approach requested
+        try {
+          await completeSignup({
+            userId: data.session.user.id,
+            gymId: gym.id,
+            fullName: formData.fullName,
+            email: formData.email,
+            phone: formData.phone
+          });
+        } catch (signupErr) {
+          console.error("Manual signup completion failed (might have been handled by trigger):", signupErr);
+        }
+
+        clearRoleCache();
+        navigate({ to: '/dashboard/m' });
       } else {
-        setErrorMsg('Please check your email to confirm your account.');
+        toast.success('Sign up successful! Please check your email to confirm your account.');
       }
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to sign up');
