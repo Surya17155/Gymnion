@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link, Navigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -96,13 +96,19 @@ function QRManagement() {
 
   if (isGymLoading || isPointsLoading) return null;
 
-  const settings = (gym?.settings as any) || {};
-  // Always allow access to QR management for admins even if feature flag is off in settings
-  // This allows admins to enable it or manage it regardless of the plan restrictions which might be enforced elsewhere
-  const attendanceEnabled = true; 
-
-  if (!attendanceEnabled) {
-    return <Navigate to="/dashboard/admin" />;
+  if (!gym?.id) {
+    return (
+      <div className="min-h-screen bg-[#0D0F0C] text-white flex flex-col items-center justify-center p-4">
+        <h1 className="text-xl font-bold mb-2">No Gym Found</h1>
+        <p className="text-gray-400 mb-4">We couldn't find a gym associated with your account.</p>
+        <button
+          onClick={() => navigate({ to: '/dashboard/admin' })}
+          className="bg-[#B7FF1E] text-black px-4 py-2 rounded-full font-bold"
+        >
+          Return to Dashboard
+        </button>
+      </div>
+    );
   }
 
   const accessPoints = rawAccessPoints || [];
