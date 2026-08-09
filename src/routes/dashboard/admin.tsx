@@ -42,22 +42,34 @@ export function AdminDashboard() {
   const getActivityFn = useServerFn(getRecentActivity);
   const getGymDetailsFn = useServerFn(getGymDetails);
 
-  const { data: gymData } = useQuery({
+  const { data: gymData, isLoading: isGymLoading } = useQuery({
     queryKey: ['admin-gym-settings'],
-    queryFn: () => getGymDetailsFn({ data: {} })
+    queryFn: () => getGymDetailsFn({ data: {} }),
+    staleTime: Infinity, // Keep in memory
   });
 
-  const { data: stats } = useQuery({
+  const { data: stats, isLoading: isStatsLoading } = useQuery({
     queryKey: ['admin-stats', gymData?.id],
     queryFn: () => getStatsFn({ data: { gymId: gymData!.id } }),
-    enabled: !!gymData?.id
+    enabled: !!gymData?.id,
+    staleTime: 30000, // Refresh every 30s
   });
 
-  const { data: recentActivity } = useQuery({
+  const { data: recentActivity, isLoading: isActivityLoading } = useQuery({
     queryKey: ['admin-activity', gymData?.id],
     queryFn: () => getActivityFn({ data: { gymId: gymData!.id } }),
-    enabled: !!gymData?.id
+    enabled: !!gymData?.id,
+    staleTime: 30000,
   });
+
+  if (isGymLoading || (gymData?.id && (isStatsLoading || isActivityLoading))) {
+    return (
+      <div className="bg-[#121411] text-[#e3e3dd] min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
 
   useEffect(() => {
     if (gymData?.id) {
