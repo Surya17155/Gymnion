@@ -38,10 +38,14 @@ function QRManagement() {
           .select('*', { count: 'exact', head: true })
           .eq('gym_id', gym!.id)
           .gte('check_in_at', `${today}T00:00:00`);
-        if (error) throw error;
+        
+        if (error) {
+          console.error("Supabase attendance query error:", error);
+          return 0;
+        }
         return count || 0;
       } catch (err) {
-        console.error("Attendance query failed:", err);
+        console.error("Attendance query catch block:", err);
         return 0;
       }
     },
@@ -76,8 +80,9 @@ function QRManagement() {
   };
 
   useEffect(() => {
-    if (gym?.id) {
-      const checkinUrl = `${window.location.origin}/checkin?gym=${gym.id}&code=${gym.gym_code || ''}`;
+    let active = true;
+    if (gym?.id && gym.gym_code) {
+      const checkinUrl = `${window.location.origin}/checkin?gym=${gym.id}&code=${gym.gym_code}`;
       QRCode.toDataURL(checkinUrl, {
         width: 400,
         margin: 2,
@@ -85,9 +90,14 @@ function QRManagement() {
           dark: '#000000',
           light: '#ffffff',
         },
-      }).then(setQrUrl);
+      }).then(url => {
+        if (active) setQrUrl(url);
+      }).catch(err => {
+        console.error("QR Code generation error:", err);
+      });
     }
-  }, [gym]);
+    return () => { active = false; };
+  }, [gym?.id, gym?.gym_code]);
 
   if (isGymPending) {
     return (
