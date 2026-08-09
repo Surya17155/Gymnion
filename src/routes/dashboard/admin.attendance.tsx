@@ -63,6 +63,14 @@ function AttendanceDashboard() {
 
   return (
     <div className="min-h-screen bg-[#0D0F0C] text-[#e3e3dd] font-['Poppins'] pb-32">
+      {/* Top Glow Effect */}
+      <div 
+        className="fixed top-0 left-0 right-0 h-[300px] z-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle at 50% 0%, rgba(183, 255, 30, 0.15) 0%, rgba(18, 20, 17, 0) 70%)'
+        }}
+      />
+
       {/* Header */}
       <div className="p-6 pb-2">
         <div className="flex justify-between items-start mb-6">
