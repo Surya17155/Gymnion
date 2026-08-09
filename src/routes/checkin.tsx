@@ -10,13 +10,14 @@ import { z } from 'zod';
 
 export const Route = createFileRoute('/checkin')({
   validateSearch: (search) => z.object({
-    gym: z.string().optional()
+    gym: z.string().optional(),
+    code: z.string().optional()
   }).parse(search),
   component: CheckInPage,
 });
 
 function CheckInPage() {
-  const { gym: gymId } = Route.useSearch();
+  const { gym: gymId, code: gymCode } = Route.useSearch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [session, setSession] = useState<any>(null);
@@ -30,10 +31,11 @@ function CheckInPage() {
       setSession(session);
       setLoadingSession(false);
       if (!session && gymId) {
-        navigate({ to: '/auth/login', search: { redirect: `/checkin?gym=${gymId}` } });
+        const redirectUrl = `/checkin?gym=${gymId}${gymCode ? `&code=${gymCode}` : ''}`;
+        navigate({ to: '/auth/login', search: { redirect: redirectUrl } });
       }
     });
-  }, [gymId, navigate]);
+  }, [gymId, gymCode, navigate]);
 
   const { data: statusData, isLoading: isLoadingStatus } = useQuery({
     queryKey: ['my-attendance-status', gymId],
@@ -43,7 +45,7 @@ function CheckInPage() {
 
   const mutation = useMutation({
     mutationFn: async (action: 'in' | 'out') => {
-      return recordAttendanceFn({ data: { gymId: gymId!, action } });
+      return recordAttendanceFn({ data: { gymId: gymId!, action, code: gymCode } });
     },
     onSuccess: (data) => {
       toast.success(data.message);

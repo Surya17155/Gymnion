@@ -69,11 +69,25 @@ export const recordAttendance = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: unknown) => z.object({
     gymId: z.string(),
-    action: z.enum(['in', 'out'])
+    action: z.enum(['in', 'out']),
+    code: z.string().optional()
   }).parse(data))
   .handler(async ({ data, context }) => {
     const userId = context.userId;
-    const { gymId, action } = data;
+    const { gymId, action, code } = data;
+
+    // 1. Verify gym code if provided
+    if (code) {
+      const { data: gym } = await supabaseAdmin
+        .from('gyms')
+        .select('gym_code')
+        .eq('id', gymId)
+        .single();
+      
+      if (gym && gym.gym_code !== code) {
+        throw new Error("Invalid access code. Please scan a fresh QR code.");
+      }
+    }
 
     // 1. Verify user is a member of the gym
     const { data: member, error: memberError } = await supabaseAdmin
