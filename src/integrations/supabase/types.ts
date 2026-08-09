@@ -246,6 +246,8 @@ export type Database = {
           id: string
           name: string
           owner_email: string
+          owner_first_name: string | null
+          owner_last_name: string | null
           owner_name: string
           owner_phone: string
           owner_photo_url: string | null
@@ -264,6 +266,8 @@ export type Database = {
           id?: string
           name: string
           owner_email: string
+          owner_first_name?: string | null
+          owner_last_name?: string | null
           owner_name: string
           owner_phone: string
           owner_photo_url?: string | null
@@ -282,6 +286,8 @@ export type Database = {
           id?: string
           name?: string
           owner_email?: string
+          owner_first_name?: string | null
+          owner_last_name?: string | null
           owner_name?: string
           owner_phone?: string
           owner_photo_url?: string | null
@@ -309,10 +315,12 @@ export type Database = {
           deleted_at: string | null
           email: string
           fee_plan_id: string | null
+          first_name: string | null
           full_name: string
           gym_id: string
           id: string
           join_date: string | null
+          last_name: string | null
           phone: string
           photo_url: string | null
           status: string
@@ -324,10 +332,12 @@ export type Database = {
           deleted_at?: string | null
           email: string
           fee_plan_id?: string | null
+          first_name?: string | null
           full_name: string
           gym_id: string
           id?: string
           join_date?: string | null
+          last_name?: string | null
           phone: string
           photo_url?: string | null
           status?: string
@@ -339,10 +349,12 @@ export type Database = {
           deleted_at?: string | null
           email?: string
           fee_plan_id?: string | null
+          first_name?: string | null
           full_name?: string
           gym_id?: string
           id?: string
           join_date?: string | null
+          last_name?: string | null
           phone?: string
           photo_url?: string | null
           status?: string
