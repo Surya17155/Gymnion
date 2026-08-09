@@ -257,7 +257,7 @@ function SuperAdminPlans() {
                            updatedFeatures[idx] = { ...updatedFeatures[idx], enabled: !isEnabled };
                         }
                         
-                        supabase.from('global_plans').update({ features: updatedFeatures }).eq('id', plan.id).then(() => {
+                        supabase.from('global_plans').update({ features: updatedFeatures as any }).eq('id', plan.id).then(() => {
                           queryClient.invalidateQueries({ queryKey: ['global-plans'] });
                         });
                       }}
