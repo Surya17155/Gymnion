@@ -127,7 +127,6 @@ export function AdminDashboard() {
                 <Link
                   to="/dashboard/admin/plans"
                   className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#C0C2B8] hover:bg-white/5 transition-colors text-[14px]"
-                  onClick={() => setShowDropdown(false)}
                 >
                   <span className="material-symbols-outlined text-[18px]">payments</span>
                   Gym Plans
@@ -135,7 +134,6 @@ export function AdminDashboard() {
                 <Link
                   to="/dashboard/admin/qr-management"
                   className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#C0C2B8] hover:bg-white/5 transition-colors text-[14px]"
-                  onClick={() => setShowDropdown(false)}
                 >
                   <span className="material-symbols-outlined text-[18px]">qr_code_2</span>
                   QR Management
@@ -143,7 +141,6 @@ export function AdminDashboard() {
                 <Link
                   to="/dashboard/admin/settings"
                   className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#C0C2B8] hover:bg-white/5 transition-colors text-[14px]"
-                  onClick={() => setShowDropdown(false)}
                 >
                   <span className="material-symbols-outlined text-[18px]">settings</span>
                   Settings
