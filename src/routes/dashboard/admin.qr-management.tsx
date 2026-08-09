@@ -211,7 +211,7 @@ function QRManagement() {
             </div>
 
             <div className="bg-[#1e201d]/50 border-t border-white/5 py-3 px-[16px] flex justify-between items-center text-[12px]">
-              <span className="text-[#858A7D]">Last scanned: Just now</span>
+              <span className="text-[#858A7D]">Real-time tracking</span>
               <span className="text-white font-semibold">{attendanceCount || 0} scans today</span>
             </div>
           </section>
