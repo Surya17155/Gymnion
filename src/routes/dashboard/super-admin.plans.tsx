@@ -186,7 +186,7 @@ function SuperAdminPlans() {
             <button 
               data-testid="add-new-plan-btn"
               onClick={() => {
-                setSelectedPlan({ name: '', price: '' });
+                setSelectedPlan({ id: `new-${Date.now()}`, name: '', price: '' });
                 setManualFeatures(['']);
                 setIsEditingPlan(true);
               }}
