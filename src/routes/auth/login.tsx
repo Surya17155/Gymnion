@@ -118,9 +118,16 @@ function AuthPage() {
         clearRoleCache();
         const role = await getRoleForUser(data.session.user.id);
         const home = homeForRole(role);
+        
         console.log("Login successful, role:", role, "redirecting to:", home);
-        // Using window.location for a hard reset to ensure all auth states are fresh
-        window.location.href = home ?? '/dashboard';
+        
+        if (role === 'admin' || role === 'super_admin' || role === 'member') {
+          // If we have a valid role, use the dedicated home
+          window.location.href = home ?? '/dashboard';
+        } else {
+          // Fallback if role is not yet fully synced/found
+          window.location.href = '/dashboard';
+        }
       }
 
     } catch (err: any) {
