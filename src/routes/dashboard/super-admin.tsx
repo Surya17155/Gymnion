@@ -10,14 +10,16 @@ export const Route = createFileRoute('/dashboard/super-admin')({
 function SuperAdminLayout() {
   const { pathname } = useLocation();
   const isExact = pathname === '/dashboard/super-admin' || pathname === '/dashboard/super-admin/';
+  
+  if (!isExact) return <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans no-scrollbar w-full"><Outlet /></div>;
 
   return (
-    <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans">
-      {isExact ? <SuperAdminDashboard /> : <Outlet />}
+    <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans no-scrollbar">
+      <Outlet />
       
       <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-[100] flex justify-around items-center px-4 py-2 pb-safe rounded-t-[20px] max-w-[480px] left-1/2 -translate-x-1/2">
         <Link 
-          to="/dashboard/super-admin"
+          to="/dashboard/super-admin/"
           activeOptions={{ exact: true }}
           preload="intent"
           className="flex flex-col items-center justify-center w-[64px] h-[52px] rounded-xl"

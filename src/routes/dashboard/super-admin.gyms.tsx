@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-router';
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from 'react';
@@ -9,10 +9,15 @@ import { getSubscriptionPlans } from "@/lib/plans.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute('/dashboard/super-admin/gyms')({
-  component: SuperAdminGyms,
+  component: SuperAdminGymsLayout,
 });
 
-function SuperAdminGyms() {
+function SuperAdminGymsLayout() {
+  return <Outlet />;
+}
+
+export function SuperAdminGyms() {
+
   const queryClient = useQueryClient();
   const createGymFn = useServerFn(createGymWithAdmin);
   
@@ -179,6 +184,7 @@ function SuperAdminGyms() {
                 key={gym.id}
                 to="/dashboard/super-admin/gyms/$gymId"
                 params={{ gymId: gym.id }}
+                preload="intent"
                 className="bg-[#121411] border border-white/5 rounded-xl p-3 flex items-center gap-3 hover:border-[#B7FF1E]/30 transition-colors cursor-pointer group"
               >
                 <div className="w-12 h-12 rounded-lg bg-[#333532] flex-shrink-0 overflow-hidden border border-white/5 relative">
@@ -323,3 +329,5 @@ function SuperAdminGyms() {
     </div>
   );
 }
+
+export const GymsIndexRoute = SuperAdminGyms;

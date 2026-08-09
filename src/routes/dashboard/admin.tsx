@@ -8,17 +8,10 @@ export const Route = createFileRoute('/dashboard/admin')({
 });
 
 function AdminLayout() {
-  const { pathname } = useLocation();
-  const isExactAdmin = pathname === '/dashboard/admin';
-
-  if (!isExactAdmin) {
-    return <Outlet />;
-  }
-
-  return <AdminDashboard />;
+  return <Outlet />;
 }
 
-function AdminDashboard() {
+export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
 
   const { data: gymData } = useQuery({
@@ -61,7 +54,7 @@ function AdminDashboard() {
   const currentPlan = activePlans?.find((p: any) => p.id === (gymData?.settings as any)?.plan_id);
 
   return (
-    <div className="bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins']">
+    <div className="bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins'] no-scrollbar">
       {/* Head link for icons is already in __root.tsx, but ensuring icons are available */}
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       
@@ -233,7 +226,7 @@ function AdminDashboard() {
 
       <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] left-1/2 -translate-x-1/2">
         <Link 
-          to="/dashboard/admin"
+          to="/dashboard/admin/"
           activeOptions={{ exact: true }}
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
