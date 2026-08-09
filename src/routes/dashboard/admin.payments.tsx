@@ -47,7 +47,9 @@ function PaymentsDashboard() {
   const { data: payments = [], isLoading } = useQuery({
     queryKey: ['admin-payments', gymId, filter],
     queryFn: () => getPaymentsFn({ data: { gymId: gymId!, status: filter } }),
-    enabled: !!gymId
+    enabled: !!gymId,
+    staleTime: 60000,
+    gcTime: Infinity,
   });
 
   const { data: members = [] } = useQuery({
