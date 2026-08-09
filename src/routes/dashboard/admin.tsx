@@ -134,7 +134,7 @@ export function AdminDashboard() {
                   Gym Plans
                 </Link>
                 <Link
-                  to="/dashboard/admin/settings/qr-management"
+                  to="/dashboard/admin/qr-management"
                   className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#C0C2B8] hover:bg-white/5 transition-colors text-[14px]"
                   onClick={() => setShowDropdown(false)}
                 >

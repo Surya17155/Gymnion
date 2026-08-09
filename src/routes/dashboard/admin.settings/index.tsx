@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { getGymDetails, updateGymCode } from '@/lib/auth.functions';
 
-export const Route = createFileRoute('/dashboard/admin/settings')({
+export const Route = createFileRoute('/dashboard/admin/settings/')({
   component: AdminSettings,
 });
 
@@ -135,7 +135,7 @@ function AdminSettings() {
             </Link>
 
             <Link 
-              to="/dashboard/admin/settings/qr-management"
+              to="/dashboard/admin/qr-management"
               className="flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-[#B7FF1E]/30 transition-colors group text-left w-full"
             >
               <div className="w-12 h-12 rounded-full bg-[#25340D] flex items-center justify-center mr-4 group-hover:bg-[#B7FF1E]/20 transition-colors">
