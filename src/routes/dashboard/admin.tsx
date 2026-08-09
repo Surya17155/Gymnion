@@ -122,11 +122,7 @@ export function AdminDashboard() {
         <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-2">
           {/* Page Title */}
           <section className="-mt-4">
-            <h2 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white">Dashboard</h2>
-            <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Good morning, {gymData?.owner_name || 'Admin'}</p>
-            {gymData && (
-              <p className="text-[12px] text-[#B7FF1E] mt-1 font-semibold uppercase tracking-wider">{gymData.name}</p>
-            )}
+            <h2 className="text-[40px] font-bold leading-[44px] tracking-[-0.04em] text-white">Hi, {gymData?.owner_name || 'Admin'}</h2>
           </section>
 
           {/* Subscription/Manual Features Banner */}
