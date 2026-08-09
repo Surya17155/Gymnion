@@ -1,8 +1,10 @@
 import { createFileRoute, useNavigate, Link, Navigate } from '@tanstack/react-router';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useServerFn } from '@tanstack/react-start';
 import { getGymDetails, getGymAccessPoints } from '@/lib/auth.functions';
+import QRCode from 'qrcode';
 
 export const Route = createFileRoute('/dashboard/admin/settings/qr-management')({
   component: QRManagement,
