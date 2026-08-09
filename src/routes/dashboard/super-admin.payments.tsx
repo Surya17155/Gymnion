@@ -23,7 +23,7 @@ function SuperAdminPayments() {
 
   const { data: gymsData, isLoading } = useQuery({
     queryKey: ['super-admin-payments-gyms', search],
-    queryFn: () => getAllGymsFn({ search, limit: 100 })
+    queryFn: () => getAllGymsFn({ data: { search, limit: 100 } })
   });
 
   const now = new Date();
