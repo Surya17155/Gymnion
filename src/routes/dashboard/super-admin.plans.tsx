@@ -101,7 +101,10 @@ function SuperAdminPlans() {
         return;
       }
       
-      const cleanedFeatures = manualFeatures.filter((f: string) => f.trim() !== '');
+      const cleanedFeatures = manualFeatures.filter((f: any) => {
+        const text = typeof f === 'string' ? f : f.name;
+        return text.trim() !== '';
+      });
       const planData = {
         name: selectedPlan.name,
         price: Math.round(parseFloat(selectedPlan.price) * 100),
