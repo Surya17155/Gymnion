@@ -16,25 +16,14 @@ function QRManagement() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const getGymDetailsFn = useServerFn(getGymDetails);
-  const getAccessPointsFn = useServerFn(getGymAccessPointsFull);
-  const createAccessPointFn = useServerFn(createAccessPoint);
-  const deleteAccessPointFn = useServerFn(deleteAccessPoint);
   const regenerateQR = useServerFn(regenerateGymQR);
   
   const [qrUrl, setQrUrl] = useState<string>('');
   const [isRegenerating, setIsRegenerating] = useState(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [newPointName, setNewPointName] = useState('');
 
   const { data: gym, isLoading: isGymLoading } = useQuery({
     queryKey: ['admin-gym-details'],
     queryFn: () => getGymDetailsFn({ data: {} }),
-  });
-
-  const { data: rawAccessPoints, isLoading: isPointsLoading } = useQuery({
-    queryKey: ['gym-access-points', gym?.id],
-    queryFn: () => getAccessPointsFn({ data: { gymId: gym!.id } }),
-    enabled: !!gym?.id
   });
 
   const { data: attendanceCount } = useQuery({
@@ -53,26 +42,6 @@ function QRManagement() {
     enabled: !!gym?.id,
   });
 
-  const createMutation = useMutation({
-    mutationFn: (name: string) => createAccessPointFn({ data: { gymId: gym!.id, name } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['gym-access-points'] });
-      setIsDrawerOpen(false);
-      setNewPointName('');
-      toast.success('Access point created');
-    },
-    onError: () => toast.error('Failed to create access point')
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: (id: string) => deleteAccessPointFn({ data: { id } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['gym-access-points'] });
-      toast.success('Access point deleted');
-    },
-    onError: () => toast.error('Failed to delete access point')
-  });
-
   useEffect(() => {
     if (gym?.id) {
       const checkinUrl = `${window.location.origin}/checkin?gym=${gym.id}&code=${gym.gym_code || ''}`;
@@ -87,7 +56,7 @@ function QRManagement() {
     }
   }, [gym]);
 
-  if (isGymLoading || isPointsLoading) return null;
+  if (isGymLoading) return null;
 
   if (!gym?.id) {
     return (
