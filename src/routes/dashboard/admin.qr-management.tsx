@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useServerFn } from '@tanstack/react-start';
 import { getGymDetails, getGymAccessPoints } from '@/lib/auth.functions';
+import { regenerateGymQR } from '@/lib/gyms.functions';
+import { toast } from 'sonner';
 import QRCode from 'qrcode';
 
 export const Route = createFileRoute('/dashboard/admin/qr-management')({
@@ -14,7 +16,9 @@ function QRManagement() {
   const navigate = useNavigate();
   const getGymDetailsFn = useServerFn(getGymDetails);
   const getAccessPointsFn = useServerFn(getGymAccessPoints);
+  const regenerateQR = useServerFn(regenerateGymQR);
   const [qrUrl, setQrUrl] = useState<string>('');
+  const [isRegenerating, setIsRegenerating] = useState(false);
 
   const { data: gym, isLoading: isGymLoading } = useQuery({
     queryKey: ['admin-gym-details'],
@@ -23,7 +27,7 @@ function QRManagement() {
 
   useEffect(() => {
     if (gym?.id) {
-      const checkinUrl = `${window.location.origin}/checkin?gym=${gym.id}`;
+      const checkinUrl = `${window.location.origin}/checkin?gym=${gym.id}&code=${gym.gym_code || ''}`;
       QRCode.toDataURL(checkinUrl, {
         width: 400,
         margin: 2,
@@ -45,13 +49,20 @@ function QRManagement() {
     document.body.removeChild(link);
   };
 
-  const handleRegenerate = () => {
-    if (gym?.id) {
-      const checkinUrl = `${window.location.origin}/checkin?gym=${gym.id}`;
-      QRCode.toDataURL(checkinUrl, {
-        width: 400,
-        margin: 2,
-      }).then(setQrUrl);
+  const handleRegenerate = async () => {
+    if (!gym?.id) return;
+    try {
+      setIsRegenerating(true);
+      const updatedGym = await regenerateQR({ data: gym.id });
+      const checkinUrl = `${window.location.origin}/checkin?gym=${updatedGym.id}&code=${updatedGym.gym_code}`;
+      const url = await QRCode.toDataURL(checkinUrl, { width: 400, margin: 2 });
+      setQrUrl(url);
+      toast.success("Gym access code regenerated successfully!");
+    } catch (error) {
+      toast.error("Failed to regenerate gym code");
+      console.error(error);
+    } finally {
+      setIsRegenerating(false);
     }
   };
 
@@ -159,10 +170,11 @@ function QRManagement() {
               <div className="flex gap-3 w-full">
                 <button 
                   onClick={handleRegenerate}
-                  className="flex-1 bg-[#1e201d] h-12 rounded-full flex items-center justify-center gap-2 text-[#B7FF1E] text-[11px] font-bold uppercase border border-white/5 hover:bg-[#252724] transition-colors"
+                  className="flex-1 bg-[#1e201d] h-12 rounded-full flex items-center justify-center gap-2 text-[#B7FF1E] text-[11px] font-bold uppercase border border-white/5 hover:bg-[#252724] transition-colors disabled:opacity-50"
+                  disabled={isRegenerating}
                 >
-                  <span className="material-symbols-outlined text-[18px]">refresh</span>
-                  Regenerate
+                  <span className={`material-symbols-outlined text-[18px] ${isRegenerating ? 'animate-spin' : ''}`}>refresh</span>
+                  {isRegenerating ? 'Working...' : 'Regenerate'}
                 </button>
                 <button 
                   onClick={handleDownload}

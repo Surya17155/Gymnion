@@ -61,7 +61,7 @@ export function AdminDashboard() {
 
   useEffect(() => {
     if (gymData?.id) {
-      const checkinUrl = `${window.location.origin}/checkin?gym=${gymData.id}`;
+      const checkinUrl = `${window.location.origin}/checkin?gym=${gymData.id}&code=${gymData.gym_code || ''}`;
       QRCode.toDataURL(checkinUrl, { width: 400, margin: 2 }).then(setQrUrl);
     }
   }, [gymData]);
@@ -168,26 +168,25 @@ export function AdminDashboard() {
             <h2 className="text-[40px] font-bold leading-[44px] tracking-[-0.04em] text-white">Hi, {gymData?.owner_name || 'Admin'}</h2>
           </section>
 
-          {/* QR Quick Action */}
+          {/* Revenue Card (Full width) */}
           <section>
-            <button 
-              onClick={() => setShowQRModal(true)}
-              className="w-full bg-[#1e201d] border border-white/5 rounded-xl p-4 flex items-center justify-between group hover:bg-[#252724] transition-colors"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#B7FF1E]/10 flex items-center justify-center text-[#B7FF1E]">
-                  <span className="material-symbols-outlined">qr_code_2</span>
-                </div>
-                <div className="text-left">
-                  <h3 className="text-white font-bold">Gym QR Code</h3>
-                  <p className="text-[12px] text-[#858A7D]">Members scan this to check in</p>
+            <div className="bg-[#121411] rounded-xl p-[16px] border border-white/5 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-[#B7FF1E]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="flex justify-between items-start mb-2">
+                <span className="text-[12px] leading-[18px] text-[#858A7D] uppercase tracking-wider">Revenue (This Month)</span>
+                <span className="material-symbols-outlined text-[#B7FF1E] opacity-50" style={{ fontVariationSettings: '"FILL" 0' }}>payments</span>
+              </div>
+              <div className="flex items-end gap-3 mt-1">
+                <span className="text-[40px] leading-[40px] font-bold tracking-[-0.04em] text-[#B7FF1E]">₹{stats?.monthRevenue.toLocaleString() || 0}</span>
+                <div className="flex items-center text-[#A7F52A] text-[11px] font-semibold pb-2">
+                  <span className="material-symbols-outlined text-sm">trending_up</span>
+                  <span>+12%</span>
                 </div>
               </div>
-              <span className="material-symbols-outlined text-[#858A7D] group-hover:text-white transition-colors">arrow_forward_ios</span>
-            </button>
+            </div>
           </section>
 
-          {/* Subscription/Manual Features Banner */}
+          {/* Subscription/Manual Features Banner - Current Plan */}
           {(currentPlan || (gymData?.settings as any)?.manual_pricing) && (
             <section className="bg-[#B7FF1E]/10 border border-[#B7FF1E]/20 rounded-xl p-4 flex items-center justify-between">
               <div>
@@ -200,7 +199,6 @@ export function AdminDashboard() {
                 )}
               </div>
               <div className="flex gap-2">
-                {/* Check specific manual features if override exists, otherwise plan features */}
                 {(() => {
                   const settings = (gymData?.settings as any) || {};
                   const manualFeatures = settings.features;
@@ -243,23 +241,28 @@ export function AdminDashboard() {
             </section>
           )}
 
-          {/* KPI Grid */}
-          <section className="grid grid-cols-2 gap-3">
-            {/* Revenue Card (Full width) */}
-            <div className="col-span-2 bg-[#121411] rounded-xl p-[16px] border border-white/5 relative overflow-hidden group">
-              <div className="absolute inset-0 bg-[#B7FF1E]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="flex justify-between items-start mb-2">
-                <span className="text-[12px] leading-[18px] text-[#858A7D] uppercase tracking-wider">Revenue (This Month)</span>
-                <span className="material-symbols-outlined text-[#B7FF1E] opacity-50" style={{ fontVariationSettings: '"FILL" 0' }}>payments</span>
-              </div>
-              <div className="flex items-end gap-3 mt-1">
-                <span className="text-[40px] leading-[40px] font-bold tracking-[-0.04em] text-[#B7FF1E]">₹{stats?.monthRevenue.toLocaleString() || 0}</span>
-                <div className="flex items-center text-[#A7F52A] text-[11px] font-semibold pb-2">
-                  <span className="material-symbols-outlined text-sm">trending_up</span>
-                  <span>+12%</span>
+          {/* QR Quick Action - Link to QR Management */}
+          <section>
+            <Link 
+              to="/dashboard/admin/qr-management"
+              className="w-full bg-[#1e201d] border border-white/5 rounded-xl p-4 flex items-center justify-between group hover:bg-[#252724] transition-colors"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#B7FF1E]/10 flex items-center justify-center text-[#B7FF1E]">
+                  <span className="material-symbols-outlined">qr_code_2</span>
+                </div>
+                <div className="text-left">
+                  <h3 className="text-white font-bold">Gym QR Code</h3>
+                  <p className="text-[12px] text-[#858A7D]">Members scan this to check in</p>
                 </div>
               </div>
-            </div>
+              <span className="material-symbols-outlined text-[#858A7D] group-hover:text-white transition-colors">arrow_forward_ios</span>
+            </Link>
+          </section>
+
+          {/* KPI Grid */}
+          <section className="grid grid-cols-2 gap-3">
+            {/* Revenue Card moved up */}
 
             {/* Member Status Card */}
             <div className="bg-[#121411] rounded-xl p-[16px] border border-white/5 flex flex-col items-center justify-center text-center">
