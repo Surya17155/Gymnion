@@ -61,7 +61,7 @@ export const createGymWithAdmin = createServerFn({ method: "POST" })
       .from('user_roles')
       .insert([
         { user_id: userId, role: 'admin', gym_id: gym.id },
-        { user_id: userId, role: 'user', gym_id: gym.id }
+        { user_id: userId, role: 'member', gym_id: gym.id }
       ]);
 
     if (roleError) {
