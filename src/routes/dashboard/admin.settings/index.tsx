@@ -163,8 +163,8 @@ function AdminSettings() {
               to="/dashboard/admin/account"
               className="w-full flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-[#B7FF1E]/30 transition-colors group text-left"
             >
-              <div className="w-12 h-12 rounded-full bg-[#333532] group-hover:bg-[#B7FF1E]/20 transition-colors flex items-center justify-center mr-4">
-                <span className="material-symbols-outlined text-[#e3e3dd] group-hover:text-[#B7FF1E]">manage_accounts</span>
+              <div className="w-12 h-12 rounded-full bg-[#25340D] flex items-center justify-center mr-4 group-hover:bg-[#B7FF1E]/20 transition-colors">
+                <span className="material-symbols-outlined text-[#B7FF1E]" style={{ fontVariationSettings: '"FILL" 1' }}>manage_accounts</span>
               </div>
               <div className="flex-1">
                 <h3 className="text-[18px] font-semibold text-[#e3e3dd]">Account</h3>
