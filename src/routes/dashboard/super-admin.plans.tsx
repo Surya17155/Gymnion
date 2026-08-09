@@ -130,12 +130,14 @@ function SuperAdminPlans() {
       if (!isNewPlan) {
         console.log('Updating existing plan', selectedPlan.id);
         await updatePlanFn({
-          id: selectedPlan.id,
-          ...planData
+          data: {
+            id: selectedPlan.id,
+            ...planData
+          }
         });
       } else {
         console.log('Inserting new plan');
-        await createPlanFn(planData);
+        await createPlanFn({ data: planData });
       }
       
       toast.success(isNewPlan ? "Plan created successfully" : "Plan updated successfully");

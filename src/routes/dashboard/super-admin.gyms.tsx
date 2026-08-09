@@ -28,7 +28,7 @@ function SuperAdminGyms() {
 
   const { data: gymsData, isLoading } = useQuery({
     queryKey: ['super-admin-gyms', searchQuery, statusFilter],
-    queryFn: () => getGymsFn({ search: searchQuery, status: statusFilter }),
+    queryFn: () => getGymsFn({ data: { search: searchQuery, status: statusFilter } }),
   });
 
   const { data: plans } = useQuery({
@@ -71,7 +71,8 @@ function SuperAdminGyms() {
         ownerEmail: '',
         ownerPassword: '',
         ownerPhone: '',
-        gymCode: ''
+        gymCode: '',
+        planId: ''
       });
       queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
     } catch (err: any) {
@@ -381,7 +382,7 @@ function SuperAdminGyms() {
                     <button 
                       onClick={async () => {
                         try {
-                          await extendSubFn({ gymId: selectedGym.id, months: 1 });
+                          await extendSubFn({ data: { gymId: selectedGym.id, months: 1 } });
                           toast.success("Subscription extended by 1 month");
                           queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
                           setSelectedGym(null);
@@ -397,7 +398,7 @@ function SuperAdminGyms() {
                       <button 
                         onClick={async () => {
                           try {
-                            await updateStatusFn({ gymId: selectedGym.id, status: 'suspended' });
+                            await updateStatusFn({ data: { gymId: selectedGym.id, status: 'suspended' } });
                             toast.success("Gym suspended");
                             queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
                             setSelectedGym(null);
@@ -413,7 +414,7 @@ function SuperAdminGyms() {
                       <button 
                         onClick={async () => {
                           try {
-                            await updateStatusFn({ gymId: selectedGym.id, status: 'approved' });
+                            await updateStatusFn({ data: { gymId: selectedGym.id, status: 'approved' } });
                             toast.success("Gym reactivated");
                             queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
                             setSelectedGym(null);
