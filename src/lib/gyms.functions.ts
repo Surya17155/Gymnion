@@ -32,7 +32,7 @@ export const createGymWithAdmin = createServerFn({ method: "POST" })
         subscription_plan_id: data.planId || null,
         subscription_started_at: now.toISOString(),
         subscription_ends_at: nextMonth.toISOString()
-      })
+      } as any)
       .select()
       .single();
 
