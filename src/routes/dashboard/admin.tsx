@@ -102,7 +102,7 @@ function AdminDashboard() {
                 <p className="text-white font-bold">{currentPlan.name}</p>
               </div>
               <div className="flex gap-2">
-                {currentPlan.features?.slice(0, 3).map((f: any, i: number) => (
+                {Array.isArray(currentPlan.features) && (currentPlan.features as any[]).slice(0, 3).map((f: any, i: number) => (
                   <span 
                     key={i} 
                     className="material-symbols-outlined text-[16px]" 
