@@ -355,33 +355,51 @@ export function AdminDashboard() {
           )}
         </Link>
         
-        <Link 
-          to="/dashboard/admin/payments"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>receipt_long</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Payments</span>
-            </>
-          )}
-        </Link>
+        {(() => {
+          const settings = (gymData?.settings as any) || {};
+          const paymentEnabled = settings.features?.payment_management !== false;
+          
+          if (!paymentEnabled) return null;
+          
+          return (
+            <Link 
+              to="/dashboard/admin/payments"
+              activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+              inactiveProps={{ className: 'text-[#C0C2B8]' }}
+              className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+            >
+              {({ isActive }) => (
+                <>
+                  <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>receipt_long</span>
+                  <span className="text-[11px] font-semibold leading-[14px]">Payments</span>
+                </>
+              )}
+            </Link>
+          );
+        })()}
         
-        <Link 
-          to="/dashboard/admin/attendance"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>event_available</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Attendance</span>
-            </>
-          )}
-        </Link>
+        {(() => {
+          const settings = (gymData?.settings as any) || {};
+          const attendanceEnabled = settings.features?.attendance_management !== false;
+          
+          if (!attendanceEnabled) return null;
+          
+          return (
+            <Link 
+              to="/dashboard/admin/attendance"
+              activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+              inactiveProps={{ className: 'text-[#C0C2B8]' }}
+              className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+            >
+              {({ isActive }) => (
+                <>
+                  <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>event_available</span>
+                  <span className="text-[11px] font-semibold leading-[14px]">Attendance</span>
+                </>
+              )}
+            </Link>
+          );
+        })()}
         
         <Link 
           to="/dashboard/admin/settings"
