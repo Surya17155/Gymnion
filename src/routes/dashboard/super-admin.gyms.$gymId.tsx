@@ -187,20 +187,25 @@ function GymDetailScreen() {
         <section className="bg-[#121411] border border-white/5 rounded-3xl p-6 relative overflow-hidden">
           <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#B7FF1E]/10 rounded-full blur-3xl"></div>
           <div className="flex flex-col items-center text-center relative z-10">
-            <div className="relative">
+            <div className="relative group">
               <div 
-                onClick={() => fileInputRef.current?.click()}
-                className="w-24 h-24 rounded-2xl bg-[#1e201d] flex items-center justify-center border border-[#B7FF1E]/20 text-[#B7FF1E] mb-4 overflow-hidden cursor-pointer group"
+                className="w-24 h-24 rounded-2xl bg-[#1e201d] flex items-center justify-center border border-[#B7FF1E]/20 text-[#B7FF1E] mb-4 overflow-hidden relative"
               >
                 {(gym as any).owner_photo_url ? (
                   <img src={(gym as any).owner_photo_url} alt="Admin" className="w-full h-full object-cover" />
                 ) : (
                   <span className="material-symbols-outlined text-[48px]">person</span>
                 )}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                  <span className="material-symbols-outlined text-white">photo_camera</span>
-                </div>
               </div>
+              
+              {/* Profile Photo Edit Pencil */}
+              <button 
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute -right-1 -bottom-1 w-8 h-8 bg-[#B7FF1E] text-black rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform z-20"
+              >
+                <span className="material-symbols-outlined text-[18px]">edit</span>
+              </button>
+
               <input 
                 type="file" 
                 ref={fileInputRef} 
@@ -210,26 +215,43 @@ function GymDetailScreen() {
               />
             </div>
             
-            {editingSection === 'gym' ? (
-              <div className="w-full space-y-3 px-4">
-                <input 
-                  className="w-full h-10 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-white text-center text-[20px] font-bold outline-none focus:border-[#B7FF1E]"
-                  value={editGymData.name}
-                  onChange={e => setEditGymData(prev => ({ ...prev, name: e.target.value }))}
-                />
-                <input 
-                  placeholder="Address"
-                  className="w-full h-8 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-[#858A7D] text-center text-[12px] outline-none focus:border-[#B7FF1E]"
-                  value={editGymData.address}
-                  onChange={e => setEditGymData(prev => ({ ...prev, address: e.target.value }))}
-                />
-              </div>
-            ) : (
-              <>
-                <h2 className="text-[24px] font-bold text-white">{gym.name}</h2>
-                <p className="text-[12px] text-[#858A7D] mt-1">{(gym as any).address || 'No address set'}</p>
-              </>
-            )}
+            <div className="flex items-center gap-2 group">
+              {editingSection === 'gym' ? (
+                <div className="w-full space-y-3 px-4">
+                  <input 
+                    className="w-full h-10 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-white text-center text-[20px] font-bold outline-none focus:border-[#B7FF1E]"
+                    value={editGymData.name}
+                    onChange={e => setEditGymData(prev => ({ ...prev, name: e.target.value }))}
+                  />
+                  <input 
+                    placeholder="Address"
+                    className="w-full h-8 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-[#858A7D] text-center text-[12px] outline-none focus:border-[#B7FF1E]"
+                    value={editGymData.address}
+                    onChange={e => setEditGymData(prev => ({ ...prev, address: e.target.value }))}
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col items-center relative">
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-[24px] font-bold text-white">{gym.name}</h2>
+                    <button 
+                      onClick={() => {
+                        setEditingSection('gym');
+                        setEditGymData({
+                          name: gym.name || '',
+                          address: (gym as any).address || '',
+                          gymCode: gym.gym_code || ''
+                        });
+                      }}
+                      className="text-[#858A7D] hover:text-[#B7FF1E] transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">edit</span>
+                    </button>
+                  </div>
+                  <p className="text-[12px] text-[#858A7D] mt-1">{(gym as any).address || 'No address set'}</p>
+                </div>
+              )}
+            </div>
             
             <div className="flex items-center gap-2 mt-3">
               <div className={`w-2 h-2 rounded-full ${gym.status === 'suspended' ? 'bg-[#FF5964]' : 'bg-[#B7FF1E]'}`}></div>
@@ -245,21 +267,17 @@ function GymDetailScreen() {
               <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block">Core Information</label>
               <button 
                 onClick={() => {
-                  if (editingSection === 'gym') {
-                    handleUpdateGym();
-                  } else {
-                    setEditingSection('gym');
-                    setEditGymData({
-                      name: gym.name || '',
-                      address: (gym as any).address || '',
-                      gymCode: gym.gym_code || ''
-                    });
-                  }
+                  setEditingSection('gym');
+                  setEditGymData({
+                    name: gym.name || '',
+                    address: (gym as any).address || '',
+                    gymCode: gym.gym_code || ''
+                  });
                 }}
                 className="text-[#B7FF1E] flex items-center gap-1 active:scale-90 transition-transform"
               >
-                <span className="material-symbols-outlined text-[18px]">{editingSection === 'gym' ? 'check' : 'edit'}</span>
-                <span className="text-[11px] font-bold">{editingSection === 'gym' ? 'Save' : 'Edit'}</span>
+                <span className="material-symbols-outlined text-[18px]">edit</span>
+                <span className="text-[11px] font-bold">Edit</span>
               </button>
             </div>
             <div className="space-y-4">
@@ -296,21 +314,17 @@ function GymDetailScreen() {
               <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block">Administrator</label>
               <button 
                 onClick={() => {
-                  if (editingSection === 'admin') {
-                    handleUpdateAdmin();
-                  } else {
-                    setEditingSection('admin');
-                    setEditAdminData({
-                      ownerName: gym.owner_name || '',
-                      ownerEmail: gym.owner_email || '',
-                      ownerPhone: gym.owner_phone || ''
-                    });
-                  }
+                  setEditingSection('admin');
+                  setEditAdminData({
+                    ownerName: gym.owner_name || '',
+                    ownerEmail: gym.owner_email || '',
+                    ownerPhone: gym.owner_phone || ''
+                  });
                 }}
                 className="text-[#B7FF1E] flex items-center gap-1 active:scale-90 transition-transform"
               >
-                <span className="material-symbols-outlined text-[18px]">{editingSection === 'admin' ? 'check' : 'edit'}</span>
-                <span className="text-[11px] font-bold">{editingSection === 'admin' ? 'Save' : 'Edit'}</span>
+                <span className="material-symbols-outlined text-[18px]">edit</span>
+                <span className="text-[11px] font-bold">Edit</span>
               </button>
             </div>
             <div className="space-y-4">
@@ -377,12 +391,24 @@ function GymDetailScreen() {
       
       {editingSection && (
         <div className="fixed bottom-24 left-1/2 -translate-x-1/2 w-full max-w-[440px] px-5 z-50">
-          <button 
-            onClick={() => setEditingSection(null)}
-            className="w-full py-3 bg-[#1e201d] text-[#858A7D] rounded-xl font-bold text-[14px] active:scale-95 transition-all border border-white/5"
-          >
-            Cancel Editing
-          </button>
+          <div className="flex gap-3">
+            <button 
+              onClick={() => setEditingSection(null)}
+              className="flex-1 py-3 bg-[#1e201d] text-[#858A7D] rounded-xl font-bold text-[14px] active:scale-95 transition-all border border-white/5"
+            >
+              Cancel
+            </button>
+            <button 
+              onClick={() => {
+                if (editingSection === 'gym') handleUpdateGym();
+                else handleUpdateAdmin();
+              }}
+              disabled={isUpdating}
+              className="flex-1 py-3 bg-[#B7FF1E] text-black rounded-xl font-bold text-[14px] active:scale-95 transition-all shadow-[0_8px_16px_rgba(183,255,30,0.2)]"
+            >
+              {isUpdating ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
         </div>
       )}
     </div>
