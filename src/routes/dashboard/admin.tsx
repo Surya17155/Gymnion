@@ -118,7 +118,7 @@ export function AdminDashboard() {
             {showDropdown && (
               <div className="absolute right-0 mt-2 w-48 bg-[#1e201d] border border-white/10 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200">
                 <Link
-                  to="/dashboard/admin/settings"
+                  to="/dashboard/admin/account"
                   className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#C0C2B8] hover:bg-white/5 transition-colors text-[14px]"
                   onClick={() => setShowDropdown(false)}
                 >
