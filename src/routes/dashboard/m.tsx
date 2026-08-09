@@ -149,7 +149,7 @@ export function MemberDashboard() {
           </section>
         </div>
 
-        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-40 bg-[#1e201d] border-t border-white/5 shadow-lg px-2 py-2 pb-safe flex justify-around items-center h-[64px] rounded-t-2xl">
+        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-40 bg-[#1e201d] border-t border-white/5 shadow-lg px-2 py-2 pb-safe flex justify-around items-center h-[64px] rounded-t-lg">
           <Link to="/dashboard/m/" className="flex flex-col items-center justify-center text-[#B7FF1E] bg-[#25340D]/20 rounded-xl p-1 w-[72px] h-[64px] scale-90 transition-all duration-200">
             <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: '"FILL" 1' }}>home</span>
             <span className="text-[11px] leading-[14px] font-semibold">Home</span>
