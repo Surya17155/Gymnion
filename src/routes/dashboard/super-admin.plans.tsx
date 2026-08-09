@@ -30,6 +30,7 @@ function SuperAdminPlans() {
   const createPlanFn = useServerFn(createSubscriptionPlan);
   const updatePlanFn = useServerFn(updateSubscriptionPlan);
   const deletePlanFn = useServerFn(deleteSubscriptionPlan);
+  const setManualPricingFn = useServerFn(setGymManualPricing);
 
   const { data: globalPlans, isLoading: isLoadingPlans } = useQuery({
     queryKey: ['global-plans'],
@@ -61,18 +62,12 @@ function SuperAdminPlans() {
 
     setIsSubmitting(true);
     try {
-      const currentSettings = (selectedGymForOverride.settings as Record<string, any>) || {};
-      const newSettings = { 
-        ...currentSettings, 
-        manual_pricing: parseFloat(customMonthlyPrice) 
-      };
-
-      const { error } = await supabase
-        .from('gyms')
-        .update({ settings: newSettings })
-        .eq('id', selectedGymForOverride.id);
-
-      if (error) throw error;
+      await setManualPricingFn({
+        data: {
+          gymId: selectedGymForOverride.id,
+          manualPricing: parseFloat(customMonthlyPrice)
+        }
+      });
 
       toast.success(`Manual pricing set for ${selectedGymForOverride.name}`);
       setIsAddingOverride(false);
@@ -336,11 +331,18 @@ function SuperAdminPlans() {
                         onBlur={async (e) => {
                           const newPrice = parseFloat(e.target.value);
                           if (!isNaN(newPrice)) {
-                            await supabase.from('gyms').update({
-                              settings: { ...(gym.settings as any), manual_pricing: newPrice }
-                            }).eq('id', gym.id);
-                            toast.success("Price updated");
-                            queryClient.invalidateQueries({ queryKey: ['gyms-with-overrides'] });
+                            try {
+                              await setManualPricingFn({
+                                data: {
+                                  gymId: gym.id,
+                                  manualPricing: newPrice
+                                }
+                              });
+                              toast.success("Price updated");
+                              queryClient.invalidateQueries({ queryKey: ['gyms-with-overrides'] });
+                            } catch (err: any) {
+                              toast.error(err.message || "Update failed");
+                            }
                           }
                         }}
                       />
