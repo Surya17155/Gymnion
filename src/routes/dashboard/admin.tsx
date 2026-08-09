@@ -88,8 +88,35 @@ function AdminDashboard() {
           {/* Page Title */}
           <section className="-mt-4">
             <h2 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white">Dashboard</h2>
-            <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Good morning, Admin</p>
+            <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Good morning, {gymData?.owner_name || 'Admin'}</p>
+            {gymData && (
+              <p className="text-[12px] text-[#B7FF1E] mt-1 font-semibold uppercase tracking-wider">{gymData.name}</p>
+            )}
           </section>
+
+          {/* Subscription Banner */}
+          {currentPlan && (
+            <section className="bg-[#B7FF1E]/10 border border-[#B7FF1E]/20 rounded-xl p-4 flex items-center justify-between">
+              <div>
+                <p className="text-[10px] text-[#858A7D] uppercase font-bold">Current Plan</p>
+                <p className="text-white font-bold">{currentPlan.name}</p>
+              </div>
+              <div className="flex gap-2">
+                {currentPlan.features?.slice(0, 3).map((f: any, i: number) => (
+                  <span 
+                    key={i} 
+                    className="material-symbols-outlined text-[16px]" 
+                    style={{ 
+                      fontVariationSettings: "'FILL' 1",
+                      color: (typeof f === 'string' ? true : f.enabled) ? '#B7FF1E' : '#FF5964'
+                    }}
+                  >
+                    {(typeof f === 'string' ? true : f.enabled) ? 'check_circle' : 'cancel'}
+                  </span>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* KPI Grid */}
           <section className="grid grid-cols-2 gap-3">
