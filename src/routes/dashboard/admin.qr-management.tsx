@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate, Link, Navigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useServerFn } from '@tanstack/react-start';
-import { getGymDetails, getGymAccessPoints } from '@/lib/auth.functions';
+import { getGymDetails, getGymAccessPoints, createAccessPoint, deleteAccessPoint } from '@/lib/auth.functions';
 import { regenerateGymQR } from '@/lib/gyms.functions';
 import { toast } from 'sonner';
 import QRCode from 'qrcode';
