@@ -185,7 +185,7 @@ function AuthPage() {
         <div className="bg-[#333532] p-1 rounded-full flex relative w-full mb-6 border border-white/5 shadow-inner z-10">
           <div className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-[#B7FF1E] rounded-full transition-all duration-300 ease-in-out ${authMode === 'signin' ? 'left-1' : 'left-[calc(50%+1px)]'}`}></div>
           <button type="button" onClick={() => setAuthMode('signin')} className={`flex-1 py-3 text-center z-10 text-sm font-semibold transition-colors duration-300 ${authMode === 'signin' ? 'text-[#293500]' : 'text-[#C0C2B8]'}`}>Sign In</button>
-          <button onClick={() => setAuthMode('signup')} className={`flex-1 py-3 text-center z-10 text-sm font-semibold transition-colors duration-300 ${authMode === 'signup' ? 'text-[#293500]' : 'text-[#C0C2B8]'}`}>Sign Up</button>
+          <button type="button" onClick={() => setAuthMode('signup')} className={`flex-1 py-3 text-center z-10 text-sm font-semibold transition-colors duration-300 ${authMode === 'signup' ? 'text-[#293500]' : 'text-[#C0C2B8]'}`}>Sign Up</button>
         </div>
 
         {errorMsg && <div className="text-center text-xs mb-4 p-3 rounded-xl border text-[#FF5964] border-[#FF5964]/20 bg-[#FF5964]/5">{errorMsg}</div>}
