@@ -104,9 +104,26 @@ export function AdminDashboard() {
                   className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#C0C2B8] hover:bg-white/5 transition-colors text-[14px]"
                   onClick={() => setShowDropdown(false)}
                 >
+                  <span className="material-symbols-outlined text-[18px]">person</span>
+                  Profile
+                </Link>
+                <Link
+                  to="/dashboard/admin/settings/qr-management"
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#C0C2B8] hover:bg-white/5 transition-colors text-[14px]"
+                  onClick={() => setShowDropdown(false)}
+                >
+                  <span className="material-symbols-outlined text-[18px]">qr_code_2</span>
+                  QR Management
+                </Link>
+                <Link
+                  to="/dashboard/admin/settings"
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#C0C2B8] hover:bg-white/5 transition-colors text-[14px]"
+                  onClick={() => setShowDropdown(false)}
+                >
                   <span className="material-symbols-outlined text-[18px]">settings</span>
                   Settings
                 </Link>
+                <div className="h-px bg-white/5 my-1 mx-2"></div>
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#FF5964] hover:bg-white/5 transition-colors text-[14px]"
@@ -232,51 +249,7 @@ export function AdminDashboard() {
             </div>
           </section>
 
-          {/* Quick Actions */}
-          <section className="flex flex-col gap-3">
-            <h3 className="text-[18px] font-semibold text-white mb-1">Quick Actions</h3>
-            
-            {/* Conditional QR Management Button */}
-            {(() => {
-              const settings = (gymData?.settings as any) || {};
-              const attendanceEnabled = settings.features?.attendance_management !== false; // Default to true for global plans for now
-              
-              if (attendanceEnabled) {
-                return (
-                  <Link 
-                    to="/dashboard/admin/settings/qr-management"
-                    className="bg-[#B7FF1E] rounded-xl p-[16px] flex items-center justify-between shadow-[0_0_20px_rgba(183,255,30,0.1)] hover:scale-[0.98] transition-transform cursor-pointer"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center">
-                        <span className="material-symbols-outlined text-[#B7FF1E] text-3xl" style={{ fontVariationSettings: '"FILL" 0' }}>qr_code_2</span>
-                      </div>
-                      <div>
-                        <h4 className="text-[18px] font-semibold text-black">Gym QR Code</h4>
-                        <p className="text-[12px] text-black/70">Show to members for check-in</p>
-                      </div>
-                    </div>
-                    <span className="material-symbols-outlined text-black">chevron_right</span>
-                  </Link>
-                );
-              }
-              
-              return (
-                <div className="bg-[#1e201d] rounded-xl p-[16px] flex items-center justify-between border border-white/5 opacity-50 cursor-not-allowed">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-black/40 rounded-lg flex items-center justify-center">
-                      <span className="material-symbols-outlined text-[#858A7D] text-3xl">qr_code_2</span>
-                    </div>
-                    <div>
-                      <h4 className="text-[18px] font-semibold text-[#858A7D]">Gym QR Code</h4>
-                      <p className="text-[12px] text-[#858A7D]">Attendance feature disabled</p>
-                    </div>
-                  </div>
-                  <span className="material-symbols-outlined text-[#858A7D]">lock</span>
-                </div>
-              );
-            })()}
-          </section>
+          {/* Quick Actions removed from dashboard as requested, keeping other sections */}
 
           {/* Recent Activity */}
           <section>
