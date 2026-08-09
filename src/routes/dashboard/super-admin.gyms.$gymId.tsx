@@ -38,6 +38,8 @@ function GymDetailScreen() {
   });
 
   const [editAdminData, setEditAdminData] = useState({
+    ownerFirstName: '',
+    ownerLastName: '',
     ownerName: '',
     ownerEmail: '',
     ownerPhone: ''
@@ -52,6 +54,8 @@ function GymDetailScreen() {
         gymCode: gym.gym_code || ''
       });
       setEditAdminData({
+        ownerFirstName: (gym as any).owner_first_name || '',
+        ownerLastName: (gym as any).owner_last_name || '',
         ownerName: gym.owner_name || '',
         ownerEmail: gym.owner_email || '',
         ownerPhone: gym.owner_phone || ''
@@ -318,6 +322,8 @@ function GymDetailScreen() {
                 onClick={() => {
                   setEditingSection('admin');
                   setEditAdminData({
+                    ownerFirstName: (gym as any).owner_first_name || '',
+                    ownerLastName: (gym as any).owner_last_name || '',
                     ownerName: gym.owner_name || '',
                     ownerEmail: gym.owner_email || '',
                     ownerPhone: gym.owner_phone || ''
@@ -332,13 +338,29 @@ function GymDetailScreen() {
             <div className="space-y-4">
               {editingSection === 'admin' ? (
                 <div className="space-y-3">
-                  <div className="space-y-1">
-                    <p className="text-[10px] text-[#858A7D] font-bold">NAME</p>
-                    <input 
-                      className="w-full h-10 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-white outline-none focus:border-[#B7FF1E]"
-                      value={editAdminData.ownerName}
-                      onChange={e => setEditAdminData(prev => ({ ...prev, ownerName: e.target.value }))}
-                    />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <p className="text-[10px] text-[#858A7D] font-bold">FIRST NAME</p>
+                      <input 
+                        className="w-full h-10 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-white outline-none focus:border-[#B7FF1E]"
+                        value={editAdminData.ownerFirstName}
+                        onChange={e => {
+                          const newFirstName = e.target.value;
+                          setEditAdminData(prev => ({ ...prev, ownerFirstName: newFirstName, ownerName: `${newFirstName} ${prev.ownerLastName}`.trim() }));
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-[10px] text-[#858A7D] font-bold">LAST NAME</p>
+                      <input 
+                        className="w-full h-10 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-white outline-none focus:border-[#B7FF1E]"
+                        value={editAdminData.ownerLastName}
+                        onChange={e => {
+                          const newLastName = e.target.value;
+                          setEditAdminData(prev => ({ ...prev, ownerLastName: newLastName, ownerName: `${prev.ownerFirstName} ${newLastName}`.trim() }));
+                        }}
+                      />
+                    </div>
                   </div>
                   <div className="space-y-1">
                     <p className="text-[10px] text-[#858A7D] font-bold">EMAIL</p>
@@ -359,7 +381,8 @@ function GymDetailScreen() {
                 </div>
               ) : (
                 <>
-                  <DetailRow icon="person" label="Name" value={gym.owner_name} />
+                  <DetailRow icon="person" label="First Name" value={(gym as any).owner_first_name} />
+                  <DetailRow icon="person" label="Last Name" value={(gym as any).owner_last_name} />
                   <DetailRow icon="mail" label="Email" value={gym.owner_email} />
                   <DetailRow icon="call" label="Phone" value={gym.owner_phone} />
                 </>
