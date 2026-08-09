@@ -1,5 +1,5 @@
-import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-router';
-import { useState } from 'react';
+import { createFileRoute, Link, Outlet, useLocation, useNavigate } from '@tanstack/react-router';
+import { useState, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -12,7 +12,25 @@ function AdminLayout() {
 }
 
 export function AdminDashboard() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate({ to: '/auth/login' });
+  };
 
   const { data: gymData } = useQuery({
     queryKey: ['admin-gym-settings'],
@@ -72,9 +90,34 @@ export function AdminDashboard() {
         <header className="flex justify-between items-center px-[20px] h-[64px] w-full sticky top-0 z-40">
           <div className="flex items-center gap-3">
           </div>
-          <button className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity text-[#B7FF1E] bg-[#1e201d]/50">
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 0' }}>person</span>
-          </button>
+          <div className="relative" ref={dropdownRef}>
+            <button 
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity text-[#B7FF1E] bg-[#1e201d]/50 border border-white/10 focus:outline-none"
+            >
+              <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 0' }}>person</span>
+            </button>
+
+            {showDropdown && (
+              <div className="absolute right-0 mt-2 w-48 bg-[#1e201d] border border-white/10 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200">
+                <Link
+                  to="/dashboard/admin/settings"
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#C0C2B8] hover:bg-white/5 transition-colors text-[14px]"
+                  onClick={() => setShowDropdown(false)}
+                >
+                  <span className="material-symbols-outlined text-[18px]">settings</span>
+                  Settings
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#FF5964] hover:bg-white/5 transition-colors text-[14px]"
+                >
+                  <span className="material-symbols-outlined text-[18px]">logout</span>
+                  Log out
+                </button>
+              </div>
+            )}
+          </div>
         </header>
 
         <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-2">
