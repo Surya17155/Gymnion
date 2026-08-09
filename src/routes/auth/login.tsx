@@ -165,11 +165,13 @@ function AuthPage() {
         // Belt + Suspenders approach requested
         try {
           await completeSignup({
-            userId: data.session.user.id,
-            gymId: gym.id,
-            fullName: formData.fullName,
-            email: formData.email,
-            phone: formData.phone
+            data: {
+              userId: data.session.user.id,
+              gymId: gym.id,
+              fullName: formData.fullName,
+              email: formData.email,
+              phone: formData.phone
+            }
           });
         } catch (signupErr) {
           console.error("Manual signup completion failed (might have been handled by trigger):", signupErr);

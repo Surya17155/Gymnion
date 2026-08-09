@@ -30,7 +30,7 @@ export const completeSignup = createServerFn({ method: "POST" })
         phone: phone || '',
         status: 'active',
         join_date: new Date().toISOString().split('T')[0]
-      })
+      } as any) // Using 'any' to bypass strict property checks for generated types which sometimes conflict with TanStack Server Functions' data passing
       .select()
       .maybeSingle();
 
