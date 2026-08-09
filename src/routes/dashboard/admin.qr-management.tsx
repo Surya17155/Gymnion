@@ -21,23 +21,33 @@ function QRManagement() {
   const [qrUrl, setQrUrl] = useState<string>('');
   const [isRegenerating, setIsRegenerating] = useState(false);
 
-  const { data: gym, isLoading: isGymLoading } = useQuery({
+  const { data: gym, isPending: isGymPending, error: gymError } = useQuery({
     queryKey: ['admin-gym-details'],
     queryFn: () => getGymDetailsFn({ data: {} }),
+    retry: false,
+    staleTime: 60000,
   });
 
   const { data: attendanceCount } = useQuery({
     queryKey: ['gym-attendance-today', gym?.id],
     queryFn: async () => {
-      if (!gym?.id) return 0;
-      const today = new Date().toISOString().split('T')[0];
-      const { count, error } = await supabase
-        .from('attendance')
-        .select('*', { count: 'exact', head: true })
-        .eq('gym_id', gym.id)
-        .gte('check_in_at', `${today}T00:00:00`);
-      if (error) throw error;
-      return count || 0;
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const { count, error } = await supabase
+          .from('attendance')
+          .select('*', { count: 'exact', head: true })
+          .eq('gym_id', gym!.id)
+          .gte('check_in_at', `${today}T00:00:00`);
+        
+        if (error) {
+          console.error("Supabase attendance query error:", error);
+          return 0;
+        }
+        return count || 0;
+      } catch (err) {
+        console.error("Attendance query catch block:", err);
+        return 0;
+      }
     },
     enabled: !!gym?.id,
   });
@@ -70,8 +80,9 @@ function QRManagement() {
   };
 
   useEffect(() => {
-    if (gym?.id) {
-      const checkinUrl = `${window.location.origin}/checkin?gym=${gym.id}&code=${gym.gym_code || ''}`;
+    let active = true;
+    if (gym?.id && gym.gym_code) {
+      const checkinUrl = `${window.location.origin}/checkin?gym=${gym.id}&code=${gym.gym_code}`;
       QRCode.toDataURL(checkinUrl, {
         width: 400,
         margin: 2,
@@ -79,20 +90,35 @@ function QRManagement() {
           dark: '#000000',
           light: '#ffffff',
         },
-      }).then(setQrUrl);
+      }).then(url => {
+        if (active) setQrUrl(url);
+      }).catch(err => {
+        console.error("QR Code generation error:", err);
+      });
     }
-  }, [gym]);
+    return () => { active = false; };
+  }, [gym?.id, gym?.gym_code]);
 
-  if (isGymLoading) return null;
-
-  if (!gym?.id) {
+  if (isGymPending) {
     return (
       <div className="min-h-screen bg-[#0D0F0C] text-white flex flex-col items-center justify-center p-4">
-        <h1 className="text-xl font-bold mb-2">No Gym Found</h1>
-        <p className="text-gray-400 mb-4">We couldn't find a gym associated with your account.</p>
+        <div className="w-8 h-8 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-[#858A7D]">Loading gym details...</p>
+      </div>
+    );
+  }
+
+  if (gymError || !gym?.id) {
+    return (
+      <div className="min-h-screen bg-[#0D0F0C] text-white flex flex-col items-center justify-center p-4">
+        <span className="material-symbols-outlined text-[#FF5964] text-[48px] mb-4">error</span>
+        <h1 className="text-xl font-bold mb-2">Access Denied</h1>
+        <p className="text-gray-400 mb-6 text-center max-w-[280px]">
+          {gymError instanceof Error ? gymError.message : "We couldn't find a gym associated with your account."}
+        </p>
         <button
           onClick={() => navigate({ to: '/dashboard/admin' })}
-          className="bg-[#B7FF1E] text-black px-4 py-2 rounded-full font-bold"
+          className="bg-[#B7FF1E] text-black px-8 py-3 rounded-full font-bold active:scale-95 transition-transform"
         >
           Return to Dashboard
         </button>
@@ -110,7 +136,7 @@ function QRManagement() {
       />
 
       <div className="max-w-[480px] mx-auto min-h-screen pb-24 relative z-10 flex flex-col">
-        <header className="flex items-center px-[20px] h-[64px] w-full sticky top-0 z-40 bg-[#121411]/80 backdrop-blur-md">
+        <header className="flex items-center px-[20px] h-[64px] w-full sticky top-0 z-40 bg-transparent">
           <Link 
             to="/dashboard/admin/settings" 
             className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center border border-white/5 absolute left-[20px]"
