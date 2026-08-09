@@ -15,7 +15,7 @@ export const Route = createFileRoute('/dashboard/super-admin/gyms')({
 function SuperAdminGyms() {
   const queryClient = useQueryClient();
   const createGymFn = useServerFn(createGymWithAdmin);
-  const [selectedGym, setSelectedGym] = useState<any>(null);
+  
   const [isAddingGym, setIsAddingGym] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -175,9 +175,10 @@ function SuperAdminGyms() {
             </div>
           ) : (
             gyms?.map((gym: any) => (
-              <div 
+              <Link 
                 key={gym.id}
-                onClick={() => setSelectedGym(gym)}
+                to="/dashboard/super-admin/gyms/$gymId"
+                params={{ gymId: gym.id }}
                 className="bg-[#121411] border border-white/5 rounded-xl p-3 flex items-center gap-3 hover:border-[#B7FF1E]/30 transition-colors cursor-pointer group"
               >
                 <div className="w-12 h-12 rounded-lg bg-[#333532] flex-shrink-0 overflow-hidden border border-white/5 relative">
@@ -195,7 +196,7 @@ function SuperAdminGyms() {
                 <div className="text-[#858A7D] group-hover:text-[#B7FF1E] transition-colors">
                   <span className="material-symbols-outlined">chevron_right</span>
                 </div>
-              </div>
+              </Link>
             ))
           )}
         </section>
@@ -318,149 +319,7 @@ function SuperAdminGyms() {
         </div>
       )}
 
-      {/* Detail Drawer */}
-      {selectedGym && (
-        <div className="fixed inset-0 z-[100] flex flex-col justify-end">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedGym(null)}></div>
-          <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 pb-12 w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300">
-            <div className="w-12 h-1.5 bg-[#1e201d] rounded-full mx-auto mb-8"></div>
-            
-            <div className="flex items-center gap-5 mb-8">
-              <div className="w-20 h-20 rounded-2xl bg-[#1e201d] flex items-center justify-center border border-[#B7FF1E]/20 text-[#B7FF1E]">
-                <span className="material-symbols-outlined text-4xl">fitness_center</span>
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-white">{selectedGym.name}</h2>
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="w-2 h-2 rounded-full bg-[#B7FF1E]"></span>
-                  <span className="text-[11px] text-[#B7FF1E] font-bold tracking-widest uppercase">Verified Partner</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              <div>
-                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-[0.15em] block mb-3">Administrator Details</label>
-                <div className="bg-[#1e201d]/30 rounded-2xl p-4 border border-white/5 flex flex-col gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="w-8 h-8 rounded-full bg-[#B7FF1E]/10 flex items-center justify-center text-[#B7FF1E]">
-                      <span className="material-symbols-outlined text-[18px]">person</span>
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-[#858A7D] uppercase font-bold">Name</p>
-                      <p className="text-[14px] text-white font-medium">{selectedGym.owner_name || 'Not provided'}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-8 h-8 rounded-full bg-[#B7FF1E]/10 flex items-center justify-center text-[#B7FF1E]">
-                      <span className="material-symbols-outlined text-[18px]">mail</span>
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-[#858A7D] uppercase font-bold">Email</p>
-                      <p className="text-[14px] text-white font-medium">{selectedGym.owner_email || 'Not provided'}</p>
-                    </div>
-                  </div>
-                  {selectedGym.owner_phone && (
-                    <div className="flex items-center gap-4">
-                      <div className="w-8 h-8 rounded-full bg-[#B7FF1E]/10 flex items-center justify-center text-[#B7FF1E]">
-                        <span className="material-symbols-outlined text-[18px]">call</span>
-                      </div>
-                      <div>
-                        <p className="text-[10px] text-[#858A7D] uppercase font-bold">Phone</p>
-                        <p className="text-[14px] text-white font-medium">{selectedGym.owner_phone}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-[0.15em] block mb-3">Subscription Status</label>
-                <div className="bg-[#1e201d]/30 rounded-2xl p-4 border border-white/5 flex flex-col gap-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-[#C0C2B8]">Ends At:</span>
-                    <span className="text-xs text-white font-medium">
-                      {selectedGym.subscription_ends_at ? new Date(selectedGym.subscription_ends_at).toLocaleDateString() : 'No subscription'}
-                    </span>
-                  </div>
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={async () => {
-                        try {
-                          await extendSubFn({ data: { gymId: selectedGym.id, months: 1 } });
-                          toast.success("Subscription extended by 1 month");
-                          queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
-                          setSelectedGym(null);
-                        } catch (err: any) {
-                          toast.error(err.message || "Failed to extend");
-                        }
-                      }}
-                      className="flex-1 py-2 bg-[#B7FF1E]/10 border border-[#B7FF1E]/30 rounded-xl text-[#B7FF1E] text-[10px] font-bold uppercase"
-                    >
-                      Extend 1 Mo
-                    </button>
-                    {selectedGym.status === 'approved' ? (
-                      <button 
-                        onClick={async () => {
-                          try {
-                            await updateStatusFn({ data: { gymId: selectedGym.id, status: 'suspended' } });
-                            toast.success("Gym suspended");
-                            queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
-                            setSelectedGym(null);
-                          } catch (err: any) {
-                            toast.error(err.message || "Failed to suspend");
-                          }
-                        }}
-                        className="flex-1 py-2 bg-[#FF5964]/10 border border-[#FF5964]/30 rounded-xl text-[#FF5964] text-[10px] font-bold uppercase"
-                      >
-                        Suspend
-                      </button>
-                    ) : (
-                      <button 
-                        onClick={async () => {
-                          try {
-                            await updateStatusFn({ data: { gymId: selectedGym.id, status: 'approved' } });
-                            toast.success("Gym reactivated");
-                            queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
-                            setSelectedGym(null);
-                          } catch (err: any) {
-                            toast.error(err.message || "Failed to activate");
-                          }
-                        }}
-                        className="flex-1 py-2 bg-[#B7FF1E]/10 border border-[#B7FF1E]/30 rounded-xl text-[#B7FF1E] text-[10px] font-bold uppercase"
-                      >
-                        Reactivate
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-[0.15em] block mb-3">Gym Configuration</label>
-                <div className="bg-[#1e201d]/30 rounded-2xl p-4 border border-white/5 grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-[10px] text-[#858A7D] uppercase font-bold mb-1">Gym Code</p>
-                    <p className="text-[18px] font-bold text-[#B7FF1E] font-mono tracking-wider">{selectedGym.gym_code || '---'}</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] text-[#858A7D] uppercase font-bold mb-1">Join Date</p>
-                    <p className="text-[14px] text-white font-medium">{selectedGym.created_at ? new Date(selectedGym.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '---'}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <button 
-              onClick={() => setSelectedGym(null)}
-              className="w-full mt-10 py-[18px] bg-[#B7FF1E] text-black text-[16px] font-bold rounded-2xl shadow-[0_12px_24px_rgba(183,255,30,0.15)] active:scale-95 transition-all"
-            >
-              Close Details
-            </button>
-          </div>
-        </div>
-      )}
-
+      {/* Detail Drawer - Removed in favor of page navigation */}
     </div>
   );
 }
