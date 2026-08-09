@@ -25,7 +25,7 @@ function HomePage() {
       <h1 className="text-4xl font-bold mb-2">Gym<span className="text-[#B7FF1E]">Sync</span></h1>
       <p className="text-[#858A7D] mb-12">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                             
-                                            this is the button, when I click nothing happens, connect this with the backend so when I click on this button, and the email and passowrd matches with the correct designation (super admin, admin or member) keep me signin with my email and password</p>
+                                            No, nothing has happened so far; the functionality is still broken. Please check using my superadmin email and password and verify in the backend whether any error is visible that is preventing me from logging in or accessing the dashboard. Determine the issue. Earlier it was working well, but now I don’t know what the problem is. Please restore the functionality to its previous state, as it was working before.</p>
       
       <button 
         onClick={() => navigate({ to: "/auth/login" })}

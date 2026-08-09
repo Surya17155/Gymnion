@@ -116,7 +116,9 @@ function AuthPage() {
         clearRoleCache();
         const role = await getRoleForUser(data.session.user.id);
         const home = homeForRole(role);
-        navigate({ to: home ?? redirectPath });
+        console.log("Login successful, role:", role, "redirecting to:", home);
+        // Using window.location for a hard reset to ensure all auth states are fresh
+        window.location.href = home ?? '/dashboard';
       }
 
     } catch (err: any) {

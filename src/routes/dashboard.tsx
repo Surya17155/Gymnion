@@ -17,10 +17,18 @@ export const Route = createFileRoute('/dashboard')({
     const home = homeForRole(role);
 
     if (!home) {
-      throw redirect({ to: '/auth/login', search: { redirect: location.href } });
+      console.warn("User has no role, redirecting to login");
+      throw redirect({ to: '/auth/login' });
     }
 
+    // If on the base /dashboard, go to role home
+    if (location.pathname === '/dashboard' || location.pathname === '/dashboard/') {
+      throw redirect({ to: home });
+    }
+
+    // If on a path not belonging to the role home, redirect
     if (!location.pathname.startsWith(home)) {
+      console.warn(`Path ${location.pathname} is not allowed for role ${role}, redirecting to ${home}`);
       throw redirect({ to: home });
     }
 
