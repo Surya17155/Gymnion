@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { getGymDetails, updateAdminAccount } from '@/lib/auth.functions';
+import { supabase } from '@/integrations/supabase/client';
 
 export const Route = createFileRoute('/dashboard/admin/account')({
   component: AdminAccount,
@@ -27,6 +28,8 @@ function AdminAccount() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (gym) {
@@ -102,10 +105,53 @@ function AdminAccount() {
                 )}
               </div>
               {isEditing && (
-                <button className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#B7FF1E] text-[#121411] flex items-center justify-center border-2 border-[#121411]">
-                  <span className="material-symbols-outlined text-sm">edit</span>
+                <button 
+                  type="button"
+                  disabled={isUploading}
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#B7FF1E] text-[#121411] flex items-center justify-center border-2 border-[#121411] disabled:opacity-50"
+                >
+                  {isUploading ? (
+                    <div className="w-4 h-4 border-2 border-[#121411] border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <span className="material-symbols-outlined text-sm">edit</span>
+                  )}
                 </button>
               )}
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                className="hidden" 
+                accept="image/*"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+
+                  try {
+                    setIsUploading(true);
+                    const fileExt = file.name.split('.').pop();
+                    const fileName = `${gym?.id || 'admin'}-${Math.random()}.${fileExt}`;
+                    const filePath = `owners/${fileName}`;
+
+                    const { error: uploadError } = await supabase.storage
+                      .from('gym-assets')
+                      .upload(filePath, file);
+
+                    if (uploadError) throw uploadError;
+
+                    const { data: { publicUrl } } = supabase.storage
+                      .from('gym-assets')
+                      .getPublicUrl(filePath);
+
+                    setFormData(prev => ({ ...prev, photo_url: publicUrl }));
+                    setMessage({ type: 'success', text: 'Photo uploaded! Don\'t forget to save changes.' });
+                  } catch (err: any) {
+                    setMessage({ type: 'error', text: err.message || 'Failed to upload photo' });
+                  } finally {
+                    setIsUploading(false);
+                  }
+                }}
+              />
             </div>
             <h2 className="text-xl font-bold mt-4 text-white">{formData.full_name}</h2>
             <p className="text-sm text-[#858A7D]">Gym Administrator</p>
