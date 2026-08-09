@@ -547,9 +547,15 @@ export const updateFeePlan = createServerFn({ method: 'POST' })
   }).parse(data))
   .handler(async ({ data }) => {
     const { id, ...updates } = data;
+    const finalUpdates: any = {};
+    if (updates.name !== undefined) finalUpdates.name = updates.name;
+    if (updates.amount !== undefined) finalUpdates.amount = updates.amount;
+    if (updates.description !== undefined) finalUpdates.description = updates.description;
+    if (updates.billing_cycle !== undefined) finalUpdates.billing_cycle = updates.billing_cycle;
+
     const { error } = await supabaseAdmin
       .from('fee_plans')
-      .update(updates)
+      .update(finalUpdates)
       .eq('id', id);
     
     if (error) throw error;
