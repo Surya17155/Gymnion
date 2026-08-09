@@ -16,21 +16,39 @@ export const Route = createFileRoute('/dashboard')({
     const role = await getRoleForUser(session.user.id);
     const home = homeForRole(role);
 
-    if (!home) {
-      console.warn("User has no role, redirecting to login");
+    if (!role || !home) {
+      console.warn("User has no valid role, redirecting to login");
       throw redirect({ to: '/auth/login' });
     }
 
-    // If on the base /dashboard, go to role home
-    if (location.pathname === '/dashboard' || location.pathname === '/dashboard/') {
+    // Role-based path security
+    const path = location.pathname;
+    
+    // Super Admin security
+    if (role === 'super_admin') {
+      if (!path.startsWith('/dashboard/super-admin')) {
+        throw redirect({ to: '/dashboard/super-admin' });
+      }
+    } 
+    // Gym Admin security
+    else if (role === 'gym_admin') {
+      if (!path.startsWith('/dashboard/admin')) {
+        throw redirect({ to: '/dashboard/admin' });
+      }
+    }
+    // Member security
+    else if (role === 'member') {
+      if (!path.startsWith('/dashboard/m')) {
+        throw redirect({ to: '/dashboard/m' });
+      }
+    }
+
+    // If on the base /dashboard, the above blocks already redirected, but for safety:
+    if (path === '/dashboard' || path === '/dashboard/') {
       throw redirect({ to: home });
     }
 
-    // If on a path not belonging to the role home, redirect
-    if (!location.pathname.startsWith(home)) {
-      console.warn(`Path ${location.pathname} is not allowed for role ${role}, redirecting to ${home}`);
-      throw redirect({ to: home });
-    }
+    return { role };
 
     return { role };
   },
