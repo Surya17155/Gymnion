@@ -113,7 +113,7 @@ function SuperAdminPlans() {
       const planData = {
         name: selectedPlan.name,
         price: Math.round(parseFloat(selectedPlan.price) * 100),
-        features: cleanedFeatures,
+        features: cleanedFeatures as any,
         is_active: true
       };
 
