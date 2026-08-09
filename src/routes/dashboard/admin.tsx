@@ -29,7 +29,7 @@ export function AdminDashboard() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate({ to: '/auth/login' });
+    navigate({ to: '/auth/login', search: { redirect: undefined } });
   };
 
   const { data: gymData } = useQuery({
