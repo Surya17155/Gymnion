@@ -27,26 +27,27 @@ function AdminDashboard() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return null;
       
-      const { data: profile } = await supabase
-        .from('profiles')
+      const { data: roleData } = await supabase
+        .from('user_roles')
         .select('gym_id')
-        .eq('id', user.id)
-        .single();
+        .eq('user_id', user.id)
+        .eq('role', 'gym_admin' as any)
+        .maybeSingle();
         
-      if (!profile?.gym_id) return null;
+      if (!roleData?.gym_id) return null;
       
       const { data: gym } = await supabase
         .from('gyms')
         .select('*')
-        .eq('id', profile.gym_id)
-        .single();
+        .eq('id', roleData.gym_id)
+        .maybeSingle();
         
       return gym;
     }
   });
 
   const { data: activePlans } = useQuery({
-    queryKey: ['available-plans'],
+    queryKey: ['global-plans-for-admin'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('global_plans')
