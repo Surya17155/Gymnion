@@ -53,7 +53,7 @@ export const getMyPayments = createServerFn({ method: 'GET' })
       .from('payments')
       .select('*')
       .eq('member_id', data.memberId)
-      .order('payment_date', { ascending: false })
+      .order('created_at', { ascending: false })
       .limit(data.limit);
 
     if (error) throw error;
@@ -73,13 +73,15 @@ export const getMyAttendance = createServerFn({ method: 'GET' })
       .eq('member_id', data.memberId);
 
     if (data.month) {
-      const [year, month] = data.month.split('-').map(Number);
+      const parts = data.month.split('-');
+      const year = parseInt(parts[0]);
+      const month = parseInt(parts[1]);
       const startDate = new Date(year, month - 1, 1).toISOString();
       const endDate = new Date(year, month, 0, 23, 59, 59).toISOString();
-      query = query.gte('check_in', startDate).lte('check_in', endDate);
+      query = query.gte('check_in_at', startDate).lte('check_in_at', endDate);
     }
 
-    const { data: attendance, error } = await query.order('check_in', { ascending: false });
+    const { data: attendance, error } = await query.order('check_in_at', { ascending: false });
 
     if (error) throw error;
     return attendance;
@@ -95,9 +97,15 @@ export const updateMyProfile = createServerFn({ method: 'POST' })
   }).parse(data))
   .handler(async ({ data, context }) => {
     const userId = context.userId;
+    const updates: any = {};
+    if (data.phone) updates.phone = data.phone;
+    if (data.email) updates.email = data.email;
+    if (data.photo_url !== undefined) updates.photo_url = data.photo_url;
+    if (data.full_name) updates.full_name = data.full_name;
+
     const { error } = await supabaseAdmin
       .from('members')
-      .update(data)
+      .update(updates)
       .eq('user_id', userId);
     
     if (error) throw error;
@@ -284,9 +292,9 @@ export const getAdminStats = createServerFn({ method: 'GET' })
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
     const [checkins, currentlyIn, revenue, overdue] = await Promise.all([
-      supabaseAdmin.from('attendance').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).gte('check_in', todayStart),
-      supabaseAdmin.from('attendance').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).is('check_out', null),
-      supabaseAdmin.from('payments').select('amount').eq('gym_id', gymId).gte('payment_date', monthStart).eq('status', 'paid'),
+      supabaseAdmin.from('attendance').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).gte('check_in_at', todayStart),
+      supabaseAdmin.from('attendance').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).is('check_out_at', null),
+      supabaseAdmin.from('payments').select('amount').eq('gym_id', gymId).gte('created_at', monthStart).eq('status', 'paid'),
       supabaseAdmin.from('members').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).eq('status', 'overdue')
     ]);
 
@@ -312,30 +320,30 @@ export const getRecentActivity = createServerFn({ method: 'GET' })
         .from('attendance')
         .select('*, members(full_name)')
         .eq('gym_id', data.gymId)
-        .order('check_in', { ascending: false })
+        .order('check_in_at', { ascending: false })
         .limit(data.limit),
       supabaseAdmin
         .from('payments')
         .select('*, members(full_name)')
         .eq('gym_id', data.gymId)
-        .order('payment_date', { ascending: false })
+        .order('created_at', { ascending: false })
         .limit(data.limit)
     ]);
 
     const activities = [
       ...(attendance.data || []).map(a => ({
         type: 'attendance',
-        member_name: a.members?.full_name,
-        timestamp: a.check_in,
+        member_name: (a.members as any)?.full_name,
+        timestamp: a.check_in_at,
         action: 'checked in'
       })),
       ...(payments.data || []).map(p => ({
         type: 'payment',
-        member_name: p.members?.full_name,
-        timestamp: p.payment_date,
+        member_name: (p.members as any)?.full_name,
+        timestamp: p.created_at,
         action: `paid ₹${p.amount}`
       }))
-    ].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+    ].sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
      .slice(0, data.limit);
 
     return activities;
@@ -348,13 +356,22 @@ export const createMember = createServerFn({ method: 'POST' })
     full_name: z.string(),
     email: z.string().email(),
     phone: z.string().optional(),
-    plan_id: z.string().optional(),
+    fee_plan_id: z.string().optional(),
     status: z.string().default('active')
   }).parse(data))
   .handler(async ({ data }) => {
+    const insertData: any = {
+      gym_id: data.gym_id,
+      full_name: data.full_name,
+      email: data.email,
+      status: data.status,
+      phone: data.phone || ''
+    };
+    if (data.fee_plan_id) insertData.fee_plan_id = data.fee_plan_id;
+
     const { data: member, error } = await supabaseAdmin
       .from('members')
-      .insert([data])
+      .insert([insertData])
       .select()
       .single();
     
@@ -369,14 +386,21 @@ export const updateMember = createServerFn({ method: 'POST' })
     full_name: z.string().optional(),
     email: z.string().email().optional(),
     phone: z.string().optional(),
-    plan_id: z.string().optional(),
+    fee_plan_id: z.string().optional(),
     status: z.string().optional()
   }).parse(data))
   .handler(async ({ data }) => {
     const { id, ...updates } = data;
+    const finalUpdates: any = {};
+    if (updates.full_name) finalUpdates.full_name = updates.full_name;
+    if (updates.email) finalUpdates.email = updates.email;
+    if (updates.phone) finalUpdates.phone = updates.phone;
+    if (updates.fee_plan_id) finalUpdates.fee_plan_id = updates.fee_plan_id;
+    if (updates.status) finalUpdates.status = updates.status;
+
     const { data: member, error } = await supabaseAdmin
       .from('members')
-      .update(updates)
+      .update(finalUpdates)
       .eq('id', id)
       .select()
       .single();
@@ -410,7 +434,7 @@ export const getPaymentsDashboard = createServerFn({ method: 'GET' })
       .from('payments')
       .select('*, members(full_name, photo_url)')
       .eq('gym_id', data.gymId)
-      .order('payment_date', { ascending: false });
+      .order('created_at', { ascending: false });
 
     if (error) throw error;
 
@@ -427,9 +451,10 @@ export const recordManualPayment = createServerFn({ method: 'POST' })
     member_id: z.string(),
     gym_id: z.string(),
     amount: z.number(),
-    method: z.string(),
-    note: z.string().optional(),
-    payment_date: z.string().default(new Date().toISOString())
+    payment_method: z.string(),
+    notes: z.string().optional(),
+    payment_month: z.string(),
+    source: z.string().default('manual')
   }).parse(data))
   .handler(async ({ data }) => {
     const { error } = await supabaseAdmin
@@ -457,18 +482,18 @@ export const getAttendanceDashboard = createServerFn({ method: 'GET' })
         .from('attendance')
         .select('*, members(full_name, photo_url)')
         .eq('gym_id', data.gymId)
-        .is('check_out', null),
+        .is('check_out_at', null),
       supabaseAdmin
         .from('attendance')
         .select('*, members(full_name, photo_url)')
         .eq('gym_id', data.gymId)
-        .gte('check_in', todayStart)
-        .order('check_in', { ascending: false }),
+        .gte('check_in_at', todayStart)
+        .order('check_in_at', { ascending: false }),
       supabaseAdmin
         .from('attendance')
         .select('*, members(full_name, photo_url)')
         .eq('gym_id', data.gymId)
-        .order('check_in', { ascending: false })
+        .order('check_in_at', { ascending: false })
         .limit(50)
     ]);
 
