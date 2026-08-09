@@ -507,3 +507,24 @@ export const getAttendanceDashboard = createServerFn({ method: 'GET' })
       all_visits: allVisits.data || []
     };
   });
+
+export const getGymAccessPoints = createServerFn({ method: 'GET' })
+  .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.object({
+    gymId: z.string()
+  }).parse(data))
+  .handler(async ({ data }) => {
+    const { data: gym } = await supabaseAdmin
+      .from('gyms')
+      .select('settings')
+      .eq('id', data.gymId)
+      .single();
+    
+    const settings = (gym?.settings as any) || {};
+    return settings.access_points || [
+      { id: 1, name: 'Main Entrance', status: 'Active', icon: 'door_front' },
+      { id: 2, name: 'Cardio Zone', status: 'Active', icon: 'directions_run' },
+      { id: 3, name: 'VIP Lounge', status: 'Active', icon: 'workspace_premium' },
+      { id: 4, name: 'Pool Area', status: 'Offline', icon: 'warning', warning: true },
+    ];
+  });

@@ -104,9 +104,26 @@ export function AdminDashboard() {
                   className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#C0C2B8] hover:bg-white/5 transition-colors text-[14px]"
                   onClick={() => setShowDropdown(false)}
                 >
+                  <span className="material-symbols-outlined text-[18px]">person</span>
+                  Profile
+                </Link>
+                <Link
+                  to="/dashboard/admin/settings/qr-management"
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#C0C2B8] hover:bg-white/5 transition-colors text-[14px]"
+                  onClick={() => setShowDropdown(false)}
+                >
+                  <span className="material-symbols-outlined text-[18px]">qr_code_2</span>
+                  QR Management
+                </Link>
+                <Link
+                  to="/dashboard/admin/settings"
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#C0C2B8] hover:bg-white/5 transition-colors text-[14px]"
+                  onClick={() => setShowDropdown(false)}
+                >
                   <span className="material-symbols-outlined text-[18px]">settings</span>
                   Settings
                 </Link>
+                <div className="h-px bg-white/5 my-1 mx-2"></div>
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#FF5964] hover:bg-white/5 transition-colors text-[14px]"
@@ -122,11 +139,7 @@ export function AdminDashboard() {
         <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-2">
           {/* Page Title */}
           <section className="-mt-4">
-            <h2 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white">Dashboard</h2>
-            <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Good morning, {gymData?.owner_name || 'Admin'}</p>
-            {gymData && (
-              <p className="text-[12px] text-[#B7FF1E] mt-1 font-semibold uppercase tracking-wider">{gymData.name}</p>
-            )}
+            <h2 className="text-[40px] font-bold leading-[44px] tracking-[-0.04em] text-white">Hi, {gymData?.owner_name || 'Admin'}</h2>
           </section>
 
           {/* Subscription/Manual Features Banner */}
@@ -236,51 +249,7 @@ export function AdminDashboard() {
             </div>
           </section>
 
-          {/* Quick Actions */}
-          <section className="flex flex-col gap-3">
-            <h3 className="text-[18px] font-semibold text-white mb-1">Quick Actions</h3>
-            
-            {/* Conditional QR Management Button */}
-            {(() => {
-              const settings = (gymData?.settings as any) || {};
-              const attendanceEnabled = settings.features?.attendance_management !== false; // Default to true for global plans for now
-              
-              if (attendanceEnabled) {
-                return (
-                  <Link 
-                    to="/dashboard/admin/settings/qr-management"
-                    className="bg-[#B7FF1E] rounded-xl p-[16px] flex items-center justify-between shadow-[0_0_20px_rgba(183,255,30,0.1)] hover:scale-[0.98] transition-transform cursor-pointer"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center">
-                        <span className="material-symbols-outlined text-[#B7FF1E] text-3xl" style={{ fontVariationSettings: '"FILL" 0' }}>qr_code_2</span>
-                      </div>
-                      <div>
-                        <h4 className="text-[18px] font-semibold text-black">Gym QR Code</h4>
-                        <p className="text-[12px] text-black/70">Show to members for check-in</p>
-                      </div>
-                    </div>
-                    <span className="material-symbols-outlined text-black">chevron_right</span>
-                  </Link>
-                );
-              }
-              
-              return (
-                <div className="bg-[#1e201d] rounded-xl p-[16px] flex items-center justify-between border border-white/5 opacity-50 cursor-not-allowed">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-black/40 rounded-lg flex items-center justify-center">
-                      <span className="material-symbols-outlined text-[#858A7D] text-3xl">qr_code_2</span>
-                    </div>
-                    <div>
-                      <h4 className="text-[18px] font-semibold text-[#858A7D]">Gym QR Code</h4>
-                      <p className="text-[12px] text-[#858A7D]">Attendance feature disabled</p>
-                    </div>
-                  </div>
-                  <span className="material-symbols-outlined text-[#858A7D]">lock</span>
-                </div>
-              );
-            })()}
-          </section>
+          {/* Quick Actions removed from dashboard as requested, keeping other sections */}
 
           {/* Recent Activity */}
           <section>
@@ -320,7 +289,7 @@ export function AdminDashboard() {
           activeOptions={{ exact: true }}
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
@@ -334,7 +303,7 @@ export function AdminDashboard() {
           to="/dashboard/admin/members"
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
@@ -348,7 +317,7 @@ export function AdminDashboard() {
           to="/dashboard/admin/payments"
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
@@ -362,26 +331,12 @@ export function AdminDashboard() {
           to="/dashboard/admin/attendance"
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
               <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>event_available</span>
               <span className="text-[11px] font-semibold leading-[14px]">Attendance</span>
-            </>
-          )}
-        </Link>
-        
-        <Link 
-          to="/dashboard/admin/settings"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>settings</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Settings</span>
             </>
           )}
         </Link>
