@@ -114,15 +114,15 @@ function GymPlans() {
             <span className="material-symbols-outlined">arrow_back</span>
           </button>
           <div className="flex-1 text-center pr-10">
-            <h2 className="text-[18px] font-bold text-white uppercase tracking-wider">Fee Plans</h2>
+            <h2 className="text-[18px] font-bold text-white uppercase tracking-wider">GYM PRICING</h2>
+            <p className="text-[12px] text-[#858A7D]">Manage membership options for your gym.</p>
           </div>
         </header>
 
         <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-4">
           <div className="flex justify-between items-end">
             <div>
-              <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white mb-1">Gym Pricing</h1>
-              <p className="text-[12px] text-[#858A7D]">Manage membership options for your gym.</p>
+              <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white mb-1">{"\n"}</h1>
             </div>
             <button 
               onClick={() => { resetForm(); setIsDrawerOpen(true); }}
