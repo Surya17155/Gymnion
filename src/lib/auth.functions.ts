@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
@@ -685,5 +686,23 @@ export const updateAdminAccount = createServerFn({ method: 'POST' })
       await supabaseAdmin.auth.admin.updateUserById(userId, authUpdates);
     }
 
+    return { success: true };
+  });
+
+export const updateAdminPassword = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.object({
+    currentPassword: z.string().min(6),
+    newPassword: z.string().min(6),
+  }).parse(data))
+  .handler(async ({ data, context }) => {
+    const userId = context.userId;
+    if (!userId) throw new Error("Unauthorized");
+
+    const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
+      password: data.newPassword
+    });
+
+    if (error) throw error;
     return { success: true };
   });
