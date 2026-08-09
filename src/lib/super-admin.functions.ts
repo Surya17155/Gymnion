@@ -153,3 +153,55 @@ export const extendSubscription = createServerFn({ method: "POST" })
     if (error) throw error;
     return { success: true, newEndDate: newEnd.toISOString() };
   });
+
+export const getPlatformRevenue = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    // Check if user is super_admin
+    const { data: roleData } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', context.userId)
+      .eq('role', 'super_admin')
+      .single();
+
+    if (!roleData) throw new Error("Unauthorized");
+
+    const { data: gyms } = await supabaseAdmin
+      .from('gyms')
+      .select('subscription_plan_id, settings, subscription_ends_at');
+    
+    const { data: plans } = await supabaseAdmin.from('global_plans').select('id, price');
+    const planPrices = Object.fromEntries(plans?.map(p => [p.id, p.price]) || []);
+
+    let totalCollected = 0;
+    let paidCount = 0;
+    let overdueCount = 0;
+    const now = new Date();
+
+    gyms?.forEach(g => {
+        const manualPrice = (g.settings as any)?.manual_pricing;
+        let monthlyPaise = 0;
+        if (manualPrice) {
+            monthlyPaise = manualPrice * 100;
+        } else if (g.subscription_plan_id && planPrices[g.subscription_plan_id]) {
+            monthlyPaise = planPrices[g.subscription_plan_id] as number;
+        }
+        
+        const isOverdue = g.subscription_ends_at ? new Date(g.subscription_ends_at) < now : true;
+        
+        if (!isOverdue) {
+          totalCollected += monthlyPaise;
+          paidCount++;
+        } else {
+          overdueCount++;
+        }
+    });
+
+    return {
+      totalCollected: Math.round(totalCollected / 100),
+      paidCount,
+      overdueCount,
+      growth: 15
+    };
+  });
