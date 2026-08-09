@@ -33,9 +33,10 @@ function SuperAdminPayments() {
     
     return gymsData.gyms.filter(gym => {
       const isOverdue = gym.subscription_ends_at ? new Date(gym.subscription_ends_at) < now : true;
+      const isPaid = (gym.settings as any)?.payment_status === 'paid' || (!isOverdue && gym.subscription_ends_at);
       
-      if (filter === 'paid') return !isOverdue;
-      if (filter === 'overdue') return isOverdue;
+      if (filter === 'paid') return isPaid;
+      if (filter === 'overdue') return !isPaid;
       return true;
     });
   }, [gymsData, filter, now]);
@@ -130,27 +131,28 @@ function SuperAdminPayments() {
           ) : (
             filteredGyms.map((gym) => {
               const isOverdue = gym.subscription_ends_at ? new Date(gym.subscription_ends_at) < now : true;
+              const isPaid = (gym.settings as any)?.payment_status === 'paid' || (!isOverdue && gym.subscription_ends_at);
               const planName = (gym as any).global_plans?.name || 'Standard Plan';
               const manualPrice = (gym.settings as any)?.manual_pricing;
               const price = manualPrice ? `₹${manualPrice}` : 'Plan Price';
               
               return (
-                <div key={gym.id} className={`bg-[#121411] border border-white/5 rounded-xl p-4 flex items-center gap-4 hover:border-white/20 transition-colors cursor-pointer group ${isOverdue ? 'border-l-2 border-l-[#FF5964]' : ''}`}>
+                <div key={gym.id} className={`bg-[#121411] border border-white/5 rounded-xl p-4 flex items-center gap-4 hover:border-white/20 transition-colors cursor-pointer group ${!isPaid ? 'border-l-2 border-l-[#FF5964]' : ''}`}>
                   <div className="w-12 h-12 rounded-lg bg-[#292A28] flex items-center justify-center shrink-0 border border-white/5 group-hover:border-[#B7FF1E]/30 transition-colors">
                     <span className="material-symbols-outlined text-white">fitness_center</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-1">
                       <h3 className="text-[18px] font-semibold text-white truncate pr-2">{gym.name}</h3>
-                      <span className={`text-[11px] font-semibold px-2 py-0.5 rounded border shrink-0 ${isOverdue ? 'text-[#FF5964] bg-[#FF5964]/10 border-[#FF5964]/20' : 'text-[#B7FF1E] bg-[#B7FF1E]/10 border-[#B7FF1E]/20'}`}>
-                        {isOverdue ? 'OVERDUE' : 'PAID'}
+                      <span className={`text-[11px] font-semibold px-2 py-0.5 rounded border shrink-0 ${!isPaid ? 'text-[#FF5964] bg-[#FF5964]/10 border-[#FF5964]/20' : 'text-[#B7FF1E] bg-[#B7FF1E]/10 border-[#B7FF1E]/20'}`}>
+                        {isPaid ? 'PAID' : 'PENDING'}
                       </span>
                     </div>
                     <p className="text-[12px] text-[#C0C2B8] truncate">{planName} ({price})</p>
-                    <p className={`text-[11px] font-semibold mt-1 ${isOverdue ? 'text-[#FF5964]' : 'text-[#858A7D]'}`}>
-                      {isOverdue 
+                    <p className={`text-[11px] font-semibold mt-1 ${!isPaid ? 'text-[#FF5964]' : 'text-[#858A7D]'}`}>
+                      {!isPaid 
                         ? `Due: ${gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), "MMM dd, yyyy") : 'Immediate'}` 
-                        : `Ends: ${gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), "MMM dd, yyyy") : 'N/A'}`
+                        : `Valid Until: ${gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), "MMM dd, yyyy") : 'N/A'}`
                       }
                     </p>
                   </div>
