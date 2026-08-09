@@ -113,14 +113,22 @@ export const updateMyProfile = createServerFn({ method: 'POST' })
   });
 
 export const getFeePlans = createServerFn({ method: 'GET' })
-  .handler(async () => {
-    const { data, error } = await supabaseAdmin
+  .validator((data: any) => z.object({
+    gymId: z.string().optional()
+  }).parse(data || {}))
+  .handler(async ({ data }) => {
+    let query = supabaseAdmin
       .from('fee_plans')
       .select('*')
       .eq('is_active', true);
     
+    if (data.gymId) {
+      query = query.eq('gym_id', data.gymId);
+    }
+    
+    const { data: plans, error } = await query;
     if (error) throw error;
-    return data;
+    return plans;
   });
 
 export const createFeePlan = createServerFn({ method: 'POST' })
@@ -527,4 +535,43 @@ export const getGymAccessPoints = createServerFn({ method: 'GET' })
       { id: 3, name: 'VIP Lounge', status: 'Active', icon: 'workspace_premium' },
       { id: 4, name: 'Pool Area', status: 'Offline', icon: 'warning', warning: true },
     ];
+  });
+
+export const updateFeePlan = createServerFn({ method: 'POST' })
+  .validator((data: any) => z.object({
+    id: z.string(),
+    name: z.string().optional(),
+    amount: z.number().optional(),
+    description: z.string().optional().nullable(),
+    billing_cycle: z.string().optional(),
+  }).parse(data))
+  .handler(async ({ data }) => {
+    const { id, ...updates } = data;
+    const finalUpdates: any = {};
+    if (updates.name !== undefined) finalUpdates.name = updates.name;
+    if (updates.amount !== undefined) finalUpdates.amount = updates.amount;
+    if (updates.description !== undefined) finalUpdates.description = updates.description;
+    if (updates.billing_cycle !== undefined) finalUpdates.billing_cycle = updates.billing_cycle;
+
+    const { error } = await supabaseAdmin
+      .from('fee_plans')
+      .update(finalUpdates)
+      .eq('id', id);
+    
+    if (error) throw error;
+    return { success: true };
+  });
+
+export const deleteFeePlan = createServerFn({ method: 'POST' })
+  .validator((data: any) => z.object({
+    id: z.string()
+  }).parse(data))
+  .handler(async ({ data }) => {
+    const { error } = await supabaseAdmin
+      .from('fee_plans')
+      .update({ is_active: false })
+      .eq('id', data.id);
+    
+    if (error) throw error;
+    return { success: true };
   });
