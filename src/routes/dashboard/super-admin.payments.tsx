@@ -132,9 +132,9 @@ function SuperAdminPayments() {
             filteredGyms.map((gym) => {
               const isOverdue = gym.subscription_ends_at ? new Date(gym.subscription_ends_at) < now : true;
               const isPaid = (gym.settings as any)?.payment_status === 'paid' || (!isOverdue && gym.subscription_ends_at);
-              const planName = (gym as any).global_plans?.name || 'Standard Plan';
+              
               const manualPrice = (gym.settings as any)?.manual_pricing;
-              const price = manualPrice ? `₹${manualPrice}` : 'Plan Price';
+              const planName = manualPrice ? `Manual Pricing: ₹${manualPrice}` : ((gym as any).global_plans?.name || 'Standard Plan');
               
               return (
                 <div key={gym.id} className={`bg-[#121411] border border-white/5 rounded-xl p-4 flex items-center gap-4 hover:border-white/20 transition-colors cursor-pointer group ${!isPaid ? 'border-l-2 border-l-[#FF5964]' : ''}`}>
