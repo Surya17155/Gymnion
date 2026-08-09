@@ -21,24 +21,29 @@ function QRManagement() {
   const [qrUrl, setQrUrl] = useState<string>('');
   const [isRegenerating, setIsRegenerating] = useState(false);
 
-  const { data: gym, isLoading: isGymLoading, error: gymError } = useQuery({
+  const { data: gym, isPending: isGymPending, error: gymError } = useQuery({
     queryKey: ['admin-gym-details'],
     queryFn: () => getGymDetailsFn({ data: {} }),
     retry: false,
+    staleTime: 60000, // 1 minute
   });
 
   const { data: attendanceCount } = useQuery({
     queryKey: ['gym-attendance-today', gym?.id],
     queryFn: async () => {
-      if (!gym?.id) return 0;
-      const today = new Date().toISOString().split('T')[0];
-      const { count, error } = await supabase
-        .from('attendance')
-        .select('*', { count: 'exact', head: true })
-        .eq('gym_id', gym.id)
-        .gte('check_in_at', `${today}T00:00:00`);
-      if (error) throw error;
-      return count || 0;
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const { count, error } = await supabase
+          .from('attendance')
+          .select('*', { count: 'exact', head: true })
+          .eq('gym_id', gym!.id)
+          .gte('check_in_at', `${today}T00:00:00`);
+        if (error) throw error;
+        return count || 0;
+      } catch (err) {
+        console.error("Attendance query failed:", err);
+        return 0;
+      }
     },
     enabled: !!gym?.id,
   });
@@ -84,7 +89,7 @@ function QRManagement() {
     }
   }, [gym]);
 
-  if (isGymLoading) {
+  if (isGymPending) {
     return (
       <div className="min-h-screen bg-[#0D0F0C] text-white flex flex-col items-center justify-center p-4">
         <div className="w-8 h-8 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin mb-4" />
