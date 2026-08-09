@@ -207,35 +207,44 @@ export function AdminDashboard() {
                     return (
                       <>
                         <span 
-                          className="material-symbols-outlined text-[16px]" 
-                          style={{ fontVariationSettings: "'FILL' 1", color: manualFeatures.payment_management ? '#B7FF1E' : '#FF5964' }}
+                          className="material-symbols-outlined text-[18px]" 
+                          style={{ color: manualFeatures.payment_management ? '#B7FF1E' : '#FF5964' }}
                           title="Payments"
                         >
-                          {manualFeatures.payment_management ? 'check_circle' : 'cancel'}
+                          payments
                         </span>
                         <span 
-                          className="material-symbols-outlined text-[16px]" 
-                          style={{ fontVariationSettings: "'FILL' 1", color: manualFeatures.attendance_management ? '#B7FF1E' : '#FF5964' }}
+                          className="material-symbols-outlined text-[18px]" 
+                          style={{ color: manualFeatures.attendance_management ? '#B7FF1E' : '#FF5964' }}
                           title="Attendance"
                         >
-                          {manualFeatures.attendance_management ? 'check_circle' : 'cancel'}
+                          how_to_reg
                         </span>
                       </>
                     );
                   }
                   
-                  return Array.isArray(currentPlan?.features) && (currentPlan.features as any[]).slice(0, 3).map((f: any, i: number) => (
-                    <span 
-                      key={i} 
-                      className="material-symbols-outlined text-[16px]" 
-                      style={{ 
-                        fontVariationSettings: "'FILL' 1",
-                        color: (typeof f === 'string' ? true : f.enabled) ? '#B7FF1E' : '#FF5964'
-                      }}
-                    >
-                      {(typeof f === 'string' ? true : f.enabled) ? 'check_circle' : 'cancel'}
-                    </span>
-                  ));
+                  return Array.isArray(currentPlan?.features) && (currentPlan.features as any[]).slice(0, 3).map((f: any, i: number) => {
+                    const isEnabled = typeof f === 'string' ? true : f.enabled;
+                    const featureName = typeof f === 'string' ? f.toLowerCase() : (f.name || '').toLowerCase();
+                    
+                    let icon = 'check_circle';
+                    if (featureName.includes('payment')) icon = 'payments';
+                    else if (featureName.includes('attendance')) icon = 'how_to_reg';
+
+                    return (
+                      <span 
+                        key={i} 
+                        className="material-symbols-outlined text-[18px]" 
+                        style={{ 
+                          color: isEnabled ? '#B7FF1E' : '#FF5964'
+                        }}
+                        title={typeof f === 'string' ? f : f.name}
+                      >
+                        {icon}
+                      </span>
+                    );
+                  });
                 })()}
               </div>
             </section>
