@@ -688,3 +688,21 @@ export const updateAdminAccount = createServerFn({ method: 'POST' })
 
     return { success: true };
   });
+
+export const updateAdminPassword = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.object({
+    currentPassword: z.string().min(6),
+    newPassword: z.string().min(6),
+  }).parse(data))
+  .handler(async ({ data, context }) => {
+    const userId = context.userId;
+    if (!userId) throw new Error("Unauthorized");
+
+    const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
+      password: data.newPassword
+    });
+
+    if (error) throw error;
+    return { success: true };
+  });
