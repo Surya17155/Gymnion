@@ -357,6 +357,57 @@ export const getRecentActivity = createServerFn({ method: 'GET' })
     return activities;
   });
 
+export const getGymAccessPointsFull = createServerFn({ method: 'GET' })
+  .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.object({ gymId: z.string() }).parse(data))
+  .handler(async ({ data }) => {
+    const { data: points, error } = await supabaseAdmin
+      .from('gym_access_points')
+      .select('*')
+      .eq('gym_id', data.gymId);
+    if (error) {
+      if (error.code === '42P01') return [];
+      throw error;
+    }
+    return points || [];
+  });
+
+export const createAccessPoint = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.object({
+    gymId: z.string(),
+    name: z.string(),
+    icon: z.string().optional().default('door_front')
+  }).parse(data))
+  .handler(async ({ data }) => {
+    const { data: point, error } = await supabaseAdmin
+      .from('gym_access_points')
+      .insert({
+        gym_id: data.gymId,
+        name: data.name,
+        icon: data.icon,
+        is_active: true
+      })
+      .select()
+      .single();
+    if (error) throw error;
+    return point;
+  });
+
+export const deleteAccessPoint = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.object({
+    id: z.string()
+  }).parse(data))
+  .handler(async ({ data }) => {
+    const { error } = await supabaseAdmin
+      .from('gym_access_points')
+      .delete()
+      .eq('id', data.id);
+    if (error) throw error;
+    return { success: true };
+  });
+
 export const createMember = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({
@@ -522,19 +573,16 @@ export const getGymAccessPoints = createServerFn({ method: 'GET' })
     gymId: z.string()
   }).parse(data))
   .handler(async ({ data }) => {
-    const { data: gym } = await supabaseAdmin
-      .from('gyms')
-      .select('settings')
-      .eq('id', data.gymId)
-      .single();
+    const { data: points, error } = await supabaseAdmin
+      .from('gym_access_points')
+      .select('*')
+      .eq('gym_id', data.gymId);
     
-    const settings = (gym?.settings as any) || {};
-    return settings.access_points || [
-      { id: 1, name: 'Main Entrance', status: 'Active', icon: 'door_front' },
-      { id: 2, name: 'Cardio Zone', status: 'Active', icon: 'directions_run' },
-      { id: 3, name: 'VIP Lounge', status: 'Active', icon: 'workspace_premium' },
-      { id: 4, name: 'Pool Area', status: 'Offline', icon: 'warning', warning: true },
-    ];
+    if (error) {
+      if (error.code === '42P01') return [];
+      throw error;
+    }
+    return points || [];
   });
 
 export const updateFeePlan = createServerFn({ method: 'POST' })
