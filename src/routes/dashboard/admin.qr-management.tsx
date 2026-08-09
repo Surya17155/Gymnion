@@ -21,9 +21,10 @@ function QRManagement() {
   const [qrUrl, setQrUrl] = useState<string>('');
   const [isRegenerating, setIsRegenerating] = useState(false);
 
-  const { data: gym, isLoading: isGymLoading } = useQuery({
+  const { data: gym, isLoading: isGymLoading, error: gymError } = useQuery({
     queryKey: ['admin-gym-details'],
     queryFn: () => getGymDetailsFn({ data: {} }),
+    retry: false,
   });
 
   const { data: attendanceCount } = useQuery({
@@ -92,14 +93,17 @@ function QRManagement() {
     );
   }
 
-  if (!gym?.id) {
+  if (gymError || !gym?.id) {
     return (
       <div className="min-h-screen bg-[#0D0F0C] text-white flex flex-col items-center justify-center p-4">
-        <h1 className="text-xl font-bold mb-2">No Gym Found</h1>
-        <p className="text-gray-400 mb-4">We couldn't find a gym associated with your account.</p>
+        <span className="material-symbols-outlined text-[#FF5964] text-[48px] mb-4">error</span>
+        <h1 className="text-xl font-bold mb-2">Access Denied</h1>
+        <p className="text-gray-400 mb-6 text-center max-w-[280px]">
+          {gymError instanceof Error ? gymError.message : "We couldn't find a gym associated with your account."}
+        </p>
         <button
           onClick={() => navigate({ to: '/dashboard/admin' })}
-          className="bg-[#B7FF1E] text-black px-4 py-2 rounded-full font-bold"
+          className="bg-[#B7FF1E] text-black px-8 py-3 rounded-full font-bold active:scale-95 transition-transform"
         >
           Return to Dashboard
         </button>
