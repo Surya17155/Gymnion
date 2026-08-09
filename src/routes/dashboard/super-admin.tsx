@@ -9,9 +9,11 @@ export const Route = createFileRoute('/dashboard/super-admin')({
 
 function SuperAdminLayout() {
   const { pathname } = useLocation();
-  const isExact = pathname === '/dashboard/super-admin' || pathname === '/dashboard/super-admin/';
-  
-  if (!isExact) return <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans no-scrollbar w-full"><Outlet /></div>;
+  const isGymDetail = pathname.includes('/dashboard/super-admin/gyms/') && pathname.split('/').length > 4;
+
+  if (isGymDetail) return <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans no-scrollbar w-full"><Outlet /></div>;
+
+
 
   return (
     <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans no-scrollbar">
