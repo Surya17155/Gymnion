@@ -175,9 +175,10 @@ function SuperAdminGyms() {
             </div>
           ) : (
             gyms?.map((gym: any) => (
-              <div 
+              <Link 
                 key={gym.id}
-                onClick={() => setSelectedGym(gym)}
+                to="/dashboard/super-admin/gyms/$gymId"
+                params={{ gymId: gym.id }}
                 className="bg-[#121411] border border-white/5 rounded-xl p-3 flex items-center gap-3 hover:border-[#B7FF1E]/30 transition-colors cursor-pointer group"
               >
                 <div className="w-12 h-12 rounded-lg bg-[#333532] flex-shrink-0 overflow-hidden border border-white/5 relative">
