@@ -36,6 +36,7 @@ import { Route as DashboardAdminPlansNewRouteImport } from './routes/dashboard/a
 import { Route as DashboardAdminSettingsQrManagementRouteImport } from './routes/dashboard/admin.settings.qr-management'
 import { Route as DashboardSuperAdminGymsIndexRouteImport } from './routes/dashboard/super-admin.gyms.index'
 import { Route as DashboardSuperAdminGymsGymIdRouteImport } from './routes/dashboard/super-admin.gyms.$gymId'
+import { Route as DashboardSuperAdminGymsAddRouteImport } from './routes/dashboard/super-admin.gyms.add'
 import { Route as DashboardAdminPlansEditPlanIdRouteImport } from './routes/dashboard/admin.plans.edit.$planId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -180,6 +181,12 @@ const DashboardSuperAdminGymsGymIdRoute =
     path: '/$gymId',
     getParentRoute: () => DashboardSuperAdminGymsRoute,
   } as any)
+const DashboardSuperAdminGymsAddRoute =
+  DashboardSuperAdminGymsAddRouteImport.update({
+    id: '/add',
+    path: '/add',
+    getParentRoute: () => DashboardSuperAdminGymsRoute,
+  } as any)
 const DashboardAdminPlansEditPlanIdRoute =
   DashboardAdminPlansEditPlanIdRouteImport.update({
     id: '/edit/$planId',
@@ -214,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
   '/dashboard/admin/settings/qr-management': typeof DashboardAdminSettingsQrManagementRoute
   '/dashboard/super-admin/gyms/$gymId': typeof DashboardSuperAdminGymsGymIdRoute
+  '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
   '/dashboard/super-admin/gyms/': typeof DashboardSuperAdminGymsIndexRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
 }
@@ -240,6 +248,7 @@ export interface FileRoutesByTo {
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
   '/dashboard/admin/settings/qr-management': typeof DashboardAdminSettingsQrManagementRoute
   '/dashboard/super-admin/gyms/$gymId': typeof DashboardSuperAdminGymsGymIdRoute
+  '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
   '/dashboard/super-admin/gyms': typeof DashboardSuperAdminGymsIndexRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
 }
@@ -271,6 +280,7 @@ export interface FileRoutesById {
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
   '/dashboard/admin/settings/qr-management': typeof DashboardAdminSettingsQrManagementRoute
   '/dashboard/super-admin/gyms/$gymId': typeof DashboardSuperAdminGymsGymIdRoute
+  '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
   '/dashboard/super-admin/gyms/': typeof DashboardSuperAdminGymsIndexRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
 }
@@ -303,6 +313,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/plans/new'
     | '/dashboard/admin/settings/qr-management'
     | '/dashboard/super-admin/gyms/$gymId'
+    | '/dashboard/super-admin/gyms/add'
     | '/dashboard/super-admin/gyms/'
     | '/dashboard/admin/plans/edit/$planId'
   fileRoutesByTo: FileRoutesByTo
@@ -329,6 +340,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/plans/new'
     | '/dashboard/admin/settings/qr-management'
     | '/dashboard/super-admin/gyms/$gymId'
+    | '/dashboard/super-admin/gyms/add'
     | '/dashboard/super-admin/gyms'
     | '/dashboard/admin/plans/edit/$planId'
   id:
@@ -359,6 +371,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/plans/new'
     | '/dashboard/admin/settings/qr-management'
     | '/dashboard/super-admin/gyms/$gymId'
+    | '/dashboard/super-admin/gyms/add'
     | '/dashboard/super-admin/gyms/'
     | '/dashboard/admin/plans/edit/$planId'
   fileRoutesById: FileRoutesById
@@ -563,6 +576,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSuperAdminGymsGymIdRouteImport
       parentRoute: typeof DashboardSuperAdminGymsRoute
     }
+    '/dashboard/super-admin/gyms/add': {
+      id: '/dashboard/super-admin/gyms/add'
+      path: '/add'
+      fullPath: '/dashboard/super-admin/gyms/add'
+      preLoaderRoute: typeof DashboardSuperAdminGymsAddRouteImport
+      parentRoute: typeof DashboardSuperAdminGymsRoute
+    }
     '/dashboard/admin/plans/edit/$planId': {
       id: '/dashboard/admin/plans/edit/$planId'
       path: '/edit/$planId'
@@ -643,12 +663,14 @@ const DashboardMRouteWithChildren = DashboardMRoute._addFileChildren(
 
 interface DashboardSuperAdminGymsRouteChildren {
   DashboardSuperAdminGymsGymIdRoute: typeof DashboardSuperAdminGymsGymIdRoute
+  DashboardSuperAdminGymsAddRoute: typeof DashboardSuperAdminGymsAddRoute
   DashboardSuperAdminGymsIndexRoute: typeof DashboardSuperAdminGymsIndexRoute
 }
 
 const DashboardSuperAdminGymsRouteChildren: DashboardSuperAdminGymsRouteChildren =
   {
     DashboardSuperAdminGymsGymIdRoute: DashboardSuperAdminGymsGymIdRoute,
+    DashboardSuperAdminGymsAddRoute: DashboardSuperAdminGymsAddRoute,
     DashboardSuperAdminGymsIndexRoute: DashboardSuperAdminGymsIndexRoute,
   }
 

@@ -205,3 +205,75 @@ export const getPlatformRevenue = createServerFn({ method: "GET" })
       growth: 15
     };
   });
+
+export const updateGymDetails = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((data: unknown) => z.object({
+    gymId: z.string(),
+    name: z.string().optional(),
+    address: z.string().optional(),
+    gymCode: z.string().optional(),
+    ownerPhotoUrl: z.string().optional(),
+  }).parse(data))
+  .handler(async ({ data, context }) => {
+    // Check if user is super_admin
+    const { data: roleData } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', context.userId)
+      .eq('role', 'super_admin')
+      .single();
+
+    if (!roleData) throw new Error("Unauthorized");
+
+    const updateData: any = {};
+    if (data.name) updateData.name = data.name;
+    if (data.address) updateData.address = data.address;
+    if (data.gymCode) updateData.gym_code = data.gymCode;
+    if (data.ownerPhotoUrl) updateData.owner_photo_url = data.ownerPhotoUrl;
+
+    const { error } = await supabaseAdmin
+      .from('gyms')
+      .update(updateData as any)
+      .eq('id', data.gymId);
+
+    if (error) throw error;
+    return { success: true };
+  });
+
+export const updateGymAdminDetails = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((data: unknown) => z.object({
+    gymId: z.string(),
+    ownerName: z.string().optional(),
+    ownerEmail: z.string().optional(),
+    ownerPhone: z.string().optional(),
+  }).parse(data))
+  .handler(async ({ data, context }) => {
+    // Check if user is super_admin
+    const { data: roleData } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', context.userId)
+      .eq('role', 'super_admin')
+      .single();
+
+    if (!roleData) throw new Error("Unauthorized");
+
+    const updateData: any = {};
+    if (data.ownerName) updateData.owner_name = data.ownerName;
+    if (data.ownerEmail) updateData.owner_email = data.ownerEmail;
+    if (data.ownerPhone) updateData.owner_phone = data.ownerPhone;
+
+    const { error } = await supabaseAdmin
+      .from('gyms')
+      .update(updateData as any)
+      .eq('id', data.gymId);
+
+    if (error) throw error;
+
+    // Optional: If email changed, we should probably update auth user too
+    // But for now let's keep it simple as requested
+    
+    return { success: true };
+  });

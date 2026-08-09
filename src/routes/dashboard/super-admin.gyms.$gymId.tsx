@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { getAllGymsServer, updateGymStatus, extendSubscription } from "@/lib/super-admin.functions";
+import { getAllGymsServer, updateGymStatus, extendSubscription, updateGymDetails, updateGymAdminDetails } from "@/lib/super-admin.functions";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/super-admin/gyms/$gymId')({
@@ -16,7 +17,12 @@ function GymDetailScreen() {
   const getGymsFn = useServerFn(getAllGymsServer);
   const updateStatusFn = useServerFn(updateGymStatus);
   const extendSubFn = useServerFn(extendSubscription);
+  const updateGymFn = useServerFn(updateGymDetails);
+  const updateAdminFn = useServerFn(updateGymAdminDetails);
+  
   const [isUpdating, setIsUpdating] = useState(false);
+  const [editingSection, setEditingSection] = useState<'gym' | 'admin' | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: gymsData, isLoading } = useQuery({
     queryKey: ['super-admin-gyms'],
@@ -24,6 +30,34 @@ function GymDetailScreen() {
   });
 
   const gym = gymsData?.gyms?.find((g: any) => g.id === gymId);
+
+  const [editGymData, setEditGymData] = useState({
+    name: '',
+    address: '',
+    gymCode: ''
+  });
+
+  const [editAdminData, setEditAdminData] = useState({
+    ownerName: '',
+    ownerEmail: '',
+    ownerPhone: ''
+  });
+
+  // Initialize edit data when gym is loaded
+  useState(() => {
+    if (gym) {
+      setEditGymData({
+        name: gym.name || '',
+        address: (gym as any).address || '',
+        gymCode: gym.gym_code || ''
+      });
+      setEditAdminData({
+        ownerName: gym.owner_name || '',
+        ownerEmail: gym.owner_email || '',
+        ownerPhone: gym.owner_phone || ''
+      });
+    }
+  });
 
   const handleStatusUpdate = async (newStatus: 'approved' | 'suspended') => {
     setIsUpdating(true);
@@ -51,6 +85,64 @@ function GymDetailScreen() {
     }
   };
 
+  const handleUpdateGym = async () => {
+    setIsUpdating(true);
+    try {
+      await updateGymFn({ data: { gymId, ...editGymData } });
+      toast.success("Gym details updated");
+      setEditingSection(null);
+      queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update gym");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleUpdateAdmin = async () => {
+    setIsUpdating(true);
+    try {
+      await updateAdminFn({ data: { gymId, ...editAdminData } });
+      toast.success("Admin details updated");
+      setEditingSection(null);
+      queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update admin");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUpdating(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${gymId}-${Math.random()}.${fileExt}`;
+      const filePath = `admin-photos/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('gym-assets')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('gym-assets')
+        .getPublicUrl(filePath);
+
+      await updateGymFn({ data: { gymId, ownerPhotoUrl: publicUrl } });
+      toast.success("Admin photo updated");
+      queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to upload photo");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#0A0B0A] flex items-center justify-center">
@@ -67,6 +159,8 @@ function GymDetailScreen() {
       </div>
     );
   }
+
+  const hasPlan = !!gym.global_plans?.name;
 
   return (
     <div className="min-h-screen bg-[#0A0B0A] antialiased pb-10 glow-top overflow-x-hidden">
@@ -93,11 +187,51 @@ function GymDetailScreen() {
         <section className="bg-[#121411] border border-white/5 rounded-3xl p-6 relative overflow-hidden">
           <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#B7FF1E]/10 rounded-full blur-3xl"></div>
           <div className="flex flex-col items-center text-center relative z-10">
-            <div className="w-24 h-24 rounded-2xl bg-[#1e201d] flex items-center justify-center border border-[#B7FF1E]/20 text-[#B7FF1E] mb-4">
-              <span className="material-symbols-outlined text-[48px]">fitness_center</span>
+            <div className="relative">
+              <div 
+                onClick={() => fileInputRef.current?.click()}
+                className="w-24 h-24 rounded-2xl bg-[#1e201d] flex items-center justify-center border border-[#B7FF1E]/20 text-[#B7FF1E] mb-4 overflow-hidden cursor-pointer group"
+              >
+                {(gym as any).owner_photo_url ? (
+                  <img src={(gym as any).owner_photo_url} alt="Admin" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="material-symbols-outlined text-[48px]">person</span>
+                )}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                  <span className="material-symbols-outlined text-white">photo_camera</span>
+                </div>
+              </div>
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                className="hidden" 
+                accept="image/*"
+                onChange={handlePhotoUpload}
+              />
             </div>
-            <h2 className="text-[24px] font-bold text-white">{gym.name}</h2>
-            <div className="flex items-center gap-2 mt-2">
+            
+            {editingSection === 'gym' ? (
+              <div className="w-full space-y-3 px-4">
+                <input 
+                  className="w-full h-10 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-white text-center text-[20px] font-bold outline-none focus:border-[#B7FF1E]"
+                  value={editGymData.name}
+                  onChange={e => setEditGymData(prev => ({ ...prev, name: e.target.value }))}
+                />
+                <input 
+                  placeholder="Address"
+                  className="w-full h-8 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-[#858A7D] text-center text-[12px] outline-none focus:border-[#B7FF1E]"
+                  value={editGymData.address}
+                  onChange={e => setEditGymData(prev => ({ ...prev, address: e.target.value }))}
+                />
+              </div>
+            ) : (
+              <>
+                <h2 className="text-[24px] font-bold text-white">{gym.name}</h2>
+                <p className="text-[12px] text-[#858A7D] mt-1">{(gym as any).address || 'No address set'}</p>
+              </>
+            )}
+            
+            <div className="flex items-center gap-2 mt-3">
               <div className={`w-2 h-2 rounded-full ${gym.status === 'suspended' ? 'bg-[#FF5964]' : 'bg-[#B7FF1E]'}`}></div>
               <span className="text-[12px] text-[#B7FF1E] font-bold tracking-widest uppercase">{gym.status}</span>
             </div>
@@ -107,24 +241,109 @@ function GymDetailScreen() {
         {/* Details Grid */}
         <div className="grid gap-4">
           <div className="bg-[#121411] border border-white/5 rounded-2xl p-5">
-            <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-4">Core Information</label>
+            <div className="flex justify-between items-center mb-4">
+              <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block">Core Information</label>
+              <button 
+                onClick={() => {
+                  if (editingSection === 'gym') {
+                    handleUpdateGym();
+                  } else {
+                    setEditingSection('gym');
+                    setEditGymData({
+                      name: gym.name || '',
+                      address: (gym as any).address || '',
+                      gymCode: gym.gym_code || ''
+                    });
+                  }
+                }}
+                className="text-[#B7FF1E] flex items-center gap-1 active:scale-90 transition-transform"
+              >
+                <span className="material-symbols-outlined text-[18px]">{editingSection === 'gym' ? 'check' : 'edit'}</span>
+                <span className="text-[11px] font-bold">{editingSection === 'gym' ? 'Save' : 'Edit'}</span>
+              </button>
+            </div>
             <div className="space-y-4">
-              <DetailRow icon="fingerprint" label="Gym Code" value={gym.gym_code} highlight />
-              <DetailRow icon="subscriptions" label="Current Plan" value={gym.global_plans?.name || 'Manual Pricing'} />
+              {editingSection === 'gym' ? (
+                <div className="space-y-3">
+                   <div className="space-y-1">
+                    <p className="text-[10px] text-[#858A7D] font-bold">GYM CODE</p>
+                    <input 
+                      className="w-full h-10 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-[#B7FF1E] font-mono font-bold outline-none focus:border-[#B7FF1E]"
+                      value={editGymData.gymCode}
+                      onChange={e => setEditGymData(prev => ({ ...prev, gymCode: e.target.value.toUpperCase() }))}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <DetailRow icon="fingerprint" label="Gym Code" value={gym.gym_code} highlight />
+              )}
+              
+              <DetailRow icon="subscriptions" label="Current Plan" value={gym.global_plans?.name || 'no plan'} />
               <DetailRow 
                 icon="calendar_today" 
                 label="Subscription Ends" 
-                value={gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), 'PPP') : 'N/A'} 
+                value={hasPlan && gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), 'PPP') : 'N/A'} 
               />
             </div>
           </div>
 
           <div className="bg-[#121411] border border-white/5 rounded-2xl p-5">
-            <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-4">Administrator</label>
+            <div className="flex justify-between items-center mb-4">
+              <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block">Administrator</label>
+              <button 
+                onClick={() => {
+                  if (editingSection === 'admin') {
+                    handleUpdateAdmin();
+                  } else {
+                    setEditingSection('admin');
+                    setEditAdminData({
+                      ownerName: gym.owner_name || '',
+                      ownerEmail: gym.owner_email || '',
+                      ownerPhone: gym.owner_phone || ''
+                    });
+                  }
+                }}
+                className="text-[#B7FF1E] flex items-center gap-1 active:scale-90 transition-transform"
+              >
+                <span className="material-symbols-outlined text-[18px]">{editingSection === 'admin' ? 'check' : 'edit'}</span>
+                <span className="text-[11px] font-bold">{editingSection === 'admin' ? 'Save' : 'Edit'}</span>
+              </button>
+            </div>
             <div className="space-y-4">
-              <DetailRow icon="person" label="Name" value={gym.owner_name} />
-              <DetailRow icon="mail" label="Email" value={gym.owner_email} />
-              <DetailRow icon="call" label="Phone" value={gym.owner_phone} />
+              {editingSection === 'admin' ? (
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <p className="text-[10px] text-[#858A7D] font-bold">NAME</p>
+                    <input 
+                      className="w-full h-10 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-white outline-none focus:border-[#B7FF1E]"
+                      value={editAdminData.ownerName}
+                      onChange={e => setEditAdminData(prev => ({ ...prev, ownerName: e.target.value }))}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[10px] text-[#858A7D] font-bold">EMAIL</p>
+                    <input 
+                      className="w-full h-10 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-white outline-none focus:border-[#B7FF1E]"
+                      value={editAdminData.ownerEmail}
+                      onChange={e => setEditAdminData(prev => ({ ...prev, ownerEmail: e.target.value }))}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[10px] text-[#858A7D] font-bold">PHONE</p>
+                    <input 
+                      className="w-full h-10 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-white outline-none focus:border-[#B7FF1E]"
+                      value={editAdminData.ownerPhone}
+                      onChange={e => setEditAdminData(prev => ({ ...prev, ownerPhone: e.target.value }))}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <DetailRow icon="person" label="Name" value={gym.owner_name} />
+                  <DetailRow icon="mail" label="Email" value={gym.owner_email} />
+                  <DetailRow icon="call" label="Phone" value={gym.owner_phone} />
+                </>
+              )}
             </div>
           </div>
 
@@ -142,7 +361,7 @@ function GymDetailScreen() {
               <button 
                 disabled={isUpdating}
                 onClick={() => handleExtend(1)}
-                className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 text-white rounded-xl font-bold text-[13px] active:scale-95 transition-all"
+                className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 text-white rounded-xl font-bold text-[13px] active:scale-95 transition-all disabled:opacity-50"
               >
                 <span className="material-symbols-outlined text-[18px]">add_task</span>
                 +30 Days
@@ -151,6 +370,17 @@ function GymDetailScreen() {
           </div>
         </div>
       </main>
+      
+      {editingSection && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 w-full max-w-[440px] px-5 z-50">
+          <button 
+            onClick={() => setEditingSection(null)}
+            className="w-full py-3 bg-[#1e201d] text-[#858A7D] rounded-xl font-bold text-[14px] active:scale-95 transition-all border border-white/5"
+          >
+            Cancel Editing
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -161,9 +391,9 @@ function DetailRow({ icon, label, value, highlight }: { icon: string, label: str
       <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-[#858A7D]">
         <span className="material-symbols-outlined text-[20px]">{icon}</span>
       </div>
-      <div>
+      <div className="flex-1">
         <p className="text-[10px] text-[#858A7D] uppercase font-bold tracking-tighter">{label}</p>
-        <p className={`text-[15px] font-medium ${highlight ? 'text-[#B7FF1E] font-mono font-bold' : 'text-white'}`}>{value || 'Not provided'}</p>
+        <p className={`text-[15px] font-medium truncate ${highlight ? 'text-[#B7FF1E] font-mono font-bold' : 'text-white'}`}>{value || 'Not provided'}</p>
       </div>
     </div>
   );
