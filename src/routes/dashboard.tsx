@@ -31,13 +31,13 @@ export const Route = createFileRoute('/dashboard')({
     
     // 3. Path validation
     if (role === 'super_admin' && !path.startsWith('/dashboard/super-admin')) {
-      throw redirect({ to: '/dashboard/super-admin' });
+      throw redirect({ to: '/dashboard/super-admin/' });
     } 
     if (role === 'gym_admin' && !path.startsWith('/dashboard/admin')) {
-      throw redirect({ to: '/dashboard/admin' });
+      throw redirect({ to: '/dashboard/admin/' });
     }
     if (role === 'member' && !path.startsWith('/dashboard/m')) {
-      throw redirect({ to: '/dashboard/m' });
+      throw redirect({ to: '/dashboard/m/' });
     }
 
     if (path === '/dashboard' || path === '/dashboard/') {

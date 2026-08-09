@@ -226,7 +226,7 @@ export function AdminDashboard() {
 
       <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] left-1/2 -translate-x-1/2">
         <Link 
-          to="/dashboard/admin"
+          to="/dashboard/admin/"
           activeOptions={{ exact: true }}
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
