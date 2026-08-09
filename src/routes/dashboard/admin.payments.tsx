@@ -28,7 +28,7 @@ function PaymentsDashboard() {
 
   const { data: payments = [], isLoading } = useQuery({
     queryKey: ['admin-payments', gymId, filter],
-    queryFn: () => getPaymentsFn({ data: { gymId: gymId!, status: filter === 'all' ? undefined : filter } }),
+    queryFn: () => getPaymentsFn({ data: { gymId: gymId!, status: filter } }),
     enabled: !!gymId
   });
 

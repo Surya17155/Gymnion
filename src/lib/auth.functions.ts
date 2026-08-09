@@ -427,22 +427,23 @@ export const deleteMember = createServerFn({ method: 'POST' })
 export const getPaymentsDashboard = createServerFn({ method: 'GET' })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({
-    gymId: z.string()
+    gymId: z.string(),
+    status: z.enum(['all', 'paid', 'pending', 'overdue']).optional().default('all')
   }).parse(data))
   .handler(async ({ data }) => {
-    const { data: payments, error } = await supabaseAdmin
+    let query = supabaseAdmin
       .from('payments')
       .select('*, members(full_name, photo_url)')
-      .eq('gym_id', data.gymId)
-      .order('created_at', { ascending: false });
+      .eq('gym_id', data.gymId);
+
+    if (data.status && data.status !== 'all') {
+      query = query.eq('status', data.status);
+    }
+
+    const { data: payments, error } = await query.order('created_at', { ascending: false });
 
     if (error) throw error;
-
-    return {
-      paid: payments.filter(p => p.status === 'paid'),
-      pending: payments.filter(p => p.status === 'pending'),
-      overdue: payments.filter(p => p.status === 'overdue')
-    };
+    return payments || [];
   });
 
 export const recordManualPayment = createServerFn({ method: 'POST' })
@@ -451,9 +452,9 @@ export const recordManualPayment = createServerFn({ method: 'POST' })
     member_id: z.string(),
     gym_id: z.string(),
     amount: z.number(),
-    payment_method: z.string(),
+    payment_method: z.string().optional().default('cash'),
     notes: z.string().optional(),
-    payment_month: z.string(),
+    payment_month: z.string().optional(),
     source: z.string().default('manual')
   }).parse(data))
   .handler(async ({ data }) => {
