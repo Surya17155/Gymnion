@@ -8,17 +8,10 @@ export const Route = createFileRoute('/dashboard/admin')({
 });
 
 function AdminLayout() {
-  const { pathname } = useLocation();
-  const isExactAdmin = pathname === '/dashboard/admin';
-
-  if (!isExactAdmin) {
-    return <Outlet />;
-  }
-
-  return <AdminDashboard />;
+  return <Outlet />;
 }
 
-function AdminDashboard() {
+export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
 
   const { data: gymData } = useQuery({

@@ -6,12 +6,13 @@ export const Route = createFileRoute('/dashboard/m')({
   component: MemberDashboard,
 });
 
-function MemberDashboard() {
+function MemberDashboardLayout() {
+  return <Outlet />;
+}
+
+export function MemberDashboard() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const isHome = location.pathname === '/dashboard/m' || location.pathname === '/dashboard/m/';
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -33,10 +34,11 @@ function MemberDashboard() {
       {/* Ensure Google Material Symbols are loaded */}
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       
-      {!isHome ? (
-        <Outlet />
-      ) : (
-        <>
+  return (
+    <div className="flex justify-center min-h-screen bg-[#121411] text-[#e3e3dd] antialiased font-['Poppins']">
+      {/* Ensure Google Material Symbols are loaded */}
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+      
           {/* Global ambient glow */}
           <div 
             className="fixed top-0 left-0 right-0 h-[40vh] z-0 pointer-events-none"
@@ -190,8 +192,10 @@ function MemberDashboard() {
               </Link>
             </nav>
           </main>
-        </>
-      )}
     </div>
   );
 }
+
+export const Route = createFileRoute('/dashboard/m')({
+  component: MemberDashboardLayout,
+});

@@ -13,17 +13,10 @@ export const Route = createFileRoute('/dashboard/super-admin/gyms')({
 });
 
 function SuperAdminGymsLayout() {
-  const { pathname } = useLocation();
-  const isExact = pathname === '/dashboard/super-admin/gyms' || pathname === '/dashboard/super-admin/gyms/';
-
-  if (!isExact) {
-    return <Outlet />;
-  }
-
-  return <SuperAdminGyms />;
+  return <Outlet />;
 }
 
-function SuperAdminGyms() {
+export function SuperAdminGyms() {
 
   const queryClient = useQueryClient();
   const createGymFn = useServerFn(createGymWithAdmin);
