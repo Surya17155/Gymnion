@@ -114,7 +114,6 @@ function SuperAdminPlans() {
         name: selectedPlan.name,
         price: Math.round(parseFloat(selectedPlan.price) * 100),
         features: cleanedFeatures as any,
-        metadata: { gym_overrides: selectedPlan.gym_overrides || {} } as any,
         is_active: selectedPlan.is_active !== false,
         updated_at: new Date().toISOString()
       };
