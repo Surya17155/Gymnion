@@ -25,7 +25,7 @@ function HomePage() {
       <h1 className="text-4xl font-bold mb-2">Gym<span className="text-[#B7FF1E]">Sync</span></h1>
       <p className="text-[#858A7D] mb-12">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                             
-                                            hello (just say hello, if we can go further)</p>
+                                            I am trying to log in, but I am unable to access my dashboard. I am signing in with my super admin email. Please fix this login error. When I click the Sign In button, I should be taken to my dedicated dashboard, which belongs to my email.</p>
       
       <button 
         onClick={() => navigate({ to: "/auth/login" })}
