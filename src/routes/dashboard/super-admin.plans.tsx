@@ -233,14 +233,37 @@ function SuperAdminPlans() {
                 </div>
 
                 <ul className="space-y-2 mb-6 relative z-10">
-                  {plan.features?.map((feature: string, idx: number) => (
-                    <li key={idx} className={`flex items-center gap-3 text-sm ${
-                      plan.name.toLowerCase() === 'unlimited' ? 'text-[#e3e3dd]' : 'text-[#C0C2B8]'
-                    }`}>
-                      <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                      {feature}
-                    </li>
-                  ))}
+                  {plan.features?.map((feature: any, idx: number) => {
+                    const isEnabled = typeof feature === 'string' ? true : feature.enabled;
+                    const text = typeof feature === 'string' ? feature : feature.name;
+                    
+                    return (
+                      <li key={idx} className={`flex items-center gap-3 text-sm group cursor-pointer ${
+                        plan.name.toLowerCase() === 'unlimited' ? 'text-[#e3e3dd]' : 'text-[#C0C2B8]'
+                      }`}
+                      onClick={() => {
+                        const updatedFeatures = [...plan.features];
+                        if (typeof updatedFeatures[idx] === 'string') {
+                           updatedFeatures[idx] = { name: updatedFeatures[idx], enabled: false };
+                        } else {
+                           updatedFeatures[idx] = { ...updatedFeatures[idx], enabled: !isEnabled };
+                        }
+                        
+                        supabase.from('global_plans').update({ features: updatedFeatures }).eq('id', plan.id).then(() => {
+                          queryClient.invalidateQueries({ queryKey: ['global-plans'] });
+                        });
+                      }}
+                      >
+                        <span className="material-symbols-outlined text-sm" style={{ 
+                          fontVariationSettings: "'FILL' 1",
+                          color: isEnabled ? '#c9f232' : '#FF5964'
+                        }}>
+                          {isEnabled ? 'check_circle' : 'cancel'}
+                        </span>
+                        {text}
+                      </li>
+                    );
+                  })}
                 </ul>
 
                 <button 
