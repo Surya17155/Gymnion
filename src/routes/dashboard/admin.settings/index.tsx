@@ -89,30 +89,36 @@ function AdminSettings() {
                 )}
               </div>
               
-              {isEditingCode ? (
-                <div className="flex gap-2">
-                  <input 
-                    type="text" 
-                    value={gymCode}
-                    onChange={(e) => setGymCode(e.target.value.toUpperCase())}
-                    className="flex-1 bg-[#121411] border border-white/10 rounded-xl px-4 py-2 text-sm focus:border-[#B7FF1E] focus:outline-none"
-                    placeholder="Enter code (e.g. GYM123)"
-                  />
-                  <button 
-                    disabled={loading}
-                    onClick={handleUpdateCode}
-                    className="bg-[#B7FF1E] text-[#293500] px-4 py-2 rounded-xl text-xs font-bold uppercase disabled:opacity-50"
-                  >
-                    Save
-                  </button>
-                  <button 
-                    onClick={() => { setIsEditingCode(false); setGymCode(gym?.gym_code || ''); }}
-                    className="bg-[#333532] text-[#e3e3dd] px-4 py-2 rounded-xl text-xs font-bold uppercase"
-                  >
-                    Cancel
-                  </button>
+              {isEditingCode && (
+                <div className="flex flex-col gap-3 mt-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <div className="flex gap-2">
+                    <input 
+                      type="text" 
+                      value={gymCode}
+                      onChange={(e) => setGymCode(e.target.value.toUpperCase())}
+                      className="flex-1 bg-[#121411] border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-[#B7FF1E] focus:outline-none font-mono tracking-wider"
+                      placeholder="Enter code (e.g. GYM123)"
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <button 
+                      disabled={loading}
+                      onClick={handleUpdateCode}
+                      className="flex-1 bg-[#B7FF1E] text-[#293500] h-11 rounded-xl text-xs font-bold uppercase disabled:opacity-50 transition-transform active:scale-95"
+                    >
+                      {loading ? 'Saving...' : 'Save'}
+                    </button>
+                    <button 
+                      onClick={() => { setIsEditingCode(false); setGymCode(gym?.gym_code || ''); }}
+                      className="flex-1 bg-[#333532] text-[#e3e3dd] h-11 rounded-xl text-xs font-bold uppercase transition-transform active:scale-95"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
-              ) : (
+              )}
+              
+              {!isEditingCode && (
                 <div className="bg-[#121411] rounded-xl px-4 py-3 flex items-center justify-between border border-white/5">
                   <span className="text-[14px] font-mono tracking-wider text-[#B7FF1E]">{gymCode || 'NOT SET'}</span>
                   <span className="text-[10px] text-[#858A7D] uppercase">Active Code</span>
