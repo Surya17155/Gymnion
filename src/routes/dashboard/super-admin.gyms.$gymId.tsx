@@ -48,7 +48,7 @@ function GymDetailScreen() {
     if (gym) {
       setEditGymData({
         name: gym.name || '',
-        address: gym.address || '',
+        address: (gym as any).address || '',
         gymCode: gym.gym_code || ''
       });
       setEditAdminData({
@@ -192,8 +192,8 @@ function GymDetailScreen() {
                 onClick={() => fileInputRef.current?.click()}
                 className="w-24 h-24 rounded-2xl bg-[#1e201d] flex items-center justify-center border border-[#B7FF1E]/20 text-[#B7FF1E] mb-4 overflow-hidden cursor-pointer group"
               >
-                {gym.owner_photo_url ? (
-                  <img src={gym.owner_photo_url} alt="Admin" className="w-full h-full object-cover" />
+                {(gym as any).owner_photo_url ? (
+                  <img src={(gym as any).owner_photo_url} alt="Admin" className="w-full h-full object-cover" />
                 ) : (
                   <span className="material-symbols-outlined text-[48px]">person</span>
                 )}
@@ -227,7 +227,7 @@ function GymDetailScreen() {
             ) : (
               <>
                 <h2 className="text-[24px] font-bold text-white">{gym.name}</h2>
-                <p className="text-[12px] text-[#858A7D] mt-1">{gym.address || 'No address set'}</p>
+                <p className="text-[12px] text-[#858A7D] mt-1">{(gym as any).address || 'No address set'}</p>
               </>
             )}
             
@@ -251,7 +251,7 @@ function GymDetailScreen() {
                     setEditingSection('gym');
                     setEditGymData({
                       name: gym.name || '',
-                      address: gym.address || '',
+                      address: (gym as any).address || '',
                       gymCode: gym.gym_code || ''
                     });
                   }
