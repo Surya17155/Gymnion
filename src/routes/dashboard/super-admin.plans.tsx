@@ -360,64 +360,146 @@ function SuperAdminPlans() {
         </section>
       </div>
 
-      {/* Manual Pricing Modal */}
+      {/* Add/Edit Override Drawer */}
       {isAddingOverride && (
-        <div className="fixed inset-0 z-[110] flex flex-col justify-end">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !isSubmitting && setIsAddingOverride(false)}></div>
-          <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[16px] p-6 pb-24 w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300 max-h-[90vh] overflow-y-auto">
-
-            <div className="w-12 h-1.5 bg-[#1e201d] rounded-full mx-auto mb-6"></div>
+        <>
+          <div 
+            className="fixed inset-0 bg-black/60 z-[100] animate-in fade-in duration-300"
+            onClick={() => {
+              if (!isSubmitting) {
+                setIsAddingOverride(false);
+                setSelectedGymForOverride(null);
+              }
+            }}
+          />
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 pb-12 z-[101] animate-in slide-in-from-bottom duration-300 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] max-h-[90vh] overflow-y-auto">
+            <div className="w-12 h-1 bg-white/10 rounded-full mx-auto mb-6" />
             
-            <h2 className="text-[20px] font-bold text-white mb-6">Add Manual Pricing</h2>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-[#c9f232]/10 flex items-center justify-center text-[#c9f232]">
+                  <span className="material-symbols-outlined">payments</span>
+                </div>
+                <div>
+                  <h3 className="text-[18px] font-bold text-white">Manual Pricing Override</h3>
+                  <p className="text-[12px] text-[#858A7D]">Set custom rates and features for a gym</p>
+                </div>
+              </div>
+            </div>
 
-            <div className="space-y-5">
+            <div className="space-y-6">
               {!selectedGymForOverride ? (
-                <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-[#858A7D] uppercase tracking-wider">Select Gym</label>
                   <div className="relative">
-                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#858A7D]">search</span>
+                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#858A7D] text-[20px]">search</span>
                     <input 
-                      autoFocus
-                      className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl pl-10 pr-4 text-[#e3e3dd] focus:border-[#c9f232] outline-none transition-colors" 
-                      placeholder="Search existing gym..."
                       value={searchQuery}
-                      onChange={e => setSearchQuery(e.target.value)}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full h-14 bg-[#1e201d] border border-white/10 rounded-2xl pl-10 pr-4 text-white font-medium outline-none focus:border-[#c9f232] transition-colors"
+                      placeholder="Search for a gym..."
                     />
                   </div>
-                  
-                  <div className="max-h-[300px] overflow-y-auto space-y-2">
-                    {filteredGymsForSearch?.map(gym => (
-                      <button 
-                        key={gym.id}
-                        onClick={() => setSelectedGymForOverride(gym)}
-                        className="w-full p-3 bg-[#1e201d] border border-white/5 rounded-xl flex items-center justify-between text-left hover:border-[#c9f232]/30 transition-colors"
-                      >
-                        <div>
-                          <p className="text-sm font-bold text-white">{gym.name}</p>
-                          <p className="text-[10px] text-[#858A7D] uppercase tracking-wider">{gym.gym_code}</p>
+                  {searchQuery && filteredGymsForSearch && filteredGymsForSearch.length > 0 && (
+                    <div className="max-h-40 overflow-y-auto mt-2 bg-[#1e201d] border border-white/10 rounded-xl divide-y divide-white/5">
+                      {filteredGymsForSearch.map(gym => (
+                        <div 
+                          key={gym.id}
+                          onClick={() => {
+                            setSelectedGymForOverride(gym);
+                            setSearchQuery('');
+                          }}
+                          className="p-3 hover:bg-white/5 cursor-pointer text-[#e3e3dd] text-sm font-medium"
+                        >
+                          {gym.name}
                         </div>
-                        <span className="material-symbols-outlined text-[#858A7D]">add_circle</span>
-                      </button>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ) : (
-                <div className="space-y-5 animate-in fade-in duration-300">
-                  <div className="bg-[#c9f232]/10 border border-[#c9f232]/20 rounded-xl p-4 flex items-center justify-between">
-                    <div>
-                      <p className="text-[10px] text-[#c9f232] font-bold uppercase tracking-wider mb-0.5">Selected Gym</p>
-                      <p className="text-base font-bold text-white">{selectedGymForOverride.name}</p>
-                    </div>
-                    <button 
-                      onClick={() => setSelectedGymForOverride(null)}
-                      className="text-[#858A7D] hover:text-white"
-                    >
-                      <span className="material-symbols-outlined">close</span>
-                    </button>
+                <div className="bg-white/5 p-4 rounded-2xl border border-white/5 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                     <span className="material-symbols-outlined text-[#c9f232]">fitness_center</span>
+                     <span className="text-white font-bold">{selectedGymForOverride.name}</span>
                   </div>
+                  <button 
+                    onClick={() => setSelectedGymForOverride(null)}
+                    className="text-[10px] font-bold text-[#FF5964] uppercase tracking-widest"
+                  >
+                    Change
+                  </button>
+                </div>
+              )}
 
-                  <div>
-                    <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Manual Monthly Price (₹)</label>
-                    <div className="relative">
+              <div className="space-y-2">
+                <label className="text-[11px] font-bold text-[#858A7D] uppercase tracking-wider">Pricing Amount (₹/mo)</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span className="text-white font-bold">₹</span>
+                  </div>
+                  <input 
+                    type="number"
+                    value={customMonthlyPrice}
+                    onChange={(e) => setCustomMonthlyPrice(e.target.value)}
+                    className="w-full h-14 bg-[#1e201d] border border-white/10 rounded-2xl pl-10 pr-4 text-white font-bold text-[18px] outline-none focus:border-[#c9f232] transition-colors"
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-[11px] font-bold text-[#858A7D] uppercase tracking-wider">Features Access</label>
+                
+                <div 
+                  onClick={() => setOverrideForm(prev => ({ ...prev, payment_management: !prev.payment_management }))}
+                  className="flex items-center justify-between p-4 bg-[#1e201d] border border-white/5 rounded-2xl cursor-pointer hover:border-white/10 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className={`material-symbols-outlined ${overrideForm.payment_management ? 'text-[#c9f232]' : 'text-[#858A7D]'}`}>payments</span>
+                    <span className="text-[14px] font-medium text-white">Payment Management</span>
+                  </div>
+                  <div className={`w-12 h-6 rounded-full p-1 transition-colors ${overrideForm.payment_management ? 'bg-[#c9f232]' : 'bg-[#333532]'}`}>
+                    <div className={`w-4 h-4 bg-white rounded-full transition-transform ${overrideForm.payment_management ? 'translate-x-6' : 'translate-x-0'}`} />
+                  </div>
+                </div>
+
+                <div 
+                  onClick={() => setOverrideForm(prev => ({ ...prev, attendance_management: !prev.attendance_management }))}
+                  className="flex items-center justify-between p-4 bg-[#1e201d] border border-white/5 rounded-2xl cursor-pointer hover:border-white/10 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className={`material-symbols-outlined ${overrideForm.attendance_management ? 'text-[#c9f232]' : 'text-[#858A7D]'}`}>qr_code_scanner</span>
+                    <span className="text-[14px] font-medium text-white">Attendance Management</span>
+                  </div>
+                  <div className={`w-12 h-6 rounded-full p-1 transition-colors ${overrideForm.attendance_management ? 'bg-[#c9f232]' : 'bg-[#333532]'}`}>
+                    <div className={`w-4 h-4 bg-white rounded-full transition-transform ${overrideForm.attendance_management ? 'translate-x-6' : 'translate-x-0'}`} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button 
+                  onClick={() => {
+                    setIsAddingOverride(false);
+                    setSelectedGymForOverride(null);
+                  }}
+                  className="flex-1 h-14 bg-white/5 text-[#858A7D] font-bold rounded-2xl active:scale-95 transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  disabled={isSubmitting}
+                  onClick={handleAddOverride}
+                  className="flex-[2] h-14 bg-[#c9f232] text-black font-bold rounded-2xl shadow-[0_8px_20px_rgba(201,242,50,0.2)] active:scale-95 transition-all disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Saving...' : (selectedGymForOverride?.settings?.manual_pricing ? 'Update Override' : 'Add Override')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
                       <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
                         <span className="text-lg font-semibold text-[#C0C2B8]">₹</span>
                       </div>
