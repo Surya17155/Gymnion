@@ -234,7 +234,7 @@ export const updateGymDetails = createServerFn({ method: "POST" })
 
     const { error } = await supabaseAdmin
       .from('gyms')
-      .update(updateData)
+      .update(updateData as any)
       .eq('id', data.gymId);
 
     if (error) throw error;
@@ -267,7 +267,7 @@ export const updateGymAdminDetails = createServerFn({ method: "POST" })
 
     const { error } = await supabaseAdmin
       .from('gyms')
-      .update(updateData)
+      .update(updateData as any)
       .eq('id', data.gymId);
 
     if (error) throw error;
