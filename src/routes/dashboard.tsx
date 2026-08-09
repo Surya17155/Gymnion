@@ -7,48 +7,36 @@ export const Route = createFileRoute('/dashboard')({
   // SSR round-trip that made the first paint hang on a black screen.
   ssr: false,
   beforeLoad: async ({ location }) => {
+    // 1. Quick local session check
     const { data: { session } } = await supabase.auth.getSession();
-
     if (!session) {
       throw redirect({ to: '/auth/login', search: { redirect: location.href } });
     }
 
+    // 2. Optimized role lookup (hits localStorage first)
     const role = await getRoleForUser(session.user.id);
     const home = homeForRole(role);
 
     if (!role || !home) {
-      console.warn("User has no valid role, redirecting to login");
       throw redirect({ to: '/auth/login' });
     }
 
-    // Role-based path security
     const path = location.pathname;
     
-    // Super Admin security
-    if (role === 'super_admin') {
-      if (!path.startsWith('/dashboard/super-admin')) {
-        throw redirect({ to: '/dashboard/super-admin' });
-      }
+    // 3. Path validation
+    if (role === 'super_admin' && !path.startsWith('/dashboard/super-admin')) {
+      throw redirect({ to: '/dashboard/super-admin' });
     } 
-    // Gym Admin security
-    else if (role === 'gym_admin') {
-      if (!path.startsWith('/dashboard/admin')) {
-        throw redirect({ to: '/dashboard/admin' });
-      }
+    if (role === 'gym_admin' && !path.startsWith('/dashboard/admin')) {
+      throw redirect({ to: '/dashboard/admin' });
     }
-    // Member security
-    else if (role === 'member') {
-      if (!path.startsWith('/dashboard/m')) {
-        throw redirect({ to: '/dashboard/m' });
-      }
+    if (role === 'member' && !path.startsWith('/dashboard/m')) {
+      throw redirect({ to: '/dashboard/m' });
     }
 
-    // If on the base /dashboard, the above blocks already redirected, but for safety:
     if (path === '/dashboard' || path === '/dashboard/') {
       throw redirect({ to: home });
     }
-
-    return { role };
 
     return { role };
   },
