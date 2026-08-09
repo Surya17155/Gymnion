@@ -42,6 +42,33 @@ function QRManagement() {
     enabled: !!gym?.id,
   });
 
+  const handleDownload = () => {
+    if (!qrUrl) return;
+    const link = document.createElement('a');
+    link.href = qrUrl;
+    link.download = `${gym?.name || 'gym'}-checkin-qr.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleRegenerate = async () => {
+    if (!gym?.id) return;
+    try {
+      setIsRegenerating(true);
+      const updatedGym = await regenerateQR({ data: gym.id });
+      const checkinUrl = `${window.location.origin}/checkin?gym=${updatedGym.id}&code=${updatedGym.gym_code}`;
+      const url = await QRCode.toDataURL(checkinUrl, { width: 400, margin: 2 });
+      setQrUrl(url);
+      toast.success("Gym access code regenerated successfully!");
+    } catch (error) {
+      toast.error("Failed to regenerate gym code");
+      console.error(error);
+    } finally {
+      setIsRegenerating(false);
+    }
+  };
+
   useEffect(() => {
     if (gym?.id) {
       const checkinUrl = `${window.location.origin}/checkin?gym=${gym.id}&code=${gym.gym_code || ''}`;
