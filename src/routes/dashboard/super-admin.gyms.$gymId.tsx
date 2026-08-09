@@ -189,23 +189,25 @@ function GymDetailScreen() {
           <div className="flex flex-col items-center text-center relative z-10">
             <div className="relative group">
               <div 
-                className="w-24 h-24 rounded-2xl bg-[#1e201d] flex items-center justify-center border border-[#B7FF1E]/20 text-[#B7FF1E] mb-4 overflow-hidden relative"
+                className={`w-24 h-24 rounded-2xl bg-[#1e201d] flex items-center justify-center border border-[#B7FF1E]/20 text-[#B7FF1E] mb-4 overflow-hidden relative ${editingSection === 'gym' ? 'cursor-pointer' : ''}`}
+                onClick={() => {
+                  if (editingSection === 'gym') {
+                    fileInputRef.current?.click();
+                  }
+                }}
               >
                 {(gym as any).owner_photo_url ? (
                   <img src={(gym as any).owner_photo_url} alt="Admin" className="w-full h-full object-cover" />
                 ) : (
                   <span className="material-symbols-outlined text-[48px]">person</span>
                 )}
+                {editingSection === 'gym' && (
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-white">photo_camera</span>
+                  </div>
+                )}
               </div>
               
-              {/* Profile Photo Edit Pencil */}
-              <button 
-                onClick={() => fileInputRef.current?.click()}
-                className="absolute -right-1 -bottom-1 w-8 h-8 bg-[#B7FF1E] text-black rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform z-20"
-              >
-                <span className="material-symbols-outlined text-[18px]">edit</span>
-              </button>
-
               <input 
                 type="file" 
                 ref={fileInputRef} 
@@ -390,7 +392,7 @@ function GymDetailScreen() {
       </main>
       
       {editingSection && (
-        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 w-full max-w-[440px] px-5 z-50">
+        <div className="w-full max-w-[480px] mx-auto px-5 mb-10">
           <div className="flex gap-3">
             <button 
               onClick={() => setEditingSection(null)}
