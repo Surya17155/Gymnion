@@ -196,7 +196,7 @@ function SuperAdminGyms() {
                 <div className="text-[#858A7D] group-hover:text-[#B7FF1E] transition-colors">
                   <span className="material-symbols-outlined">chevron_right</span>
                 </div>
-              </div>
+              </Link>
             ))
           )}
         </section>
