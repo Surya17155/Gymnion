@@ -13,16 +13,17 @@ export const Route = createFileRoute('/dashboard/super-admin/gyms')({
 });
 
 function SuperAdminGymsLayout() {
-  return <Outlet />;
-}
-
-function SuperAdminGyms() {
   const { pathname } = useLocation();
   const isExact = pathname === '/dashboard/super-admin/gyms' || pathname === '/dashboard/super-admin/gyms/';
 
   if (!isExact) {
     return <Outlet />;
   }
+
+  return <SuperAdminGyms />;
+}
+
+function SuperAdminGyms() {
 
   const queryClient = useQueryClient();
   const createGymFn = useServerFn(createGymWithAdmin);
@@ -335,3 +336,5 @@ function SuperAdminGyms() {
     </div>
   );
 }
+
+export const GymsIndexRoute = SuperAdminGyms;
