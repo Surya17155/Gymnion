@@ -169,7 +169,6 @@ function AdminSettings() {
               to="/dashboard/admin/account"
               className="w-full flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-[#B7FF1E]/30 transition-colors group text-left"
               onClick={(e) => {
-                // Prevent default Link behavior and use navigate directly to ensure a single transition
                 e.preventDefault();
                 navigate({ to: '/dashboard/admin/account' });
               }}
