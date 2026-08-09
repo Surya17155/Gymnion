@@ -31,7 +31,7 @@ function ProfilePage() {
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ['my-profile'],
-    queryFn: () => getMyProfileFn({ data: {} as any }),
+    queryFn: () => getMyProfileFn({ data: {} } as any),
   });
 
   const [tempProfile, setTempProfile] = useState<any>({});
