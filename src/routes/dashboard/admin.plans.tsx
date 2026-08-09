@@ -146,18 +146,12 @@ function GymPlans() {
                       <p className="text-[12px] text-[#858A7D]">₹{plan.amount} / {plan.billing_cycle}</p>
                     </div>
                   </div>
-                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex gap-2">
                     <button 
                       onClick={() => handleEdit(plan)}
-                      className="w-8 h-8 rounded-full bg-[#121411] flex items-center justify-center text-[#B7FF1E] border border-white/5"
+                      className="w-10 h-10 rounded-full bg-[#121411] flex items-center justify-center text-[#B7FF1E] border border-white/5 active:bg-[#25340D]/20 transition-colors"
                     >
-                      <span className="material-symbols-outlined text-[18px]">edit</span>
-                    </button>
-                    <button 
-                      onClick={() => { if(confirm('Delete this plan?')) deleteMutation.mutate(plan.id); }}
-                      className="w-8 h-8 rounded-full bg-[#121411] flex items-center justify-center text-[#FF5964] border border-white/5"
-                    >
-                      <span className="material-symbols-outlined text-[18px]">delete</span>
+                      <span className="material-symbols-outlined text-[20px]">edit</span>
                     </button>
                   </div>
                 </div>
@@ -231,21 +225,34 @@ function GymPlans() {
                   />
                 </div>
 
-                <div className="flex gap-3 mt-4">
-                  <button 
-                    type="button"
-                    onClick={() => setIsDrawerOpen(false)}
-                    className="flex-1 bg-[#333532] text-white py-4 rounded-2xl font-bold uppercase text-xs tracking-widest border border-white/5"
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    type="submit"
-                    disabled={createMutation.isPending || updateMutation.isPending}
-                    className="flex-1 bg-[#B7FF1E] text-[#293500] py-4 rounded-2xl font-bold uppercase text-xs tracking-widest shadow-lg shadow-[#B7FF1E]/10 disabled:opacity-50"
-                  >
-                    {editingPlan ? 'Save Changes' : 'Create Plan'}
-                  </button>
+                <div className="flex flex-col gap-3 mt-4">
+                  <div className="flex gap-3">
+                    <button 
+                      type="button"
+                      onClick={() => setIsDrawerOpen(false)}
+                      className="flex-1 bg-[#333532] text-white py-4 rounded-2xl font-bold uppercase text-xs tracking-widest border border-white/5"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit"
+                      disabled={createMutation.isPending || updateMutation.isPending}
+                      className="flex-1 bg-[#B7FF1E] text-[#293500] py-4 rounded-2xl font-bold uppercase text-xs tracking-widest shadow-lg shadow-[#B7FF1E]/10 disabled:opacity-50"
+                    >
+                      {editingPlan ? 'Save Changes' : 'Create Plan'}
+                    </button>
+                  </div>
+                  
+                  {editingPlan && (
+                    <button 
+                      type="button"
+                      onClick={() => { if(confirm('Are you sure you want to delete this plan?')) deleteMutation.mutate(editingPlan.id); }}
+                      className="w-full flex items-center justify-center gap-2 py-3 text-[#FF5964] text-[11px] font-bold uppercase tracking-wider"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">delete</span>
+                      Delete Plan
+                    </button>
+                  )}
                 </div>
               </form>
             </div>
