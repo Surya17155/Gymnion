@@ -383,7 +383,7 @@ export function AdminDashboard() {
           activeOptions={{ exact: true }}
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl transition-all duration-200"
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
@@ -397,7 +397,7 @@ export function AdminDashboard() {
           to="/dashboard/admin/members"
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl transition-all duration-200"
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
@@ -411,7 +411,7 @@ export function AdminDashboard() {
           to="/dashboard/admin/payments"
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl transition-all duration-200"
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
@@ -425,7 +425,7 @@ export function AdminDashboard() {
           to="/dashboard/admin/attendance"
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl transition-all duration-200"
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
@@ -439,7 +439,7 @@ export function AdminDashboard() {
           to="/dashboard/admin/settings"
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl transition-all duration-200"
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
         >
           {({ isActive }) => (
             <>
