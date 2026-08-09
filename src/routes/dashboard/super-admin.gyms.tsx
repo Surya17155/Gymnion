@@ -134,7 +134,12 @@ function SuperAdminGyms() {
               type="text"
             />
           </div>
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide no-scrollbar" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
+            <style>{`
+              .no-scrollbar::-webkit-scrollbar {
+                display: none;
+              }
+            `}</style>
             <button 
               onClick={() => setStatusFilter('all')}
               className={`px-4 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-colors ${statusFilter === 'all' ? 'bg-[#B7FF1E] text-black' : 'bg-[#1e201d] text-[#C0C2B8] border border-white/5'}`}
