@@ -35,7 +35,7 @@ export function AdminDashboard() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate({ to: '/auth/login', search: { redirect: undefined } });
+    navigate({ to: '/auth/login', search: { redirect: "" } });
   };
 
   const getStatsFn = useServerFn(getAdminStats);

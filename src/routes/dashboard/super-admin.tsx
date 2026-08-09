@@ -94,7 +94,7 @@ export function SuperAdminDashboard() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate({ to: '/auth/login', search: { redirect: undefined } });
+    navigate({ to: '/auth/login', search: { redirect: "" } });
   };
 
   const statsFn = useServerFn(getPlatformStats);

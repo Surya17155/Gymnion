@@ -24,7 +24,7 @@ export const Route = createFileRoute('/dashboard')({
     const home = homeForRole(role);
 
     if (!role || !home) {
-      throw redirect({ to: '/auth/login', search: { redirect: undefined } });
+      throw redirect({ to: '/auth/login', search: { redirect: "" } });
     }
 
     const path = location.pathname;
