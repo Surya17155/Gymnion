@@ -14,6 +14,7 @@ function GymPlans() {
   const queryClient = useQueryClient();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [editingPlan, setEditingPlan] = useState<any>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     amount: '',
@@ -60,6 +61,9 @@ function GymPlans() {
     mutationFn: (id: string) => deleteFeePlanFn({ data: { id } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['gym-fee-plans'] });
+      setIsDrawerOpen(false);
+      setEditingPlan(null);
+      setIsDeleting(false);
     }
   });
 
@@ -246,11 +250,22 @@ function GymPlans() {
                   {editingPlan && (
                     <button 
                       type="button"
-                      onClick={() => { if(confirm('Are you sure you want to delete this plan?')) deleteMutation.mutate(editingPlan.id); }}
-                      className="w-full flex items-center justify-center gap-2 py-3 text-[#FF5964] text-[11px] font-bold uppercase tracking-wider"
+                      onClick={() => {
+                        if (isDeleting) {
+                          deleteMutation.mutate(editingPlan.id);
+                        } else {
+                          setIsDeleting(true);
+                          setTimeout(() => setIsDeleting(false), 3000);
+                        }
+                      }}
+                      className={`w-full flex items-center justify-center gap-2 py-3 text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all ${
+                        isDeleting ? 'bg-[#FF5964] text-white' : 'text-[#FF5964]'
+                      }`}
                     >
-                      <span className="material-symbols-outlined text-[18px]">delete</span>
-                      Delete Plan
+                      <span className="material-symbols-outlined text-[18px]">
+                        {isDeleting ? 'warning' : 'delete'}
+                      </span>
+                      {isDeleting ? 'Sure?' : 'Delete Plan'}
                     </button>
                   )}
                 </div>
