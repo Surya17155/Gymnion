@@ -14,21 +14,8 @@ let cachedRole: { userId: string; role: Role } | null = null;
 export async function getRoleForUser(userId: string): Promise<Role> {
   if (cachedRole && cachedRole.userId === userId) return cachedRole.role;
 
-  // Optimized lookup: check persistent storage first to avoid blocking on network in route guards
-  if (typeof localStorage !== 'undefined') {
-    const stored = localStorage.getItem('gymsync_role_v2');
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (parsed?.userId === userId) {
-          cachedRole = parsed;
-          return parsed.role as Role;
-        }
-      } catch {
-        // ignore malformed cache
-      }
-    }
-  }
+  // Always refresh from DB to avoid stale role issues for now, unless we can trust the cache
+  // Removed local cache lookup to ensure updates reflect immediately for the user
 
   // Fallback to check hardcoded super admin email immediately if storage is empty
   const { data: { session } } = await supabase.auth.getSession();
