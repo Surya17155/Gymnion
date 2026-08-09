@@ -222,9 +222,12 @@ function AdminMembers() {
               </div>
 
               <div className="flex flex-col gap-3 pb-8 relative z-10">
-                <button className="w-full h-12 bg-[#1e201d] border border-white/5 rounded-full flex items-center justify-center gap-2 text-[#D5FF40] text-[11px] font-bold uppercase tracking-wider hover:bg-[#292b27] transition-all active:scale-[0.98]">
-                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>history</span>
-                  View History
+                <button 
+                  onClick={() => handleDelete(selectedMember.id)}
+                  className="w-full h-12 bg-white/5 border border-white/5 rounded-full flex items-center justify-center gap-2 text-[#FF5964] text-[11px] font-bold uppercase tracking-wider hover:bg-[#FF5964]/10 transition-all active:scale-[0.98]"
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>delete</span>
+                  Delete Member
                 </button>
               </div>
             </div>
@@ -246,7 +249,73 @@ function AdminMembers() {
               <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>dashboard</span>
               <span className="text-[11px] font-semibold leading-[14px]">Dashboard</span>
             </>
-          )}
+      )}
+
+      {/* ADD MEMBER DRAWER */}
+      {isAdding && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" 
+            onClick={() => setIsAdding(false)}
+          />
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[70] p-6 border-t border-white/10 animate-in slide-in-from-bottom duration-300">
+            <h2 className="text-[22px] font-bold text-white mb-6">Add New Member</h2>
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Full Name</label>
+                <input 
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
+                  value={newMember.full_name}
+                  onChange={e => setNewMember(prev => ({ ...prev, full_name: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Email Address</label>
+                <input 
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
+                  value={newMember.email}
+                  onChange={e => setNewMember(prev => ({ ...prev, email: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Phone Number</label>
+                <input 
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
+                  value={newMember.phone}
+                  onChange={e => setNewMember(prev => ({ ...prev, phone: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Fee Plan</label>
+                <select 
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none appearance-none"
+                  value={newMember.fee_plan_id}
+                  onChange={e => setNewMember(prev => ({ ...prev, fee_plan_id: e.target.value }))}
+                >
+                  <option value="">Select a plan</option>
+                  {plans.map((plan: any) => (
+                    <option key={plan.id} value={plan.id}>{plan.name} - ₹{plan.amount}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex gap-3 pt-4">
+                <button 
+                  onClick={() => setIsAdding(false)}
+                  className="flex-1 h-14 bg-white/5 text-[#858A7D] font-bold rounded-2xl active:scale-95 transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleAddMember}
+                  className="flex-[2] h-14 bg-[#D5FF40] text-black font-bold rounded-2xl shadow-[0_8px_20px_rgba(213,255,64,0.2)] active:scale-95 transition-all"
+                >
+                  Create Member
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
         </Link>
         <Link 
           to="/dashboard/admin/members" 
