@@ -500,43 +500,6 @@ function SuperAdminPlans() {
           </div>
         </>
       )}
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                        <span className="text-lg font-semibold text-[#C0C2B8]">₹</span>
-                      </div>
-                      <input 
-                        required
-                        type="number"
-                        placeholder="e.g. 750"
-                        className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl pl-8 pr-4 text-[#e3e3dd] font-bold focus:border-[#c9f232] outline-none"
-                        value={customMonthlyPrice}
-                        onChange={e => setCustomMonthlyPrice(e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <button 
-                      type="button"
-                      onClick={() => setIsAddingOverride(false)}
-                      className="flex-1 py-4 bg-[#1e201d] text-[#858A7D] text-[15px] font-bold rounded-2xl"
-                    >
-                      Cancel
-                    </button>
-                    <button 
-                      onClick={handleAddOverride}
-                      disabled={isSubmitting || !customMonthlyPrice}
-                      className="flex-[2] py-4 bg-[#c9f232] text-black text-[15px] font-bold rounded-2xl shadow-[0_12px_24px_rgba(201,242,50,0.15)] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                    >
-                      {isSubmitting && <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin"></span>}
-                      Set Pricing
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Edit Plan Modal */}
       {isEditingPlan && selectedPlan && (
