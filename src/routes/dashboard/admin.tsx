@@ -172,7 +172,10 @@ function AdminDashboard() {
           {/* Quick Actions */}
           <section>
             <h3 className="text-[18px] font-semibold text-white mb-[12px]">Quick Actions</h3>
-            <div className="bg-[#B7FF1E] rounded-xl p-[16px] flex items-center justify-between shadow-[0_0_20px_rgba(183,255,30,0.1)] hover:scale-[0.98] transition-transform cursor-pointer">
+            <Link 
+              to="/dashboard/admin/settings/qr-management"
+              className="bg-[#B7FF1E] rounded-xl p-[16px] flex items-center justify-between shadow-[0_0_20px_rgba(183,255,30,0.1)] hover:scale-[0.98] transition-transform cursor-pointer"
+            >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center">
                   <span className="material-symbols-outlined text-[#B7FF1E] text-3xl" style={{ fontVariationSettings: '"FILL" 0' }}>qr_code_2</span>
@@ -183,7 +186,7 @@ function AdminDashboard() {
                 </div>
               </div>
               <span className="material-symbols-outlined text-black">chevron_right</span>
-            </div>
+            </Link>
           </section>
 
           {/* Recent Activity */}
