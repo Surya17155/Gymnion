@@ -92,61 +92,72 @@ function SuperAdminPlans() {
     setIsEditingPlan(true);
   };
 
-  const handleUpdatePlan = async () => {
+  const handleUpdatePlan = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!selectedPlan) return;
+    
+    console.log('Starting handleUpdatePlan', { selectedPlan, manualFeatures });
     setIsSubmitting(true);
+    
     try {
       if (!selectedPlan.name || !selectedPlan.price) {
         toast.error("Please provide a plan name and price");
+        setIsSubmitting(false);
         return;
       }
       
       const cleanedFeatures = manualFeatures.filter((f: any) => {
         const text = typeof f === 'string' ? f : f.name;
-        return text.trim() !== '';
+        return text && text.trim() !== '';
       }).map((f: any) => {
-        // Ensure features are saved as { name: string, enabled: boolean } objects
         if (typeof f === 'string') return { name: f, enabled: true };
         return { name: f.name, enabled: f.enabled !== false };
       });
 
       const planData = {
         name: selectedPlan.name,
-        price: Math.round(parseFloat(selectedPlan.price) * 100),
+        price: Math.round(parseFloat(selectedPlan.price.toString()) * 100),
         features: cleanedFeatures as any,
         is_active: selectedPlan.is_active !== false,
         updated_at: new Date().toISOString()
       };
 
+      console.log('Prepared planData', planData);
+
       let error;
       const isNewPlan = !selectedPlan.id || (typeof selectedPlan.id === 'string' && selectedPlan.id.startsWith('new-'));
       
       if (!isNewPlan) {
-        // Update existing plan
+        console.log('Updating existing plan', selectedPlan.id);
         const { error: updateError } = await supabase
           .from('global_plans')
           .update(planData)
           .eq('id', selectedPlan.id);
         error = updateError;
       } else {
-        // Insert new plan
+        console.log('Inserting new plan');
         const { error: insertError } = await supabase
           .from('global_plans')
-          .insert([planData]);
+          .insert([{
+            name: planData.name,
+            price: planData.price,
+            features: planData.features,
+            is_active: planData.is_active
+          }]);
         error = insertError;
       }
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
       
-      const message = selectedPlan.id ? 
-        `${selectedPlan.name} plan updated successfully` : 
-        `${selectedPlan.name} plan created successfully`;
-      
-      toast.success(message);
+      toast.success(isNewPlan ? "Plan created successfully" : "Plan updated successfully");
       setIsEditingPlan(false);
       setSelectedPlan(null);
-      queryClient.invalidateQueries({ queryKey: ['global-plans'] });
+      await queryClient.invalidateQueries({ queryKey: ['global-plans'] });
     } catch (err: any) {
+      console.error('Catch block error:', err);
       toast.error(err.message || "Failed to save plan");
     } finally {
       setIsSubmitting(false);
