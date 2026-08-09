@@ -15,7 +15,7 @@ export const Route = createFileRoute('/dashboard/super-admin/gyms')({
 function SuperAdminGyms() {
   const queryClient = useQueryClient();
   const createGymFn = useServerFn(createGymWithAdmin);
-  const [selectedGym, setSelectedGym] = useState<any>(null);
+  
   const [isAddingGym, setIsAddingGym] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
