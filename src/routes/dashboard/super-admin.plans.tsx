@@ -21,7 +21,7 @@ function SuperAdminPlans() {
   const [selectedGymForOverride, setSelectedGymForOverride] = useState<Gym | null>(null);
   const [customMonthlyPrice, setCustomMonthlyPrice] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [manualFeatures, setManualFeatures] = useState<string[]>(['']);
+  const [manualFeatures, setManualFeatures] = useState<any[]>(['']);
 
   const { data: globalPlans, isLoading: isLoadingPlans } = useQuery({
     queryKey: ['global-plans'],
@@ -101,7 +101,10 @@ function SuperAdminPlans() {
         return;
       }
       
-      const cleanedFeatures = manualFeatures.filter((f: string) => f.trim() !== '');
+      const cleanedFeatures = manualFeatures.filter((f: any) => {
+        const text = typeof f === 'string' ? f : f.name;
+        return text.trim() !== '';
+      });
       const planData = {
         name: selectedPlan.name,
         price: Math.round(parseFloat(selectedPlan.price) * 100),
@@ -233,14 +236,37 @@ function SuperAdminPlans() {
                 </div>
 
                 <ul className="space-y-2 mb-6 relative z-10">
-                  {plan.features?.map((feature: string, idx: number) => (
-                    <li key={idx} className={`flex items-center gap-3 text-sm ${
-                      plan.name.toLowerCase() === 'unlimited' ? 'text-[#e3e3dd]' : 'text-[#C0C2B8]'
-                    }`}>
-                      <span className="material-symbols-outlined text-[#c9f232] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                      {feature}
-                    </li>
-                  ))}
+                  {plan.features?.map((feature: any, idx: number) => {
+                    const isEnabled = typeof feature === 'string' ? true : feature.enabled;
+                    const text = typeof feature === 'string' ? feature : feature.name;
+                    
+                    return (
+                      <li key={idx} className={`flex items-center gap-3 text-sm group cursor-pointer ${
+                        plan.name.toLowerCase() === 'unlimited' ? 'text-[#e3e3dd]' : 'text-[#C0C2B8]'
+                      }`}
+                      onClick={() => {
+                        const updatedFeatures = [...plan.features];
+                        if (typeof updatedFeatures[idx] === 'string') {
+                           updatedFeatures[idx] = { name: updatedFeatures[idx], enabled: false };
+                        } else {
+                           updatedFeatures[idx] = { ...updatedFeatures[idx], enabled: !isEnabled };
+                        }
+                        
+                        supabase.from('global_plans').update({ features: updatedFeatures }).eq('id', plan.id).then(() => {
+                          queryClient.invalidateQueries({ queryKey: ['global-plans'] });
+                        });
+                      }}
+                      >
+                        <span className="material-symbols-outlined text-sm" style={{ 
+                          fontVariationSettings: "'FILL' 1",
+                          color: isEnabled ? '#c9f232' : '#FF5964'
+                        }}>
+                          {isEnabled ? 'check_circle' : 'cancel'}
+                        </span>
+                        {text}
+                      </li>
+                    );
+                  })}
                 </ul>
 
                 <button 
@@ -458,33 +484,62 @@ function SuperAdminPlans() {
               </div>
 
               <div>
-                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Features</label>
+                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Features (Click icon to toggle)</label>
                 <div className="space-y-2">
-                  {manualFeatures.map((feature: string, idx: number) => (
-                    <div key={idx} className="flex items-center gap-3 bg-[#1e201d] border border-white/5 p-3 rounded-xl">
-                      <span className="material-symbols-outlined text-[#c9f232] text-sm">check_circle</span>
-                      <input 
-                        type="text"
-                        className="text-sm text-[#e3e3dd] bg-transparent border-none outline-none flex-1"
-                        value={feature}
-                        placeholder="Feature name..."
-                        onChange={e => {
-                          const newFeatures = [...manualFeatures];
-                          newFeatures[idx] = e.target.value;
-                          setManualFeatures(newFeatures);
-                        }}
-                      />
-                      <button 
-                        onClick={() => {
-                          const newFeatures = manualFeatures.filter((_, i) => i !== idx);
-                          setManualFeatures(newFeatures.length > 0 ? newFeatures : ['']);
-                        }}
-                        className="text-[#858A7D] hover:text-white"
-                      >
-                        <span className="material-symbols-outlined text-sm">close</span>
-                      </button>
-                    </div>
-                  ))}
+                  {manualFeatures.map((feature: any, idx: number) => {
+                    const isEnabled = typeof feature === 'string' ? true : feature.enabled;
+                    const text = typeof feature === 'string' ? feature : feature.name;
+                    
+                    return (
+                      <div key={idx} className="flex items-center gap-3 bg-[#1e201d] border border-white/5 p-3 rounded-xl">
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            const newFeatures = [...manualFeatures];
+                            if (typeof newFeatures[idx] === 'string') {
+                              newFeatures[idx] = { name: newFeatures[idx], enabled: false };
+                            } else {
+                              newFeatures[idx] = { ...newFeatures[idx], enabled: !isEnabled };
+                            }
+                            setManualFeatures(newFeatures);
+                          }}
+                          className="transition-transform active:scale-90"
+                        >
+                          <span className="material-symbols-outlined text-sm" style={{ 
+                            fontVariationSettings: "'FILL' 1",
+                            color: isEnabled ? '#c9f232' : '#FF5964'
+                          }}>
+                            {isEnabled ? 'check_circle' : 'cancel'}
+                          </span>
+                        </button>
+                        <input 
+                          type="text"
+                          className="text-sm text-[#e3e3dd] bg-transparent border-none outline-none flex-1"
+                          value={text}
+                          placeholder="Feature name..."
+                          onChange={e => {
+                            const newFeatures = [...manualFeatures];
+                            if (typeof newFeatures[idx] === 'string') {
+                              newFeatures[idx] = e.target.value;
+                            } else {
+                              newFeatures[idx] = { ...newFeatures[idx], name: e.target.value };
+                            }
+                            setManualFeatures(newFeatures);
+                          }}
+                        />
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            const newFeatures = manualFeatures.filter((_, i) => i !== idx);
+                            setManualFeatures(newFeatures.length > 0 ? newFeatures : ['']);
+                          }}
+                          className="text-[#858A7D] hover:text-white"
+                        >
+                          <span className="material-symbols-outlined text-sm">close</span>
+                        </button>
+                      </div>
+                    );
+                  })}
                   <button 
                     onClick={() => setManualFeatures([...manualFeatures, ''])}
                     className="w-full py-2 border border-dashed border-white/10 rounded-xl text-[10px] font-bold text-[#858A7D] uppercase tracking-wider hover:border-[#c9f232]/30 transition-colors"
