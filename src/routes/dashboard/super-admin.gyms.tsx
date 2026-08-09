@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-router';
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from 'react';
@@ -9,8 +9,19 @@ import { getSubscriptionPlans } from "@/lib/plans.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute('/dashboard/super-admin/gyms')({
-  component: SuperAdminGyms,
+  component: SuperAdminGymsLayout,
 });
+
+function SuperAdminGymsLayout() {
+  const { pathname } = useLocation();
+  const isExact = pathname === '/dashboard/super-admin/gyms' || pathname === '/dashboard/super-admin/gyms/';
+
+  if (!isExact) {
+    return <Outlet />;
+  }
+
+  return <SuperAdminGyms />;
+}
 
 function SuperAdminGyms() {
   const queryClient = useQueryClient();

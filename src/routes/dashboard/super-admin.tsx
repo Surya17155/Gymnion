@@ -10,6 +10,7 @@ export const Route = createFileRoute('/dashboard/super-admin')({
 function SuperAdminLayout() {
   const { pathname } = useLocation();
   const isExact = pathname === '/dashboard/super-admin' || pathname === '/dashboard/super-admin/';
+  const isGymsIndex = pathname === '/dashboard/super-admin/gyms' || pathname === '/dashboard/super-admin/gyms/';
 
   return (
     <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans no-scrollbar">
