@@ -23,7 +23,7 @@ export function MemberDashboard() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate({ to: '/auth/login' });
+    navigate({ to: '/auth/login', search: { redirect: undefined } });
   };
 
   return (
