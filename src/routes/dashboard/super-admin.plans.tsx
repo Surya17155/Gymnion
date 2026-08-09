@@ -306,54 +306,88 @@ function SuperAdminPlans() {
               </div>
             )}
             
-            {gymsWithOverrides?.map((gym) => (
-              <div key={gym.id} className="bg-[#121411] border border-white/5 rounded-xl p-4">
-                <div className="flex items-center gap-3 mb-4 pb-4 border-b border-white/5">
-                  <div className="w-12 h-12 rounded-lg bg-[#383a36] flex items-center justify-center overflow-hidden">
-                    <span className="material-symbols-outlined text-[#858A7D]">fitness_center</span>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-[#e3e3dd]">{gym.name}</h3>
-                    <p className="text-xs text-[#C0C2B8]">Manual Pricing Enabled</p>
-                  </div>
-                </div>
-                <div className="space-y-4 mb-5">
-                  <div>
-                    <label className="text-[11px] font-semibold text-[#858A7D] block mb-1 uppercase tracking-wider">Manual Pricing (Monthly)</label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                        <span className="text-lg font-semibold text-[#C0C2B8]">₹</span>
+            {gymsWithOverrides?.map((gym) => {
+              const currentPrice = (gym.settings as any)?.manual_pricing;
+              return (
+                <div key={gym.id} className="bg-[#121411] border border-white/5 rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-lg bg-[#383a36] flex items-center justify-center overflow-hidden">
+                        <span className="material-symbols-outlined text-[#858A7D]">fitness_center</span>
                       </div>
-                      <input 
-                        className="w-full h-12 bg-[#1a1c19] border border-white/10 rounded-xl pl-8 pr-4 text-white font-bold focus:border-[#c9f232] outline-none" 
-                        defaultValue={(gym.settings as any)?.manual_pricing}
-                        type="number" 
-                        onBlur={async (e) => {
-                          const newPrice = parseFloat(e.target.value);
-                          if (!isNaN(newPrice)) {
-                            try {
-                              await setManualPricingFn({
-                                data: {
-                                  gymId: gym.id,
-                                  manualPricing: newPrice
-                                }
-                              });
-                              toast.success("Price updated");
-                              queryClient.invalidateQueries({ queryKey: ['gyms-with-overrides'] });
-                            } catch (err: any) {
-                              toast.error(err.message || "Update failed");
-                            }
+                      <div>
+                        <h3 className="text-lg font-semibold text-[#e3e3dd]">{gym.name}</h3>
+                        <p className="text-xs text-[#C0C2B8]">Manual Pricing Enabled</p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={async () => {
+                        if (confirm(`Remove manual pricing for ${gym.name}?`)) {
+                          try {
+                            await setManualPricingFn({
+                              data: {
+                                gymId: gym.id,
+                                manualPricing: null
+                              }
+                            });
+                            toast.success("Manual pricing removed");
+                            queryClient.invalidateQueries({ queryKey: ['gyms-with-overrides'] });
+                          } catch (err: any) {
+                            toast.error(err.message || "Failed to remove override");
                           }
-                        }}
-                      />
+                        }
+                      }}
+                      className="text-[#FF5964] p-2 hover:bg-[#FF5964]/10 rounded-lg transition-colors"
+                      title="Remove Override"
+                    >
+                      <span className="material-symbols-outlined text-sm">delete</span>
+                    </button>
+                  </div>
+                  <div className="space-y-4 mb-5">
+                    <div>
+                      <label className="text-[11px] font-semibold text-[#858A7D] block mb-1 uppercase tracking-wider">Manual Pricing (Monthly)</label>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                          <span className="text-lg font-semibold text-[#C0C2B8]">₹</span>
+                        </div>
+                        <input 
+                          id={`price-${gym.id}`}
+                          className="w-full h-12 bg-[#1a1c19] border border-white/10 rounded-xl pl-8 pr-4 text-white font-bold focus:border-[#c9f232] outline-none" 
+                          defaultValue={currentPrice}
+                          type="number" 
+                          onBlur={async (e) => {
+                            const newPrice = parseFloat(e.target.value);
+                            if (!isNaN(newPrice) && newPrice !== currentPrice) {
+                              try {
+                                await setManualPricingFn({
+                                  data: {
+                                    gymId: gym.id,
+                                    manualPricing: newPrice
+                                  }
+                                });
+                                toast.success("Price updated");
+                                queryClient.invalidateQueries({ queryKey: ['gyms-with-overrides'] });
+                              } catch (err: any) {
+                                toast.error(err.message || "Update failed");
+                              }
+                            }
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
+                  <button 
+                    onClick={() => {
+                      const input = document.getElementById(`price-${gym.id}`) as HTMLInputElement;
+                      if (input) input.blur();
+                    }}
+                    className="w-full py-3 bg-[#c9f232] text-[#576c00] text-xs font-bold rounded-xl hover:opacity-90 transition-opacity"
+                  >
+                    Update Settings
+                  </button>
                 </div>
-                <button className="w-full py-3 bg-[#c9f232] text-[#576c00] text-xs font-bold rounded-xl hover:opacity-90 transition-opacity">
-                  Update Settings
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       </div>
