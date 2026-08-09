@@ -70,6 +70,7 @@ function GymPlans() {
   const resetForm = () => {
     setFormData({ name: '', amount: '', billing_cycle: 'monthly', description: '' });
     setEditingPlan(null);
+    setIsDeleting(false);
   };
 
   const handleEdit = (plan: any) => {
