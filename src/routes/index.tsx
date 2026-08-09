@@ -23,9 +23,7 @@ function HomePage() {
         <span className="material-symbols-outlined text-[#B7FF1E] text-5xl" style={{ fontVariationSettings: '"FILL" 1' }}>fitness_center</span>
       </div>
       <h1 className="text-4xl font-bold mb-2">Gym<span className="text-[#B7FF1E]">Sync</span></h1>
-      <p className="text-[#858A7D] mb-12 text-center">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
-                                            
-                                            add a feature by which I can make them correct tick to wrong red mark in just one click, this is because some feature are not available in some plans, that's why I want to make some features not available but want to write as red mark</p>
+      <p className="text-[#858A7D] mb-12 text-center">I have connected the plan management system to the backend, enabling real-time saving and global updates for plans, pricing, and features. You can now toggle features between "Available" (green tick) and "Unavailable" (red cross) in the Super Admin dashboard, and these changes will be reflected instantly across the app, including on the Gym Admin dashboard.</p>
       
       <button 
         onClick={() => navigate({ to: "/auth/login" })}

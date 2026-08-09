@@ -1,5 +1,7 @@
 import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-router';
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
 export const Route = createFileRoute('/dashboard/admin')({
   component: AdminLayout,
@@ -18,6 +20,45 @@ function AdminLayout() {
 
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  const { data: gymData } = useQuery({
+    queryKey: ['admin-gym-settings'],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return null;
+      
+      const { data: roleData } = await supabase
+        .from('user_roles')
+        .select('gym_id')
+        .eq('user_id', user.id)
+        .eq('role', 'gym_admin' as any)
+        .maybeSingle();
+        
+      if (!roleData?.gym_id) return null;
+      
+      const { data: gym } = await supabase
+        .from('gyms')
+        .select('*')
+        .eq('id', roleData.gym_id)
+        .maybeSingle();
+        
+      return gym;
+    }
+  });
+
+  const { data: activePlans } = useQuery({
+    queryKey: ['global-plans-for-admin'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('global_plans')
+        .select('*')
+        .eq('is_active', true);
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  const currentPlan = activePlans?.find((p: any) => p.id === (gymData?.settings as any)?.plan_id);
 
   return (
     <div className="bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins']">
@@ -47,8 +88,35 @@ function AdminDashboard() {
           {/* Page Title */}
           <section className="-mt-4">
             <h2 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white">Dashboard</h2>
-            <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Good morning, Admin</p>
+            <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Good morning, {gymData?.owner_name || 'Admin'}</p>
+            {gymData && (
+              <p className="text-[12px] text-[#B7FF1E] mt-1 font-semibold uppercase tracking-wider">{gymData.name}</p>
+            )}
           </section>
+
+          {/* Subscription Banner */}
+          {currentPlan && (
+            <section className="bg-[#B7FF1E]/10 border border-[#B7FF1E]/20 rounded-xl p-4 flex items-center justify-between">
+              <div>
+                <p className="text-[10px] text-[#858A7D] uppercase font-bold">Current Plan</p>
+                <p className="text-white font-bold">{currentPlan.name}</p>
+              </div>
+              <div className="flex gap-2">
+                {Array.isArray(currentPlan.features) && (currentPlan.features as any[]).slice(0, 3).map((f: any, i: number) => (
+                  <span 
+                    key={i} 
+                    className="material-symbols-outlined text-[16px]" 
+                    style={{ 
+                      fontVariationSettings: "'FILL' 1",
+                      color: (typeof f === 'string' ? true : f.enabled) ? '#B7FF1E' : '#FF5964'
+                    }}
+                  >
+                    {(typeof f === 'string' ? true : f.enabled) ? 'check_circle' : 'cancel'}
+                  </span>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* KPI Grid */}
           <section className="grid grid-cols-2 gap-3">

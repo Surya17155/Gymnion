@@ -104,16 +104,22 @@ function SuperAdminPlans() {
       const cleanedFeatures = manualFeatures.filter((f: any) => {
         const text = typeof f === 'string' ? f : f.name;
         return text.trim() !== '';
+      }).map((f: any) => {
+        // Ensure features are saved as { name: string, enabled: boolean } objects
+        if (typeof f === 'string') return { name: f, enabled: true };
+        return { name: f.name, enabled: f.enabled !== false };
       });
+
       const planData = {
         name: selectedPlan.name,
         price: Math.round(parseFloat(selectedPlan.price) * 100),
-        features: cleanedFeatures,
-        is_active: true
+        features: cleanedFeatures as any,
+        is_active: selectedPlan.is_active !== false,
+        updated_at: new Date().toISOString()
       };
 
       let error;
-      const isNewPlan = !selectedPlan.id;
+      const isNewPlan = !selectedPlan.id || (typeof selectedPlan.id === 'string' && selectedPlan.id.startsWith('new-'));
       
       if (!isNewPlan) {
         // Update existing plan
@@ -181,7 +187,7 @@ function SuperAdminPlans() {
             <button 
               data-testid="add-new-plan-btn"
               onClick={() => {
-                setSelectedPlan({ name: '', price: '' });
+                setSelectedPlan({ id: `new-${Date.now()}`, name: '', price: '' });
                 setManualFeatures(['']);
                 setIsEditingPlan(true);
               }}
@@ -252,7 +258,7 @@ function SuperAdminPlans() {
                            updatedFeatures[idx] = { ...updatedFeatures[idx], enabled: !isEnabled };
                         }
                         
-                        supabase.from('global_plans').update({ features: updatedFeatures }).eq('id', plan.id).then(() => {
+                        supabase.from('global_plans').update({ features: updatedFeatures as any }).eq('id', plan.id).then(() => {
                           queryClient.invalidateQueries({ queryKey: ['global-plans'] });
                         });
                       }}

@@ -141,7 +141,7 @@ export type Database = {
       global_plans: {
         Row: {
           created_at: string | null
-          features: string[] | null
+          features: Json | null
           id: string
           is_active: boolean | null
           name: string
@@ -150,7 +150,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
-          features?: string[] | null
+          features?: Json | null
           id?: string
           is_active?: boolean | null
           name: string
@@ -159,7 +159,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
-          features?: string[] | null
+          features?: Json | null
           id?: string
           is_active?: boolean | null
           name?: string
