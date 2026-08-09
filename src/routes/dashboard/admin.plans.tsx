@@ -96,7 +96,7 @@ function AdminPlans() {
                     </div>
                   </div>
                   <Link 
-                    to={`/dashboard/admin/plans/edit/${plan.id}`}
+                    to={`/dashboard/admin/plans/edit/${plan.id}` as any}
                     className="w-8 h-8 rounded-full bg-[#292A28] flex items-center justify-center hover:bg-[#383a36] transition-colors"
                   >
                     <span className="material-symbols-outlined text-[#e3e3dd] text-sm">edit</span>
