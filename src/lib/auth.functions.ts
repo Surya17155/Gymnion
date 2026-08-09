@@ -113,14 +113,22 @@ export const updateMyProfile = createServerFn({ method: 'POST' })
   });
 
 export const getFeePlans = createServerFn({ method: 'GET' })
-  .handler(async () => {
-    const { data, error } = await supabaseAdmin
+  .validator((data: any) => z.object({
+    gymId: z.string().optional()
+  }).parse(data || {}))
+  .handler(async ({ data }) => {
+    let query = supabaseAdmin
       .from('fee_plans')
       .select('*')
       .eq('is_active', true);
     
+    if (data.gymId) {
+      query = query.eq('gym_id', data.gymId);
+    }
+    
+    const { data: plans, error } = await query;
     if (error) throw error;
-    return data;
+    return plans;
   });
 
 export const createFeePlan = createServerFn({ method: 'POST' })
