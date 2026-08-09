@@ -260,12 +260,14 @@ function GymPlans() {
                         }
                       }}
                       className={`w-full flex items-center justify-center gap-2 py-3 text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all ${
-                        isDeleting ? 'bg-[#FF5964] text-white' : 'text-[#FF5964]'
+                        isDeleting ? 'bg-[#FF0000] text-white' : 'text-[#FF5964]'
                       }`}
                     >
-                      <span className="material-symbols-outlined text-[18px]">
-                        {isDeleting ? 'warning' : 'delete'}
-                      </span>
+                      {!isDeleting && (
+                        <span className="material-symbols-outlined text-[18px]">
+                          delete
+                        </span>
+                      )}
                       {isDeleting ? 'Sure?' : 'Delete Plan'}
                     </button>
                   )}
