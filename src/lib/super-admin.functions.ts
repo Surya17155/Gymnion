@@ -279,6 +279,10 @@ export const setGymManualPricing = createServerFn({ method: "POST" })
   .validator((data: unknown) => z.object({
     gymId: z.string(),
     manualPricing: z.number().nullable(),
+    features: z.object({
+      payment_management: z.boolean(),
+      attendance_management: z.boolean(),
+    }).optional()
   }).parse(data))
   .handler(async ({ data, context }) => {
     // Check if user is super_admin
@@ -300,10 +304,19 @@ export const setGymManualPricing = createServerFn({ method: "POST" })
 
     const currentSettings = (gym?.settings as any) || {};
     
-    if (data.manualPricing === null) {
-      delete currentSettings.manual_pricing;
-    } else {
-      currentSettings.manual_pricing = data.manualPricing;
+    if (data.manualPricing !== undefined) {
+      if (data.manualPricing === null) {
+        delete currentSettings.manual_pricing;
+      } else {
+        currentSettings.manual_pricing = data.manualPricing;
+      }
+    }
+
+    if (data.features) {
+      currentSettings.features = {
+        ...currentSettings.features,
+        ...data.features
+      };
     }
 
     const { error } = await supabaseAdmin

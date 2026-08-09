@@ -130,26 +130,58 @@ export function AdminDashboard() {
             )}
           </section>
 
-          {/* Subscription Banner */}
-          {currentPlan && (
+          {/* Subscription/Manual Features Banner */}
+          {(currentPlan || (gymData?.settings as any)?.manual_pricing) && (
             <section className="bg-[#B7FF1E]/10 border border-[#B7FF1E]/20 rounded-xl p-4 flex items-center justify-between">
               <div>
                 <p className="text-[10px] text-[#858A7D] uppercase font-bold">Current Plan</p>
-                <p className="text-white font-bold">{currentPlan.name}</p>
+                <p className="text-white font-bold">
+                  {currentPlan?.name || 'Manual Pricing'}
+                </p>
+                {(gymData?.settings as any)?.manual_pricing && (
+                  <p className="text-[12px] text-[#B7FF1E] font-medium mt-0.5">₹{(gymData?.settings as any).manual_pricing}/mo</p>
+                )}
               </div>
               <div className="flex gap-2">
-                {Array.isArray(currentPlan.features) && (currentPlan.features as any[]).slice(0, 3).map((f: any, i: number) => (
-                  <span 
-                    key={i} 
-                    className="material-symbols-outlined text-[16px]" 
-                    style={{ 
-                      fontVariationSettings: "'FILL' 1",
-                      color: (typeof f === 'string' ? true : f.enabled) ? '#B7FF1E' : '#FF5964'
-                    }}
-                  >
-                    {(typeof f === 'string' ? true : f.enabled) ? 'check_circle' : 'cancel'}
-                  </span>
-                ))}
+                {/* Check specific manual features if override exists, otherwise plan features */}
+                {(() => {
+                  const settings = (gymData?.settings as any) || {};
+                  const manualFeatures = settings.features;
+                  
+                  if (manualFeatures) {
+                    return (
+                      <>
+                        <span 
+                          className="material-symbols-outlined text-[16px]" 
+                          style={{ fontVariationSettings: "'FILL' 1", color: manualFeatures.payment_management ? '#B7FF1E' : '#FF5964' }}
+                          title="Payments"
+                        >
+                          {manualFeatures.payment_management ? 'check_circle' : 'cancel'}
+                        </span>
+                        <span 
+                          className="material-symbols-outlined text-[16px]" 
+                          style={{ fontVariationSettings: "'FILL' 1", color: manualFeatures.attendance_management ? '#B7FF1E' : '#FF5964' }}
+                          title="Attendance"
+                        >
+                          {manualFeatures.attendance_management ? 'check_circle' : 'cancel'}
+                        </span>
+                      </>
+                    );
+                  }
+                  
+                  return Array.isArray(currentPlan?.features) && (currentPlan.features as any[]).slice(0, 3).map((f: any, i: number) => (
+                    <span 
+                      key={i} 
+                      className="material-symbols-outlined text-[16px]" 
+                      style={{ 
+                        fontVariationSettings: "'FILL' 1",
+                        color: (typeof f === 'string' ? true : f.enabled) ? '#B7FF1E' : '#FF5964'
+                      }}
+                    >
+                      {(typeof f === 'string' ? true : f.enabled) ? 'check_circle' : 'cancel'}
+                    </span>
+                  ));
+                })()}
               </div>
             </section>
           )}
@@ -206,23 +238,49 @@ export function AdminDashboard() {
           </section>
 
           {/* Quick Actions */}
-          <section>
-            <h3 className="text-[18px] font-semibold text-white mb-[12px]">Quick Actions</h3>
-            <Link 
-              to="/dashboard/admin/settings/qr-management"
-              className="bg-[#B7FF1E] rounded-xl p-[16px] flex items-center justify-between shadow-[0_0_20px_rgba(183,255,30,0.1)] hover:scale-[0.98] transition-transform cursor-pointer"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center">
-                  <span className="material-symbols-outlined text-[#B7FF1E] text-3xl" style={{ fontVariationSettings: '"FILL" 0' }}>qr_code_2</span>
+          <section className="flex flex-col gap-3">
+            <h3 className="text-[18px] font-semibold text-white mb-1">Quick Actions</h3>
+            
+            {/* Conditional QR Management Button */}
+            {(() => {
+              const settings = (gymData?.settings as any) || {};
+              const attendanceEnabled = settings.features?.attendance_management !== false; // Default to true for global plans for now
+              
+              if (attendanceEnabled) {
+                return (
+                  <Link 
+                    to="/dashboard/admin/settings/qr-management"
+                    className="bg-[#B7FF1E] rounded-xl p-[16px] flex items-center justify-between shadow-[0_0_20px_rgba(183,255,30,0.1)] hover:scale-[0.98] transition-transform cursor-pointer"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center">
+                        <span className="material-symbols-outlined text-[#B7FF1E] text-3xl" style={{ fontVariationSettings: '"FILL" 0' }}>qr_code_2</span>
+                      </div>
+                      <div>
+                        <h4 className="text-[18px] font-semibold text-black">Gym QR Code</h4>
+                        <p className="text-[12px] text-black/70">Show to members for check-in</p>
+                      </div>
+                    </div>
+                    <span className="material-symbols-outlined text-black">chevron_right</span>
+                  </Link>
+                );
+              }
+              
+              return (
+                <div className="bg-[#1e201d] rounded-xl p-[16px] flex items-center justify-between border border-white/5 opacity-50 cursor-not-allowed">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-black/40 rounded-lg flex items-center justify-center">
+                      <span className="material-symbols-outlined text-[#858A7D] text-3xl">qr_code_2</span>
+                    </div>
+                    <div>
+                      <h4 className="text-[18px] font-semibold text-[#858A7D]">Gym QR Code</h4>
+                      <p className="text-[12px] text-[#858A7D]">Attendance feature disabled</p>
+                    </div>
+                  </div>
+                  <span className="material-symbols-outlined text-[#858A7D]">lock</span>
                 </div>
-                <div>
-                  <h4 className="text-[18px] font-semibold text-black">Gym QR Code</h4>
-                  <p className="text-[12px] text-black/70">Show to members for check-in</p>
-                </div>
-              </div>
-              <span className="material-symbols-outlined text-black">chevron_right</span>
-            </Link>
+              );
+            })()}
           </section>
 
           {/* Recent Activity */}
@@ -297,33 +355,51 @@ export function AdminDashboard() {
           )}
         </Link>
         
-        <Link 
-          to="/dashboard/admin/payments"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>receipt_long</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Payments</span>
-            </>
-          )}
-        </Link>
+        {(() => {
+          const settings = (gymData?.settings as any) || {};
+          const paymentEnabled = settings.features?.payment_management !== false;
+          
+          if (!paymentEnabled) return null;
+          
+          return (
+            <Link 
+              to="/dashboard/admin/payments"
+              activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+              inactiveProps={{ className: 'text-[#C0C2B8]' }}
+              className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+            >
+              {({ isActive }) => (
+                <>
+                  <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>receipt_long</span>
+                  <span className="text-[11px] font-semibold leading-[14px]">Payments</span>
+                </>
+              )}
+            </Link>
+          );
+        })()}
         
-        <Link 
-          to="/dashboard/admin/attendance"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>event_available</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Attendance</span>
-            </>
-          )}
-        </Link>
+        {(() => {
+          const settings = (gymData?.settings as any) || {};
+          const attendanceEnabled = settings.features?.attendance_management !== false;
+          
+          if (!attendanceEnabled) return null;
+          
+          return (
+            <Link 
+              to="/dashboard/admin/attendance"
+              activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+              inactiveProps={{ className: 'text-[#C0C2B8]' }}
+              className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+            >
+              {({ isActive }) => (
+                <>
+                  <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>event_available</span>
+                  <span className="text-[11px] font-semibold leading-[14px]">Attendance</span>
+                </>
+              )}
+            </Link>
+          );
+        })()}
         
         <Link 
           to="/dashboard/admin/settings"

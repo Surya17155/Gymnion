@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, Link, Navigate } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { getGymDetails } from '@/lib/auth.functions';
@@ -10,10 +10,19 @@ export const Route = createFileRoute('/dashboard/admin/settings/qr-management')(
 function QRManagement() {
   const navigate = useNavigate();
 
-  const { data: gym } = useQuery({
+  const { data: gym, isLoading } = useQuery({
     queryKey: ['admin-gym-details'],
     queryFn: () => getGymDetails(),
   });
+
+  if (isLoading) return null;
+
+  const settings = (gym?.settings as any) || {};
+  const attendanceEnabled = settings.features?.attendance_management !== false;
+
+  if (!attendanceEnabled) {
+    return <Navigate to="/dashboard/admin" />;
+  }
 
   const { data: attendanceCount } = useQuery({
     queryKey: ['gym-attendance-today', gym?.id],

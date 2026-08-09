@@ -1,10 +1,33 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, Navigate } from '@tanstack/react-router';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
 export const Route = createFileRoute('/dashboard/admin/payments')({
   component: AdminPayments,
 });
 
 function AdminPayments() {
+  const { data: gymData, isLoading } = useQuery({
+    queryKey: ['admin-gym-settings'],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return null;
+      const { data: roleData } = await supabase.from('user_roles').select('gym_id').eq('user_id', user.id).maybeSingle();
+      if (!roleData?.gym_id) return null;
+      const { data: gym } = await supabase.from('gyms').select('*').eq('id', roleData.gym_id).maybeSingle();
+      return gym;
+    }
+  });
+
+  if (isLoading) return null;
+
+  const settings = (gymData?.settings as any) || {};
+  const paymentEnabled = settings.features?.payment_management !== false;
+
+  if (!paymentEnabled) {
+    return <Navigate to="/dashboard/admin" />;
+  }
+
   return (
     <div className="bg-[#0D0F0C] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins']">
       {/* Head link for icons is already in __root.tsx, but ensuring icons are available */}
