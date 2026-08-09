@@ -145,13 +145,13 @@ function QRManagement() {
           </Link>
           <div className="flex-1 text-center">
             <h2 className="text-[18px] font-bold text-white uppercase tracking-wider">Access Control</h2>
+            <p className="text-[12px] text-[#858A7D]">Manage QR codes for facility entry points.</p>
           </div>
         </header>
 
         <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-4">
           <div>
             <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white mb-1">{"\n"}</h1>
-            <p className="text-[12px] text-[#858A7D]">Manage QR codes for facility entry points.</p>
           </div>
 
           <section className="bg-[#121411] rounded-xl border border-white/5 overflow-hidden relative group"
