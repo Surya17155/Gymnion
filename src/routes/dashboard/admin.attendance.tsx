@@ -11,7 +11,7 @@ export const Route = createFileRoute('/dashboard/admin/attendance')({
   loader: async ({ context }) => {
     const gymId = await context.queryClient.ensureQueryData({
       queryKey: ['current-gym-id'],
-      queryFn: () => getCurrentGymId({ data: {} })
+      queryFn: () => getCurrentGymId({ data: undefined })
     });
     if (gymId) {
       await context.queryClient.ensureQueryData({
