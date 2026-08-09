@@ -19,7 +19,7 @@ export const Route = createFileRoute('/dashboard')({
       staleTime: 1000 * 60 * 5
     });
 
-    // 2. Optimized role lookup (hits localStorage first)
+    // 2. Optimized role lookup
     const role = await getRoleForUser(session.user.id);
     const home = homeForRole(role);
 

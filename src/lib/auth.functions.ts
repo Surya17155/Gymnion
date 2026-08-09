@@ -209,7 +209,7 @@ export const getGymDetails = createServerFn({ method: 'GET' })
         .from('user_roles')
         .select('gym_id')
         .eq('user_id', userId)
-        .eq('role', 'gym_admin')
+        .eq('role', 'admin')
         .single();
       gymId = roleData?.gym_id || undefined;
     }
@@ -235,7 +235,7 @@ export const getCurrentGymId = createServerFn({ method: 'GET' })
       .from('user_roles')
       .select('gym_id')
       .eq('user_id', userId)
-      .eq('role', 'gym_admin')
+      .eq('role', 'admin')
       .single();
 
     if (error || !data) return null;
@@ -253,7 +253,7 @@ export const getSubscriptionPlan = createServerFn({ method: 'GET' })
       .from('user_roles')
       .select('gym_id')
       .eq('user_id', userId)
-      .eq('role', 'gym_admin')
+      .eq('role', 'admin')
       .single();
 
     if (!roleData?.gym_id) return null;

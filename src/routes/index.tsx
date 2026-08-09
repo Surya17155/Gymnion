@@ -8,8 +8,8 @@ export const Route = createFileRoute("/")({
     if (session) {
       const role = await getAuthUserRole();
       if (role === 'super_admin') throw redirect({ to: '/dashboard/super-admin' });
-      if (role === 'admin') throw redirect({ to: '/dashboard/admin' });
-      if (role) throw redirect({ to: '/dashboard/m' });
+      if (role === 'admin' || role === 'gym_admin') throw redirect({ to: '/dashboard/admin' });
+      if (role === 'member') throw redirect({ to: '/dashboard/m' });
     }
   },
   component: HomePage,
