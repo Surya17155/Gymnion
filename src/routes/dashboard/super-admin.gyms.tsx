@@ -42,49 +42,6 @@ export function SuperAdminGyms() {
 
   const gyms = gymsData?.gyms;
 
-  // New Gym Form State
-  const [newGym, setNewGym] = useState({
-    name: '',
-    ownerName: '',
-    ownerEmail: '',
-    ownerPassword: '',
-    ownerPhone: '',
-    gymCode: '',
-    planId: ''
-  });
-
-  const generateGymCode = () => {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let code = '';
-    for (let i = 0; i < 6; i++) {
-      code += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    setNewGym(prev => ({ ...prev, gymCode: code }));
-  };
-
-  const handleAddGym = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      await createGymFn({ data: newGym });
-      toast.success("Gym and Admin created successfully!");
-      setIsAddingGym(false);
-      setNewGym({
-        name: '',
-        ownerName: '',
-        ownerEmail: '',
-        ownerPassword: '',
-        ownerPhone: '',
-        gymCode: '',
-        planId: ''
-      });
-      queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
-    } catch (err: any) {
-      toast.error(err.message || "Failed to create gym");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const filteredGyms = gyms?.filter(gym => 
     gym.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
