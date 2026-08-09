@@ -6,12 +6,18 @@ export const Route = createFileRoute('/dashboard')({
   // Session lives in localStorage, so gate on the client only. This removes the
   // SSR round-trip that made the first paint hang on a black screen.
   ssr: false,
-  beforeLoad: async ({ location }) => {
+  beforeLoad: async ({ location, context }) => {
     // 1. Quick local session check
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       throw redirect({ to: '/auth/login', search: { redirect: location.href } });
     }
+
+    // Preload next route to speed up navigation
+    context.queryClient.prefetchQuery({
+      queryKey: ['platform-stats'],
+      staleTime: 1000 * 60 * 5
+    });
 
     // 2. Optimized role lookup (hits localStorage first)
     const role = await getRoleForUser(session.user.id);
