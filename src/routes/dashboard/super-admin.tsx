@@ -1,7 +1,9 @@
-import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useLocation, useNavigate } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { getPlatformStats } from '@/lib/super-admin.functions';
+import { useState, useRef, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 export const Route = createFileRoute('/dashboard/super-admin')({
   component: SuperAdminLayout,
@@ -76,6 +78,25 @@ function SuperAdminLayout() {
 }
 
 export function SuperAdminDashboard() {
+  const navigate = useNavigate();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate({ to: '/auth/login' });
+  };
+
   const statsFn = useServerFn(getPlatformStats);
   const { data: stats, isLoading } = useQuery({
     queryKey: ['platform-stats'],
@@ -101,8 +122,33 @@ export function SuperAdminDashboard() {
         <div className="md:hidden flex items-center mb-8">
           <h1 className="text-[22px] font-bold text-white">Dashboard</h1>
           <div className="flex-1"></div>
-          <div className="w-10 h-10 rounded-full bg-[#333532] border border-white/10 overflow-hidden flex items-center justify-center">
-            <span className="material-symbols-outlined text-[#C0C2B8]">person</span>
+          <div className="relative" ref={dropdownRef}>
+            <button 
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="w-10 h-10 rounded-full bg-[#333532] border border-white/10 overflow-hidden flex items-center justify-center transition-colors focus:outline-none hover:border-[#B7FF1E]/30"
+            >
+              <span className="material-symbols-outlined text-[#C0C2B8]">person</span>
+            </button>
+
+            {showDropdown && (
+              <div className="absolute right-0 mt-2 w-48 bg-[#1e201d] border border-white/10 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200">
+                <Link
+                  to="/dashboard/super-admin/gyms"
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#C0C2B8] hover:bg-white/5 transition-colors text-[14px]"
+                  onClick={() => setShowDropdown(false)}
+                >
+                  <span className="material-symbols-outlined text-[18px]">settings</span>
+                  Settings
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#FF5964] hover:bg-white/5 transition-colors text-[14px]"
+                >
+                  <span className="material-symbols-outlined text-[18px]">logout</span>
+                  Log out
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
