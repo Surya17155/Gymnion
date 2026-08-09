@@ -168,10 +168,6 @@ function AdminSettings() {
             <Link 
               to="/dashboard/admin/account"
               className="w-full flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-[#B7FF1E]/30 transition-colors group text-left"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate({ to: '/dashboard/admin/account' });
-              }}
             >
               <div className="w-12 h-12 rounded-full bg-[#25340D] flex items-center justify-center mr-4 group-hover:bg-[#B7FF1E]/20 transition-colors">
                 <span className="material-symbols-outlined text-[#B7FF1E]" style={{ fontVariationSettings: '"FILL" 1' }}>manage_accounts</span>
