@@ -118,7 +118,7 @@ function SuperAdminPlans() {
       };
 
       let error;
-      const isNewPlan = !selectedPlan.id;
+      const isNewPlan = !selectedPlan.id || selectedPlan.id.startsWith('new-');
       
       if (!isNewPlan) {
         // Update existing plan
