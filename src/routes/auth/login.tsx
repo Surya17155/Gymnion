@@ -116,7 +116,8 @@ function AuthPage() {
         clearRoleCache();
         const role = await getRoleForUser(data.session.user.id);
         const home = homeForRole(role);
-        navigate({ to: home ?? redirectPath });
+        console.log("Login successful, role:", role, "redirecting to:", home);
+        navigate({ to: home ?? '/dashboard' });
       }
 
     } catch (err: any) {
