@@ -1,7 +1,10 @@
-import { createFileRoute, Link, Outlet, useLocation, useNavigate } from '@tanstack/react-router';
-import { useState, useRef, useEffect } from 'react';
+import { createFileRoute, Link, Outlet, useNavigate } from '@tanstack/react-router';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useServerFn } from '@tanstack/react-start';
+import { getAdminStats, getRecentActivity, getGymDetails } from '@/lib/auth.functions';
+import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin')({
   component: AdminLayout,
@@ -32,29 +35,25 @@ export function AdminDashboard() {
     navigate({ to: '/auth/login', search: { redirect: undefined } });
   };
 
+  const getStatsFn = useServerFn(getAdminStats);
+  const getActivityFn = useServerFn(getRecentActivity);
+  const getGymDetailsFn = useServerFn(getGymDetails);
+
   const { data: gymData } = useQuery({
     queryKey: ['admin-gym-settings'],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return null;
-      
-      const { data: roleData } = await supabase
-        .from('user_roles')
-        .select('gym_id')
-        .eq('user_id', user.id)
-        .eq('role', 'gym_admin' as any)
-        .maybeSingle();
-        
-      if (!roleData?.gym_id) return null;
-      
-      const { data: gym } = await supabase
-        .from('gyms')
-        .select('*')
-        .eq('id', roleData.gym_id)
-        .maybeSingle();
-        
-      return gym;
-    }
+    queryFn: () => getGymDetailsFn({ data: {} })
+  });
+
+  const { data: stats } = useQuery({
+    queryKey: ['admin-stats', gymData?.id],
+    queryFn: () => getStatsFn({ data: { gymId: gymData!.id } }),
+    enabled: !!gymData?.id
+  });
+
+  const { data: recentActivity } = useQuery({
+    queryKey: ['admin-activity', gymData?.id],
+    queryFn: () => getActivityFn({ data: { gymId: gymData!.id } }),
+    enabled: !!gymData?.id
   });
 
   const { data: activePlans } = useQuery({
@@ -196,7 +195,7 @@ export function AdminDashboard() {
                 <span className="material-symbols-outlined text-[#B7FF1E] opacity-50" style={{ fontVariationSettings: '"FILL" 0' }}>payments</span>
               </div>
               <div className="flex items-end gap-3 mt-1">
-                <span className="text-[40px] leading-[40px] font-bold tracking-[-0.04em] text-[#B7FF1E]">₹45,200</span>
+                <span className="text-[40px] leading-[40px] font-bold tracking-[-0.04em] text-[#B7FF1E]">₹{stats?.monthRevenue.toLocaleString() || 0}</span>
                 <div className="flex items-center text-[#A7F52A] text-[11px] font-semibold pb-2">
                   <span className="material-symbols-outlined text-sm">trending_up</span>
                   <span>+12%</span>
@@ -214,12 +213,12 @@ export function AdminDashboard() {
                   <circle className="text-[#B7FF1E]" cx="50" cy="50" fill="none" r="40" stroke="currentColor" strokeDasharray="251.2" strokeDashoffset="60" strokeLinecap="round" strokeWidth="8"></circle>
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-[18px] font-semibold text-white">85%</span>
+                  <span className="text-[18px] font-semibold text-white">{stats ? Math.round((stats.todayCheckins / 200) * 100) : 0}%</span>
                 </div>
               </div>
               <div className="flex justify-between w-full text-[11px] font-semibold">
-                <span className="text-[#C0C2B8]">210 Paid</span>
-                <span className="text-[#B7FF1E]">32 Pend</span>
+                <span className="text-[#C0C2B8]">{stats?.todayCheckins || 0} In</span>
+                <span className="text-[#B7FF1E]">{stats?.currentlyIn || 0} Now</span>
               </div>
             </div>
 
@@ -231,7 +230,7 @@ export function AdminDashboard() {
                   <span className="text-[12px] leading-[18px] text-[#FF5964]">Overdue</span>
                   <span className="material-symbols-outlined text-[#FF5964] opacity-80" style={{ fontVariationSettings: '"FILL" 1' }}>warning</span>
                 </div>
-                <span className="text-[40px] leading-[40px] font-bold tracking-[-0.04em] text-white block mb-1">14</span>
+                <span className="text-[40px] leading-[40px] font-bold tracking-[-0.04em] text-white block mb-1">{stats?.overdueCount || 0}</span>
                 <span className="text-[11px] font-semibold text-[#C0C2B8]">Members unpaid</span>
               </div>
             </div>
@@ -290,36 +289,26 @@ export function AdminDashboard() {
               <span className="text-[11px] font-semibold text-[#B7FF1E] cursor-pointer">View All</span>
             </div>
             <div className="bg-[#121411] rounded-xl border border-white/5 overflow-hidden">
-              {/* Item 1 */}
-              <div className="p-[16px] border-b border-white/5 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center text-[#C0C2B8]">
-                  <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: '"FILL" 1' }}>login</span>
+              {recentActivity?.map((activity, i) => (
+                <div key={i} className="p-[16px] border-b border-white/5 flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${activity.type === 'payment' ? 'text-[#B7FF1E]' : 'text-[#C0C2B8]'} bg-[#1e201d]`}>
+                    <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: '"FILL" 1' }}>
+                      {activity.type === 'payment' ? 'payments' : 'login'}
+                    </span>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-[12px] text-white"><span className="font-semibold">{activity.member_name}</span> {activity.action}</p>
+                    <p className="text-[11px] font-semibold text-[#858A7D]">
+                      {format(new Date(activity.timestamp!), 'hh:mm a')}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <p className="text-[12px] text-white"><span className="font-semibold">Aman Gupta</span> checked in</p>
-                  <p className="text-[11px] font-semibold text-[#858A7D]">2 mins ago</p>
+              ))}
+              {(!recentActivity || recentActivity.length === 0) && (
+                <div className="p-8 text-center text-[#858A7D] text-sm">
+                  No recent activity
                 </div>
-              </div>
-              {/* Item 2 */}
-              <div className="p-[16px] border-b border-white/5 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center text-[#B7FF1E]">
-                  <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: '"FILL" 1' }}>payments</span>
-                </div>
-                <div className="flex-1">
-                  <p className="text-[12px] text-white"><span className="font-semibold">Sarah J.</span> paid ₹1,000</p>
-                  <p className="text-[11px] font-semibold text-[#858A7D]">15 mins ago</p>
-                </div>
-              </div>
-              {/* Item 3 */}
-              <div className="p-[16px] flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center text-[#C0C2B8]">
-                  <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: '"FILL" 1' }}>login</span>
-                </div>
-                <div className="flex-1">
-                  <p className="text-[12px] text-white"><span className="font-semibold">Rohan Sharma</span> checked in</p>
-                  <p className="text-[11px] font-semibold text-[#858A7D]">45 mins ago</p>
-                </div>
-              </div>
+              )}
             </div>
           </section>
         </main>

@@ -1,139 +1,211 @@
-import { createFileRoute, Link, Navigate } from '@tanstack/react-router';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useServerFn } from '@tanstack/react-start';
+import { getPaymentsDashboard, recordManualPayment, getCurrentGymId, getMembers } from '@/lib/auth.functions';
+import { toast } from 'sonner';
+import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin/payments')({
-  component: AdminPayments,
+  component: PaymentsDashboard,
 });
 
-function AdminPayments() {
-  const { data: gymData, isLoading } = useQuery({
-    queryKey: ['admin-gym-settings'],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return null;
-      const { data: roleData } = await supabase.from('user_roles').select('gym_id').eq('user_id', user.id).maybeSingle();
-      if (!roleData?.gym_id) return null;
-      const { data: gym } = await supabase.from('gyms').select('*').eq('id', roleData.gym_id).maybeSingle();
-      return gym;
-    }
+function PaymentsDashboard() {
+  const queryClient = useQueryClient();
+  const [filter, setFilter] = useState<'all' | 'paid' | 'pending'>('all');
+  const [isRecording, setIsRecording] = useState(false);
+  const [newPayment, setNewPayment] = useState({ member_id: '', amount: 0, notes: '' });
+
+  const getPaymentsFn = useServerFn(getPaymentsDashboard);
+  const recordPaymentFn = useServerFn(recordManualPayment);
+  const getGymIdFn = useServerFn(getCurrentGymId);
+  const getMembersFn = useServerFn(getMembers);
+
+  const { data: gymId } = useQuery({
+    queryKey: ['current-gym-id'],
+    queryFn: () => getGymIdFn(),
   });
 
-  if (isLoading) return null;
+  const { data: payments = [], isLoading } = useQuery({
+    queryKey: ['admin-payments', gymId, filter],
+    queryFn: () => getPaymentsFn({ data: { gymId: gymId!, status: filter } }),
+    enabled: !!gymId
+  });
 
-  const settings = (gymData?.settings as any) || {};
-  const paymentEnabled = settings.features?.payment_management !== false;
+  const { data: members = [] } = useQuery({
+    queryKey: ['members', gymId],
+    queryFn: () => getMembersFn({ data: { gymId: gymId! } }),
+    enabled: !!gymId
+  });
 
-  if (!paymentEnabled) {
-    return <Navigate to="/dashboard/admin" />;
-  }
+  const handleRecordPayment = async () => {
+    if (!newPayment.member_id || !newPayment.amount || !gymId) {
+      toast.error('Please fill in required fields');
+      return;
+    }
+    try {
+      await recordPaymentFn({ data: { ...newPayment, gym_id: gymId } });
+      toast.success('Payment recorded successfully');
+      setIsRecording(false);
+      setNewPayment({ member_id: '', amount: 0, notes: '' });
+      queryClient.invalidateQueries({ queryKey: ['admin-payments'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-stats'] });
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to record payment');
+    }
+  };
 
   return (
-    <div className="bg-[#0D0F0C] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins']">
-      {/* Head link for icons is already in __root.tsx, but ensuring icons are available */}
-      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-      
-      {/* Top Glow Effect */}
-      <div 
-        className="fixed top-0 left-0 right-0 h-[400px] z-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle at 50% 0%, rgba(213, 255, 64, 0.15) 0%, transparent 70%)'
-        }}
-      />
+    <div className="min-h-screen bg-[#0D0F0C] text-[#e3e3dd] font-['Poppins'] pb-32">
+      {/* Header */}
+      <div className="p-6 pb-2">
+        <div className="flex justify-between items-start mb-6">
+          <div>
+            <h1 className="text-[32px] font-bold leading-[32px] tracking-[-0.04em] text-white mb-2">Payments</h1>
+            <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Manage gym revenue</p>
+          </div>
+          <Link to="/dashboard/admin" className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center border border-white/5">
+            <span className="material-symbols-outlined text-[20px]">close</span>
+          </Link>
+        </div>
 
-      {/* Main Mobile Container */}
-      <div className="max-w-[480px] mx-auto min-h-screen pb-24 relative z-10 flex flex-col">
-        <main className="flex-1 px-[20px] flex flex-col gap-[24px] pt-[24px]">
-          {/* Page Header */}
-          <section className="flex flex-col gap-1">
-            <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white">Payments</h1>
-            <p className="text-[14px] leading-[20px] text-[#858A7D]">Revenue Tracking & Collections</p>
-          </section>
+        {/* Filter and Actions */}
+        <div className="flex gap-2 mb-6">
+          <div className="flex-1 bg-[#121411] rounded-xl p-1 flex border border-white/5">
+            <button 
+              onClick={() => setFilter('all')}
+              className={`flex-1 h-10 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all ${filter === 'all' ? 'bg-[#D5FF40] text-black' : 'text-[#858A7D]'}`}
+            >
+              All
+            </button>
+            <button 
+              onClick={() => setFilter('paid')}
+              className={`flex-1 h-10 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all ${filter === 'paid' ? 'bg-[#D5FF40] text-black' : 'text-[#858A7D]'}`}
+            >
+              Paid
+            </button>
+            <button 
+              onClick={() => setFilter('pending')}
+              className={`flex-1 h-10 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all ${filter === 'pending' ? 'bg-[#D5FF40] text-black' : 'text-[#858A7D]'}`}
+            >
+              Pending
+            </button>
+          </div>
+          <button 
+            onClick={() => setIsRecording(true)}
+            className="h-12 w-12 flex items-center justify-center bg-[#D5FF40] rounded-xl active:scale-95 transition-all"
+          >
+            <span className="material-symbols-outlined text-black font-bold">add</span>
+          </button>
+        </div>
+      </div>
 
-          {/* Revenue Telemetry Card */}
-          <section className="bg-[rgba(18,20,17,0.6)] backdrop-blur-[12px] rounded-xl p-[16px] border border-white/5 flex flex-col gap-[12px] relative overflow-hidden">
-            <div className="absolute -right-8 -top-8 w-32 h-32 bg-[#B7FF1E]/10 rounded-full blur-2xl pointer-events-none"></div>
-            <div className="flex justify-between items-start">
-              <span className="text-[12px] leading-[18px] text-[#858A7D] uppercase tracking-wider font-semibold">Total Revenue (Month)</span>
-              <span className="material-symbols-outlined text-[#858A7D] text-[18px]">monitoring</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[40px] leading-[40px] font-bold tracking-[-0.04em] text-[#B7FF1E]">₹42,500</span>
-              <div className="flex items-center gap-1 mt-1">
-                <span className="material-symbols-outlined text-[#A7F52A] text-[14px]">trending_up</span>
-                <span className="text-[12px] leading-[18px] text-[#A7F52A]">+12.4%</span>
-                <span className="text-[12px] leading-[18px] text-[#858A7D] ml-1">vs last month</span>
+      {/* Payments List */}
+      <div className="px-6 space-y-3">
+        {isLoading ? (
+          <div className="text-center py-12 text-[#858A7D]">Loading payments...</div>
+        ) : (
+          payments.map((payment: any) => (
+            <div 
+              key={payment.id}
+              className="bg-[#121411] rounded-2xl p-4 border border-white/5 flex items-center gap-4 transition-all"
+            >
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center border border-white/10 ${
+                payment.status === 'paid' ? 'text-[#D5FF40] bg-[#D5FF40]/5' : 'text-[#FF5964] bg-[#FF5964]/5'
+              }`}>
+                <span className="material-symbols-outlined text-[24px]">
+                  {payment.status === 'paid' ? 'check_circle' : 'schedule'}
+                </span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex justify-between items-start mb-0.5">
+                  <h3 className="font-bold text-[15px] text-white truncate">{payment.members?.full_name}</h3>
+                  <span className="text-[15px] font-bold text-white">₹{payment.amount}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-[12px] text-[#858A7D] font-medium truncate">
+                    {payment.created_at ? format(new Date(payment.created_at), 'MMM dd, yyyy') : 'N/A'}
+                  </p>
+                  <span className={`text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full ${
+                    payment.status === 'paid' ? 'bg-[#D5FF40]/10 text-[#D5FF40]' : 'bg-[#FF5964]/10 text-[#FF5964]'
+                  }`}>
+                    {payment.status}
+                  </span>
+                </div>
               </div>
             </div>
-          </section>
+          ))
+        )}
+        {(!isLoading && payments.length === 0) && (
+          <div className="text-center py-12 text-[#858A7D]">No payments found</div>
+        )}
+      </div>
 
-          {/* Filter Tabs */}
-          <section className="flex bg-[#1e201d] rounded-full p-1 border border-white/5">
-            <button className="flex-1 py-2 rounded-full text-[11px] font-semibold text-[#858A7D] hover:text-[#e3e3dd] transition-colors">Paid</button>
-            <button className="flex-1 py-2 rounded-full text-[11px] font-semibold text-[#858A7D] hover:text-[#e3e3dd] transition-colors">Pending</button>
-            <button className="flex-1 py-2 rounded-full text-[11px] font-semibold bg-[#B7FF1E] text-[#293500] shadow-[0_0_15px_rgba(183,255,30,0.3)] transition-all">Overdue</button>
-          </section>
-
-          {/* Critically Overdue Section */}
-          <section className="flex flex-col gap-[12px]">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-[#FF5964] animate-pulse shadow-[0_0_8px_rgba(255,89,100,0.8)]"></div>
-              <h2 className="text-[18px] font-semibold text-[#FF5964]">Critically Overdue</h2>
-              <span className="text-[12px] leading-[18px] text-[#FF5964]/70 ml-auto font-medium">2+ Months</span>
-            </div>
-            
-            <div className="border border-white/5 rounded-xl p-[16px] flex items-center justify-between gap-3 bg-[#1a1c19]">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full overflow-hidden border border-[#FF5964]/30">
-                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7q5DaCI3dHVAyjrs3epeZyzZsDutBe3a1PfpumrewoOSXFpXjtgqi2N5s-bMgrc9MAyYoXMfcEQ7PsrxvY_bkryNjNpwm61X7pLg4awH7ZhL4_ah1HUy5XGG5Qp-qU-Yv0vY2RgoI13Mh6_LFcOdUTjOlY41-KmcE0qNqqmonnEAQWcVsdS4mSDc0VhEgeWSgpLfP3HeFyBEIXr7clH2WwePp7zlWjliBZotMoDcixSOy-f26xQ" alt="Marcus" className="w-full h-full object-cover" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-[14px] leading-[20px] text-[#e3e3dd] font-semibold">Marcus Vance</span>
-                  <span className="text-[11px] leading-[14px] text-[#FF5964] mt-0.5 font-semibold">3 Months Unpaid</span>
-                </div>
+      {/* RECORD PAYMENT DRAWER */}
+      {isRecording && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" 
+            onClick={() => setIsRecording(false)}
+          />
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[70] p-6 border-t border-white/10 animate-in slide-in-from-bottom duration-300">
+            <h2 className="text-[22px] font-bold text-white mb-6">Record Payment</h2>
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Select Member</label>
+                <select 
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none appearance-none"
+                  value={newPayment.member_id}
+                  onChange={e => setNewPayment(prev => ({ ...prev, member_id: e.target.value }))}
+                >
+                  <option value="">Select a member</option>
+                  {members.map((member: any) => (
+                    <option key={member.id} value={member.id}>{member.full_name}</option>
+                  ))}
+                </select>
               </div>
-              <div className="flex flex-col items-end gap-2">
-                <span className="text-[18px] font-semibold text-[#e3e3dd]">₹20,000</span>
-                <button className="bg-[#1e201d] hover:bg-[#383a36] border border-white/10 text-[#e3e3dd] text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
-                  <span className="material-symbols-outlined text-[14px]">notifications_active</span>
-                  Remind
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Amount (₹)</label>
+                <input 
+                  type="number"
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
+                  value={newPayment.amount || ''}
+                  onChange={e => setNewPayment(prev => ({ ...prev, amount: Number(e.target.value) }))}
+                  placeholder="0"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Notes</label>
+                <textarea 
+                  className="w-full h-24 bg-[#1e201d] border border-white/10 rounded-xl p-4 text-white focus:border-[#D5FF40] outline-none resize-none"
+                  value={newPayment.notes}
+                  onChange={e => setNewPayment(prev => ({ ...prev, notes: e.target.value }))}
+                  placeholder="Payment for June..."
+                />
+              </div>
+              <div className="flex gap-3 pt-4">
+                <button 
+                  onClick={() => setIsRecording(false)}
+                  className="flex-1 h-14 bg-white/5 text-[#858A7D] font-bold rounded-2xl active:scale-95 transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleRecordPayment}
+                  className="flex-[2] h-14 bg-[#D5FF40] text-black font-bold rounded-2xl shadow-[0_8px_20px_rgba(213,255,64,0.2)] active:scale-95 transition-all"
+                >
+                  Record
                 </button>
               </div>
             </div>
-          </section>
+          </div>
+        </>
+      )}
 
-          {/* Standard Overdue List */}
-          <section className="flex flex-col gap-[8px]">
-            <h2 className="text-[18px] font-semibold text-[#e3e3dd] mb-2 mt-2">Recent Overdue</h2>
-            
-            {[
-              { name: 'Sarah Jenkins', date: 'Oct 15', amount: '₹6,500', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA-yKO58Y9zQjt2sMaG34f4GoHvQpHvRVPPpGrwacfnB0cH7ez41Wc9l0FUXhg2fBr6jZNF4SPxHoLaEhvFRt3_PxVFZ15c-YZaVlPPZiu1GzuXEC6eTQzDFC60_PBEVztXduyk-2ZmOsyb9320Lcx45mmXt4ZlsQhhnxfyrmDeMQxSEH0tLKF-xrfo8xqZmdWcawdFT-OU7Q8hkJdmfhMLrkY1aiJvVP-M8NClVgWoIGOcX8YB9g' },
-              { name: 'David Chen', date: 'Oct 18', amount: '₹10,000', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBgeW0n_j5ah-tOX4mW2keMTOgt6lvkeivxZNzCUW9VBlGza4lhJfRMF__p1UuLoWU_PisH8vvdSv_bzVrbNdGBg9EQuSSyy56vwUyCQyW2y5xUIrw0wH7J6LZ1yNZoYqD4pV4oSkPFJ8AaaJpaXZZy6dHdOBrRFpxQo3BwomPs8VC1TX-1tWPk8jBiAiXzfcCQP9-E1-dU3w3YbkuUQ4B11yzxadJGDwqjwtmSXqVLK2Bv3TLr0A' },
-              { name: 'Elena Rostova', date: 'Oct 20', amount: '₹6,500', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDE0ya5iZyJg2KXKfJGedC_EdMwD3Zlwqzdy5BHsjafdPMfk6CzNQjvps80OxV1XCj9e_oyVRfHAH32VuQEpqum3OMJDnnyZfjdjpXwPYR4CbWqGsrhQrUYMZdnKe4RO5LFit6NDzWWbvKczYZC0iwsglEFnO8q-rxUHWv1Z2zL4qX8DBVoNWBkbaqMXcGFr6tdmKqoaBkG7mhE4NerTriarunFlTgtK-lbLGnrT_0SrucPCjH2Lg' }
-            ].map((member, i) => (
-              <div key={i} className="bg-[rgba(18,20,17,0.6)] backdrop-blur-[12px] border border-white/5 rounded-xl p-3 flex items-center justify-between gap-3 hover:border-white/10 transition-colors cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10">
-                    <img src={member.img} alt={member.name} className="w-full h-full object-cover" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[14px] leading-[20px] text-[#e3e3dd] font-medium">{member.name}</span>
-                    <span className="text-[12px] leading-[18px] text-[#858A7D]">Due: {member.date}</span>
-                  </div>
-                </div>
-                <div className="flex flex-col items-end">
-                  <span className="text-[14px] leading-[20px] text-[#e3e3dd] font-semibold">{member.amount}</span>
-                  <span className="text-[11px] leading-[14px] text-[#FFB4AB] mt-0.5 px-2 py-0.5 bg-[#93000A]/30 rounded-sm font-semibold uppercase">Overdue</span>
-                </div>
-              </div>
-            ))}
-          </section>
-        </main>
-      </div>
-
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] left-1/2 -translate-x-1/2">
+      {/* Bottom Navigation */}
+      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px]">
         <Link 
-          to="/dashboard/admin"
+          to="/dashboard/admin" 
           activeOptions={{ exact: true }}
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
@@ -146,9 +218,8 @@ function AdminPayments() {
             </>
           )}
         </Link>
-        
         <Link 
-          to="/dashboard/admin/members"
+          to="/dashboard/admin/members" 
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
@@ -160,7 +231,6 @@ function AdminPayments() {
             </>
           )}
         </Link>
-        
         <Link 
           to="/dashboard/admin/payments"
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
@@ -174,7 +244,6 @@ function AdminPayments() {
             </>
           )}
         </Link>
-        
         <Link 
           to="/dashboard/admin/attendance"
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
@@ -183,22 +252,8 @@ function AdminPayments() {
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>event_available</span>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>how_to_reg</span>
               <span className="text-[11px] font-semibold leading-[14px]">Attendance</span>
-            </>
-          )}
-        </Link>
-        
-        <Link 
-          to="/dashboard/admin/settings"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>settings</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Settings</span>
             </>
           )}
         </Link>

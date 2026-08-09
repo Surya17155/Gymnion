@@ -1,6 +1,11 @@
-import { createFileRoute, Link, Outlet, useLocation, useNavigate } from '@tanstack/react-router';
-import { useState, useRef, useEffect } from 'react';
+import { createFileRoute, Link, Outlet, useNavigate } from '@tanstack/react-router';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { supabase } from "@/integrations/supabase/client";
+import { useMyProfile } from "@/hooks/useMyProfile";
+import { useQuery } from '@tanstack/react-query';
+import { useServerFn } from '@tanstack/react-start';
+import { getMyPayments, getMyAttendance } from '@/lib/auth.functions';
+import { format } from 'date-fns';
 
 function MemberDashboardLayout() {
   return <Outlet />;
@@ -10,6 +15,60 @@ export function MemberDashboard() {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  const { data: profile, isLoading: isProfileLoading } = useMyProfile();
+  const getPaymentsFn = useServerFn(getMyPayments);
+  const getAttendanceFn = useServerFn(getMyAttendance);
+
+  const { data: payments } = useQuery({
+    queryKey: ['my-payments', profile?.id],
+    queryFn: () => getPaymentsFn({ data: { memberId: profile!.id, limit: 5 } }),
+    enabled: !!profile?.id
+  });
+
+  const { data: attendance } = useQuery({
+    queryKey: ['my-attendance', profile?.id],
+    queryFn: () => getAttendanceFn({ data: { memberId: profile!.id } }),
+    enabled: !!profile?.id
+  });
+
+  const lastPayment = payments?.[0];
+  const attendanceCount = useMemo(() => {
+    if (!attendance) return 0;
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    return attendance.filter(a => {
+      const d = new Date(a.check_in_at!);
+      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+    }).length;
+  }, [attendance]);
+
+  const attendanceMap = useMemo(() => {
+    const map: Record<number, boolean> = {};
+    if (!attendance) return map;
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    attendance.forEach(a => {
+      const d = new Date(a.check_in_at!);
+      if (d.getMonth() === currentMonth && d.getFullYear() === currentYear) {
+        map[d.getDate()] = true;
+      }
+    });
+    return map;
+  }, [attendance]);
+
+  const nextDue = useMemo(() => {
+    if (!profile?.join_date) return 'N/A';
+    // Simple logic for monthly cycle
+    const now = new Date();
+    return format(new Date(now.getFullYear(), now.getMonth() + 1, 1), 'MMM do');
+  }, [profile]);
+
+  const isPaymentsEnabled = profile?.gyms?.global_plans?.features 
+    ? (profile.gyms.global_plans.features as any).payments !== false 
+    : true;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -41,7 +100,7 @@ export function MemberDashboard() {
         <header className="flex justify-between items-center px-5 h-[80px] w-full sticky top-0 z-40 bg-transparent pt-6">
           <div className="flex items-center gap-3">
             <div>
-              <h1 className="text-[18px] leading-[24px] font-semibold text-white">Hi, Johan</h1>
+              <h1 className="text-[18px] leading-[24px] font-semibold text-white">Hi, {profile?.full_name?.split(' ')[0] || 'Member'}</h1>
               <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Ready to crush it today?</p>
             </div>
           </div>
@@ -54,7 +113,7 @@ export function MemberDashboard() {
               <img 
                 alt="Profile avatar" 
                 className="w-full h-full object-cover" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuACajaR2PjILkSEOoatycCJ36DX_-AVsZnEodZIF4WU9HcJM2MkjXI2qDWN0odA1lIrrhCgSk2rNd_WNw8L5jOa3wK0ypjzmgHTwBjlD48-xJ7Pa4gnBHM6Dym0FJiTEYF42jQugxJ2xQWYX5HcwRUK-RGVETvhKLNOdwY5yW6j9rA8jlooFx5CczVg0yjGKDzyTd9_cqhGeblF-vY4--0YoxCJxwxrUmpx0lRH0Q4zriAz0tIGdA" 
+                src={profile?.photo_url || "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=100&h=100&fit=crop"} 
               />
             </button>
 
@@ -88,8 +147,8 @@ export function MemberDashboard() {
               <div>
                 <h2 className="text-[12px] leading-[18px] text-[#C0C2B8] uppercase tracking-wider mb-1">Last Payment</h2>
                 <div className="flex items-end gap-2">
-                  <span className="text-[40px] leading-[40px] font-bold text-white tracking-tight">₹1,200</span>
-                  <span className="text-[12px] leading-[18px] text-[#C0C2B8] mb-1">/ May 1st</span>
+                  <span className="text-[40px] leading-[40px] font-bold text-white tracking-tight">₹{lastPayment?.amount || 0}</span>
+                  <span className="text-[12px] leading-[18px] text-[#C0C2B8] mb-1">/ {lastPayment?.created_at ? format(new Date(lastPayment.created_at), 'MMM do') : 'N/A'}</span>
                 </div>
               </div>
               <div className="bg-[#333532] rounded-full p-2 border border-white/5 flex items-center justify-center w-10 h-10">
@@ -100,9 +159,12 @@ export function MemberDashboard() {
             <div className="bg-[#121411] rounded-xl p-4 flex justify-between items-center border border-white/5 relative z-10">
               <div>
                 <h3 className="text-[12px] leading-[18px] text-[#C0C2B8] mb-0.5">Next Due</h3>
-                <p className="text-[18px] leading-[24px] font-semibold text-white">June 1st</p>
+                <p className="text-[18px] leading-[24px] font-semibold text-white">{nextDue}</p>
               </div>
-              <button className="bg-[#B7FF1E] text-[#293500] text-[18px] leading-[24px] font-semibold px-6 py-2.5 rounded-full hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(183,255,30,0.3)]">
+              <button 
+                disabled={!isPaymentsEnabled || profile?.status === 'active'}
+                className="bg-[#B7FF1E] text-[#293500] text-[18px] leading-[24px] font-semibold px-6 py-2.5 rounded-full hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(183,255,30,0.3)] disabled:opacity-50 disabled:shadow-none"
+              >
                 Pay Now
               </button>
             </div>
@@ -112,17 +174,17 @@ export function MemberDashboard() {
             <div className="flex justify-between items-start mb-4">
               <h2 className="text-[18px] leading-[24px] font-semibold text-white">This Month's Attendance</h2>
               <div className="flex flex-col items-end">
-                <span className="text-[40px] leading-[40px] font-bold text-[#B7FF1E] tracking-tight">18</span>
+                <span className="text-[40px] leading-[40px] font-bold text-[#B7FF1E] tracking-tight">{attendanceCount}</span>
                 <span className="text-[11px] leading-[14px] font-semibold text-[#B7FF1E] uppercase tracking-wider">Days</span>
               </div>
             </div>
             
             <div className="flex justify-start">
               <div className="grid grid-cols-7 gap-2 w-fit">
-                {[...Array(30)].map((_, i) => (
+                {[...Array(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate())].map((_, i) => (
                   <div 
                     key={i} 
-                    className={`w-[14px] h-[14px] rounded-[4px] ${i < 3 || (i > 3 && i < 7) || (i > 7 && i < 11) || (i > 11 && i < 15) || (i > 15 && i < 19) || (i > 19 && i < 23) ? 'bg-[#B7FF1E]' : 'bg-[#333532]'}`}
+                    className={`w-[14px] h-[14px] rounded-[4px] ${attendanceMap[i + 1] ? 'bg-[#B7FF1E]' : 'bg-[#333532]'}`}
                   />
                 ))}
               </div>
@@ -135,25 +197,21 @@ export function MemberDashboard() {
               <button className="text-[12px] leading-[18px] text-[#B7FF1E] hover:underline">View All</button>
             </div>
 
-            <div className="bg-[#1e201d] rounded-xl p-4 flex items-center gap-4 border border-white/5">
-              <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center text-[#B7FF1E]">
-                <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>history</span>
+            {attendance?.slice(0, 3).map((a, i) => (
+              <div key={i} className="bg-[#1e201d] rounded-xl p-4 flex items-center gap-4 border border-white/5">
+                <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center text-[#B7FF1E]">
+                  <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>history</span>
+                </div>
+                <div>
+                  <h3 className="text-[18px] leading-[24px] font-semibold text-white">
+                    {format(new Date(a.check_in_at!), 'EEEE')}
+                  </h3>
+                  <p className="text-[12px] leading-[18px] text-[#C0C2B8]">
+                    {format(new Date(a.check_in_at!), 'hh:mm a')} Check-in
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-[18px] leading-[24px] font-semibold text-white">Today</h3>
-                <p className="text-[12px] leading-[18px] text-[#C0C2B8]">06:45 PM Check-in</p>
-              </div>
-            </div>
-
-            <div className="bg-[#1e201d] rounded-xl p-4 flex items-center gap-4 border border-white/5">
-              <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center text-[#C0C2B8]">
-                <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>history</span>
-              </div>
-              <div>
-                <h3 className="text-[18px] leading-[24px] font-semibold text-white">Yesterday</h3>
-                <p className="text-[12px] leading-[18px] text-[#C0C2B8]">07:12 AM Check-in</p>
-              </div>
-            </div>
+            ))}
           </section>
         </div>
 
@@ -169,7 +227,10 @@ export function MemberDashboard() {
           </Link>
           
           <div className="relative -top-6">
-            <button className="w-16 h-16 bg-[#B7FF1E] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgba(213,255,64,0.3)] border-4 border-[#1e201d] hover:scale-105 transition-transform">
+            <button 
+              onClick={() => navigate({ to: `/checkin`, search: { gym: profile?.gym_id } })}
+              className="w-16 h-16 bg-[#B7FF1E] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgba(213,255,64,0.3)] border-4 border-[#1e201d] hover:scale-105 transition-transform"
+            >
               <span className="material-symbols-outlined text-[30px] text-[#293500]">qr_code_scanner</span>
             </button>
           </div>

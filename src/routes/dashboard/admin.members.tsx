@@ -1,243 +1,273 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getMembers } from '@/lib/auth.functions';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useServerFn } from '@tanstack/react-start';
+import { getMembers, getCurrentGymId, createMember, deleteMember, getFeePlans } from '@/lib/auth.functions';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/dashboard/admin/members')({
-  component: AdminMembers,
+  component: MembersDashboard,
 });
 
-
-interface Member {
-  id: string;
-  name: string;
-  plan: string;
-  status: 'Active' | 'Overdue' | 'Pending';
-  image?: string;
-  initials?: string;
-  email: string;
-  phone: string;
-  age: number;
-  dob: string;
-  address: string;
-}
-
-const DUMMY_MEMBERS: Member[] = [
-  {
-    id: '1',
-    name: 'Aman Gupta',
-    plan: 'Annual Pro Plan',
-    status: 'Active',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCt3aoaHw9zAi0mZ5ng_BUkvX67DgJTDioId_IIe5NWUfNPO2WomkLP_dJ0LoLhTXj5Gt8H9bA-2oVroOdlI7UNLaKD-zl7xGkWiyDIvZwxfp7KthwAEd2zUqqozSlns2lFlX82i4A-bHsyRyyNTyNimOYKCGcP4UTeToDsMTGOJaxH6b7IaUIaSkeHkfWrC04y1QqCgx-pAGs_iCCMWiqVQejhKfkzDcbPqPVve0PGWCSBCMf6XA',
-    email: 'aman.gupta@example.com',
-    phone: '+91 98765 43210',
-    age: 28,
-    dob: '14 May 1995',
-    address: '42, Horizon Towers, Cyber City, Phase 2, Gurugram',
-  },
-  {
-    id: '2',
-    name: 'Sarah Rogers',
-    plan: 'Monthly Basic',
-    status: 'Overdue',
-    initials: 'SR',
-    email: 'sarah.r@example.com',
-    phone: '+91 99988 77766',
-    age: 24,
-    dob: '22 Aug 2000',
-    address: '15, Lotus Apartments, Saket, New Delhi',
-  },
-  {
-    id: '3',
-    name: 'Priya Sharma',
-    plan: 'Quarterly Elite',
-    status: 'Active',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBBMjJN_vnBHvBtY7WdsVcVf59Ti6HI-2HCgSCXSjVwXhwlQKYiUtfrZpUB3798BMZfrtv5LT83x7xOJjOhVsOX1Pb4MwUimnMhW9lEUiAxox9CDOXjWS6YJyBccuTSCIka12l6_T85qwolTfQVbusNGefs_aogZUY9U6o4JRMmDtglDaCbCBADrr2sgXXbCbng5BjWm_mWfkoCymaOesemkaZywvcCDlkLwGqbgPP1GLfrbqehMg',
-    email: 'priya.s@example.com',
-    phone: '+91 91234 56789',
-    age: 26,
-    dob: '10 Jan 1998',
-    address: 'Green Park Ext, Block B, New Delhi',
-  },
-  {
-    id: '4',
-    name: 'Michael Kim',
-    plan: 'Day Pass',
-    status: 'Pending',
-    initials: 'MK',
-    email: 'm.kim@example.com',
-    phone: '+91 90000 11111',
-    age: 30,
-    dob: '05 Mar 1994',
-    address: 'Sector 44, Noida, Uttar Pradesh',
-  },
-];
-
-function AdminMembers() {
+function MembersDashboard() {
+  const queryClient = useQueryClient();
   const [selectedMember, setSelectedMember] = useState<any | null>(null);
-  
-  const { data: members = [], isLoading } = useQuery({
-    queryKey: ['members'],
-    queryFn: () => getMembers(),
+  const [isAdding, setIsAdding] = useState(false);
+  const [newMember, setNewMember] = useState({ full_name: '', email: '', phone: '', fee_plan_id: '' });
+
+  const getMembersFn = useServerFn(getMembers);
+  const getGymIdFn = useServerFn(getCurrentGymId);
+  const createMemberFn = useServerFn(createMember);
+  const deleteMemberFn = useServerFn(deleteMember);
+  const getPlansFn = useServerFn(getFeePlans);
+
+  const { data: gymId } = useQuery({
+    queryKey: ['current-gym-id'],
+    queryFn: () => getGymIdFn(),
   });
 
+  const { data: members = [], isLoading } = useQuery({
+    queryKey: ['members', gymId],
+    queryFn: () => getMembersFn({ data: { gymId: gymId! } }),
+    enabled: !!gymId
+  });
+
+  const { data: plans = [] } = useQuery({
+    queryKey: ['gym-plans', gymId],
+    queryFn: () => getPlansFn(),
+    enabled: !!gymId
+  });
+
+  const handleAddMember = async () => {
+    if (!newMember.full_name || !newMember.email || !gymId) {
+      toast.error('Please fill in required fields');
+      return;
+    }
+    try {
+      await createMemberFn({ data: { ...newMember, gym_id: gymId } });
+      toast.success('Member added successfully');
+      setIsAdding(false);
+      setNewMember({ full_name: '', email: '', phone: '', fee_plan_id: '' });
+      queryClient.invalidateQueries({ queryKey: ['members'] });
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to add member');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this member?')) return;
+    try {
+      await deleteMemberFn({ data: { id } });
+      toast.success('Member deleted');
+      setSelectedMember(null);
+      queryClient.invalidateQueries({ queryKey: ['members'] });
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to delete member');
+    }
+  };
 
   return (
-    <div className="bg-[#000000] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins']">
-      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-      
-      <div 
-        className="fixed top-[-100px] left-1/2 -translate-x-1/2 w-[300px] h-[300px] z-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(213, 255, 64, 0.15) 0%, rgba(213, 255, 64, 0) 70%)',
-          borderRadius: '50%'
-        }}
-      />
-
-      <div className="max-w-[480px] mx-auto min-h-screen pb-[80px] relative z-10 flex flex-col">
-        <main className="flex-1 px-[20px] pt-8 flex flex-col">
-          <header className="mb-[24px]">
-            <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white mb-1">Members</h1>
-            <p className="text-[14px] leading-[20px] text-[#C0C2B8]">214 Total Active</p>
-          </header>
-
-          <div className="flex gap-[12px] mb-[24px]">
-            <div className="relative flex-1">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#C0C2B8]" style={{ fontVariationSettings: "'FILL' 0" }}>search</span>
-              <input 
-                className="w-full h-12 bg-[#1e201d] border border-white/5 rounded-xl pl-12 pr-4 text-[14px] text-[#e3e3dd] placeholder:text-[#C0C2B8] focus:outline-none focus:border-[#D5FF40] focus:ring-1 focus:ring-[#D5FF40] transition-colors" 
-                placeholder="Search members..." 
-                type="text"
-              />
-            </div>
-            <button className="h-12 w-12 flex items-center justify-center bg-[#1e201d] border border-white/5 rounded-xl hover:border-[#D5FF40] transition-colors">
-              <span className="material-symbols-outlined text-[#e3e3dd]" style={{ fontVariationSettings: "'FILL' 0" }}>tune</span>
-            </button>
+    <div className="min-h-screen bg-[#0D0F0C] text-[#e3e3dd] font-['Poppins'] pb-32">
+      {/* Header */}
+      <div className="p-6 pb-2">
+        <div className="flex justify-between items-start mb-6">
+          <div>
+            <h1 className="text-[32px] font-bold leading-[32px] tracking-[-0.04em] text-white mb-2">Members</h1>
+            <p className="text-[14px] leading-[20px] text-[#C0C2B8]">{members.length} Total Members</p>
           </div>
+          <Link to="/dashboard/admin" className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center border border-white/5">
+            <span className="material-symbols-outlined text-[20px]">close</span>
+          </Link>
+        </div>
 
-          <div className="flex gap-[8px] overflow-x-auto no-scrollbar mb-[24px] pb-2 -mx-[20px] px-[20px]">
-            <button className="whitespace-nowrap px-4 py-2 rounded-full bg-[#D5FF40] text-[11px] font-semibold text-black">All</button>
-            <button className="whitespace-nowrap px-4 py-2 rounded-full bg-[#292b27] text-[11px] font-semibold text-[#C0C2B8] hover:bg-[#333532] transition-colors">Active</button>
-            <button className="whitespace-nowrap px-4 py-2 rounded-full bg-[#292b27] text-[11px] font-semibold text-[#C0C2B8] hover:bg-[#333532] transition-colors">Overdue</button>
-            <button className="whitespace-nowrap px-4 py-2 rounded-full bg-[#292b27] text-[11px] font-semibold text-[#C0C2B8] hover:bg-[#333532] transition-colors">Pending</button>
+        {/* Search and Filter Bar */}
+        <div className="flex gap-2 mb-6">
+          <div className="flex-1 relative">
+            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#858A7D] text-[20px]">search</span>
+            <input 
+              type="text" 
+              placeholder="Search by name, email..." 
+              className="w-full h-12 bg-[#1e201d] border border-white/5 rounded-xl pl-12 pr-4 text-[14px] text-white placeholder:text-[#858A7D] outline-none focus:border-[#D5FF40]/30 transition-colors"
+            />
           </div>
-
-          <div className="flex flex-col gap-[12px]">
-            {members.map((member: any) => (
-              <div 
-                key={member.id}
-                onClick={() => setSelectedMember(member)}
-                className="flex items-center p-[16px] bg-[#1e201d] border border-white/5 rounded-xl relative overflow-hidden group cursor-pointer active:scale-[0.98] transition-all"
-              >
-                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#D5FF40]/20 to-transparent"></div>
-                {member.photo_url ? (
-                  <img className="w-12 h-12 rounded-full object-cover mr-4 border border-white/10" src={member.photo_url} alt={member.full_name} />
-                ) : (
-                  <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center mr-4 border border-white/10">
-                    <span className="text-[18px] font-semibold text-white">{member.full_name?.charAt(0)}</span>
-                  </div>
-                )}
-                <div className="flex-1">
-                  <h3 className="text-[18px] font-semibold text-white">{member.full_name}</h3>
-                  <p className="text-[12px] text-[#C0C2B8]">{member.fee_plans?.name || 'No Plan'}</p>
-                </div>
-
-                <div className={`px-2 py-1 rounded border ${
-                  member.status === 'active' ? 'bg-[#A7F52A]/10 border-[#A7F52A]/20 text-[#A7F52A]' :
-                  member.status === 'overdue' ? 'bg-[#FF5964]/10 border-[#FF5964]/20 text-[#FF5964]' :
-                  'bg-[#D5FF40]/10 border-[#D5FF40]/20 text-[#D5FF40]'
-                }`}>
-                  <span className="text-[11px] font-semibold uppercase">{member.status}</span>
-                </div>
-
-              </div>
-            ))}
-          </div>
-        </main>
+          <button 
+            onClick={() => setIsAdding(true)}
+            className="h-12 w-12 flex items-center justify-center bg-[#D5FF40] rounded-xl active:scale-95 transition-all"
+          >
+            <span className="material-symbols-outlined text-black font-bold">add</span>
+          </button>
+        </div>
       </div>
 
-      {/* DETAIL DRAWER */}
+      {/* Members List */}
+      <div className="px-6 space-y-3">
+        {isLoading ? (
+          <div className="text-center py-12 text-[#858A7D]">Loading members...</div>
+        ) : (
+          members.map((member: any) => (
+            <div 
+              key={member.id}
+              onClick={() => setSelectedMember(member)}
+              className="bg-[#121411] rounded-2xl p-4 border border-white/5 flex items-center gap-4 active:scale-[0.98] transition-all"
+            >
+              <div className="w-12 h-12 rounded-full bg-[#1e201d] flex items-center justify-center border border-white/10 overflow-hidden">
+                {member.full_name ? (
+                  <span className="text-[14px] font-bold text-[#D5FF40]">
+                    {member.full_name.split(' ').map((n: any) => n[0]).join('').toUpperCase()}
+                  </span>
+                ) : (
+                  <span className="material-symbols-outlined text-[#858A7D]">person</span>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex justify-between items-start mb-0.5">
+                  <h3 className="font-bold text-[15px] text-white truncate">{member.full_name}</h3>
+                  <span className={`text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full ${
+                    member.payment_status === 'paid' ? 'bg-[#D5FF40]/10 text-[#D5FF40]' : 'bg-[#FF5964]/10 text-[#FF5964]'
+                  }`}>
+                    {member.payment_status || 'Pending'}
+                  </span>
+                </div>
+                <p className="text-[12px] text-[#858A7D] font-medium truncate">
+                  {member.fee_plans?.name || 'No Plan'}
+                </p>
+              </div>
+              <span className="material-symbols-outlined text-[#3d3f3b]">chevron_right</span>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* MEMBER DETAILS DRAWER */}
       {selectedMember && (
         <>
           <div 
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] transition-opacity animate-in fade-in duration-300" 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" 
             onClick={() => setSelectedMember(null)}
           />
-          <div 
-            className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[70] flex flex-col shadow-[0_-8px_32px_rgba(0,0,0,0.8)] border-t border-white/10 transform transition-transform animate-in slide-in-from-bottom duration-300" 
-            style={{ maxHeight: '85vh' }}
-          >
-            <div className="w-full flex justify-center py-3 shrink-0" onClick={() => setSelectedMember(null)}>
-              <div className="w-12 h-1.5 bg-white/20 rounded-full"></div>
-            </div>
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-[32px] z-[70] px-6 pt-2 pb-safe border-t border-white/10 animate-in slide-in-from-bottom duration-300">
+            <div className="w-12 h-1 bg-white/10 rounded-full mx-auto my-4" />
             
-            <div className="px-[20px] pb-safe pt-2 overflow-y-auto no-scrollbar flex-1">
-              <div className="flex flex-col items-center mb-6">
-                <div className="w-24 h-24 rounded-full overflow-hidden bg-[#1e201d] border-2 border-[#D5FF40] shadow-[0_0_16px_rgba(213,255,64,0.2)] mb-4">
-                  {selectedMember.photo_url ? (
-                    <img className="w-full h-full object-cover" src={selectedMember.photo_url} alt={selectedMember.full_name} />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-[#333532]">
-                      <span className="text-[32px] font-bold text-white">{selectedMember.full_name?.charAt(0)}</span>
-                    </div>
-                  )}
+            <div className="flex flex-col items-center text-center mb-8">
+              <div className="w-24 h-24 rounded-full bg-[#1e201d] border-4 border-white/5 flex items-center justify-center mb-4 overflow-hidden relative group">
+                <span className="text-[32px] font-bold text-[#D5FF40]">
+                  {selectedMember.full_name.split(' ').map((n: any) => n[0]).join('').toUpperCase()}
+                </span>
+              </div>
+              <h2 className="text-[24px] font-bold text-white mb-1">{selectedMember.full_name}</h2>
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#1e201d] rounded-full border border-white/5">
+                <div className={`w-1.5 h-1.5 rounded-full ${selectedMember.payment_status === 'paid' ? 'bg-[#D5FF40]' : 'bg-[#FF5964]'}`} />
+                <span className="text-[11px] font-bold text-[#C0C2B8] uppercase tracking-wider">{selectedMember.payment_status || 'Pending'}</span>
+              </div>
+            </div>
+
+            <div className="space-y-6 mb-8 overflow-y-auto max-h-[40vh] pr-2 custom-scrollbar">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-[#121411] p-4 rounded-2xl border border-white/5">
+                  <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-1">Fee Plan</p>
+                  <p className="text-[14px] text-white font-bold">{selectedMember.fee_plans?.name || 'Standard'}</p>
                 </div>
-                <h2 className="text-[22px] font-bold text-white text-center leading-[26px] tracking-[-0.025em]">{selectedMember.full_name}</h2>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className={`w-2 h-2 rounded-full animate-pulse ${selectedMember.status === 'active' ? 'bg-[#A7F52A]' : 'bg-[#FF5964]'}`}></span>
-                  <span className={`text-[11px] font-semibold uppercase tracking-wide ${selectedMember.status === 'active' ? 'text-[#A7F52A]' : 'text-[#FF5964]'}`}>
-                    {selectedMember.status} Member
-                  </span>
+                <div className="bg-[#121411] p-4 rounded-2xl border border-white/5">
+                  <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-1">Renewal</p>
+                  <p className="text-[14px] text-white font-bold">12 Jun 2024</p>
                 </div>
               </div>
 
-
-              <div className="space-y-[12px] mb-6">
-                <div className="p-4 bg-[#121411] border border-white/5 rounded-xl relative overflow-hidden group">
-                  <div className="absolute top-0 left-0 right-0 h-[100px] bg-[radial-gradient(circle_at_50%_0%,rgba(213,255,64,0.05)_0%,transparent_60%)] pointer-events-none"></div>
-                  
-                  <div className="flex items-center gap-4 mb-4 relative z-10">
-                    <div className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center shrink-0">
-                      <span className="material-symbols-outlined text-[#C0C2B8]" style={{ fontSize: '20px' }}>mail</span>
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-[10px] text-[#C0C2B8] uppercase font-semibold tracking-wider">Email</p>
-                      <p className="text-[14px] text-white truncate">{selectedMember.email}</p>
-                    </div>
+              <div className="space-y-3">
+                <div className="flex items-center gap-4 p-4 bg-[#121411] rounded-2xl border border-white/5">
+                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#858A7D]">
+                    <span className="material-symbols-outlined text-[20px]">mail</span>
                   </div>
-                  <div className="w-full h-[1px] bg-white/5 mb-4 relative z-10"></div>
-                  <div className="flex items-center gap-4 relative z-10">
-                    <div className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center shrink-0">
-                      <span className="material-symbols-outlined text-[#C0C2B8]" style={{ fontSize: '20px' }}>phone_iphone</span>
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-[10px] text-[#C0C2B8] uppercase font-semibold tracking-wider">Phone</p>
-                      <p className="text-[14px] text-white truncate">{selectedMember.phone}</p>
-                    </div>
+                  <div>
+                    <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-0.5">Email</p>
+                    <p className="text-[14px] text-white font-semibold">{selectedMember.email}</p>
                   </div>
                 </div>
 
-                <div className="p-4 bg-[#121411] border border-white/5 rounded-xl grid grid-cols-2 gap-4 relative overflow-hidden">
-                  <div className="absolute top-0 left-0 right-0 h-[100px] bg-[radial-gradient(circle_at_50%_0%,rgba(213,255,64,0.05)_0%,transparent_60%)] pointer-events-none"></div>
-                  <div className="relative z-10">
-                    <p className="text-[10px] text-[#C0C2B8] uppercase font-semibold tracking-wider mb-1">Age</p>
-                    <p className="text-[18px] font-semibold text-white">{selectedMember.age} y/o</p>
+                <div className="flex items-center gap-4 p-4 bg-[#121411] rounded-2xl border border-white/5">
+                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#858A7D]">
+                    <span className="material-symbols-outlined text-[20px]">call</span>
                   </div>
-                  <div className="relative z-10">
-                    <p className="text-[10px] text-[#C0C2B8] uppercase font-semibold tracking-wider mb-1">DOB</p>
-                    <p className="text-[18px] font-semibold text-white">{selectedMember.dob}</p>
-                  </div>
-                  <div className="col-span-2 mt-2 relative z-10">
-                    <p className="text-[10px] text-[#C0C2B8] uppercase font-semibold tracking-wider mb-1">Address</p>
-                    <p className="text-[14px] text-white leading-[20px]">{selectedMember.address}</p>
+                  <div>
+                    <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-0.5">Phone</p>
+                    <p className="text-[14px] text-white font-semibold">{selectedMember.phone || 'Not provided'}</p>
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-col gap-3 pb-8 relative z-10">
-                <button className="w-full h-12 bg-[#1e201d] border border-white/5 rounded-full flex items-center justify-center gap-2 text-[#D5FF40] text-[11px] font-bold uppercase tracking-wider hover:bg-[#292b27] transition-all active:scale-[0.98]">
-                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>history</span>
-                  View History
+                <button 
+                  onClick={() => handleDelete(selectedMember.id)}
+                  className="w-full h-12 bg-white/5 border border-white/5 rounded-full flex items-center justify-center gap-2 text-[#FF5964] text-[11px] font-bold uppercase tracking-wider hover:bg-[#FF5964]/10 transition-all active:scale-[0.98]"
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>delete</span>
+                  Delete Member
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ADD MEMBER DRAWER */}
+      {isAdding && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" 
+            onClick={() => setIsAdding(false)}
+          />
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[70] p-6 border-t border-white/10 animate-in slide-in-from-bottom duration-300">
+            <h2 className="text-[22px] font-bold text-white mb-6">Add New Member</h2>
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Full Name</label>
+                <input 
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
+                  value={newMember.full_name}
+                  onChange={e => setNewMember(prev => ({ ...prev, full_name: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Email Address</label>
+                <input 
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
+                  value={newMember.email}
+                  onChange={e => setNewMember(prev => ({ ...prev, email: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Phone Number</label>
+                <input 
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
+                  value={newMember.phone}
+                  onChange={e => setNewMember(prev => ({ ...prev, phone: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Fee Plan</label>
+                <select 
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none appearance-none"
+                  value={newMember.fee_plan_id}
+                  onChange={e => setNewMember(prev => ({ ...prev, fee_plan_id: e.target.value }))}
+                >
+                  <option value="">Select a plan</option>
+                  {plans.map((plan: any) => (
+                    <option key={plan.id} value={plan.id}>{plan.name} - ₹{plan.amount}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex gap-3 pt-4">
+                <button 
+                  onClick={() => setIsAdding(false)}
+                  className="flex-1 h-14 bg-white/5 text-[#858A7D] font-bold rounded-2xl active:scale-95 transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleAddMember}
+                  className="flex-[2] h-14 bg-[#D5FF40] text-black font-bold rounded-2xl shadow-[0_8px_20px_rgba(213,255,64,0.2)] active:scale-95 transition-all"
+                >
+                  Create Member
                 </button>
               </div>
             </div>
@@ -295,35 +325,12 @@ function AdminMembers() {
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>event_available</span>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>how_to_reg</span>
               <span className="text-[11px] font-semibold leading-[14px]">Attendance</span>
             </>
           )}
         </Link>
-        <Link 
-          to="/dashboard/admin/settings"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>settings</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Settings</span>
-            </>
-          )}
-        </Link>
       </nav>
-
-      <style>{`
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
     </div>
   );
 }
