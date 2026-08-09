@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
-import { getGymDetails, updateAdminAccount } from '@/lib/auth.functions';
+import { getGymDetails, updateAdminAccount, updateAdminPassword } from '@/lib/auth.functions';
 import { supabase } from '@/integrations/supabase/client';
 
 export const Route = createFileRoute('/dashboard/admin/account')({
@@ -20,6 +20,7 @@ function AdminAccount() {
   const queryClient = useQueryClient();
   const getGymDetailsFn = useServerFn(getGymDetails);
   const updateAccountFn = useServerFn(updateAdminAccount);
+  const updatePasswordFn = useServerFn(updateAdminPassword);
 
   const { data: gym, isLoading } = useQuery({
     queryKey: ['admin-gym-details'],
@@ -35,6 +36,9 @@ function AdminAccount() {
     photo_url: '',
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordData, setPasswordData] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -67,6 +71,31 @@ function AdminAccount() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     updateMutation.mutate(formData);
+  };
+  
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      setMessage({ type: 'error', text: 'New passwords do not match' });
+      return;
+    }
+    
+    try {
+      setIsUpdatingPassword(true);
+      await updatePasswordFn({ 
+        data: { 
+          currentPassword: passwordData.currentPassword, 
+          newPassword: passwordData.newPassword 
+        } 
+      });
+      setMessage({ type: 'success', text: 'Password updated successfully!' });
+      setShowPasswordModal(false);
+      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    } catch (err: any) {
+      setMessage({ type: 'error', text: err.message || 'Failed to update password' });
+    } finally {
+      setIsUpdatingPassword(false);
+    }
   };
 
   if (isLoading) {
@@ -272,9 +301,88 @@ function AdminAccount() {
                 Edit Account Details
               </button>
             )}
+
+            <div className="h-px bg-white/5 my-2"></div>
+
+            <button 
+              type="button"
+              onClick={() => setShowPasswordModal(true)}
+              className="h-12 rounded-full border border-white/10 text-white font-bold text-sm flex items-center justify-center gap-2 hover:bg-white/5 transition-colors"
+            >
+              <span className="material-symbols-outlined text-[20px]">lock_reset</span>
+              Change Password
+            </button>
           </form>
         </main>
       </div>
+
+      {/* PASSWORD CHANGE MODAL */}
+      {showPasswordModal && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" 
+            onClick={() => setShowPasswordModal(false)}
+          />
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[70] p-6 border-t border-white/10 animate-in slide-in-from-bottom duration-300">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-[22px] font-bold text-white">Change Password</h2>
+              <button onClick={() => setShowPasswordModal(false)} className="text-[#858A7D]">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            
+            <form onSubmit={handlePasswordChange} className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider ml-1">Current Password</label>
+                <input 
+                  type="password"
+                  required
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#B7FF1E] outline-none"
+                  value={passwordData.currentPassword}
+                  onChange={e => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider ml-1">New Password</label>
+                <input 
+                  type="password"
+                  required
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#B7FF1E] outline-none"
+                  value={passwordData.newPassword}
+                  onChange={e => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider ml-1">Confirm New Password</label>
+                <input 
+                  type="password"
+                  required
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#B7FF1E] outline-none"
+                  value={passwordData.confirmPassword}
+                  onChange={e => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                />
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <button 
+                  type="button"
+                  onClick={() => setShowPasswordModal(false)}
+                  className="flex-1 h-14 bg-white/5 text-[#858A7D] font-bold rounded-2xl active:scale-95 transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit"
+                  disabled={isUpdatingPassword}
+                  className="flex-[2] h-14 bg-[#B7FF1E] text-[#121411] font-bold rounded-2xl shadow-[0_8px_20px_rgba(183,255,30,0.2)] active:scale-95 transition-all disabled:opacity-50"
+                >
+                  {isUpdatingPassword ? 'Updating...' : 'Update Password'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </>
+      )}
     </div>
   );
 }
