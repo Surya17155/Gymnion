@@ -21,6 +21,42 @@ function AdminLayout() {
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
 
+  const { data: gymData } = useQuery({
+    queryKey: ['admin-gym-settings'],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return null;
+      
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('gym_id')
+        .eq('id', user.id)
+        .single();
+        
+      if (!profile?.gym_id) return null;
+      
+      const { data: gym } = await supabase
+        .from('gyms')
+        .select('*')
+        .eq('id', profile.gym_id)
+        .single();
+        
+      return gym;
+    }
+  });
+
+  const { data: activePlans } = useQuery({
+    queryKey: ['available-plans'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('global_plans')
+        .select('*')
+        .eq('is_active', true);
+      if (error) throw error;
+      return data;
+    }
+  });
+
   return (
     <div className="bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins']">
       {/* Head link for icons is already in __root.tsx, but ensuring icons are available */}
