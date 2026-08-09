@@ -121,12 +121,6 @@ function MembersDashboard() {
               className="w-full h-12 bg-[#1e201d] border border-white/5 rounded-xl pl-12 pr-4 text-[14px] text-white placeholder:text-[#858A7D] outline-none focus:border-[#D5FF40]/30 transition-colors"
             />
           </div>
-          <button 
-            onClick={() => setIsAdding(true)}
-            className="h-12 w-12 flex items-center justify-center bg-[#D5FF40] rounded-xl active:scale-95 transition-all"
-          >
-            <span className="material-symbols-outlined text-black font-bold">add</span>
-          </button>
         </div>
       </div>
 
@@ -240,83 +234,6 @@ function MembersDashboard() {
         </>
       )}
 
-      {/* ADD MEMBER DRAWER */}
-      {isAdding && (
-        <>
-          <div 
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" 
-            onClick={() => setIsAdding(false)}
-          />
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[70] p-6 border-t border-white/10">
-            <h2 className="text-[22px] font-bold text-white mb-6">Add New Member</h2>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">First Name</label>
-                  <input 
-                    className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
-                    placeholder="e.g. John"
-                    value={newMember.first_name}
-                    onChange={e => setNewMember(prev => ({ ...prev, first_name: e.target.value }))}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Last Name</label>
-                  <input 
-                    className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
-                    placeholder="e.g. Doe"
-                    value={newMember.last_name}
-                    onChange={e => setNewMember(prev => ({ ...prev, last_name: e.target.value }))}
-                  />
-                </div>
-              </div>
-              <div className="space-y-1">
-                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Email Address</label>
-                <input 
-                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
-                  value={newMember.email}
-                  onChange={e => setNewMember(prev => ({ ...prev, email: e.target.value }))}
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Phone Number</label>
-                <input 
-                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
-                  value={newMember.phone}
-                  onChange={e => setNewMember(prev => ({ ...prev, phone: e.target.value }))}
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Fee Plan</label>
-                <select 
-                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none appearance-none"
-                  value={newMember.fee_plan_id}
-                  onChange={e => setNewMember(prev => ({ ...prev, fee_plan_id: e.target.value }))}
-                >
-                  <option value="">Select a plan</option>
-                  {plans.map((plan: any) => (
-                    <option key={plan.id} value={plan.id}>{plan.name} - ₹{plan.amount}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex gap-3 pt-4">
-                <button 
-                  onClick={() => setIsAdding(false)}
-                  className="flex-1 h-14 bg-white/5 text-[#858A7D] font-bold rounded-2xl active:scale-95 transition-all"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handleAddMember}
-                  className="flex-[2] h-14 bg-[#D5FF40] text-black font-bold rounded-2xl shadow-[0_8px_20px_rgba(213,255,64,0.2)] active:scale-95 transition-all"
-                >
-                  Create Member
-                </button>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
 
       {/* Bottom Navigation */}
       <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px]">
