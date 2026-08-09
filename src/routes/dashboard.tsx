@@ -30,9 +30,10 @@ export const Route = createFileRoute('/dashboard')({
     const path = location.pathname;
     
     // 3. Path validation
-    if (role === 'super_admin' && !path.startsWith('/dashboard/super-admin')) {
+    if (role === 'super_admin' && path !== '/dashboard/super-admin' && path !== '/dashboard/super-admin/') {
       throw redirect({ to: '/dashboard/super-admin/' });
     } 
+
     if (role === 'gym_admin' && !path.startsWith('/dashboard/admin')) {
       throw redirect({ to: '/dashboard/admin/' });
     }
