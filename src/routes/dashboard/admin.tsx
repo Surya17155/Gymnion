@@ -238,23 +238,49 @@ export function AdminDashboard() {
           </section>
 
           {/* Quick Actions */}
-          <section>
-            <h3 className="text-[18px] font-semibold text-white mb-[12px]">Quick Actions</h3>
-            <Link 
-              to="/dashboard/admin/settings/qr-management"
-              className="bg-[#B7FF1E] rounded-xl p-[16px] flex items-center justify-between shadow-[0_0_20px_rgba(183,255,30,0.1)] hover:scale-[0.98] transition-transform cursor-pointer"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center">
-                  <span className="material-symbols-outlined text-[#B7FF1E] text-3xl" style={{ fontVariationSettings: '"FILL" 0' }}>qr_code_2</span>
+          <section className="flex flex-col gap-3">
+            <h3 className="text-[18px] font-semibold text-white mb-1">Quick Actions</h3>
+            
+            {/* Conditional QR Management Button */}
+            {(() => {
+              const settings = (gymData?.settings as any) || {};
+              const attendanceEnabled = settings.features?.attendance_management !== false; // Default to true for global plans for now
+              
+              if (attendanceEnabled) {
+                return (
+                  <Link 
+                    to="/dashboard/admin/settings/qr-management"
+                    className="bg-[#B7FF1E] rounded-xl p-[16px] flex items-center justify-between shadow-[0_0_20px_rgba(183,255,30,0.1)] hover:scale-[0.98] transition-transform cursor-pointer"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center">
+                        <span className="material-symbols-outlined text-[#B7FF1E] text-3xl" style={{ fontVariationSettings: '"FILL" 0' }}>qr_code_2</span>
+                      </div>
+                      <div>
+                        <h4 className="text-[18px] font-semibold text-black">Gym QR Code</h4>
+                        <p className="text-[12px] text-black/70">Show to members for check-in</p>
+                      </div>
+                    </div>
+                    <span className="material-symbols-outlined text-black">chevron_right</span>
+                  </Link>
+                );
+              }
+              
+              return (
+                <div className="bg-[#1e201d] rounded-xl p-[16px] flex items-center justify-between border border-white/5 opacity-50 cursor-not-allowed">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-black/40 rounded-lg flex items-center justify-center">
+                      <span className="material-symbols-outlined text-[#858A7D] text-3xl">qr_code_2</span>
+                    </div>
+                    <div>
+                      <h4 className="text-[18px] font-semibold text-[#858A7D]">Gym QR Code</h4>
+                      <p className="text-[12px] text-[#858A7D]">Attendance feature disabled</p>
+                    </div>
+                  </div>
+                  <span className="material-symbols-outlined text-[#858A7D]">lock</span>
                 </div>
-                <div>
-                  <h4 className="text-[18px] font-semibold text-black">Gym QR Code</h4>
-                  <p className="text-[12px] text-black/70">Show to members for check-in</p>
-                </div>
-              </div>
-              <span className="material-symbols-outlined text-black">chevron_right</span>
-            </Link>
+              );
+            })()}
           </section>
 
           {/* Recent Activity */}
