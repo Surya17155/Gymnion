@@ -26,6 +26,9 @@ function CheckInPage() {
   const [loadingSession, setLoadingSession] = useState(true);
   const [scannedGymId, setScannedGymId] = useState<string | null>(null);
   const [scannedGymCode, setScannedGymCode] = useState<string | null>(null);
+  const [cameraPermission, setCameraPermission] = useState<'pending' | 'granted' | 'denied'>('pending');
+
+  const effectiveGymId = gymId || scannedGymId;
 
   const recordAttendanceFn = useServerFn(recordAttendance);
   const getStatusFn = useServerFn(getMyAttendanceStatus);
@@ -37,11 +40,20 @@ function CheckInPage() {
       if (!session) {
         const currentUrl = window.location.pathname + window.location.search;
         navigate({ to: '/auth/login', search: { redirect: currentUrl } });
+        return;
       }
     });
-  }, [navigate]);
 
-  const effectiveGymId = gymId || scannedGymId;
+    // Request camera permission explicitly for better UX
+    if ((!effectiveGymId || shouldScan) && typeof navigator !== 'undefined' && navigator.mediaDevices) {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(() => setCameraPermission('granted'))
+        .catch((err) => {
+          console.error("Camera permission error:", err);
+          setCameraPermission('denied');
+        });
+    }
+  }, [navigate, effectiveGymId, shouldScan]);
 
   const { data: statusData, isLoading: isLoadingStatus } = useQuery({
     queryKey: ['my-attendance-status', effectiveGymId],
@@ -163,19 +175,41 @@ function CheckInPage() {
           </div>
         ) : (!effectiveGymId || shouldScan) ? (
           <div className="w-full h-full relative">
-            <Scanner
-              onScan={handleScan}
-              onError={(error) => {
-                console.error(error);
-                toast.error("Camera access denied or error occurred");
-              }}
-              styles={{
-                container: { width: '100%', height: '100%' }
-              }}
-            />
-            <div className="absolute inset-0 border-2 border-[#B7FF1E] rounded-3xl pointer-events-none animate-pulse">
-              <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-[#B7FF1E] shadow-[0_0_15px_#B7FF1E] animate-scan" />
-            </div>
+            {cameraPermission === 'denied' ? (
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-[#1e201d]">
+                <span className="material-symbols-outlined text-[#ff4d4d] text-5xl mb-4">no_photography</span>
+                <p className="text-white font-bold mb-2">Camera Access Denied</p>
+                <p className="text-[#C0C2B8] text-sm">Please enable camera permissions in your browser settings to scan the QR code.</p>
+                <button 
+                  onClick={() => window.location.reload()}
+                  className="mt-6 px-4 py-2 bg-[#B7FF1E] text-[#293500] font-bold rounded-lg text-sm"
+                >
+                  Try Again
+                </button>
+              </div>
+            ) : cameraPermission === 'pending' ? (
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-[#1e201d]">
+                <div className="w-12 h-12 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin mb-4" />
+                <p className="text-white font-bold mb-2">Requesting Camera...</p>
+                <p className="text-[#C0C2B8] text-sm italic">Please allow camera access when prompted by your browser.</p>
+              </div>
+            ) : (
+              <>
+                <Scanner
+                  onScan={handleScan}
+                  onError={(error) => {
+                    console.error(error);
+                    setCameraPermission('denied');
+                  }}
+                  styles={{
+                    container: { width: '100%', height: '100%' }
+                  }}
+                />
+                <div className="absolute inset-0 border-2 border-[#B7FF1E] rounded-3xl pointer-events-none animate-pulse">
+                  <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-[#B7FF1E] shadow-[0_0_15px_#B7FF1E] animate-scan" />
+                </div>
+              </>
+            )}
           </div>
         ) : (
           <>
