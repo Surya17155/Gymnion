@@ -52,7 +52,7 @@ function SuperAdminPayments() {
       <main className="max-w-[480px] mx-auto pt-6 px-5 flex flex-col gap-5">
         <section>
           <h1 className="text-[24px] font-bold text-white leading-tight">Platform Revenue</h1>
-          <p className="text-[12px] text-[#858A7D]">hello</p>
+          <p className="text-[12px] text-[#858A7D]">{"\n"}</p>
         </section>
 
         <section className="grid grid-cols-1 gap-3">

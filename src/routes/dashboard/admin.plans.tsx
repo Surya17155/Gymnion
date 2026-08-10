@@ -132,7 +132,7 @@ function GymPlans() {
           </button>
           <div className="flex-1 text-center pr-10">
             <h2 className="text-[18px] font-bold text-white uppercase tracking-wider">GYM PRICING</h2>
-            <p className="text-[12px] text-[#858A7D]">hello</p>
+            <p className="text-[12px] text-[#858A7D]">{"\n"}</p>
           </div>
         </header>
 

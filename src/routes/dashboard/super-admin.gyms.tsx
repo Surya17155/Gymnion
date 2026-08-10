@@ -107,7 +107,7 @@ export function SuperAdminGyms() {
         {/* Header Section */}
         <section>
           <h1 className="text-[24px] font-bold text-white leading-tight">Gym Network</h1>
-          <p className="text-[12px] text-[#858A7D]">hello</p>
+          <p className="text-[12px] text-[#858A7D]">{"\n"}</p>
         </section>
 
         {/* Hero Metric Card */}
