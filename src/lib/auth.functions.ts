@@ -3,7 +3,6 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { exportGymAttendanceToSheets } from "./attendance.server";
 
 export const getAuthUserRole = createServerFn({ method: 'GET' })
   .middleware([requireSupabaseAuth])
@@ -774,5 +773,6 @@ export const exportGymAttendance = createServerFn({ method: 'POST' })
     gymId: z.string()
   }).parse(data))
   .handler(async ({ data }) => {
+    const { exportGymAttendanceToSheets } = await import("./attendance.server");
     return await exportGymAttendanceToSheets(data.gymId);
   });
