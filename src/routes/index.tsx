@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, redirect, Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { getAuthUserRole } from "@/lib/auth.functions";
 
@@ -25,12 +25,12 @@ function HomePage() {
       <h1 className="text-4xl font-bold mb-2">Gym<span className="text-[#B7FF1E]">Sync</span></h1>
       <p className="text-[#858A7D] mb-12 text-center"></p>
       
-      <button 
-        onClick={() => navigate({ to: "/auth/login", search: { redirect: "" } })}
-        className="w-full max-w-[300px] h-[52px] bg-[#B7FF1E] text-[#121411] font-bold rounded-full shadow-[0_0_20px_rgba(183,255,30,0.2)] hover:opacity-90 active:scale-95 transition-all"
+      <Link 
+        to="/auth/login"
+        className="w-full max-w-[300px] h-[52px] bg-[#B7FF1E] text-[#121411] font-bold rounded-full shadow-[0_0_20px_rgba(183,255,30,0.2)] hover:opacity-90 active:scale-95 transition-all flex items-center justify-center no-underline"
       >
         Get Started
-      </button>
+      </Link>
     </div>
   );
 }
