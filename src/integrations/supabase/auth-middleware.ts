@@ -64,10 +64,14 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
 
     const token = authHeader.replace('Bearer ', '');
     if (!token) {
+      console.error('[Supabase Middleware] Empty token provided');
       throw new Error('Unauthorized: No token provided');
     }
 
+    // Relaxed token check for non-JWT tokens (like API keys) if needed,
+    // but here we check for the standard 3-part JWT structure.
     if (token.split('.').length !== 3) {
+      console.error('[Supabase Middleware] Invalid token structure (not 3 parts):', token.substring(0, 10) + '...');
       throw new Error('Unauthorized: Invalid token');
     }
 
