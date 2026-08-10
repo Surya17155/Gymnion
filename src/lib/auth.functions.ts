@@ -712,3 +712,12 @@ export const updateAdminPassword = createServerFn({ method: 'POST' })
     if (error) throw error;
     return { success: true };
   });
+
+export const exportGymAttendance = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .validator((data: any) => z.object({
+    gymId: z.string()
+  }).parse(data))
+  .handler(async ({ data }) => {
+    return await exportGymAttendanceToSheets(data.gymId);
+  });
