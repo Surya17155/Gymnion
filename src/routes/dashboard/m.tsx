@@ -20,22 +20,38 @@ export function MemberDashboard() {
   
   useEffect(() => {
     if (profileError) {
-      console.error("Profile fetch error in dashboard:", profileError);
+      console.error("Profile fetch error in member dashboard:", profileError);
       const errorStr = String(profileError);
       
       // Detailed error categorization
       let errorReason = "Session verification failed";
+      let isCritical = false;
+
       if (errorStr.includes('Unauthorized') || errorStr.includes('401')) {
         errorReason = "Your session has expired. Please sign in again.";
+        isCritical = true;
       } else if (errorStr.includes('403') || errorStr.includes('Forbidden')) {
         errorReason = "You do not have permission to access this area.";
+        isCritical = true;
+      } else if (errorStr.includes('PGRST116') || errorStr.includes('JSON object requested, multiple (or no) rows returned')) {
+        // This often means the member record is missing even if the user exists
+        errorReason = "Profile record not found. Please contact support.";
+        isCritical = true;
       } else if (errorStr.includes('Failed to fetch')) {
         errorReason = "Network error. Please check your connection.";
       }
 
-      // If it's a critical auth error, redirect with the reason
-      if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('403')) {
+      // If it's a critical auth or data error, redirect with the reason
+      if (isCritical) {
         supabase.auth.signOut().then(() => {
+          // Clear all caches on logout to prevent loops
+          if (typeof sessionStorage !== 'undefined') {
+            Object.keys(sessionStorage).forEach(key => {
+              if (key.startsWith('gymsync_role')) sessionStorage.removeItem(key);
+            });
+          }
+          window.localStorage.removeItem('tanstack-query-cache');
+          
           navigate({ 
             to: '/auth/login', 
             search: { 
