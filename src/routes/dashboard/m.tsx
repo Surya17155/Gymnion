@@ -323,5 +323,14 @@ export function MemberDashboard() {
 }
 
 export const Route = createFileRoute('/dashboard/m')({
+  beforeLoad: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw redirect({
+        to: '/auth/login',
+        search: { redirect: window.location.pathname }
+      });
+    }
+  },
   component: MemberDashboardLayout,
 });

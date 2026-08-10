@@ -11,7 +11,7 @@ export const Route = createFileRoute('/dashboard/super-admin')({
     if (!session) {
       throw redirect({
         to: '/auth/login',
-        search: { redirect: '/dashboard/super-admin' }
+        search: { redirect: window.location.pathname }
       });
     }
   },
