@@ -63,7 +63,7 @@ function ProfilePage() {
       />
       
       <main className="w-full max-w-[480px] px-5 relative z-10 flex flex-col gap-6 pt-8 pb-[120px]">
-        <header className="flex items-center w-full">
+        <header className="flex items-center w-full bg-transparent">
           <h1 className="text-[28px] leading-[32px] font-bold text-white tracking-tight">Profile</h1>
         </header>
 
