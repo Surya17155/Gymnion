@@ -165,7 +165,7 @@ function QRManagement() {
           </Link>
           <div className="flex-1 text-center">
             <h2 className="text-[18px] font-bold text-white uppercase tracking-wider">Access Control</h2>
-            <p className="text-[12px] text-[#858A7D]">Manage QR codes for facility entry points.</p>
+            <p className="text-[12px] text-[#858A7D]">hello</p>
           </div>
         </header>
 
