@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { syncAttendanceToGoogleSheets } from "./attendance.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const completeSignupSchema = z.object({
@@ -135,6 +136,14 @@ export const recordAttendance = createServerFn({ method: "POST" })
 
       if (error) throw error;
 
+      // Sync to Google Sheets in the background
+      syncAttendanceToGoogleSheets({
+        gymId,
+        memberId: member.id,
+        checkInAt: newEntry.check_in_at!,
+        checkOutAt: null
+      }).catch(err => console.error('Google Sheets Sync Error:', err));
+
       return {
         success: true,
         message: "Successfully checked in!",
@@ -153,6 +162,14 @@ export const recordAttendance = createServerFn({ method: "POST" })
         .single();
 
       if (error) throw error;
+
+      // Sync to Google Sheets in the background
+      syncAttendanceToGoogleSheets({
+        gymId,
+        memberId: member.id,
+        checkInAt: updatedEntry.check_in_at!,
+        checkOutAt: updatedEntry.check_out_at
+      }).catch(err => console.error('Google Sheets Sync Error:', err));
 
       return {
         success: true,
