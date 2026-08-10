@@ -8,6 +8,8 @@ export const roleHome: Record<string, string> = {
   member: '/dashboard/m',
 };
 
+let cachedRole: { userId: string; role: Role } | null = null;
+
 // Use sessionStorage for role to ensure it persists across tab reloads but stays within the session
 // This is faster than localStorage for this use case and cleaner.
 export async function getRoleForUser(userId: string): Promise<Role> {
