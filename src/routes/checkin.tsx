@@ -26,6 +26,7 @@ function CheckInPage() {
   const [loadingSession, setLoadingSession] = useState(true);
   const [scannedGymId, setScannedGymId] = useState<string | null>(null);
   const [scannedGymCode, setScannedGymCode] = useState<string | null>(null);
+  const [cameraPermission, setCameraPermission] = useState<'pending' | 'granted' | 'denied'>('pending');
 
   const recordAttendanceFn = useServerFn(recordAttendance);
   const getStatusFn = useServerFn(getMyAttendanceStatus);
