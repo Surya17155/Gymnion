@@ -93,9 +93,18 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
       }
     );
 
-    const { data, error } = await supabase.auth.getClaims(token);
+    // Attempt to verify the token with Supabase
+    let authResult;
+    try {
+      authResult = await supabase.auth.getClaims(token);
+    } catch (e) {
+      console.error('[Supabase Middleware] Exception during getClaims:', e);
+      throw new Error('Unauthorized: Invalid token');
+    }
+
+    const { data, error } = authResult;
     if (error || !data?.claims) {
-      console.error('[Supabase Middleware] Failed to get claims for token:', error);
+      console.error('[Supabase Middleware] Failed to get claims for token:', error || 'No claims returned');
       throw new Error('Unauthorized: Invalid token');
     }
 
