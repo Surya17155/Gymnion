@@ -2,7 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
-import { syncAttendanceToGoogleSheets } from "./attendance.server";
 
 export const updateMemberPlan = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -80,6 +79,7 @@ export const recordAttendance = createServerFn({ method: "POST" })
       if (error) throw error;
       
       // Sync to Google Sheets
+      const { syncAttendanceToGoogleSheets } = await import("./attendance.server");
       await syncAttendanceToGoogleSheets({
         gymId: data.gymId,
         memberId: member.id,
@@ -110,6 +110,7 @@ export const recordAttendance = createServerFn({ method: "POST" })
       if (error) throw error;
 
       // Sync to Google Sheets
+      const { syncAttendanceToGoogleSheets } = await import("./attendance.server");
       await syncAttendanceToGoogleSheets({
         gymId: data.gymId,
         memberId: member.id,
