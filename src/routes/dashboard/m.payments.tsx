@@ -43,7 +43,7 @@ function MemberPayments() {
       />
       
       <main className="w-full max-w-[480px] min-h-screen relative pb-[120px] flex flex-col z-10 no-scrollbar">
-        <div className="flex justify-end px-5 w-full sticky top-0 z-40 h-[64px] items-center bg-[#121411]/80 backdrop-blur-md">
+        <div className="flex justify-end px-5 w-full sticky top-0 z-40 h-[64px] items-center bg-transparent">
           <button className="w-10 h-10 rounded-full flex items-center justify-center bg-[#1e201d] border border-white/5 text-[#B7FF1E] hover:opacity-80 transition-opacity">
             <span className="material-symbols-outlined">notifications</span>
           </button>
