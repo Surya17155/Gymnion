@@ -76,7 +76,7 @@ function AddGymScreen() {
             <span className="material-symbols-outlined">arrow_back</span>
           </Link>
           <h1 className="text-[20px] font-bold text-white">Add New Gym</h1>
-          <p className="text-[12px] text-[#858A7D]">{"\n"}</p>
+          <p className="text-[12px] text-[#858A7D]">hello</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

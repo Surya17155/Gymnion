@@ -181,7 +181,7 @@ function SuperAdminPlans() {
             Subscription<br/>
             <span className="text-[#c9f232]">Management</span>
           </h1>
-          <p className="text-sm text-[#C0C2B8] mt-2 font-medium">{"\n"}</p>
+          <p className="text-sm text-[#C0C2B8] mt-2 font-medium">hello</p>
         </div>
 
         {/* Zone 1: Global Subscription Plans */}

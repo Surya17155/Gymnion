@@ -77,7 +77,7 @@ function ProfilePage() {
             </div>
           </div>
           <h2 className="text-[22px] leading-[26px] font-bold text-white mb-2">{profile?.full_name}</h2>
-          <p className="text-[14px] leading-[20px] text-[#C0C2B8] max-w-[280px]">{"\n"}</p>
+          <p className="text-[14px] leading-[20px] text-[#C0C2B8] max-w-[280px]">hello</p>
         </section>
 
         <section className="flex flex-col gap-3 mt-4">

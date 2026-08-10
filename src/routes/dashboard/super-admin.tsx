@@ -132,7 +132,7 @@ export function SuperAdminDashboard() {
       <main className="md:ml-64 relative z-10 w-full max-w-[480px] mx-auto md:max-w-none flex flex-col pt-6 px-5">
         <div className="md:hidden flex items-center mb-8">
           <h1 className="text-[22px] font-bold text-white">Dashboard</h1>
-          <p className="text-[12px] text-[#858A7D]">{"\n"}</p>
+          <p className="text-[12px] text-[#858A7D]">hello</p>
           <div className="flex-1"></div>
           <div className="relative" ref={dropdownRef}>
             <button 
@@ -192,7 +192,7 @@ export function SuperAdminDashboard() {
                 </div>
               </div>
               <div className="bg-[#151714]/80 backdrop-blur-md border border-white/5 rounded-xl p-4 flex flex-col justify-between min-h-[120px]">
-                <p className="text-[11px] font-semibold text-[#858A7D]">{"\n"}</p>
+                <p className="text-[11px] font-semibold text-[#858A7D]">hello</p>
                 <div>
                   <p className="text-[28px] md:text-[32px] font-bold text-white">₹{stats?.mrr}</p>
                 </div>
