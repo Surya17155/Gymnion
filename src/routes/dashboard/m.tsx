@@ -101,7 +101,10 @@ export function MemberDashboard() {
   if (isProfileLoading && !profile) {
     return (
       <div className="bg-[#121411] text-[#e3e3dd] min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-[#C0C2B8] animate-pulse">Loading your dashboard...</p>
+        </div>
       </div>
     );
   }
