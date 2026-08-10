@@ -47,6 +47,13 @@ export type Database = {
             foreignKeyName: "attendance_gym_id_fkey"
             columns: ["gym_id"]
             isOneToOne: false
+            referencedRelation: "gym_public_info"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
             referencedRelation: "gyms"
             referencedColumns: ["id"]
           },
@@ -133,6 +140,13 @@ export type Database = {
             foreignKeyName: "fee_plans_gym_id_fkey"
             columns: ["gym_id"]
             isOneToOne: false
+            referencedRelation: "gym_public_info"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fee_plans_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
             referencedRelation: "gyms"
             referencedColumns: ["id"]
           },
@@ -201,6 +215,13 @@ export type Database = {
             foreignKeyName: "gym_access_points_gym_id_fkey"
             columns: ["gym_id"]
             isOneToOne: false
+            referencedRelation: "gym_public_info"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gym_access_points_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
             referencedRelation: "gyms"
             referencedColumns: ["id"]
           },
@@ -229,6 +250,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "gym_admins_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gym_public_info"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "gym_admins_gym_id_fkey"
             columns: ["gym_id"]
@@ -373,6 +401,13 @@ export type Database = {
             foreignKeyName: "members_gym_id_fkey"
             columns: ["gym_id"]
             isOneToOne: false
+            referencedRelation: "gym_public_info"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "members_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
             referencedRelation: "gyms"
             referencedColumns: ["id"]
           },
@@ -432,6 +467,13 @@ export type Database = {
             foreignKeyName: "payments_gym_id_fkey"
             columns: ["gym_id"]
             isOneToOne: false
+            referencedRelation: "gym_public_info"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
             referencedRelation: "gyms"
             referencedColumns: ["id"]
           },
@@ -468,6 +510,13 @@ export type Database = {
             foreignKeyName: "user_roles_gym_id_fkey"
             columns: ["gym_id"]
             isOneToOne: false
+            referencedRelation: "gym_public_info"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_roles_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
             referencedRelation: "gyms"
             referencedColumns: ["id"]
           },
@@ -475,7 +524,59 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      gym_public_info: {
+        Row: {
+          address: string | null
+          created_at: string | null
+          gym_code: string | null
+          id: string | null
+          name: string | null
+          owner_email: string | null
+          owner_name: string | null
+          owner_phone: string | null
+          owner_photo_url: string | null
+          status: string | null
+          subscription_ends_at: string | null
+          subscription_plan_id: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string | null
+          gym_code?: string | null
+          id?: string | null
+          name?: string | null
+          owner_email?: string | null
+          owner_name?: string | null
+          owner_phone?: string | null
+          owner_photo_url?: string | null
+          status?: string | null
+          subscription_ends_at?: string | null
+          subscription_plan_id?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string | null
+          gym_code?: string | null
+          id?: string | null
+          name?: string | null
+          owner_email?: string | null
+          owner_name?: string | null
+          owner_phone?: string | null
+          owner_photo_url?: string | null
+          status?: string | null
+          subscription_ends_at?: string | null
+          subscription_plan_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gyms_subscription_plan_id_fkey"
+            columns: ["subscription_plan_id"]
+            isOneToOne: false
+            referencedRelation: "global_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       has_role: {
