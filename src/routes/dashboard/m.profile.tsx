@@ -63,11 +63,8 @@ function ProfilePage() {
       />
       
       <main className="w-full max-w-[480px] px-5 relative z-10 flex flex-col gap-6 pt-8 pb-[120px]">
-        <header className="flex justify-between items-center w-full">
+        <header className="flex items-center w-full">
           <h1 className="text-[28px] leading-[32px] font-bold text-white tracking-tight">Profile</h1>
-          <button className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center hover:bg-[#1e201d] transition-colors border border-white/5">
-            <LucideSettings className="w-6 h-6 text-[#B7FF1E]" />
-          </button>
         </header>
 
         <section className="flex flex-col items-center text-center mt-4 relative">
