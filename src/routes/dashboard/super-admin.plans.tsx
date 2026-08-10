@@ -501,6 +501,9 @@ function SuperAdminPlans() {
       {/* Edit Plan Modal */}
       {isEditingPlan && selectedPlan && (
         <div className="fixed inset-0 z-[9999] flex flex-col justify-end">
+          <style>{`
+            nav { transform: translateY(100%); pointer-events: none; }
+          `}</style>
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-[99998]" onClick={() => !isSubmitting && setIsEditingPlan(false)}></div>
           <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[16px] p-6 pb-safe w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300 max-h-[90vh] overflow-y-auto z-[99999]">
             <div className="w-12 h-1.5 bg-[#1e201d] rounded-full mx-auto mb-6"></div>
