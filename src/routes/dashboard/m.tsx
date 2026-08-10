@@ -84,10 +84,16 @@ export function MemberDashboard() {
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
-    return attendance.filter(a => {
+    
+    // Count unique days attended this month
+    const uniqueDays = new Set();
+    attendance.forEach(a => {
       const d = new Date(a.check_in_at!);
-      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
-    }).length;
+      if (d.getMonth() === currentMonth && d.getFullYear() === currentYear) {
+        uniqueDays.add(d.getDate());
+      }
+    });
+    return uniqueDays.size;
   }, [attendance]);
 
   const attendanceMap = useMemo(() => {

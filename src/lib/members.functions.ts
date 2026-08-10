@@ -108,6 +108,7 @@ export const recordAttendance = createServerFn({ method: "POST" })
     const today = new Date().toISOString().split('T')[0];
 
     // Find the latest attendance entry for today
+    // We check for any entry starting from today's date
     const { data: latestEntry } = await supabaseAdmin
       .from('attendance')
       .select('*')
@@ -118,8 +119,20 @@ export const recordAttendance = createServerFn({ method: "POST" })
       .limit(1)
       .maybeSingle();
 
-    // Determine action: if latest entry is an open check-in, check out. 
-    // Otherwise, if no entry today OR latest was a completed session, check in.
+    // Find if there is ALREADY a completed session today
+    const { data: completedSessions } = await supabaseAdmin
+      .from('attendance')
+      .select('id')
+      .eq('member_id', member.id)
+      .eq('gym_id', gymId)
+      .gte('check_in_at', `${today}T00:00:00`)
+      .not('check_out_at', 'is', null);
+
+    const hasCompletedSessionToday = completedSessions && completedSessions.length > 0;
+
+    // Determine action: 
+    // 1. If latest entry is an open check-in, check out.
+    // 2. If no open check-in, we check in.
     const effectiveAction = (latestEntry && !latestEntry.check_out_at) ? 'out' : 'in';
 
     if (effectiveAction === 'in') {
@@ -128,12 +141,21 @@ export const recordAttendance = createServerFn({ method: "POST" })
         .insert({
           member_id: member.id,
           gym_id: gymId,
-          check_in_at: new Date().toISOString()
+          check_in_at: new Date().toISOString(),
+          // Add a metadata flag or note if this is a secondary visit today
+          // but logically it's still a check-in.
         } as any)
         .select()
         .single();
 
       if (error) throw error;
+
+      // SUCCESS MESSAGE LOGIC:
+      // If the user already had a session today, we still record the check-in
+      // but the UI/Reporting can treat it as a continuation of the same day.
+      const message = hasCompletedSessionToday 
+        ? "Welcome back! (Second session today)" 
+        : "Successfully checked in!";
 
       // Sync to Google Sheets in the background
       syncAttendanceToGoogleSheets({
@@ -145,7 +167,7 @@ export const recordAttendance = createServerFn({ method: "POST" })
 
       return {
         success: true,
-        message: "Successfully checked in!",
+        message,
         check_in_at: newEntry.check_in_at,
         check_out_at: null
       };

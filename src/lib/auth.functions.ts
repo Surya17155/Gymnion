@@ -307,17 +307,19 @@ export const getAdminStats = createServerFn({ method: 'GET' })
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
     const [checkins, currentlyIn, revenue, overdue] = await Promise.all([
-      supabaseAdmin.from('attendance').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).gte('check_in_at', todayStart),
+      // Count unique members who checked in today
+      supabaseAdmin.from('attendance').select('member_id').eq('gym_id', gymId).gte('check_in_at', todayStart),
       supabaseAdmin.from('attendance').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).is('check_out_at', null),
-      // Only count verified real payments. If no real payment integration is connected, status 'paid' won't exist.
+      // Only count verified real payments
       supabaseAdmin.from('payments').select('amount').eq('gym_id', gymId).gte('created_at', monthStart).eq('status', 'paid_verified'),
       supabaseAdmin.from('members').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).eq('status', 'overdue')
     ]);
 
+    const uniqueCheckinsToday = new Set(checkins.data?.map(c => c.member_id) || []).size;
     const totalRevenue = revenue.data?.reduce((sum, p) => sum + (p.amount || 0), 0) || 0;
 
     return {
-      todayCheckins: checkins.count || 0,
+      todayCheckins: uniqueCheckinsToday,
       currentlyIn: currentlyIn.count || 0,
       monthRevenue: totalRevenue,
       overdueCount: overdue.count || 0
