@@ -28,6 +28,8 @@ function CheckInPage() {
   const [scannedGymCode, setScannedGymCode] = useState<string | null>(null);
   const [cameraPermission, setCameraPermission] = useState<'pending' | 'granted' | 'denied'>('pending');
 
+  const effectiveGymId = gymId || scannedGymId;
+
   const recordAttendanceFn = useServerFn(recordAttendance);
   const getStatusFn = useServerFn(getMyAttendanceStatus);
 
@@ -43,7 +45,7 @@ function CheckInPage() {
     });
 
     // Request camera permission explicitly for better UX
-    if (!effectiveGymId || shouldScan) {
+    if ((!effectiveGymId || shouldScan) && typeof navigator !== 'undefined' && navigator.mediaDevices) {
       navigator.mediaDevices.getUserMedia({ video: true })
         .then(() => setCameraPermission('granted'))
         .catch((err) => {
@@ -52,8 +54,6 @@ function CheckInPage() {
         });
     }
   }, [navigate, effectiveGymId, shouldScan]);
-
-  const effectiveGymId = gymId || scannedGymId;
 
   const { data: statusData, isLoading: isLoadingStatus } = useQuery({
     queryKey: ['my-attendance-status', effectiveGymId],
