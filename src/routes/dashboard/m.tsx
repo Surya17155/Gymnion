@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useNavigate, redirect } from '@tanstack/react-router';
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { useMyProfile } from "@/hooks/useMyProfile";
@@ -323,5 +323,14 @@ export function MemberDashboard() {
 }
 
 export const Route = createFileRoute('/dashboard/m')({
+  beforeLoad: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw redirect({
+        to: '/auth/login',
+        search: { redirect: window.location.pathname }
+      });
+    }
+  },
   component: MemberDashboardLayout,
 });
