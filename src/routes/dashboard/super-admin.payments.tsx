@@ -33,7 +33,7 @@ function SuperAdminPayments() {
     
     return gymsData.gyms.filter(gym => {
       const isOverdue = gym.subscription_ends_at ? new Date(gym.subscription_ends_at) < now : true;
-      const isPaid = (gym.settings as any)?.payment_status === 'paid' || (!isOverdue && gym.subscription_ends_at);
+      const isPaid = (gym.settings as any)?.payment_status === 'paid' && !isOverdue;
       
       if (filter === 'paid') return isPaid;
       if (filter === 'overdue') return !isPaid;
@@ -131,7 +131,7 @@ function SuperAdminPayments() {
           ) : (
             filteredGyms.map((gym) => {
               const isOverdue = gym.subscription_ends_at ? new Date(gym.subscription_ends_at) < now : true;
-              const isPaid = (gym.settings as any)?.payment_status === 'paid' || (!isOverdue && gym.subscription_ends_at);
+              const isPaid = (gym.settings as any)?.payment_status === 'paid' && !isOverdue;
               
               const manualPrice = (gym.settings as any)?.manual_pricing;
               const planName = manualPrice ? `Manual Pricing: ₹${manualPrice}` : ((gym as any).global_plans?.name || 'Standard Plan');

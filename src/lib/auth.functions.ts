@@ -307,7 +307,8 @@ export const getAdminStats = createServerFn({ method: 'GET' })
     const [checkins, currentlyIn, revenue, overdue] = await Promise.all([
       supabaseAdmin.from('attendance').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).gte('check_in_at', todayStart),
       supabaseAdmin.from('attendance').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).is('check_out_at', null),
-      supabaseAdmin.from('payments').select('amount').eq('gym_id', gymId).gte('created_at', monthStart).eq('status', 'paid'),
+      // Only count verified real payments. If no real payment integration is connected, status 'paid' won't exist.
+      supabaseAdmin.from('payments').select('amount').eq('gym_id', gymId).gte('created_at', monthStart).eq('status', 'paid_verified'),
       supabaseAdmin.from('members').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).eq('status', 'overdue')
     ]);
 
@@ -354,7 +355,7 @@ export const getRecentActivity = createServerFn({ method: 'GET' })
         type: 'payment',
         member_name: (p.members as any)?.full_name,
         timestamp: p.created_at,
-        action: `paid ₹${p.amount}`
+        action: `processed ₹${p.amount} (${p.status})`
       }))
     ].sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
      .slice(0, data.limit);
