@@ -190,7 +190,7 @@ export function SuperAdminDashboard() {
           </div>
         </div>
 
-        <header className="hidden md:flex justify-between items-center px-8 h-20 w-full border-b border-white/5 bg-[#121411]/80 backdrop-blur-md sticky top-0 z-30 mb-8">
+        <header className="hidden md:flex justify-between items-center px-8 h-20 w-full border-b border-white/5 bg-transparent sticky top-0 z-30 mb-8">
           <h1 className="text-[22px] font-bold">Platform Overview</h1>
           <Link to="/dashboard/super-admin/gyms" className="bg-[#B7FF1E] text-[#1a1c19] text-sm font-normal px-4 py-2 rounded-full hover:opacity-90 transition-opacity flex items-center gap-2 shadow-[0_0_20px_rgba(183,255,30,0.2)]">
             <span className="material-symbols-outlined text-[18px]">add</span>Invite Gym

@@ -118,7 +118,7 @@ function AdminAccount() {
       />
 
       <div className="max-w-[480px] mx-auto relative z-10 flex flex-col min-h-screen pb-24">
-        <header className="flex items-center px-[20px] h-[64px] sticky top-0 bg-[#121411]/80 backdrop-blur-md z-40">
+        <header className="flex items-center px-[20px] h-[64px] sticky top-0 bg-transparent z-40">
           <Link to="/dashboard/admin/settings" className="w-10 h-10 rounded-full flex items-center justify-center bg-[#1e201d] border border-white/5 mr-4 text-[#C0C2B8]">
             <span className="material-symbols-outlined">arrow_back</span>
           </Link>

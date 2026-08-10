@@ -160,7 +160,7 @@ export function AdminDashboard() {
       {/* Main Mobile Container */}
       <div className="max-w-[480px] mx-auto min-h-screen pb-24 relative z-10 flex flex-col">
         {/* TopAppBar */}
-        <header className="flex justify-between items-center px-[20px] h-[64px] w-full sticky top-0 z-40 bg-[#121411]/80 backdrop-blur-md">
+        <header className="flex justify-between items-center px-[20px] h-[64px] w-full sticky top-0 z-40 bg-transparent">
           <div className="flex items-center gap-3">
           </div>
           <div className="relative" ref={dropdownRef}>
