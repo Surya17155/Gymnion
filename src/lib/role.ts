@@ -15,7 +15,8 @@ export async function getRoleForUser(userId: string): Promise<Role> {
   if (cachedRole && cachedRole.userId === userId) return cachedRole.role;
 
   // Optimized role lookup: check DB but with hardcoded overrides for dev/seed accounts
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: sessionData } = await supabase.auth.getSession();
+  const session = sessionData?.session;
   
   // Hardcoded overrides for known admin accounts
   if (session?.user?.email === 'surya.17155@gmail.com') {
@@ -31,11 +32,15 @@ export async function getRoleForUser(userId: string): Promise<Role> {
   }
 
   // Final fallback to DB lookup
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('user_roles')
     .select('role')
     .eq('user_id', userId)
     .maybeSingle();
+
+  if (error) {
+    console.error('Error fetching user role:', error);
+  }
 
   const role = (data?.role as Role) ?? null;
   cachedRole = { userId, role };

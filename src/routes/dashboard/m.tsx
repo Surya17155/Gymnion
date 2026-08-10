@@ -16,7 +16,20 @@ export function MemberDashboard() {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
-  const { data: profile, isLoading: isProfileLoading } = useMyProfile();
+  const { data: profile, isLoading: isProfileLoading, error: profileError } = useMyProfile();
+  
+  useEffect(() => {
+    if (profileError) {
+      console.error("Profile fetch error in dashboard:", profileError);
+      // Only sign out if we're sure it's an auth error (like 401/403)
+      const errorStr = String(profileError);
+      if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('403')) {
+        supabase.auth.signOut().then(() => {
+          navigate({ to: '/auth/login', search: { redirect: window.location.pathname } });
+        });
+      }
+    }
+  }, [profileError, navigate]);
   const getPaymentsFn = useServerFn(getMyPayments);
   const getAttendanceFn = useServerFn(getMyAttendance);
 

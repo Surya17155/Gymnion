@@ -9,5 +9,6 @@ export function useMyProfile() {
     queryKey: ['my-profile'],
     queryFn: () => getProfile(),
     staleTime: 1000 * 60 * 5, // 5 minutes
+    retry: 1, // Only retry once to avoid long loading states on failure
   });
 }
