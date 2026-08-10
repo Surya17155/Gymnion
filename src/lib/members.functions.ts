@@ -128,8 +128,7 @@ export const recordAttendance = createServerFn({ method: "POST" })
         .insert({
           member_id: member.id,
           gym_id: gymId,
-          check_in_at: new Date().toISOString(),
-          status: 'present'
+          check_in_at: new Date().toISOString()
         } as any)
         .select()
         .single();
