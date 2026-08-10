@@ -103,10 +103,14 @@ function CheckInPage() {
 
   // Automatically trigger action if we scanned a valid QR and have status
   useEffect(() => {
-    if (shouldScan && effectiveGymId && statusData && !mutation.isPending && !mutation.isSuccess) {
+    if (effectiveGymId && statusData && !mutation.isPending && !mutation.isSuccess) {
       handleAction();
+      // Reset shouldScan once we've triggered the action
+      if (shouldScan) {
+        navigate({ to: '/checkin', search: { gym: effectiveGymId, code: gymCode || scannedGymCode || undefined }, replace: true });
+      }
     }
-  }, [shouldScan, effectiveGymId, statusData]);
+  }, [effectiveGymId, statusData]);
 
   if (loadingSession || (session && effectiveGymId && isLoadingStatus)) {
     return (
@@ -128,17 +132,17 @@ function CheckInPage() {
       
       <div className="space-y-2">
         <h1 className="text-2xl font-bold italic tracking-tight uppercase text-white">
-          {shouldScan ? 'Scanning QR Code' : 'Gym Entry'}
+          {effectiveGymId && statusData && !shouldScan ? (isCheckedIn ? 'Checking Out...' : 'Checking In...') : 'Scanning QR Code'}
         </h1>
         <p className="text-[#C0C2B8] max-w-[280px] mx-auto">
-          {isCheckedIn 
-            ? `Checked in at ${statusData.check_in_at ? format(new Date(statusData.check_in_at), 'hh:mm a') : 'N/A'}`
+          {effectiveGymId && statusData && !shouldScan
+            ? (isCheckedIn ? 'Recording your exit...' : 'Recording your entry...')
             : 'Scan your gym\'s QR code to record attendance.'}
         </p>
       </div>
 
       <div className="w-full max-w-sm aspect-square bg-[#1e201d] border border-white/5 rounded-3xl flex items-center justify-center relative overflow-hidden">
-        {shouldScan && !effectiveGymId ? (
+        {(!effectiveGymId || shouldScan) ? (
           <div className="w-full h-full relative">
             <Scanner
               onScan={handleScan}
@@ -158,28 +162,21 @@ function CheckInPage() {
           <>
             <div className="absolute inset-0 bg-radial-gradient from-[#B7FF1E]/10 to-transparent opacity-20" />
             <div className="relative z-10 flex flex-col items-center gap-4">
-              <div className={`w-48 h-48 border-2 ${mutation.isPending ? 'border-[#B7FF1E] animate-pulse' : 'border-dashed border-[#B7FF1E]/30'} rounded-2xl flex items-center justify-center`}>
-                {mutation.isPending ? (
-                  <div className="w-12 h-12 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <span className="text-[10px] font-bold text-[#B7FF1E] tracking-[0.2em] uppercase">
-                    {effectiveGymId ? (isCheckedIn ? 'Active Session' : 'Ready') : 'Awaiting Scan'}
-                  </span>
-                )}
+              <div className={`w-48 h-48 border-2 border-[#B7FF1E] animate-pulse rounded-2xl flex items-center justify-center`}>
+                <div className="w-12 h-12 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
               </div>
             </div>
           </>
         )}
       </div>
 
-      {effectiveGymId && (
-        <button 
-          onClick={handleAction}
-          disabled={mutation.isPending}
-          className={`w-full max-w-sm ${isCheckedIn ? 'bg-white/10 text-white' : 'bg-[#B7FF1E] text-[#293500]'} h-14 rounded-full font-bold shadow-[0_8px_30px_rgba(213,255,64,0.3)] hover:scale-[1.02] transition-transform active:scale-95 disabled:opacity-50`}
-        >
-          {mutation.isPending ? 'Processing...' : (isCheckedIn ? 'Check Out' : 'Check In Now')}
-        </button>
+      {effectiveGymId && !shouldScan && (
+        <div className="w-full max-w-sm py-4">
+           <div className="flex items-center justify-center gap-2 text-[#B7FF1E] animate-pulse">
+             <span className="material-symbols-outlined">sync</span>
+             <span className="font-bold uppercase tracking-widest text-xs">Processing...</span>
+           </div>
+        </div>
       )}
 
       <Link to="/dashboard/m" className="text-sm text-[#C0C2B8] hover:text-white transition-colors">
