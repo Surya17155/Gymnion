@@ -47,12 +47,13 @@ export async function syncAttendanceToGoogleSheets(params: {
     }
 
     // 3. Initialize Google Auth
-    const auth = new google.auth.JWT(
-      clientEmail,
-      undefined,
-      privateKey,
-      ['https://www.googleapis.com/auth/spreadsheets']
-    );
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: clientEmail,
+        private_key: privateKey,
+      },
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    });
 
     const sheets = google.sheets({ version: 'v4', auth });
 
@@ -100,30 +101,21 @@ export async function syncAttendanceToGoogleSheets(params: {
       console.error('Error checking/creating sheet:', err);
     }
 
-    // 6. Sync logic:
-    // If it's a check-out, we should ideally update the existing row for today.
-    // However, to keep it simple and reliable (since members might scan multiple times),
-    // we'll append a new row for each event or try to find the row to update.
-    // The user said: "The data collected... will continuously add the date, member name... check-in and check-out times".
-    // A better approach: Append a row on Check-in. When Check-out happens, we could either:
-    // A) Append another row (redundant name/email info)
-    // B) Update the existing row (requires searching the sheet)
-    
-    // Given the prompt "Scanning same QR code second time counts as check-out",
-    // let's try to update if it's a check-out, otherwise append.
-
+    // 6. Sync logic
     if (checkOutAt) {
-      // Find the row for this member today with no check-out time yet
       const range = `${year}!A:G`;
       const rows = await sheets.spreadsheets.values.get({ spreadsheetId, range });
       const values = rows.data.values || [];
       
       let rowIndex = -1;
-      // Search backwards for the most recent check-in for this member today
       for (let i = values.length - 1; i >= 0; i--) {
-        const [rowDate, rowGym, rowName, rowEmail, rowPhone, rowIn, rowOut] = values[i];
+        const row = values[i];
+        if (!row || row.length < 4) continue;
+        const [rowDate, , , rowEmail] = row;
+        const rowOut = row[6] || '-';
+
         if (rowDate === dateStr && rowEmail === member.email && rowOut === '-') {
-          rowIndex = i + 1; // 1-indexed
+          rowIndex = i + 1;
           break;
         }
       }
@@ -157,3 +149,4 @@ export async function syncAttendanceToGoogleSheets(params: {
     console.error('Failed to sync to Google Sheets:', error);
   }
 }
+
