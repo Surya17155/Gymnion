@@ -29,7 +29,10 @@ function AuthPage() {
 
   useEffect(() => {
     if (search.error) {
-      toast.error(decodeURIComponent(search.error));
+      const decodedError = decodeURIComponent(search.error);
+      if (decodedError !== "Your session has expired. Please sign in again.") {
+        toast.error(decodedError);
+      }
     }
   }, [search.error]);
 
