@@ -50,7 +50,7 @@ function AdminSettings() {
   };
 
   return (
-    <div className="bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins']">
+    <div className={`bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins'] ${isEditingCode ? 'tab-bar-hidden' : ''}`}>
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       
       <div 

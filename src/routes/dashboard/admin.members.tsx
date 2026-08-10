@@ -93,7 +93,7 @@ function MembersDashboard() {
   };
 
   return (
-    <div className={`min-h-screen bg-[#0D0F0C] text-[#e3e3dd] font-['Poppins'] pb-32 ${selectedMember ? 'tab-bar-hidden' : ''}`}>
+    <div className={`min-h-screen bg-[#0D0F0C] text-[#e3e3dd] font-['Poppins'] pb-32 ${selectedMember || isAdding ? 'tab-bar-hidden' : ''}`}>
       {/* Top Glow Effect */}
       <div 
         className="fixed top-0 left-0 right-0 h-[300px] z-0 pointer-events-none"

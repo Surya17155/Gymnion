@@ -114,7 +114,7 @@ export function AdminDashboard() {
   const currentPlan = activePlans?.find((p: any) => p.id === (gymData?.settings as any)?.plan_id);
 
   return (
-    <div className={`bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins'] no-scrollbar ${showQRModal ? 'tab-bar-hidden' : ''}`}>
+    <div className={`bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins'] no-scrollbar ${showQRModal || showDropdown ? 'tab-bar-hidden' : ''}`}>
       {/* Head link for icons is already in __root.tsx, but ensuring icons are available */}
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       

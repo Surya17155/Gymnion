@@ -107,7 +107,7 @@ function AdminAccount() {
   }
 
   return (
-    <div className="bg-[#121411] text-[#e3e3dd] antialiased min-h-screen font-['Poppins']">
+    <div className={`bg-[#121411] text-[#e3e3dd] antialiased min-h-screen font-['Poppins'] ${showPasswordModal ? 'tab-bar-hidden' : ''}`}>
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       
       <div 

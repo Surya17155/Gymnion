@@ -58,7 +58,7 @@ function AddGymScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0B0A] antialiased pb-10 glow-top overflow-x-hidden">
+    <div className={`min-h-screen bg-[#0A0B0A] antialiased pb-10 glow-top overflow-x-hidden ${isSubmitting ? 'tab-bar-hidden' : ''}`}>
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       <style>{`
         .glow-top {
