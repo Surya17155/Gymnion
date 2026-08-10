@@ -58,12 +58,12 @@ export async function syncAttendanceToGoogleSheets(params: {
 
     // 4. Prepare data
     // Use IST (Indian Standard Time) for chips and display
-    const dtIn = DateTime.fromISO(checkInAt).setZone('Asia/Kolkata');
+    const dtIn = DateTime.fromISO(checkInAt as string).setZone('Asia/Kolkata');
     const dateStr = dtIn.toFormat('dd/MM/yyyy');
     const monthYear = dtIn.toFormat('MMMM yyyy');
     const checkInTime = dtIn.toFormat('hh:mm a');
     const checkOutTime = checkOutAt 
-      ? DateTime.fromISO(checkOutAt).setZone('Asia/Kolkata').toFormat('hh:mm a')
+      ? DateTime.fromISO(checkOutAt as string).setZone('Asia/Kolkata').toFormat('hh:mm a')
       : '-';
 
     const sheetName = gym.name.substring(0, 100); // Sheet names have limits
