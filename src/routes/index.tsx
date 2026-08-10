@@ -26,7 +26,7 @@ function HomePage() {
       <p className="text-[#858A7D] mb-12 text-center"></p>
       
       <button 
-        onClick={() => navigate({ to: "/auth/login" })}
+        onClick={() => window.location.href = "/auth/login"}
         className="w-full max-w-[300px] h-[52px] bg-[#B7FF1E] text-[#121411] font-bold rounded-full shadow-[0_0_20px_rgba(183,255,30,0.2)] hover:opacity-90 active:scale-95 transition-all"
       >
         Get Started
