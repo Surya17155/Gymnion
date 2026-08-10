@@ -417,10 +417,10 @@ function GymDetailScreen() {
       {editingSection && (
         <>
           <div 
-            className="fixed inset-0 bg-black/60 z-[9998] animate-in fade-in duration-300"
+            className="fixed inset-0 bg-black/60 z-[99998] animate-in fade-in duration-300"
             onClick={() => setEditingSection(null)}
           />
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] px-5 py-6 pb-safe bg-[#121411] border-t border-white/10 rounded-t-[32px] z-[9999] animate-in slide-in-from-bottom duration-300 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] px-5 py-6 pb-safe bg-[#121411] border-t border-white/10 rounded-t-[32px] z-[99999] animate-in slide-in-from-bottom duration-300 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
           <div className="flex gap-3">
             <button 
               onClick={() => setEditingSection(null)}
