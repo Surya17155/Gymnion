@@ -93,7 +93,7 @@ function MembersDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0F0C] text-[#e3e3dd] font-['Poppins'] pb-32">
+    <div className={`min-h-screen bg-[#0D0F0C] text-[#e3e3dd] font-['Poppins'] pb-32 ${selectedMember ? 'tab-bar-hidden' : ''}`}>
       {/* Top Glow Effect */}
       <div 
         className="fixed top-0 left-0 right-0 h-[300px] z-0 pointer-events-none"
@@ -236,7 +236,7 @@ function MembersDashboard() {
 
 
       {/* Bottom Navigation */}
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-[10] flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px]">
+      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-[10] flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] transition-transform duration-300 nav-bar-transition">
         <Link 
           to="/dashboard/admin" 
           activeOptions={{ exact: true }}

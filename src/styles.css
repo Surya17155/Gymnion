@@ -102,4 +102,9 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  .tab-bar-hidden .nav-bar-transition {
+    transform: translate(-50%, 100%) !important;
+  }
+}
 }

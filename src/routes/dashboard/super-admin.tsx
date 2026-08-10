@@ -23,11 +23,11 @@ function SuperAdminLayout() {
   const isGymDetail = pathname.includes('/gyms/') && pathname.split('/').pop() !== 'gyms';
 
   return (
-    <div className="bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans no-scrollbar">
+    <div className={`bg-[#0D0F0C] text-[#e3e3dd] min-h-screen relative overflow-x-hidden font-sans no-scrollbar ${pathname.includes('/plans') || pathname.includes('/gyms') ? 'tab-bar-container' : ''}`}>
       <Outlet />
       
       {!isGymDetail && (
-        <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full flex justify-around items-center px-4 py-2 pb-safe rounded-t-[12px] max-w-[480px] left-1/2 -translate-x-1/2 transition-transform duration-300" style={{ zIndex: 50 }}>
+        <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full flex justify-around items-center px-4 py-2 pb-safe rounded-t-[12px] max-w-[480px] left-1/2 -translate-x-1/2 transition-transform duration-300 nav-bar-transition" style={{ zIndex: 50 }}>
           <Link 
             to="/dashboard/super-admin/"
             activeOptions={{ exact: true }}
