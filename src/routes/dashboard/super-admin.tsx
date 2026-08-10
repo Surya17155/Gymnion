@@ -107,12 +107,38 @@ export function SuperAdminDashboard() {
   };
 
   const statsFn = useServerFn(getPlatformStats);
-  const { data: stats, isLoading } = useQuery({
+  const { data: stats, isLoading, error: profileError } = useQuery({
     queryKey: ['platform-stats'],
     queryFn: () => statsFn(),
     staleTime: 5000,
     retry: 1,
   });
+
+  useEffect(() => {
+    if (profileError) {
+      console.error("Profile fetch error in super-admin dashboard:", profileError);
+      const errorStr = String(profileError);
+      
+      let errorReason = "Session verification failed";
+      if (errorStr.includes('Unauthorized') || errorStr.includes('401')) {
+        errorReason = "Your session has expired. Please sign in again.";
+      } else if (errorStr.includes('403') || errorStr.includes('Forbidden')) {
+        errorReason = "You do not have permission to access this area.";
+      }
+
+      if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('403')) {
+        supabase.auth.signOut().then(() => {
+          navigate({ 
+            to: '/auth/login', 
+            search: { 
+              redirect: window.location.pathname,
+              error: encodeURIComponent(errorReason)
+            } 
+          });
+        });
+      }
+    }
+  }, [profileError, navigate]);
 
   if (isLoading && !stats) return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#0D0F0C] gap-4">
