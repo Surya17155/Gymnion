@@ -112,9 +112,12 @@ export async function syncAttendanceToGoogleSheets(params: {
         const row = values[i];
         if (!row || row.length < 4) continue;
         const [rowDate, , , rowEmail] = row;
-        const rowOut = row[6] || '-';
+        const rowInTime = row[5] || '-';
+        const rowOutTime = row[6] || '-';
 
-        if (rowDate === dateStr && rowEmail === member.email && rowOut === '-') {
+        // Check if this is the correct date, member, and it's the MOST RECENT entry for this member today
+        // We match by date and email, and ensure we haven't already filled the checkout for THIS specific session
+        if (rowDate === dateStr && rowEmail === member.email && rowOutTime === '-') {
           rowIndex = i + 1;
           break;
         }
