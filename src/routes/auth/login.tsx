@@ -160,7 +160,6 @@ function AuthPage() {
             address: formData.address,
             gym_code: formData.gymCode.trim(),
             gym_id: gym.id,
-            role: 'member' // Default role for public signups
           }
         }
       });
