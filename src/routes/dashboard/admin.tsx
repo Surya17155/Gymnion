@@ -85,7 +85,7 @@ export function AdminDashboard() {
     }
   }, [profileError, navigate]);
 
-  const { data: stats, isLoading: isStatsLoading } = useQuery({
+  const { data: stats, isLoading: isStatsLoading, error: statsError } = useQuery({
     queryKey: ['admin-stats', gymData?.id],
     queryFn: () => getStatsFn({ data: { gymId: gymData!.id } }),
     enabled: !!gymData?.id,
@@ -93,7 +93,7 @@ export function AdminDashboard() {
     retry: 1,
   });
 
-  const { data: recentActivity, isLoading: isActivityLoading } = useQuery({
+  const { data: recentActivity, isLoading: isActivityLoading, error: activityError } = useQuery({
     queryKey: ['admin-activity', gymData?.id],
     queryFn: () => getActivityFn({ data: { gymId: gymData!.id } }),
     enabled: !!gymData?.id,
@@ -102,6 +102,17 @@ export function AdminDashboard() {
   });
 
   const isActuallyLoading = isGymLoading || (gymData?.id && (isStatsLoading || isActivityLoading));
+  const hasAuthError = (statsError && String(statsError).includes('Unauthorized')) || 
+                       (activityError && String(activityError).includes('Unauthorized'));
+
+  useEffect(() => {
+    if (hasAuthError) {
+      console.warn("Auth error detected in stats/activity queries, signing out...");
+      supabase.auth.signOut().then(() => {
+        navigate({ to: '/auth/login', search: { redirect: window.location.pathname } });
+      });
+    }
+  }, [hasAuthError, navigate]);
 
   if (!gymData && isGymLoading) {
     return (
@@ -149,13 +160,26 @@ export function AdminDashboard() {
   const { data: activePlans } = useQuery({
     queryKey: ['global-plans-for-admin'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('global_plans')
-        .select('*')
-        .eq('is_active', true);
-      if (error) throw error;
-      return data;
-    }
+      // Admins might not have direct select access to global_plans via client SDK due to RLS
+      // Fallback to empty array if it fails rather than crashing the whole dashboard
+      try {
+        const { data, error } = await supabase
+          .from('global_plans')
+          .select('*')
+          .eq('is_active', true);
+        if (error) {
+          console.warn("Could not fetch global plans via client SDK:", error);
+          return [];
+        }
+        return data;
+      } catch (e) {
+        console.warn("Exception fetching global plans:", e);
+        return [];
+      }
+    },
+    retry: 1,
+    staleTime: 300000, // 5 minutes is plenty for plans
+
   });
 
   const currentPlan = activePlans?.find((p: any) => p.id === (gymData?.settings as any)?.plan_id);
@@ -456,6 +480,7 @@ export function AdminDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          preload="intent"
         >
           {({ isActive }) => (
             <>
@@ -470,6 +495,7 @@ export function AdminDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          preload="intent"
         >
           {({ isActive }) => (
             <>
@@ -484,6 +510,7 @@ export function AdminDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          preload="intent"
         >
           {({ isActive }) => (
             <>
@@ -498,6 +525,7 @@ export function AdminDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          preload="intent"
         >
           {({ isActive }) => (
             <>
@@ -512,6 +540,7 @@ export function AdminDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          preload="intent"
         >
           {({ isActive }) => (
             <>
@@ -520,6 +549,7 @@ export function AdminDashboard() {
             </>
           )}
         </Link>
+
       </nav>
     </div>
   );
