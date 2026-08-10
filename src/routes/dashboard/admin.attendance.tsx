@@ -2,8 +2,9 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
-import { getAttendanceDashboard, getCurrentGymId } from '@/lib/auth.functions';
+import { getAttendanceDashboard, getCurrentGymId, exportGymAttendance } from '@/lib/auth.functions';
 import { format } from 'date-fns';
+import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
 export const Route = createFileRoute('/dashboard/admin/attendance')({
@@ -24,8 +25,10 @@ export const Route = createFileRoute('/dashboard/admin/attendance')({
 
 function AttendanceDashboard() {
   const [tab, setTab] = useState<'today' | 'currently_in' | 'all'>('today');
+  const [isExporting, setIsExporting] = useState(false);
   const getAttendanceFn = useServerFn(getAttendanceDashboard);
   const getGymIdFn = useServerFn(getCurrentGymId);
+  const exportFn = useServerFn(exportGymAttendance);
   const queryClient = useQueryClient();
 
   const { data: gymId } = useQuery({
@@ -74,6 +77,19 @@ function AttendanceDashboard() {
   };
 
   const list = getList();
+
+  const handleExport = async () => {
+    if (!gymId) return;
+    setIsExporting(true);
+    try {
+      const result = await exportFn({ data: { gymId } });
+      toast.success(`Data exported to Google Sheet: ${result.sheetName || 'Success'}`);
+    } catch (err: any) {
+      toast.error(`Export failed: ${err.message}`);
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#0D0F0C] text-[#e3e3dd] font-['Poppins'] pb-32">
