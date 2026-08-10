@@ -83,7 +83,7 @@ export const recordAttendance = createServerFn({ method: "POST" })
       await syncAttendanceToGoogleSheets({
         gymId: data.gymId,
         memberId: member.id,
-        checkInAt: attendance.check_in_at
+        checkInAt: attendance.check_in_at as string
       });
 
       return { success: true, message: "Checked in successfully", data: attendance };
@@ -113,8 +113,8 @@ export const recordAttendance = createServerFn({ method: "POST" })
       await syncAttendanceToGoogleSheets({
         gymId: data.gymId,
         memberId: member.id,
-        checkInAt: updated.check_in_at,
-        checkOutAt: updated.check_out_at
+        checkInAt: updated.check_in_at as string,
+        checkOutAt: updated.check_out_at as string
       });
 
       return { success: true, message: "Checked out successfully" };
