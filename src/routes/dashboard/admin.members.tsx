@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { getMembers, getCurrentGymId, createMember, deleteMember, getFeePlans } from '@/lib/auth.functions';
 import { toast } from 'sonner';
+import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin/members')({
   component: MembersDashboard,
@@ -194,7 +195,7 @@ function MembersDashboard() {
                 </div>
                 <div className="bg-[#121411] p-4 rounded-2xl border border-white/5">
                   <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-1">Renewal</p>
-                  <p className="text-[14px] text-white font-bold">12 Jun 2024</p>
+                  <p className="text-[14px] text-white font-bold">{selectedMember.join_date ? format(new Date(selectedMember.join_date), 'dd MMM yyyy') : 'N/A'}</p>
                 </div>
               </div>
 

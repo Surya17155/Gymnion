@@ -64,9 +64,9 @@ export function AdminDashboard() {
       console.error("Profile fetch error in admin dashboard:", profileError);
       const errorStr = String(profileError);
       
-      let errorReason = "Session verification failed";
+      let errorReason = "";
       if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('expired')) {
-        errorReason = "Your session has expired. Please sign in again.";
+        errorReason = ""; // No message for expired session as per user request
       } else if (errorStr.includes('403') || errorStr.includes('Forbidden')) {
         errorReason = "You do not have permission to access this area.";
       }
@@ -77,7 +77,7 @@ export function AdminDashboard() {
             to: '/auth/login', 
             search: { 
               redirect: window.location.pathname,
-              error: encodeURIComponent(errorReason)
+              error: errorReason ? encodeURIComponent(errorReason) : undefined
             } 
           });
         });
