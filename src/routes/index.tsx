@@ -23,7 +23,7 @@ function HomePage() {
         <span className="material-symbols-outlined text-[#B7FF1E] text-5xl" style={{ fontVariationSettings: '"FILL" 1' }}>fitness_center</span>
       </div>
       <h1 className="text-4xl font-bold mb-2">Gym<span className="text-[#B7FF1E]">Sync</span></h1>
-      <p className="text-[#858A7D] mb-12 text-center">I have connected the plan management system to the backend, enabling real-time saving and global updates for plans, pricing, and features. You can now toggle features between "Available" (green tick) and "Unavailable" (red cross) in the Super Admin dashboard, and these changes will be reflected instantly across the app, including on the Gym Admin dashboard.</p>
+      <p className="text-[#858A7D] mb-12 text-center"></p>
       
       <button 
         onClick={() => navigate({ to: "/auth/login", search: { redirect: "" } })}
