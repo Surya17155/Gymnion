@@ -102,6 +102,17 @@ export function AdminDashboard() {
   });
 
   const isActuallyLoading = isGymLoading || (gymData?.id && (isStatsLoading || isActivityLoading));
+  const hasAuthError = (statsError && String(statsError).includes('Unauthorized')) || 
+                       (activityError && String(activityError).includes('Unauthorized'));
+
+  useEffect(() => {
+    if (hasAuthError) {
+      console.warn("Auth error detected in stats/activity queries, signing out...");
+      supabase.auth.signOut().then(() => {
+        navigate({ to: '/auth/login', search: { redirect: window.location.pathname } });
+      });
+    }
+  }, [hasAuthError, navigate]);
 
   if (!gymData && isGymLoading) {
     return (
