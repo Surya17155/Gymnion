@@ -95,6 +95,7 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
 
     const { data, error } = await supabase.auth.getClaims(token);
     if (error || !data?.claims) {
+      console.error('[Supabase Middleware] Failed to get claims for token:', error);
       throw new Error('Unauthorized: Invalid token');
     }
 
