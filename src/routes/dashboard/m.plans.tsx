@@ -74,13 +74,6 @@ function MemberPlansPage() {
         </header>
 
         <section className="flex flex-col gap-4">
-          <div className="bg-[#B7FF1E]/10 border border-[#B7FF1E]/20 rounded-2xl p-4 flex items-start gap-3">
-            <LucideInfo className="w-5 h-5 text-[#B7FF1E] mt-0.5 shrink-0" />
-            <p className="text-[13px] text-[#C0C2B8] leading-relaxed">
-              Select a plan below. Your dashboard will automatically update to reflect the chosen amount for future payments.
-            </p>
-          </div>
-
           <div className="flex flex-col gap-3">
             {plans?.map((plan: any) => {
               const isSelected = profile?.fee_plan_id === plan.id;
