@@ -160,11 +160,11 @@ export function MemberDashboard() {
       />
       
       <main className="w-full max-w-[480px] min-h-screen relative pb-[100px] flex flex-col z-10 no-scrollbar">
-        <header className="flex justify-between items-center px-5 h-[80px] w-full sticky top-0 z-40 bg-transparent pt-6">
+        <header className="flex justify-between items-center px-5 pt-8 pb-4 w-full sticky top-0 z-40 bg-transparent">
           <div className="flex items-center gap-3">
             <div>
-              <h1 className="text-[18px] leading-[24px] font-semibold text-white">Hi, {profile?.first_name || profile?.full_name?.split(' ')[0] || 'Member'}</h1>
-              <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Ready to crush it today?</p>
+              <h1 className="text-[28px] leading-[32px] font-bold text-white tracking-tight">Hi, {profile?.first_name || profile?.full_name?.split(' ')[0] || 'Member'}</h1>
+              <p className="text-[14px] leading-[20px] text-[#C0C2B8] mt-1">Ready to crush it today?</p>
             </div>
           </div>
 
