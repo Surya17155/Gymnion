@@ -101,7 +101,7 @@ export function MemberDashboard() {
           <div className="flex items-center gap-3">
             <div>
               <h1 className="text-[18px] leading-[24px] font-semibold text-white">Hi, {profile?.first_name || profile?.full_name?.split(' ')[0] || 'Member'}</h1>
-              <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Ready to crush it today?</p>
+              <p className="text-[14px] leading-[20px] text-[#C0C2B8]">hello</p>
             </div>
           </div>
 
