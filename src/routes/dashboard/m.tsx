@@ -21,11 +21,28 @@ export function MemberDashboard() {
   useEffect(() => {
     if (profileError) {
       console.error("Profile fetch error in dashboard:", profileError);
-      // Only sign out if we're sure it's an auth error (like 401/403)
       const errorStr = String(profileError);
+      
+      // Detailed error categorization
+      let errorReason = "Session verification failed";
+      if (errorStr.includes('Unauthorized') || errorStr.includes('401')) {
+        errorReason = "Your session has expired. Please sign in again.";
+      } else if (errorStr.includes('403') || errorStr.includes('Forbidden')) {
+        errorReason = "You do not have permission to access this area.";
+      } else if (errorStr.includes('Failed to fetch')) {
+        errorReason = "Network error. Please check your connection.";
+      }
+
+      // If it's a critical auth error, redirect with the reason
       if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('403')) {
         supabase.auth.signOut().then(() => {
-          navigate({ to: '/auth/login', search: { redirect: window.location.pathname } });
+          navigate({ 
+            to: '/auth/login', 
+            search: { 
+              redirect: window.location.pathname,
+              error: encodeURIComponent(errorReason)
+            } 
+          });
         });
       }
     }
