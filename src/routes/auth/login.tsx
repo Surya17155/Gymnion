@@ -10,8 +10,9 @@ import { toast } from "sonner";
 export const Route = createFileRoute('/auth/login')({
   validateSearch: (search: Record<string, unknown>) => {
     return {
-      redirect: (search['redirect'] as string) || undefined
-    } as { redirect?: string }
+      redirect: (search['redirect'] as string) || undefined,
+      error: (search['error'] as string) || undefined
+    } as { redirect?: string; error?: string }
   },
   component: AuthPage,
 });
@@ -24,7 +25,13 @@ function AuthPage() {
 
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState(search.error || '');
+
+  useEffect(() => {
+    if (search.error) {
+      toast.error(decodeURIComponent(search.error));
+    }
+  }, [search.error]);
 
   useEffect(() => {
     const checkSession = async () => {

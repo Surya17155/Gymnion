@@ -51,13 +51,39 @@ export function AdminDashboard() {
   const getActivityFn = useServerFn(getRecentActivity);
   const getGymDetailsFn = useServerFn(getGymDetails);
 
-  const { data: gymData, isLoading: isGymLoading } = useQuery({
+  const { data: gymData, isLoading: isGymLoading, error: profileError } = useQuery({
     queryKey: ['admin-gym-settings'],
     queryFn: () => getGymDetailsFn({ data: undefined }),
     staleTime: 30000,
     gcTime: Infinity,
     retry: 1,
   });
+
+  useEffect(() => {
+    if (profileError) {
+      console.error("Profile fetch error in admin dashboard:", profileError);
+      const errorStr = String(profileError);
+      
+      let errorReason = "Session verification failed";
+      if (errorStr.includes('Unauthorized') || errorStr.includes('401')) {
+        errorReason = "Your session has expired. Please sign in again.";
+      } else if (errorStr.includes('403') || errorStr.includes('Forbidden')) {
+        errorReason = "You do not have permission to access this area.";
+      }
+
+      if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('403')) {
+        supabase.auth.signOut().then(() => {
+          navigate({ 
+            to: '/auth/login', 
+            search: { 
+              redirect: window.location.pathname,
+              error: encodeURIComponent(errorReason)
+            } 
+          });
+        });
+      }
+    }
+  }, [profileError, navigate]);
 
   const { data: stats, isLoading: isStatsLoading } = useQuery({
     queryKey: ['admin-stats', gymData?.id],

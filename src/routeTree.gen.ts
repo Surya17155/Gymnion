@@ -18,6 +18,7 @@ import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-passw
 import { Route as DashboardAdminRouteImport } from './routes/dashboard/admin'
 import { Route as DashboardMRouteImport } from './routes/dashboard/m'
 import { Route as DashboardSuperAdminRouteImport } from './routes/dashboard/super-admin'
+import { Route as ApiPublicAuthCheckRouteImport } from './routes/api/public/auth-check'
 import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard/admin.index'
 import { Route as DashboardAdminAccountRouteImport } from './routes/dashboard/admin.account'
 import { Route as DashboardAdminAttendanceRouteImport } from './routes/dashboard/admin.attendance'
@@ -84,6 +85,11 @@ const DashboardSuperAdminRoute = DashboardSuperAdminRouteImport.update({
   id: '/super-admin',
   path: '/super-admin',
   getParentRoute: () => DashboardRoute,
+} as any)
+const ApiPublicAuthCheckRoute = ApiPublicAuthCheckRouteImport.update({
+  id: '/api/public/auth-check',
+  path: '/api/public/auth-check',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardAdminIndexRoute = DashboardAdminIndexRouteImport.update({
   id: '/',
@@ -211,6 +217,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/admin': typeof DashboardAdminRouteWithChildren
   '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRouteWithChildren
+  '/api/public/auth-check': typeof ApiPublicAuthCheckRoute
   '/dashboard/admin/account': typeof DashboardAdminAccountRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
@@ -240,6 +247,7 @@ export interface FileRoutesByTo {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/api/public/auth-check': typeof ApiPublicAuthCheckRoute
   '/dashboard/admin/account': typeof DashboardAdminAccountRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
@@ -272,6 +280,7 @@ export interface FileRoutesById {
   '/dashboard/admin': typeof DashboardAdminRouteWithChildren
   '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRouteWithChildren
+  '/api/public/auth-check': typeof ApiPublicAuthCheckRoute
   '/dashboard/admin/account': typeof DashboardAdminAccountRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
@@ -306,6 +315,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin'
     | '/dashboard/m'
     | '/dashboard/super-admin'
+    | '/api/public/auth-check'
     | '/dashboard/admin/account'
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
@@ -335,6 +345,7 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
+    | '/api/public/auth-check'
     | '/dashboard/admin/account'
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
@@ -366,6 +377,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin'
     | '/dashboard/m'
     | '/dashboard/super-admin'
+    | '/api/public/auth-check'
     | '/dashboard/admin/account'
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
@@ -396,6 +408,7 @@ export interface RootRouteChildren {
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  ApiPublicAuthCheckRoute: typeof ApiPublicAuthCheckRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -462,6 +475,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/super-admin'
       preLoaderRoute: typeof DashboardSuperAdminRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/api/public/auth-check': {
+      id: '/api/public/auth-check'
+      path: '/api/public/auth-check'
+      fullPath: '/api/public/auth-check'
+      preLoaderRoute: typeof ApiPublicAuthCheckRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/dashboard/admin/': {
       id: '/dashboard/admin/'
@@ -728,6 +748,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
+  ApiPublicAuthCheckRoute: ApiPublicAuthCheckRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
