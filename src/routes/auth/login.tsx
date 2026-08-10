@@ -114,6 +114,8 @@ function AuthPage() {
       if (error) throw error;
       if (data.session) {
         clearRoleCache();
+        // Clear query cache to ensure fresh data after login
+        window.localStorage.removeItem('tanstack-query-cache');
         const role = await getRoleForUser(data.session.user.id);
         const home = homeForRole(role);
         
