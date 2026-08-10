@@ -68,8 +68,21 @@ export async function getRoleForUser(userId: string): Promise<Role> {
 
 export function clearRoleCache() {
   cachedRole = null;
-  if (typeof sessionStorage !== 'undefined') sessionStorage.removeItem('gymsync_role');
-  if (typeof localStorage !== 'undefined') localStorage.removeItem('gymsync_role_v2');
+  if (typeof sessionStorage !== 'undefined') {
+    // Clear all gymsync role keys
+    Object.keys(sessionStorage).forEach(key => {
+      if (key.startsWith('gymsync_role')) {
+        sessionStorage.removeItem(key);
+      }
+    });
+  }
+  if (typeof localStorage !== 'undefined') {
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('gymsync_role')) {
+        localStorage.removeItem(key);
+      }
+    });
+  }
 }
 
 export function homeForRole(role: Role): string | null {
