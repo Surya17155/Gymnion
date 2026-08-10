@@ -285,7 +285,7 @@ export function MemberDashboard() {
           
           <div className="relative -top-6">
             <button 
-              onClick={() => navigate({ to: `/checkin`, search: { gym: profile?.gym_id } })}
+              onClick={() => navigate({ to: `/checkin`, search: { scan: 'true' } })}
               className="w-16 h-16 bg-[#B7FF1E] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgba(213,255,64,0.3)] border-4 border-[#1e201d] hover:scale-105 transition-transform"
             >
               <span className="material-symbols-outlined text-[30px] text-[#293500]">qr_code_scanner</span>
