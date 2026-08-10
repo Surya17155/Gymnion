@@ -167,7 +167,7 @@ function GymDetailScreen() {
   const hasPlan = !!gym.global_plans?.name;
 
   return (
-    <div className={`min-h-screen bg-[#0A0B0A] antialiased ${editingSection ? '' : 'pb-10'} glow-top overflow-x-hidden relative`}>
+    <div className={`min-h-screen bg-[#0A0B0A] antialiased ${editingSection ? 'tab-bar-hidden' : 'pb-10'} glow-top overflow-x-hidden relative`}>
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       <style>{`
         .glow-top {
