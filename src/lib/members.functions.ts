@@ -140,7 +140,7 @@ export const recordAttendance = createServerFn({ method: "POST" })
       syncAttendanceToGoogleSheets({
         gymId,
         memberId: member.id,
-        checkInAt: newEntry.check_in_at,
+        checkInAt: newEntry.check_in_at!,
         checkOutAt: null
       }).catch(err => console.error('Google Sheets Sync Error:', err));
 
@@ -167,7 +167,7 @@ export const recordAttendance = createServerFn({ method: "POST" })
       syncAttendanceToGoogleSheets({
         gymId,
         memberId: member.id,
-        checkInAt: updatedEntry.check_in_at,
+        checkInAt: updatedEntry.check_in_at!,
         checkOutAt: updatedEntry.check_out_at
       }).catch(err => console.error('Google Sheets Sync Error:', err));
 
