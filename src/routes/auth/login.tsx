@@ -123,13 +123,13 @@ function AuthPage() {
         clearRoleCache();
         window.localStorage.removeItem('tanstack-query-cache');
         
-        // Fast-track role resolution
+        // Wait a tiny bit for the session to be fully synchronized in all storage mechanisms
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
         const role = await getRoleForUser(data.session.user.id);
         const home = homeForRole(role) || '/dashboard';
         
         console.log("Login successful, role:", role, "redirecting to:", home);
-        
-        // Use window.location.replace for cleaner history and immediate redirect
         window.location.replace(home);
       }
 

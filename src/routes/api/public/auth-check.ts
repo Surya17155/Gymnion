@@ -38,11 +38,23 @@ export const Route = createFileRoute('/api/public/auth-check')({
 
           const role = await getRoleForUser(user.id)
           
+          // belt-and-suspenders check for members
+          let hasMemberProfile = false;
+          if (role === 'member') {
+            const { data: member } = await supabase
+              .from('members')
+              .select('id')
+              .eq('user_id', user.id)
+              .maybeSingle();
+            hasMemberProfile = !!member;
+          }
+          
           return new Response(JSON.stringify({ 
             status: 'authenticated', 
             user_id: user.id,
             role: role,
-            email: user.email
+            email: user.email,
+            has_member_profile: hasMemberProfile
           }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
