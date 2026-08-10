@@ -38,9 +38,20 @@ function CheckInPage() {
       if (!session) {
         const currentUrl = window.location.pathname + window.location.search;
         navigate({ to: '/auth/login', search: { redirect: currentUrl } });
+        return;
       }
     });
-  }, [navigate]);
+
+    // Request camera permission explicitly for better UX
+    if (!effectiveGymId || shouldScan) {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(() => setCameraPermission('granted'))
+        .catch((err) => {
+          console.error("Camera permission error:", err);
+          setCameraPermission('denied');
+        });
+    }
+  }, [navigate, effectiveGymId, shouldScan]);
 
   const effectiveGymId = gymId || scannedGymId;
 
