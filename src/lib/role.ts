@@ -8,45 +8,57 @@ export const roleHome: Record<string, string> = {
   member: '/dashboard/m',
 };
 
-// In-memory cache so navigating between tabs never re-hits the network.
-let cachedRole: { userId: string; role: Role } | null = null;
-
+// Use sessionStorage for role to ensure it persists across tab reloads but stays within the session
+// This is faster than localStorage for this use case and cleaner.
 export async function getRoleForUser(userId: string): Promise<Role> {
+  const cacheKey = `gymsync_role_${userId}`;
+  
+  // 1. Check in-memory
   if (cachedRole && cachedRole.userId === userId) return cachedRole.role;
 
-  // Optimized role lookup: check DB but with hardcoded overrides for dev/seed accounts
+  // 2. Check sessionStorage (faster than DB, survives refresh)
+  if (typeof sessionStorage !== 'undefined') {
+    const stored = sessionStorage.getItem(cacheKey);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        cachedRole = { userId, role: parsed.role };
+        return parsed.role;
+      } catch (e) {
+        console.error('Failed to parse role from session storage', e);
+      }
+    }
+  }
+
+  // 3. Fast-path check for hardcoded admin emails
+  // We check the session directly to avoid extra DB calls if we already have the email
   const { data: sessionData } = await supabase.auth.getSession();
   const session = sessionData?.session;
   
-  // Hardcoded overrides for known admin accounts
+  let role: Role = null;
+  
   if (session?.user?.email === 'surya.17155@gmail.com') {
-    const role: Role = 'super_admin';
-    cachedRole = { userId, role };
-    return role;
+    role = 'super_admin';
+  } else if (session?.user?.email === 'amssre.17155@gmail.com') {
+    role = 'admin';
+  } else {
+    // 4. Fallback to DB lookup
+    const { data, error } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error fetching user role:', error);
+    }
+    role = (data?.role as Role) ?? null;
   }
 
-  if (session?.user?.email === 'amssre.17155@gmail.com') {
-    const role: Role = 'admin';
-    cachedRole = { userId, role };
-    return role;
-  }
-
-  // Final fallback to DB lookup
-  const { data, error } = await supabase
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', userId)
-    .maybeSingle();
-
-  if (error) {
-    console.error('Error fetching user role:', error);
-  }
-
-  const role = (data?.role as Role) ?? null;
   cachedRole = { userId, role };
   
-  if (typeof localStorage !== 'undefined') {
-    localStorage.setItem('gymsync_role_v2', JSON.stringify(cachedRole));
+  if (typeof sessionStorage !== 'undefined') {
+    sessionStorage.setItem(cacheKey, JSON.stringify({ role }));
   }
   
   return role;

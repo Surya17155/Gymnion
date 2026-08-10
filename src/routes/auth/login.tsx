@@ -114,23 +114,16 @@ function AuthPage() {
       if (error) throw error;
       if (data.session) {
         clearRoleCache();
-        // Clear query cache to ensure fresh data after login
         window.localStorage.removeItem('tanstack-query-cache');
+        
+        // Fast-track role resolution
         const role = await getRoleForUser(data.session.user.id);
-        const home = homeForRole(role);
+        const home = homeForRole(role) || '/dashboard';
         
         console.log("Login successful, role:", role, "redirecting to:", home);
         
-        if (role === 'admin' || role === 'super_admin' || role === 'member') {
-          // Force a small delay to ensure session is fully hydrated in storage before redirect
-          setTimeout(() => {
-            window.location.href = home ?? '/dashboard';
-          }, 100);
-        } else {
-          setTimeout(() => {
-            window.location.href = '/dashboard';
-          }, 100);
-        }
+        // Use window.location.replace for cleaner history and immediate redirect
+        window.location.replace(home);
       }
 
     } catch (err: any) {
