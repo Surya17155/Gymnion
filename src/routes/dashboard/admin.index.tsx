@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { AdminDashboard } from './admin';
 import { getAdminStats, getRecentActivity, getGymDetails } from '@/lib/auth.functions';
 
