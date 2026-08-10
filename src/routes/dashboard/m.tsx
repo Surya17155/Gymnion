@@ -27,7 +27,7 @@ export function MemberDashboard() {
       let errorReason = "Session verification failed";
       let isCritical = false;
 
-      if (errorStr.includes('Unauthorized') || errorStr.includes('401')) {
+      if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('expired')) {
         errorReason = "Your session has expired. Please sign in again.";
         isCritical = true;
       } else if (errorStr.includes('403') || errorStr.includes('Forbidden')) {

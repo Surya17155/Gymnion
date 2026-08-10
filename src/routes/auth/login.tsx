@@ -37,12 +37,20 @@ function AuthPage() {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        // If we have a session but we're on login, we should resolve role and redirect
-        // instead of just going to redirectPath which might be /dashboard (generic)
-        const role = await getRoleForUser(session.user.id);
-        const home = homeForRole(role) || '/dashboard';
-        console.log("Existing session found on login page, redirecting to:", home);
-        navigate({ to: home });
+        // Double check token validity
+        const expiresAt = session.expires_at || 0;
+        const now = Math.floor(Date.now() / 1000);
+        
+        if (expiresAt > now + 60) { // More than 60s remaining
+          const role = await getRoleForUser(session.user.id);
+          const home = homeForRole(role) || '/dashboard';
+          console.log("Valid session found on login page, redirecting to:", home);
+          navigate({ to: home });
+        } else {
+          console.log("Session expired or near expiry, staying on login");
+          await supabase.auth.signOut();
+          clearRoleCache();
+        }
       }
     };
     checkSession();
