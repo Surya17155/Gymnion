@@ -114,7 +114,7 @@ export function SuperAdminDashboard() {
     retry: 1,
   });
 
-  if (isLoading) return (
+  if (isLoading && !stats) return (
     <div className="flex items-center justify-center h-screen bg-[#0D0F0C]">
       <div className="w-8 h-8 border-2 border-[#B7FF1E]/20 border-t-[#B7FF1E] rounded-full animate-spin"></div>
     </div>
