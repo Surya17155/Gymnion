@@ -269,9 +269,18 @@ export function MemberDashboard() {
                   <h3 className="text-[18px] leading-[24px] font-semibold text-white">
                     {format(new Date(a.check_in_at!), 'EEEE')}
                   </h3>
-                  <p className="text-[12px] leading-[18px] text-[#C0C2B8]">
-                    {format(new Date(a.check_in_at!), 'hh:mm a')} Check-in
-                  </p>
+                  <div className="flex flex-col gap-0.5">
+                    <p className="text-[12px] leading-[18px] text-[#C0C2B8] flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-[14px] text-[#B7FF1E]">login</span>
+                      In: {format(new Date(a.check_in_at!), 'hh:mm a')}
+                    </p>
+                    {a.check_out_at && (
+                      <p className="text-[12px] leading-[18px] text-[#C0C2B8] flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-[14px] text-[#FF5964]">logout</span>
+                        Out: {format(new Date(a.check_out_at), 'hh:mm a')}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
