@@ -54,7 +54,23 @@ export async function getRoleForUser(userId: string): Promise<Role> {
     if (error) {
       console.error('Error fetching user role:', error);
     }
-    role = (data?.role as Role) ?? null;
+    
+    // If not found in user_roles, check if they are a member
+    if (!data?.role) {
+      const { data: memberData } = await supabase
+        .from('members')
+        .select('id')
+        .eq('user_id', userId)
+        .maybeSingle();
+      
+      if (memberData) {
+        role = 'member';
+      } else {
+        role = null;
+      }
+    } else {
+      role = (data.role as Role) ?? null;
+    }
   }
 
   cachedRole = { userId, role };
