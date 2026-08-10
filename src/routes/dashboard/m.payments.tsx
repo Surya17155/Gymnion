@@ -43,17 +43,12 @@ function MemberPayments() {
       />
       
       <main className="w-full max-w-[480px] min-h-screen relative pb-[120px] flex flex-col z-10 no-scrollbar">
-        <div className="flex justify-end px-5 w-full sticky top-0 z-40 h-[64px] items-center bg-transparent">
-          <button className="w-10 h-10 rounded-full flex items-center justify-center bg-[#1e201d] border border-white/5 text-[#B7FF1E] hover:opacity-80 transition-opacity">
-            <span className="material-symbols-outlined">notifications</span>
-          </button>
+        <div className="px-5 pt-8 pb-4">
+          <h2 className="text-[28px] leading-[32px] font-bold text-white tracking-tight">Payments</h2>
+          <p className="text-[14px] leading-[20px] text-[#858A7D] mt-1">Manage your gym subscriptions and history</p>
         </div>
 
-        <div className="flex-1 flex flex-col px-5 gap-[24px] pt-4">
-          <div>
-            <h2 className="text-[28px] leading-[32px] font-bold text-white tracking-tight">Payments</h2>
-            <p className="text-[14px] leading-[20px] text-[#858A7D] mt-1">Manage your gym subscriptions and history</p>
-          </div>
+        <div className="flex-1 flex flex-col px-5 gap-[24px]">
 
           <section>
             <div className="bg-[#1e201d] border border-white/5 rounded-2xl p-[20px] relative overflow-hidden group">
