@@ -208,8 +208,8 @@ export async function exportGymAttendanceToSheets(gymId: string) {
   // 4. Prepare values
   const headers = ['Date', 'Month-Year', 'Member Name', 'Email', 'Phone', 'Check-in', 'Check-out', 'Status'];
   const rows = attendance.map(a => {
-    const dtIn = DateTime.fromISO(a.check_in_at).setZone('Asia/Kolkata');
-    const dtOut = a.check_out_at ? DateTime.fromISO(a.check_out_at).setZone('Asia/Kolkata') : null;
+    const dtIn = DateTime.fromISO(a.check_in_at as string).setZone('Asia/Kolkata');
+    const dtOut = a.check_out_at ? DateTime.fromISO(a.check_out_at as string).setZone('Asia/Kolkata') : null;
     
     return [
       dtIn.toFormat('dd/MM/yyyy'),
