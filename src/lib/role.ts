@@ -43,33 +43,31 @@ export async function getRoleForUser(userId: string): Promise<Role> {
     role = 'super_admin';
   } else if (session?.user?.email === 'amssre.17155@gmail.com') {
     role = 'admin';
+  } else if (session?.user?.email === 'ramb40561@gmail.com') {
+    role = 'member';
   } else {
     // 4. Fallback to DB lookup
-    const { data, error } = await supabase
+    // Try user_roles first
+    const { data: roleData, error: roleError } = await supabase
       .from('user_roles')
       .select('role')
       .eq('user_id', userId)
       .maybeSingle();
 
-    if (error) {
-      console.error('Error fetching user role:', error);
-    }
+    if (roleError) console.error('Error fetching user_role:', roleError);
     
-    // If not found in user_roles, check if they are a member
-    if (!data?.role) {
-      const { data: memberData } = await supabase
+    if (roleData?.role) {
+      role = roleData.role as Role;
+    } else {
+      // Check members table if no role found in user_roles
+      const { data: memberData, error: memberError } = await supabase
         .from('members')
         .select('id')
         .eq('user_id', userId)
         .maybeSingle();
       
-      if (memberData) {
-        role = 'member';
-      } else {
-        role = null;
-      }
-    } else {
-      role = (data.role as Role) ?? null;
+      if (memberError) console.error('Error fetching member role:', memberError);
+      if (memberData) role = 'member';
     }
   }
 
