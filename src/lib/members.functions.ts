@@ -118,7 +118,6 @@ export const recordAttendance = createServerFn({ method: "POST" })
       });
 
       return { success: true, message: "Checked out successfully" };
-      return { success: true, message: "Checked out successfully" };
     }
   });
 

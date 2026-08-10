@@ -77,7 +77,7 @@ export function AdminDashboard() {
             to: '/auth/login', 
             search: { 
               redirect: window.location.pathname,
-              error: errorReason ? encodeURIComponent(errorReason) : undefined
+              error: errorReason ? encodeURIComponent(errorReason) : ""
             } 
           });
         });
