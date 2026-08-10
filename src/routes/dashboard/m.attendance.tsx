@@ -79,7 +79,7 @@ function AttendanceHistory() {
             </div>
             <div className="flex flex-col">
               <span className="text-[40px] leading-[40px] font-bold text-white tracking-tighter">
-                {stats.avgTime.split(' ')[0]}<span className="text-[18px] text-[#C0C2B8]">{stats.avgTime.split(' ')[0].replace(/\d+/g, '') || 'h'}</span> {stats.avgTime.split(' ')[1]}<span className="text-[18px] text-[#C0C2B8]">{stats.avgTime.split(' ')[1]?.replace(/\d+/g, '') || 'm'}</span>
+                {stats.avgTime.split(' ')[0]}<span className="text-[18px] text-[#C0C2B8]">{stats.avgTime.split(' ')[0]?.replace(/\d+/g, '') || 'h'}</span> {stats.avgTime.split(' ')[1]}<span className="text-[18px] text-[#C0C2B8]">{stats.avgTime.split(' ')[1]?.replace(/\d+/g, '') || 'm'}</span>
               </span>
               <span className="text-[11px] leading-[14px] font-semibold text-[#C0C2B8] mt-1 uppercase tracking-wider">Avg Time</span>
             </div>
