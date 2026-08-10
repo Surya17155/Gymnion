@@ -167,7 +167,7 @@ function GymDetailScreen() {
   const hasPlan = !!gym.global_plans?.name;
 
   return (
-    <div className="min-h-screen bg-[#0A0B0A] antialiased pb-10 glow-top overflow-x-hidden">
+    <div className={`min-h-screen bg-[#0A0B0A] antialiased ${editingSection ? '' : 'pb-10'} glow-top overflow-x-hidden relative`}>
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       <style>{`
         .glow-top {
@@ -415,7 +415,12 @@ function GymDetailScreen() {
       </main>
       
       {editingSection && (
-        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] px-5 py-6 bg-[#121411] border-t border-white/10 rounded-t-[32px] z-[999] animate-in slide-in-from-bottom duration-300 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]" style={{ zIndex: 999 }}>
+        <>
+          <div 
+            className="fixed inset-0 bg-black/60 z-[9998] animate-in fade-in duration-300"
+            onClick={() => setEditingSection(null)}
+          />
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] px-5 py-6 pb-safe bg-[#121411] border-t border-white/10 rounded-t-[32px] z-[9999] animate-in slide-in-from-bottom duration-300 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
           <div className="flex gap-3">
             <button 
               onClick={() => setEditingSection(null)}
@@ -435,6 +440,7 @@ function GymDetailScreen() {
             </button>
           </div>
         </div>
+      </>
       )}
     </div>
   );
