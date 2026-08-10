@@ -63,10 +63,8 @@ function CheckInPage() {
       toast.success(data.message);
       queryClient.invalidateQueries({ queryKey: ['my-attendance-status', effectiveGymId] });
       queryClient.invalidateQueries({ queryKey: ['my-attendance'] });
-      // After successful action, clear scan state if we were scanning
-      if (shouldScan) {
-        setTimeout(() => navigate({ to: '/dashboard/m' }), 2000);
-      }
+      // Keep showing the status screen with the new data for a moment
+      setTimeout(() => navigate({ to: '/dashboard/m' }), 4000);
     },
     onError: (error: any) => {
       toast.error(error.message || "Attendance recording failed");
@@ -132,17 +130,38 @@ function CheckInPage() {
       
       <div className="space-y-2">
         <h1 className="text-2xl font-bold italic tracking-tight uppercase text-white">
-          {effectiveGymId && statusData && !shouldScan ? (isCheckedIn ? 'Checking Out...' : 'Checking In...') : 'Scanning QR Code'}
+          {mutation.isSuccess 
+            ? (isCheckedIn ? 'Check In Success' : 'Check Out Success')
+            : (effectiveGymId && statusData && !shouldScan ? (isCheckedIn ? 'Checking Out...' : 'Checking In...') : 'Scanning QR Code')}
         </h1>
-        <p className="text-[#C0C2B8] max-w-[280px] mx-auto">
-          {effectiveGymId && statusData && !shouldScan
-            ? (isCheckedIn ? 'Recording your exit...' : 'Recording your entry...')
-            : 'Scan your gym\'s QR code to record attendance.'}
-        </p>
+        <div className="flex flex-col gap-1">
+          <p className="text-[#C0C2B8] max-w-[280px] mx-auto">
+            {mutation.isSuccess 
+              ? `You have successfully ${isCheckedIn ? 'checked in' : 'checked out'}.`
+              : (effectiveGymId && statusData && !shouldScan
+                  ? (isCheckedIn ? 'Recording your exit...' : 'Recording your entry...')
+                  : 'Scan your gym\'s QR code to record attendance.')}
+          </p>
+          {mutation.isSuccess && (
+            <p className="text-[#B7FF1E] font-mono text-sm font-bold">
+              {format(new Date(), 'hh:mm:ss a')}
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="w-full max-w-sm aspect-square bg-[#1e201d] border border-white/5 rounded-3xl flex items-center justify-center relative overflow-hidden">
-        {(!effectiveGymId || shouldScan) ? (
+        {mutation.isSuccess ? (
+          <div className="flex flex-col items-center gap-6 z-10 animate-in fade-in zoom-in duration-500">
+            <div className="w-24 h-24 rounded-full bg-[#B7FF1E] flex items-center justify-center shadow-[0_0_30px_rgba(183,255,30,0.4)]">
+              <span className="material-symbols-outlined text-[#293500] text-[48px]">check_circle</span>
+            </div>
+            <div className="text-center">
+              <p className="text-[12px] uppercase tracking-[0.2em] text-[#C0C2B8] mb-1">Status Updated</p>
+              <p className="text-white font-bold text-xl">{isCheckedIn ? 'Entrance Authorized' : 'Exit Recorded'}</p>
+            </div>
+          </div>
+        ) : (!effectiveGymId || shouldScan) ? (
           <div className="w-full h-full relative">
             <Scanner
               onScan={handleScan}
