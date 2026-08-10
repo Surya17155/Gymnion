@@ -75,7 +75,9 @@ export function AdminDashboard() {
     retry: 1,
   });
 
-  if (isGymLoading || (gymData?.id && (isStatsLoading || isActivityLoading))) {
+  const isActuallyLoading = isGymLoading || (gymData?.id && (isStatsLoading || isActivityLoading));
+
+  if (isActuallyLoading && !gymData && !stats && !recentActivity) {
     return (
       <div className="bg-[#121411] text-[#e3e3dd] min-h-screen flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
