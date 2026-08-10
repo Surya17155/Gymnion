@@ -24,27 +24,24 @@ export function MemberDashboard() {
       const errorStr = String(profileError);
       
       // Detailed error categorization
-      let errorReason = "Session verification failed";
+      let errorReason = ""; // Empty string for no error message by default
       let isCritical = false;
 
       if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('expired')) {
-        errorReason = "Your session has expired. Please sign in again.";
+        // The user specifically wants to remove "Your session has expired. Please sign in again."
+        errorReason = "";
         isCritical = true;
       } else if (errorStr.includes('403') || errorStr.includes('Forbidden')) {
         errorReason = "You do not have permission to access this area.";
         isCritical = true;
       } else if (errorStr.includes('PGRST116') || errorStr.includes('JSON object requested, multiple (or no) rows returned')) {
-        // This often means the member record is missing even if the user exists
         errorReason = "Profile record not found. Please contact support.";
         isCritical = true;
-      } else if (errorStr.includes('Failed to fetch')) {
-        errorReason = "Network error. Please check your connection.";
       }
 
-      // If it's a critical auth or data error, redirect with the reason
+      // If it's a critical auth or data error, redirect
       if (isCritical) {
         supabase.auth.signOut().then(() => {
-          // Clear all caches on logout to prevent loops
           if (typeof sessionStorage !== 'undefined') {
             Object.keys(sessionStorage).forEach(key => {
               if (key.startsWith('gymsync_role')) sessionStorage.removeItem(key);
@@ -56,7 +53,7 @@ export function MemberDashboard() {
             to: '/auth/login', 
             search: { 
               redirect: window.location.pathname,
-              error: encodeURIComponent(errorReason)
+              error: errorReason ? encodeURIComponent(errorReason) : undefined
             } 
           });
         });
