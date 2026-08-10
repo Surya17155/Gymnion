@@ -358,7 +358,7 @@ function SuperAdminPlans() {
       {isAddingOverride && (
         <>
           <div 
-            className="fixed inset-0 bg-black/60 z-[998] animate-in fade-in duration-300"
+            className="fixed inset-0 bg-black/60 z-[9998] animate-in fade-in duration-300"
             onClick={() => {
               if (!isSubmitting) {
                 setIsAddingOverride(false);
@@ -366,7 +366,7 @@ function SuperAdminPlans() {
               }
             }}
           />
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 pb-safe z-[999] animate-in slide-in-from-bottom duration-300 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] max-h-[90vh] overflow-y-auto" style={{ zIndex: 999 }}>
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 pb-safe z-[9999] animate-in slide-in-from-bottom duration-300 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] max-h-[90vh] overflow-y-auto">
             <div className="w-12 h-1 bg-white/10 rounded-full mx-auto mb-6" />
             
             <div className="flex items-center justify-between mb-6">
@@ -497,9 +497,9 @@ function SuperAdminPlans() {
 
       {/* Edit Plan Modal */}
       {isEditingPlan && selectedPlan && (
-        <div className="fixed inset-0 z-[110] flex flex-col justify-end">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !isSubmitting && setIsEditingPlan(false)}></div>
-          <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[16px] p-6 pb-24 w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-[9999] flex flex-col justify-end">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-[9998]" onClick={() => !isSubmitting && setIsEditingPlan(false)}></div>
+          <div className="relative bg-[#121411] border-t border-white/10 rounded-t-[16px] p-6 pb-safe w-full max-w-[480px] mx-auto animate-in slide-in-from-bottom duration-300 max-h-[90vh] overflow-y-auto z-[9999]">
             <div className="w-12 h-1.5 bg-[#1e201d] rounded-full mx-auto mb-6"></div>
             
             <h2 className="text-[20px] font-bold text-white mb-6">
