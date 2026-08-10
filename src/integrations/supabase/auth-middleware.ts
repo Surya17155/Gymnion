@@ -64,10 +64,14 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
 
     const token = authHeader.replace('Bearer ', '');
     if (!token) {
+      console.error('[Supabase Middleware] Empty token provided');
       throw new Error('Unauthorized: No token provided');
     }
 
+    // Relaxed token check for non-JWT tokens (like API keys) if needed,
+    // but here we check for the standard 3-part JWT structure.
     if (token.split('.').length !== 3) {
+      console.error('[Supabase Middleware] Invalid token structure (not 3 parts):', token.substring(0, 10) + '...');
       throw new Error('Unauthorized: Invalid token');
     }
 
@@ -89,8 +93,18 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
       }
     );
 
-    const { data, error } = await supabase.auth.getClaims(token);
+    // Attempt to verify the token with Supabase
+    let authResult;
+    try {
+      authResult = await supabase.auth.getClaims(token);
+    } catch (e) {
+      console.error('[Supabase Middleware] Exception during getClaims:', e);
+      throw new Error('Unauthorized: Invalid token');
+    }
+
+    const { data, error } = authResult;
     if (error || !data?.claims) {
+      console.error('[Supabase Middleware] Failed to get claims for token:', error || 'No claims returned');
       throw new Error('Unauthorized: Invalid token');
     }
 
