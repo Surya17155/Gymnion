@@ -101,6 +101,8 @@ export function SuperAdminDashboard() {
   const { data: stats, isLoading } = useQuery({
     queryKey: ['platform-stats'],
     queryFn: () => statsFn(),
+    staleTime: 5000,
+    retry: 1,
   });
 
   if (isLoading) return (
