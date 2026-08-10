@@ -221,22 +221,36 @@ export const getGymDetails = createServerFn({ method: 'GET' })
     let gymId = data.gymId;
 
     if (!gymId) {
-      const { data: roleData } = await supabaseAdmin
+      const { data: roleData, error: roleError } = await supabaseAdmin
         .from('user_roles')
         .select('gym_id')
         .eq('user_id', userId)
         .eq('role', 'admin')
-        .single();
+        .maybeSingle();
+      
+      if (roleError) {
+        console.error("Error fetching gym_id from user_roles:", roleError);
+        throw roleError;
+      }
+      
       gymId = roleData?.gym_id || undefined;
     }
     
-    if (!gymId) return null;
+    if (!gymId) {
+      console.warn(`No gym_id found for admin user ${userId}`);
+      return null;
+    }
 
-    const { data: gym } = await supabaseAdmin
+    const { data: gym, error: gymError } = await supabaseAdmin
       .from('gyms')
       .select('*')
       .eq('id', gymId)
       .single();
+    
+    if (gymError) {
+      console.error(`Error fetching gym details for id ${gymId}:`, gymError);
+      throw gymError;
+    }
     
     return gym as any;
   });

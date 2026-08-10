@@ -8,12 +8,12 @@ import { getAdminStats, getRecentActivity, getGymDetails } from '@/lib/auth.func
 import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin')({
-  beforeLoad: async () => {
+  beforeLoad: async ({ context }) => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       throw redirect({
         to: '/auth/login',
-        search: { redirect: '/dashboard/admin' }
+        search: { redirect: window.location.pathname }
       });
     }
   },

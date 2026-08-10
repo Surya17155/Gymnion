@@ -52,9 +52,13 @@ export async function getRoleForUser(userId: string): Promise<Role> {
       .from('user_roles')
       .select('role')
       .eq('user_id', userId)
+      .limit(1)
       .maybeSingle();
 
-    if (roleError) console.error('Error fetching user_role:', roleError);
+    if (roleError) {
+      console.error('Error fetching user_role:', roleError);
+      // If RLS/Permission error, we might still be able to check members if public access is allowed
+    }
     
     if (roleData?.role) {
       role = roleData.role as Role;
@@ -64,6 +68,7 @@ export async function getRoleForUser(userId: string): Promise<Role> {
         .from('members')
         .select('id')
         .eq('user_id', userId)
+        .limit(1)
         .maybeSingle();
       
       if (memberError) console.error('Error fetching member role:', memberError);
