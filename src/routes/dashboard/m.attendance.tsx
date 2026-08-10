@@ -22,7 +22,7 @@ function AttendanceHistory() {
   });
 
   const stats = useMemo(() => {
-    if (!attendance.length) return { total: 0, avgTime: '0h 0m' };
+    if (!attendance || !attendance.length) return { total: 0, avgTime: '0h 0m' };
     
     const total = attendance.length;
     let totalMinutes = 0;
@@ -93,23 +93,23 @@ function AttendanceHistory() {
           <div className="flex flex-col gap-2">
             {isLoading ? (
               <p className="text-center text-[#858A7D] py-10">Loading logs...</p>
-            ) : attendance.length > 0 ? (
+            ) : attendance && attendance.length > 0 ? (
               attendance.map((log) => (
                 <div key={log.id} className="bg-[#151714] rounded-xl p-4 border border-white/5 flex items-center justify-between hover:bg-[#1e201d] transition-colors backdrop-blur-sm relative overflow-hidden group">
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(213,255,64,0.03),transparent)] pointer-events-none rounded-xl"></div>
                   <div className="flex items-center gap-4 relative z-10">
                     <div className="w-12 h-12 rounded-[14px] bg-[#1e201d] flex flex-col items-center justify-center border border-white/5">
-                      <span className="text-[11px] font-bold text-[#B7FF1E] uppercase">{format(new Date(log.check_in_at!), 'MMM')}</span>
-                  <span className="text-[18px] font-bold text-white leading-none mt-1">{format(new Date(log.check_in_at!), 'dd')}</span>
+                      <span className="text-[11px] font-bold text-[#B7FF1E] uppercase">{log.check_in_at ? format(new Date(log.check_in_at), 'MMM') : '---'}</span>
+                      <span className="text-[18px] font-bold text-white leading-none mt-1">{log.check_in_at ? format(new Date(log.check_in_at), 'dd') : '--'}</span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[18px] font-semibold text-white">{format(new Date(log.check_in_at!), 'EEEE')}</span>
+                      <span className="text-[18px] font-semibold text-white">{log.check_in_at ? format(new Date(log.check_in_at), 'EEEE') : 'Unknown'}</span>
                     </div>
                   </div>
                   <div className="flex flex-col items-end text-right relative z-10">
                     <span className="text-[14px] text-white flex items-center gap-2">
                       <span className="material-symbols-outlined text-[#B7FF1E] text-[18px]" style={{ fontVariationSettings: '"FILL" 1' }}>login</span>
-                      {format(new Date(log.check_in_at!), 'HH:mm')}
+                      {log.check_in_at ? format(new Date(log.check_in_at), 'HH:mm') : '--:--'}
                     </span>
                     {log.check_out_at && (
                       <span className="text-[12px] text-[#858A7D] flex items-center gap-2 mt-0.5">
