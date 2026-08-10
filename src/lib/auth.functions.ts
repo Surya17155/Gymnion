@@ -33,7 +33,16 @@ export const getMyProfile = createServerFn({ method: 'GET' })
         *,
         fee_plans(*),
         gyms(
-          *,
+          id,
+          name,
+          address,
+          owner_name,
+          owner_email,
+          owner_phone,
+          owner_photo_url,
+          gym_code,
+          status,
+          created_at,
           global_plans(*)
         )
       `)
@@ -250,6 +259,38 @@ export const getGymDetails = createServerFn({ method: 'GET' })
     if (gymError) {
       console.error(`Error fetching gym details for id ${gymId}:`, gymError);
       throw gymError;
+    }
+
+    // Filter sensitive fields for members if they are not the admin of this gym
+    const { data: roleData } = await supabaseAdmin
+      .from('user_roles')
+      .select('role, gym_id')
+      .eq('user_id', userId)
+      .limit(1)
+      .maybeSingle();
+
+    const isAdmin = roleData?.role === 'admin' && roleData?.gym_id === gymId;
+    const isSuperAdmin = roleData?.role === 'super_admin';
+
+    if (!isAdmin && !isSuperAdmin) {
+      // It's a member or someone else
+      const { 
+        razorpay_account_id, 
+        owner_email, 
+        owner_phone, 
+        owner_name,
+        settings,
+        ...safeGym 
+      } = gym as any;
+
+      // Only allow public admin details requested by user: Name, profile pic, phone no., email and GYM address
+      return {
+        ...safeGym,
+        owner_name: gym.owner_name,
+        owner_email: gym.owner_email,
+        owner_phone: gym.owner_phone,
+        owner_photo_url: (gym as any).owner_photo_url
+      };
     }
     
     return gym as any;
