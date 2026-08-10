@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { getRoleForUser, clearRoleCache, homeForRole } from "@/lib/role";
 import { completeSignup } from "@/lib/members.functions";
+import { getGymByCode } from "@/lib/auth.functions";
 import { toast } from "sonner";
 
 
