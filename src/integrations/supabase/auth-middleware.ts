@@ -97,14 +97,24 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
     let authResult;
     try {
       authResult = await supabase.auth.getClaims(token);
-    } catch (e) {
+    } catch (e: any) {
       console.error('[Supabase Middleware] Exception during getClaims:', e);
+      // If it's a "JWT expired" or similar error, throw a more descriptive message
+      // that the client-side error categorization can pick up
+      const msg = e?.message || '';
+      if (msg.toLowerCase().includes('expired')) {
+        throw new Error('Unauthorized: Session expired');
+      }
       throw new Error('Unauthorized: Invalid token');
     }
 
     const { data, error } = authResult;
     if (error || !data?.claims) {
-      console.error('[Supabase Middleware] Failed to get claims for token:', error || 'No claims returned');
+      const errorMsg = error?.message || 'No claims returned';
+      console.error('[Supabase Middleware] Failed to get claims for token:', errorMsg);
+      if (errorMsg.toLowerCase().includes('expired')) {
+        throw new Error('Unauthorized: Session expired');
+      }
       throw new Error('Unauthorized: Invalid token');
     }
 

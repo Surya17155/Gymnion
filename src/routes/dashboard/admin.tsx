@@ -65,7 +65,7 @@ export function AdminDashboard() {
       const errorStr = String(profileError);
       
       let errorReason = "Session verification failed";
-      if (errorStr.includes('Unauthorized') || errorStr.includes('401')) {
+      if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('expired')) {
         errorReason = "Your session has expired. Please sign in again.";
       } else if (errorStr.includes('403') || errorStr.includes('Forbidden')) {
         errorReason = "You do not have permission to access this area.";
