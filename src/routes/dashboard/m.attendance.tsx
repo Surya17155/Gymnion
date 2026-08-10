@@ -100,7 +100,7 @@ function AttendanceHistory() {
                   <div className="flex items-center gap-4 relative z-10">
                     <div className="w-12 h-12 rounded-[14px] bg-[#1e201d] flex flex-col items-center justify-center border border-white/5">
                       <span className="text-[11px] font-bold text-[#B7FF1E] uppercase">{format(new Date(log.check_in_at!), 'MMM')}</span>
-                      <span className="text-[18px] font-bold text-white leading-none mt-1">{format(new Date(log.check_in_at!), 'dd')}</span>
+                  <span className="text-[18px] font-bold text-white leading-none mt-1">{format(new Date(log.check_in_at!), 'dd')}</span>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-[18px] font-semibold text-white">{format(new Date(log.check_in_at!), 'EEEE')}</span>
