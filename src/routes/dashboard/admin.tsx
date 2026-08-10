@@ -85,7 +85,7 @@ export function AdminDashboard() {
     }
   }, [profileError, navigate]);
 
-  const { data: stats, isLoading: isStatsLoading } = useQuery({
+  const { data: stats, isLoading: isStatsLoading, error: statsError } = useQuery({
     queryKey: ['admin-stats', gymData?.id],
     queryFn: () => getStatsFn({ data: { gymId: gymData!.id } }),
     enabled: !!gymData?.id,
@@ -93,7 +93,7 @@ export function AdminDashboard() {
     retry: 1,
   });
 
-  const { data: recentActivity, isLoading: isActivityLoading } = useQuery({
+  const { data: recentActivity, isLoading: isActivityLoading, error: activityError } = useQuery({
     queryKey: ['admin-activity', gymData?.id],
     queryFn: () => getActivityFn({ data: { gymId: gymData!.id } }),
     enabled: !!gymData?.id,
