@@ -232,6 +232,9 @@ export function SuperAdminGyms() {
       {/* Manual Pricing Drawer */}
       {selectedGymForPricing && (
         <>
+          <style>{`
+            nav { transform: translateY(100%); pointer-events: none; }
+          `}</style>
           <div 
             className="fixed inset-0 bg-black/60 z-[99998] animate-in fade-in duration-300"
             onClick={() => setSelectedGymForPricing(null)}
