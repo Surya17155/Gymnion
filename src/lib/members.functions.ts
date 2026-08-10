@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
+import { syncAttendanceToGoogleSheets } from "./attendance.server";
 
 export const updateMemberPlan = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -77,6 +78,14 @@ export const recordAttendance = createServerFn({ method: "POST" })
         .single();
       
       if (error) throw error;
+      
+      // Sync to Google Sheets
+      await syncAttendanceToGoogleSheets({
+        gymId: data.gymId,
+        memberId: member.id,
+        checkInAt: attendance.check_in_at as string
+      });
+
       return { success: true, message: "Checked in successfully", data: attendance };
     } else {
       const { data: latest } = await supabaseAdmin
@@ -90,12 +99,25 @@ export const recordAttendance = createServerFn({ method: "POST" })
 
       if (!latest) throw new Error("No active check-in found");
 
-      const { error } = await supabaseAdmin
+      const checkOutTime = new Date().toISOString();
+      const { data: updated, error } = await supabaseAdmin
         .from('attendance')
-        .update({ check_out_at: new Date().toISOString() })
-        .eq('id', latest.id);
+        .update({ check_out_at: checkOutTime })
+        .eq('id', latest.id)
+        .select('check_in_at, check_out_at')
+        .single();
       
       if (error) throw error;
+
+      // Sync to Google Sheets
+      await syncAttendanceToGoogleSheets({
+        gymId: data.gymId,
+        memberId: member.id,
+        checkInAt: updated.check_in_at as string,
+        checkOutAt: updated.check_out_at as string
+      });
+
+      return { success: true, message: "Checked out successfully" };
       return { success: true, message: "Checked out successfully" };
     }
   });

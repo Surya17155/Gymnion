@@ -2,8 +2,9 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
-import { getAttendanceDashboard, getCurrentGymId } from '@/lib/auth.functions';
+import { getAttendanceDashboard, getCurrentGymId, exportGymAttendance } from '@/lib/auth.functions';
 import { format } from 'date-fns';
+import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
 export const Route = createFileRoute('/dashboard/admin/attendance')({
@@ -24,8 +25,10 @@ export const Route = createFileRoute('/dashboard/admin/attendance')({
 
 function AttendanceDashboard() {
   const [tab, setTab] = useState<'today' | 'currently_in' | 'all'>('today');
+  const [isExporting, setIsExporting] = useState(false);
   const getAttendanceFn = useServerFn(getAttendanceDashboard);
   const getGymIdFn = useServerFn(getCurrentGymId);
+  const exportFn = useServerFn(exportGymAttendance);
   const queryClient = useQueryClient();
 
   const { data: gymId } = useQuery({
@@ -75,6 +78,19 @@ function AttendanceDashboard() {
 
   const list = getList();
 
+  const handleExport = async () => {
+    if (!gymId) return;
+    setIsExporting(true);
+    try {
+      const result = await exportFn({ data: { gymId } });
+      toast.success(`Data exported to Google Sheet: ${result.sheetName || 'Success'}`);
+    } catch (err: any) {
+      toast.error(`Export failed: ${err.message}`);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0D0F0C] text-[#e3e3dd] font-['Poppins'] pb-32">
       {/* Top Glow Effect */}
@@ -92,6 +108,14 @@ function AttendanceDashboard() {
             <h1 className="text-[32px] font-bold leading-[32px] tracking-[-0.04em] text-white mb-2">Attendance</h1>
             <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Real-time tracking</p>
           </div>
+          <button 
+            onClick={handleExport}
+            disabled={isExporting}
+            className="flex items-center gap-2 bg-[#D5FF40] text-black px-4 py-2 rounded-xl text-[12px] font-bold uppercase tracking-wider transition-all hover:opacity-90 disabled:opacity-50"
+          >
+            <span className="material-symbols-outlined text-[20px]">{isExporting ? 'sync' : 'export_notes'}</span>
+            {isExporting ? 'Exporting...' : 'Export'}
+          </button>
         </div>
 
         {/* Status Pills */}
@@ -141,20 +165,25 @@ function AttendanceDashboard() {
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-start mb-0.5">
                   <h3 className="font-bold text-[15px] text-white truncate">{visit.members?.full_name}</h3>
-                  <span className={`text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full ${
-                    visit.check_out_at ? 'bg-white/5 text-[#858A7D]' : 'bg-[#D5FF40]/10 text-[#D5FF40]'
-                  }`}>
-                    {visit.check_out_at ? 'Completed' : 'Inside'}
-                  </span>
+                  <div className="flex gap-2">
+                    <span className="text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full bg-[#22c55e]/10 text-[#22c55e]">
+                      IN
+                    </span>
+                    {visit.check_out_at && (
+                      <span className="text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full bg-[#ef4444]/10 text-[#ef4444]">
+                        OUT
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="flex items-center gap-2 text-[12px] text-[#858A7D] font-medium">
                   <span className="material-symbols-outlined text-[14px]">login</span>
-                  <span>{visit.check_in_at ? format(new Date(visit.check_in_at), 'hh:mm a') : 'N/A'}</span>
+                  <span className="text-[#22c55e]">{visit.check_in_at ? format(new Date(visit.check_in_at), 'hh:mm a') : 'N/A'}</span>
                   {visit.check_out_at && (
                     <>
                       <span className="w-1 h-1 rounded-full bg-[#3d3f3b]" />
                       <span className="material-symbols-outlined text-[14px]">logout</span>
-                      <span>{format(new Date(visit.check_out_at), 'hh:mm a')}</span>
+                      <span className="text-[#ef4444]">{format(new Date(visit.check_out_at), 'hh:mm a')}</span>
                     </>
                   )}
                 </div>
