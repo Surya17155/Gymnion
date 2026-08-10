@@ -29,6 +29,7 @@ function CheckInPage() {
   const [cameraPermission, setCameraPermission] = useState<'pending' | 'granted' | 'denied'>('pending');
 
   const effectiveGymId = gymId || scannedGymId;
+  const effectiveGymCode = gymCode || scannedGymCode;
 
   const recordAttendanceFn = useServerFn(recordAttendance);
   const getStatusFn = useServerFn(getMyAttendanceStatus);
@@ -58,7 +59,7 @@ function CheckInPage() {
   const { data: statusData, isLoading: isLoadingStatus } = useQuery({
     queryKey: ['my-attendance-status', effectiveGymId],
     queryFn: () => getStatusFn({ data: { gymId: effectiveGymId! } }),
-    enabled: !!effectiveGymId && !!session,
+    enabled: !!effectiveGymId && !!session && !shouldScan,
   });
 
   const mutation = useMutation({
@@ -92,18 +93,23 @@ function CheckInPage() {
       const gId = params.get('gym');
       const gCode = params.get('code');
       
-      if (gId) {
+      if (gId && gCode) {
         setScannedGymId(gId);
-        if (gCode) setScannedGymCode(gCode);
+        setScannedGymCode(gCode);
         toast.success("QR Scanned successfully!");
+        // Navigate to the same page but without 'scan=true' to trigger the attendance logic
+        navigate({ 
+          to: '/checkin', 
+          search: { gym: gId, code: gCode }, 
+          replace: true 
+        });
       } else {
-        toast.error("Invalid QR Code: Gym ID missing");
+        toast.error("Invalid QR Code: Gym data missing");
       }
     } catch (e) {
-      // If not a URL, try to parse as JSON or raw string
       toast.error("Invalid QR Code format");
     }
-  }, []);
+  }, [navigate]);
 
   const handleAction = () => {
     if (!effectiveGymId) return;
@@ -113,14 +119,10 @@ function CheckInPage() {
 
   // Automatically trigger action if we scanned a valid QR and have status
   useEffect(() => {
-    if (effectiveGymId && statusData && !mutation.isPending && !mutation.isSuccess) {
+    if (effectiveGymId && effectiveGymCode && statusData && !mutation.isPending && !mutation.isSuccess && !shouldScan) {
       handleAction();
-      // Reset shouldScan once we've triggered the action
-      if (shouldScan) {
-        navigate({ to: '/checkin', search: { gym: effectiveGymId, code: gymCode || scannedGymCode || undefined }, replace: true });
-      }
     }
-  }, [effectiveGymId, statusData]);
+  }, [effectiveGymId, effectiveGymCode, statusData, shouldScan]);
 
   if (loadingSession || (session && effectiveGymId && isLoadingStatus)) {
     return (
