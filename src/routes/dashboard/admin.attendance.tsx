@@ -108,6 +108,14 @@ function AttendanceDashboard() {
             <h1 className="text-[32px] font-bold leading-[32px] tracking-[-0.04em] text-white mb-2">Attendance</h1>
             <p className="text-[14px] leading-[20px] text-[#C0C2B8]">Real-time tracking</p>
           </div>
+          <button 
+            onClick={handleExport}
+            disabled={isExporting}
+            className="flex items-center gap-2 bg-[#D5FF40] text-black px-4 py-2 rounded-xl text-[12px] font-bold uppercase tracking-wider transition-all hover:opacity-90 disabled:opacity-50"
+          >
+            <span className="material-symbols-outlined text-[20px]">{isExporting ? 'sync' : 'export_notes'}</span>
+            {isExporting ? 'Exporting...' : 'Export'}
+          </button>
         </div>
 
         {/* Status Pills */}
