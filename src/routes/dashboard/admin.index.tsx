@@ -32,7 +32,7 @@ export const Route = createFileRoute('/dashboard/admin/')({
           to: '/auth/login',
           search: { 
             redirect: '/dashboard/admin',
-            error: encodeURIComponent("Your session has expired. Please sign in again.")
+            error: ""
           }
         });
       }
