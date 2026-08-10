@@ -22,7 +22,7 @@ export async function syncAttendanceToGoogleSheets(params: {
   const spreadsheetId = '1Eid3e2UkCCakxO4237L5XHVft4A78XeWeucGtqA5PnY';
 
   if (!serviceAccountJson) {
-    console.warn('GOOGLE_SHEETS_SERVICE_ACCOUNT_JSON missing. Skipping sync.');
+    console.warn('GOOGLE_SHEETS_SERVICE_ACCOUNT_JSON missing. Attendance sync is disabled.');
     return;
   }
 
