@@ -165,20 +165,25 @@ function AttendanceDashboard() {
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-start mb-0.5">
                   <h3 className="font-bold text-[15px] text-white truncate">{visit.members?.full_name}</h3>
-                  <span className={`text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full ${
-                    visit.check_out_at ? 'bg-white/5 text-[#858A7D]' : 'bg-[#D5FF40]/10 text-[#D5FF40]'
-                  }`}>
-                    {visit.check_out_at ? 'Completed' : 'Inside'}
-                  </span>
+                  <div className="flex gap-2">
+                    <span className="text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full bg-[#22c55e]/10 text-[#22c55e]">
+                      IN
+                    </span>
+                    {visit.check_out_at && (
+                      <span className="text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full bg-[#ef4444]/10 text-[#ef4444]">
+                        OUT
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="flex items-center gap-2 text-[12px] text-[#858A7D] font-medium">
                   <span className="material-symbols-outlined text-[14px]">login</span>
-                  <span>{visit.check_in_at ? format(new Date(visit.check_in_at), 'hh:mm a') : 'N/A'}</span>
+                  <span className="text-[#22c55e]">{visit.check_in_at ? format(new Date(visit.check_in_at), 'hh:mm a') : 'N/A'}</span>
                   {visit.check_out_at && (
                     <>
                       <span className="w-1 h-1 rounded-full bg-[#3d3f3b]" />
                       <span className="material-symbols-outlined text-[14px]">logout</span>
-                      <span>{format(new Date(visit.check_out_at), 'hh:mm a')}</span>
+                      <span className="text-[#ef4444]">{format(new Date(visit.check_out_at), 'hh:mm a')}</span>
                     </>
                   )}
                 </div>
