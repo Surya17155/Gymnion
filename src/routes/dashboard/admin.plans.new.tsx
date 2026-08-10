@@ -90,7 +90,6 @@ function AddPlanScreen() {
         </button>
         <div className="flex-1 flex justify-center pr-10">
           <h2 className="text-[20px] font-semibold tracking-[-0.015em] text-[#e3e3dd]">New Plan</h2>
-          <p className="text-[12px] text-[#858A7D]">hello</p>
         </div>
       </header>
 

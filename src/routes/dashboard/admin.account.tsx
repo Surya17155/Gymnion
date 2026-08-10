@@ -123,7 +123,6 @@ function AdminAccount() {
             <span className="material-symbols-outlined">arrow_back</span>
           </Link>
           <h1 className="text-xl font-bold text-white">Account Settings</h1>
-          <p className="text-[12px] text-[#858A7D]">hello</p>
         </header>
 
         <main className="px-[20px] py-6 flex flex-col gap-8">
@@ -194,7 +193,7 @@ function AdminAccount() {
               />
             </div>
             <h2 className="text-lg font-bold mt-4 text-white">{formData.full_name}</h2>
-            <p className="text-xs text-[#858A7D]">hello</p>
+            <p className="text-xs text-[#858A7D]">Gym Administrator</p>
           </section>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">

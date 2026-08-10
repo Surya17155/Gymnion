@@ -21,10 +21,7 @@ function AttendanceHistory() {
       <main className="w-full max-w-[480px] min-h-screen relative pb-[120px] flex flex-col z-10">
         {/* Header Section */}
         <header className="flex justify-between items-center px-6 pt-8 pb-4 relative">
-          <div className="flex flex-col">
-            <h1 className="text-[28px] leading-[32px] font-bold text-white tracking-tight">Attendance</h1>
-            <p className="text-[12px] text-[#858A7D]">hello</p>
-          </div>
+          <h1 className="text-[28px] leading-[32px] font-bold text-white tracking-tight">Attendance</h1>
           <button className="w-10 h-10 flex items-center justify-center rounded-full bg-[#121411] hover:bg-[#333532] transition-colors border border-white/5 text-[#858A7D] hover:text-[#B7FF1E]">
             <span className="material-symbols-outlined">calendar_month</span>
           </button>

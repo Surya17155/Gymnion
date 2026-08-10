@@ -185,7 +185,6 @@ function GymDetailScreen() {
             <span className="material-symbols-outlined">arrow_back</span>
           </Link>
           <h1 className="text-[20px] font-bold text-white">Gym Details</h1>
-          <p className="text-[12px] text-[#858A7D]">hello</p>
         </div>
 
         {/* Profile Card */}

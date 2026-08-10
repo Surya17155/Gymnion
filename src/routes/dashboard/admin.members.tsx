@@ -107,7 +107,7 @@ function MembersDashboard() {
         <div className="flex justify-between items-start mb-6">
           <div>
             <h1 className="text-[32px] font-bold leading-[32px] tracking-[-0.04em] text-white mb-2">Members</h1>
-            <p className="text-[14px] leading-[20px] text-[#C0C2B8]">hello</p>
+            <p className="text-[14px] leading-[20px] text-[#C0C2B8]">{members.length} Total Members</p>
           </div>
         </div>
 
