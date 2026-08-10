@@ -18,7 +18,7 @@ function SuperAdminLayout() {
       <Outlet />
       
       {!isGymDetail && (
-        <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-[100] flex justify-around items-center px-4 py-2 pb-safe rounded-t-[12px] max-w-[480px] left-1/2 -translate-x-1/2">
+        <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-[50] flex justify-around items-center px-4 py-2 pb-safe rounded-t-[12px] max-w-[480px] left-1/2 -translate-x-1/2">
           <Link 
             to="/dashboard/super-admin/"
             activeOptions={{ exact: true }}
