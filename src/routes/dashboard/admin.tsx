@@ -149,13 +149,26 @@ export function AdminDashboard() {
   const { data: activePlans } = useQuery({
     queryKey: ['global-plans-for-admin'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('global_plans')
-        .select('*')
-        .eq('is_active', true);
-      if (error) throw error;
-      return data;
-    }
+      // Admins might not have direct select access to global_plans via client SDK due to RLS
+      // Fallback to empty array if it fails rather than crashing the whole dashboard
+      try {
+        const { data, error } = await supabase
+          .from('global_plans')
+          .select('*')
+          .eq('is_active', true);
+        if (error) {
+          console.warn("Could not fetch global plans via client SDK:", error);
+          return [];
+        }
+        return data;
+      } catch (e) {
+        console.warn("Exception fetching global plans:", e);
+        return [];
+      }
+    },
+    retry: 1,
+    staleTime: 300000, // 5 minutes is plenty for plans
+
   });
 
   const currentPlan = activePlans?.find((p: any) => p.id === (gymData?.settings as any)?.plan_id);
