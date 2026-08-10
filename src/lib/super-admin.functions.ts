@@ -189,7 +189,9 @@ export const getPlatformRevenue = createServerFn({ method: "GET" })
         }
         
         const isOverdue = g.subscription_ends_at ? new Date(g.subscription_ends_at) < now : true;
-        const isPaid = (g.settings as any)?.payment_status === 'paid' || !isOverdue;
+        // Strict check: only count as paid if explicitly marked as 'paid' in settings AND NOT overdue
+        // For now, no real payments exist, so this will naturally show 0 revenue.
+        const isPaid = (g.settings as any)?.payment_status === 'paid' && !isOverdue;
         
         if (isPaid) {
           totalCollected += monthlyPaise;
@@ -203,7 +205,7 @@ export const getPlatformRevenue = createServerFn({ method: "GET" })
       totalCollected: Math.round(totalCollected / 100),
       paidCount,
       overdueCount,
-      growth: 15
+      growth: 0
     };
   });
 
