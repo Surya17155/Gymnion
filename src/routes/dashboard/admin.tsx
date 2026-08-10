@@ -190,7 +190,6 @@ export function AdminDashboard() {
           <section className="-mt-4">
             <h2 className="text-[40px] font-bold leading-[44px] tracking-[-0.04em] text-white">Hi, {gymData?.owner_first_name || gymData?.owner_name?.split(' ')[0] || ''}</h2>
             <p className="text-[#858A7D] text-sm mt-1">hello</p>
-            <p className="text-[#858A7D] text-sm mt-1">hello</p>
           </section>
 
           {/* Revenue Card (Full width) */}
