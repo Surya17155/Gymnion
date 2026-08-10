@@ -170,7 +170,7 @@ function SuperAdminPlans() {
   });
 
   return (
-    <div className={`flex-1 overflow-y-auto h-full w-full relative z-0 pb-24 md:pb-8 ${isAddingOverride ? 'tab-bar-hidden' : ''}`}>
+    <div className={`flex-1 overflow-y-auto h-full w-full relative z-0 pb-24 md:pb-8 ${isAddingOverride || isEditingPlan ? 'tab-bar-hidden' : ''}`}>
       {/* Atmospheric Glow */}
       <div className="fixed top-0 left-0 w-full h-96 bg-[#c9f232]/10 blur-[100px] pointer-events-none rounded-full -translate-y-1/2 z-0"></div>
       
