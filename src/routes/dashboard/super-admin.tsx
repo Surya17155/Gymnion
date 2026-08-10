@@ -191,7 +191,7 @@ export function SuperAdminDashboard() {
                 </div>
               </div>
               <div className="bg-[#151714]/80 backdrop-blur-md border border-white/5 rounded-xl p-4 flex flex-col justify-between min-h-[120px]">
-                <p className="text-[11px] font-semibold text-[#858A7D]">Monthly Rec. Rev</p>
+                <p className="text-[11px] font-semibold text-[#858A7D]">hello</p>
                 <div>
                   <p className="text-[28px] md:text-[32px] font-bold text-white">₹{stats?.mrr}</p>
                 </div>
