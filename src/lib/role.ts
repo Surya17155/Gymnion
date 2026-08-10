@@ -33,16 +33,18 @@ export async function getRoleForUser(userId: string): Promise<Role> {
   }
 
   // 3. Fast-path check for hardcoded admin emails
+  // We check the session directly to avoid extra DB calls if we already have the email
   const { data: sessionData } = await supabase.auth.getSession();
   const session = sessionData?.session;
-  const email = session?.user?.email;
   
   let role: Role = null;
   
-  if (email === 'surya.17155@gmail.com') {
+  if (session?.user?.email === 'surya.17155@gmail.com') {
     role = 'super_admin';
-  } else if (email === 'amssre.17155@gmail.com') {
+  } else if (session?.user?.email === 'amssre.17155@gmail.com') {
     role = 'admin';
+  } else if (session?.user?.email === 'ramb40561@gmail.com') {
+    role = 'member';
   } else {
     // 4. Fallback to DB lookup
     // Try user_roles first
