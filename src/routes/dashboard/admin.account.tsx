@@ -193,7 +193,7 @@ function AdminAccount() {
               />
             </div>
             <h2 className="text-lg font-bold mt-4 text-white">{formData.full_name}</h2>
-            <p className="text-xs text-[#858A7D]">Gym Administrator</p>
+            <p className="text-xs text-[#858A7D]">hello</p>
           </section>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">

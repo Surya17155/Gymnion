@@ -64,7 +64,7 @@ function AdminSettings() {
         <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-8">
           <section className="flex flex-col gap-1">
             <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white">Settings</h1>
-            <p className="text-[14px] leading-[20px] text-[#858A7D]">Manage your gym's operations.</p>
+            <p className="text-[14px] leading-[20px] text-[#858A7D]">hello</p>
           </section>
 
           {message.text && (
