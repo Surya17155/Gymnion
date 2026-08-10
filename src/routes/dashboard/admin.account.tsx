@@ -123,7 +123,7 @@ function AdminAccount() {
             <span className="material-symbols-outlined">arrow_back</span>
           </Link>
           <h1 className="text-xl font-bold text-white">Account Settings</h1>
-          <p className="text-[12px] text-[#858A7D]">hello</p>
+          <p className="text-[12px] text-[#858A7D]">{"\n"}</p>
         </header>
 
         <main className="px-[20px] py-6 flex flex-col gap-8">
