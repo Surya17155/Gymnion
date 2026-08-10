@@ -148,6 +148,24 @@ function ProfilePage() {
               </div>
             )}
           </div>
+          {/* Gym Plans Section */}
+          <div className="bg-[#121411] rounded-2xl p-4 border border-white/5 shadow-inner">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <LucideCreditCard className="w-5 h-5 text-[#B7FF1E]" />
+                <h3 className="text-[18px] font-semibold text-white">Subscription</h3>
+              </div>
+              <Link to="/dashboard/m/plans" className="text-[#B7FF1E] text-xs font-bold px-3 py-1 bg-[#333532] rounded-lg">View Plans</Link>
+            </div>
+            
+            <div className="flex flex-col gap-1">
+              <span className="text-[11px] text-[#C0C2B8] uppercase font-bold">Current Plan</span>
+              <div className="text-white text-sm flex items-center justify-between">
+                <span>{profile?.fee_plans?.name || 'No plan selected'}</span>
+                {profile?.fee_plans && <span className="text-[#B7FF1E] font-bold">₹{profile.fee_plans.amount}</span>}
+              </div>
+            </div>
+          </div>
         </section>
       </main>
 
