@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useNavigate, redirect } from '@tanstack/react-router';
 import { useState, useRef, useEffect } from 'react';
 import QRCode from 'qrcode';
 import { useQuery } from '@tanstack/react-query';
@@ -8,6 +8,15 @@ import { getAdminStats, getRecentActivity, getGymDetails } from '@/lib/auth.func
 import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin')({
+  beforeLoad: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw redirect({
+        to: '/auth/login',
+        search: { redirect: '/dashboard/admin' }
+      });
+    }
+  },
   component: AdminLayout,
 });
 
