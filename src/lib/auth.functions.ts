@@ -232,13 +232,13 @@ export const getGymDetails = createServerFn({ method: 'GET' })
     if (!gymId) {
       const { data: roleData, error: roleError } = await supabaseAdmin
         .from('user_roles')
-        .select('gym_id')
+        .select('gym_id, role')
         .eq('user_id', userId)
-        .eq('role', 'admin')
+        .limit(1)
         .maybeSingle();
       
       if (roleError) {
-        console.error("Error fetching gym_id from user_roles:", roleError);
+        console.error("Error fetching role info from user_roles:", roleError);
         throw roleError;
       }
       
@@ -306,8 +306,8 @@ export const getCurrentGymId = createServerFn({ method: 'GET' })
       .from('user_roles')
       .select('gym_id')
       .eq('user_id', userId)
-      .eq('role', 'admin')
-      .single();
+      .limit(1)
+      .maybeSingle();
 
     if (error || !data) return null;
     return data.gym_id;
@@ -324,8 +324,8 @@ export const getSubscriptionPlan = createServerFn({ method: 'GET' })
       .from('user_roles')
       .select('gym_id')
       .eq('user_id', userId)
-      .eq('role', 'admin')
-      .single();
+      .limit(1)
+      .maybeSingle();
 
     if (!roleData?.gym_id) return null;
 

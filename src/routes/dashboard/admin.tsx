@@ -13,7 +13,7 @@ export const Route = createFileRoute('/dashboard/admin')({
     if (!session) {
       throw redirect({
         to: '/auth/login',
-        search: { redirect: window.location.pathname }
+        search: { redirect: '/dashboard/admin' }
       });
     }
   },
@@ -103,13 +103,29 @@ export function AdminDashboard() {
 
   const isActuallyLoading = isGymLoading || (gymData?.id && (isStatsLoading || isActivityLoading));
 
-  if (isActuallyLoading && !gymData) {
+  if (!gymData && isGymLoading) {
     return (
       <div className="bg-[#121411] text-[#e3e3dd] min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-8 h-8 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
           <p className="text-sm text-[#C0C2B8]">Loading your dashboard...</p>
         </div>
+      </div>
+    );
+  }
+
+  if (!gymData && !isGymLoading) {
+    return (
+      <div className="bg-[#121411] text-[#e3e3dd] min-h-screen flex flex-col items-center justify-center p-6 text-center">
+        <span className="material-symbols-outlined text-6xl text-[#FF5964] mb-4">error</span>
+        <h2 className="text-xl font-bold mb-2">Gym Not Found</h2>
+        <p className="text-[#858A7D] mb-6">We couldn't find the gym associated with your account.</p>
+        <button
+          onClick={() => navigate({ to: '/auth/login' })}
+          className="bg-[#B7FF1E] text-[#293500] px-6 py-2 rounded-full font-bold"
+        >
+          Return to Login
+        </button>
       </div>
     );
   }
