@@ -236,7 +236,7 @@ export function SuperAdminGyms() {
             className="fixed inset-0 bg-black/60 z-[998] animate-in fade-in duration-300"
             onClick={() => setSelectedGymForPricing(null)}
           />
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 z-[999] animate-in slide-in-from-bottom duration-300 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#121411] border-t border-white/10 rounded-t-[32px] p-6 pb-safe z-[999] animate-in slide-in-from-bottom duration-300 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
             <div className="w-12 h-1 bg-white/10 rounded-full mx-auto mb-6" />
             
             <div className="flex items-center gap-3 mb-6">

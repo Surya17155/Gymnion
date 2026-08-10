@@ -415,7 +415,7 @@ function GymDetailScreen() {
       </main>
       
       {editingSection && (
-        <div className="w-full max-w-[480px] mx-auto px-5 mb-10">
+        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] px-5 py-6 bg-[#121411] border-t border-white/10 rounded-t-[32px] z-[999] animate-in slide-in-from-bottom duration-300 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
           <div className="flex gap-3">
             <button 
               onClick={() => setEditingSection(null)}
