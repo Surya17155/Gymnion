@@ -24,17 +24,23 @@ function AttendanceHistory() {
   const stats = useMemo(() => {
     if (!attendance || !attendance.length) return { total: 0, avgTime: '0h 0m' };
     
-    const total = attendance.length;
+    // Count unique days for the total
+    const uniqueDays = new Set();
     let totalMinutes = 0;
     let completedSessions = 0;
 
     attendance.forEach(session => {
-      if (session.check_in_at && session.check_out_at) {
-        totalMinutes += differenceInMinutes(new Date(session.check_out_at), new Date(session.check_in_at));
-        completedSessions++;
+      if (session.check_in_at) {
+        uniqueDays.add(format(new Date(session.check_in_at), 'yyyy-MM-dd'));
+        
+        if (session.check_out_at) {
+          totalMinutes += differenceInMinutes(new Date(session.check_out_at), new Date(session.check_in_at));
+          completedSessions++;
+        }
       }
     });
 
+    const total = uniqueDays.size;
     const avgMinutes = completedSessions > 0 ? Math.round(totalMinutes / completedSessions) : 0;
     const h = Math.floor(avgMinutes / 60);
     const m = avgMinutes % 60;
