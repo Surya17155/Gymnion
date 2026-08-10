@@ -198,14 +198,16 @@ export const getGymByCode = createServerFn({ method: 'GET' })
     gym_code: z.string(),
   }).parse(data))
   .handler(async ({ data }) => {
+    const code = data.gym_code.trim();
+    if (!code) return null;
     const { data: gym, error } = await supabaseAdmin
       .from('gyms')
       .select('id, name')
-      .eq('gym_code', data.gym_code)
-      .single();
-    
+      .ilike('gym_code', code)
+      .maybeSingle();
+
     if (error || !gym) return null;
-    return gym;
+    return { id: gym.id, name: gym.name };
   });
 
 export const getGymDetails = createServerFn({ method: 'GET' })

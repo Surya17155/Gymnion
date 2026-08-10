@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { getRoleForUser, clearRoleCache, homeForRole } from "@/lib/role";
 import { completeSignup } from "@/lib/members.functions";
+import { getGymByCode } from "@/lib/auth.functions";
 import { toast } from "sonner";
 
 
@@ -56,11 +57,7 @@ function AuthPage() {
       setGymName('');
       return null;
     }
-    const { data } = await supabase
-      .from('gyms')
-      .select('id, name')
-      .ilike('gym_code', trimmed)
-      .maybeSingle();
+    const data = await getGymByCode({ data: { gym_code: trimmed } });
     if (!data) {
       setGymCodeError('Invalid code');
       setGymName('');
