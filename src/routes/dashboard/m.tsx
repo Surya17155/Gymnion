@@ -261,26 +261,26 @@ export function MemberDashboard() {
             </div>
 
             {attendance?.slice(0, 3).map((a, i) => (
-              <div key={i} className="bg-[#1e201d] rounded-xl p-4 flex items-center gap-4 border border-white/5">
-                <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center text-[#B7FF1E]">
-                  <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>history</span>
-                </div>
-                <div>
+              <div key={i} className="bg-[#1e201d] rounded-xl p-4 flex items-center justify-between border border-white/5">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center text-[#B7FF1E]">
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>history</span>
+                  </div>
                   <h3 className="text-[18px] leading-[24px] font-semibold text-white">
                     {format(new Date(a.check_in_at!), 'EEEE')}
                   </h3>
-                  <div className="flex flex-col gap-0.5">
+                </div>
+                <div className="flex flex-col items-end gap-0.5">
+                  <p className="text-[12px] leading-[18px] text-[#C0C2B8] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[14px] text-[#B7FF1E]">login</span>
+                    In: {format(new Date(a.check_in_at!), 'hh:mm a')}
+                  </p>
+                  {a.check_out_at && (
                     <p className="text-[12px] leading-[18px] text-[#C0C2B8] flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-[14px] text-[#B7FF1E]">login</span>
-                      In: {format(new Date(a.check_in_at!), 'hh:mm a')}
+                      <span className="material-symbols-outlined text-[14px] text-[#FF5964]">logout</span>
+                      Out: {format(new Date(a.check_out_at), 'hh:mm a')}
                     </p>
-                    {a.check_out_at && (
-                      <p className="text-[12px] leading-[18px] text-[#C0C2B8] flex items-center gap-1.5">
-                        <span className="material-symbols-outlined text-[14px] text-[#FF5964]">logout</span>
-                        Out: {format(new Date(a.check_out_at), 'hh:mm a')}
-                      </p>
-                    )}
-                  </div>
+                  )}
                 </div>
               </div>
             ))}
