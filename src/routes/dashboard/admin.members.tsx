@@ -170,7 +170,7 @@ function MembersDashboard() {
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" 
             onClick={() => setSelectedMember(null)}
           />
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-[32px] z-[70] px-6 pt-2 pb-safe border-t border-white/10">
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-[32px] z-[999] px-6 pt-2 pb-safe border-t border-white/10">
             <div className="w-12 h-1 bg-white/10 rounded-full mx-auto my-4" />
             
             <div className="flex flex-col items-center text-center mb-8">
@@ -236,7 +236,7 @@ function MembersDashboard() {
 
 
       {/* Bottom Navigation */}
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px]">
+      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-[50] flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px]">
         <Link 
           to="/dashboard/admin" 
           activeOptions={{ exact: true }}
