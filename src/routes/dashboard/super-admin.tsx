@@ -115,8 +115,9 @@ export function SuperAdminDashboard() {
   });
 
   if (isLoading && !stats) return (
-    <div className="flex items-center justify-center h-screen bg-[#0D0F0C]">
+    <div className="flex flex-col items-center justify-center h-screen bg-[#0D0F0C] gap-4">
       <div className="w-8 h-8 border-2 border-[#B7FF1E]/20 border-t-[#B7FF1E] rounded-full animate-spin"></div>
+      <p className="text-sm text-[#C0C2B8]">Loading platform overview...</p>
     </div>
   );
 

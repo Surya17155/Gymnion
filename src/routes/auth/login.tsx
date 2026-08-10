@@ -120,11 +120,14 @@ function AuthPage() {
         console.log("Login successful, role:", role, "redirecting to:", home);
         
         if (role === 'admin' || role === 'super_admin' || role === 'member') {
-          // If we have a valid role, use the dedicated home
-          window.location.href = home ?? '/dashboard';
+          // Force a small delay to ensure session is fully hydrated in storage before redirect
+          setTimeout(() => {
+            window.location.href = home ?? '/dashboard';
+          }, 100);
         } else {
-          // Fallback if role is not yet fully synced/found
-          window.location.href = '/dashboard';
+          setTimeout(() => {
+            window.location.href = '/dashboard';
+          }, 100);
         }
       }
 

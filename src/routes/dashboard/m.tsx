@@ -85,6 +85,14 @@ export function MemberDashboard() {
     navigate({ to: '/auth/login', search: { redirect: "" } });
   };
 
+  if (isProfileLoading && !profile) {
+    return (
+      <div className="bg-[#121411] text-[#e3e3dd] min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex justify-center min-h-screen bg-[#121411] text-[#e3e3dd] antialiased font-['Poppins']">
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
@@ -97,7 +105,7 @@ export function MemberDashboard() {
       />
       
       <main className="w-full max-w-[480px] min-h-screen relative pb-[100px] flex flex-col z-10 no-scrollbar">
-        <header className="flex justify-between items-center px-5 h-[80px] w-full sticky top-0 z-40 bg-transparent pt-6">
+        <header className="flex justify-between items-center px-5 h-[80px] w-full sticky top-0 z-40 bg-[#121411]/80 backdrop-blur-md pt-6">
           <div className="flex items-center gap-3">
             <div>
               <h1 className="text-[18px] leading-[24px] font-semibold text-white">Hi, {profile?.first_name || profile?.full_name?.split(' ')[0] || 'Member'}</h1>

@@ -77,10 +77,13 @@ export function AdminDashboard() {
 
   const isActuallyLoading = isGymLoading || (gymData?.id && (isStatsLoading || isActivityLoading));
 
-  if (isActuallyLoading && !gymData && !stats && !recentActivity) {
+  if (isActuallyLoading && !gymData) {
     return (
       <div className="bg-[#121411] text-[#e3e3dd] min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-4 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-[#C0C2B8]">Loading your dashboard...</p>
+        </div>
       </div>
     );
   }
@@ -131,7 +134,7 @@ export function AdminDashboard() {
       {/* Main Mobile Container */}
       <div className="max-w-[480px] mx-auto min-h-screen pb-24 relative z-10 flex flex-col">
         {/* TopAppBar */}
-        <header className="flex justify-between items-center px-[20px] h-[64px] w-full sticky top-0 z-40 bg-transparent">
+        <header className="flex justify-between items-center px-[20px] h-[64px] w-full sticky top-0 z-40 bg-[#121411]/80 backdrop-blur-md">
           <div className="flex items-center gap-3">
           </div>
           <div className="relative" ref={dropdownRef}>
