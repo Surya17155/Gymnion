@@ -49,7 +49,7 @@ function MemberPayments() {
           </button>
         </div>
 
-        <div className="flex-1 flex flex-col px-5 gap-[24px]">
+        <div className="flex-1 flex flex-col px-5 gap-[24px] pt-4">
           <div>
             <h2 className="text-[28px] leading-[32px] font-bold text-white tracking-tight">Payments</h2>
             <p className="text-[14px] leading-[20px] text-[#858A7D] mt-1">Manage your gym subscriptions and history</p>
