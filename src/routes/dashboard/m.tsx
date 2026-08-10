@@ -33,16 +33,19 @@ export function MemberDashboard() {
   const getPaymentsFn = useServerFn(getMyPayments);
   const getAttendanceFn = useServerFn(getMyAttendance);
 
+  // Fetch payments and attendance in parallel only after profile is loaded
   const { data: payments } = useQuery({
     queryKey: ['my-payments', profile?.id],
     queryFn: () => getPaymentsFn({ data: { memberId: profile!.id, limit: 5 } }),
-    enabled: !!profile?.id
+    enabled: !!profile?.id,
+    staleTime: 1000 * 60 * 5,
   });
 
   const { data: attendance } = useQuery({
     queryKey: ['my-attendance', profile?.id],
     queryFn: () => getAttendanceFn({ data: { memberId: profile!.id } }),
-    enabled: !!profile?.id
+    enabled: !!profile?.id,
+    staleTime: 1000 * 60 * 5,
   });
 
   const lastPayment = payments?.[0];
