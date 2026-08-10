@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useLocation, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useLocation, useNavigate, redirect } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { getPlatformStats } from '@/lib/super-admin.functions';
@@ -6,6 +6,15 @@ import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export const Route = createFileRoute('/dashboard/super-admin')({
+  beforeLoad: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw redirect({
+        to: '/auth/login',
+        search: { redirect: '/dashboard/super-admin' }
+      });
+    }
+  },
   component: SuperAdminLayout,
 });
 
@@ -101,6 +110,8 @@ export function SuperAdminDashboard() {
   const { data: stats, isLoading } = useQuery({
     queryKey: ['platform-stats'],
     queryFn: () => statsFn(),
+    staleTime: 5000,
+    retry: 1,
   });
 
   if (isLoading) return (

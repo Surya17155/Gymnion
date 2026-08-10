@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useNavigate, redirect } from '@tanstack/react-router';
 import { useState, useRef, useEffect } from 'react';
 import QRCode from 'qrcode';
 import { useQuery } from '@tanstack/react-query';
@@ -8,6 +8,15 @@ import { getAdminStats, getRecentActivity, getGymDetails } from '@/lib/auth.func
 import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin')({
+  beforeLoad: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw redirect({
+        to: '/auth/login',
+        search: { redirect: '/dashboard/admin' }
+      });
+    }
+  },
   component: AdminLayout,
 });
 
@@ -45,24 +54,25 @@ export function AdminDashboard() {
   const { data: gymData, isLoading: isGymLoading } = useQuery({
     queryKey: ['admin-gym-settings'],
     queryFn: () => getGymDetailsFn({ data: undefined }),
-    staleTime: Infinity,
+    staleTime: 30000,
     gcTime: Infinity,
+    retry: 1,
   });
 
   const { data: stats, isLoading: isStatsLoading } = useQuery({
     queryKey: ['admin-stats', gymData?.id],
     queryFn: () => getStatsFn({ data: { gymId: gymData!.id } }),
     enabled: !!gymData?.id,
-    staleTime: 60000,
-    gcTime: Infinity,
+    staleTime: 30000,
+    retry: 1,
   });
 
   const { data: recentActivity, isLoading: isActivityLoading } = useQuery({
     queryKey: ['admin-activity', gymData?.id],
     queryFn: () => getActivityFn({ data: { gymId: gymData!.id } }),
     enabled: !!gymData?.id,
-    staleTime: 60000,
-    gcTime: Infinity,
+    staleTime: 30000,
+    retry: 1,
   });
 
   if (isGymLoading || (gymData?.id && (isStatsLoading || isActivityLoading))) {
