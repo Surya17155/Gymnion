@@ -285,12 +285,14 @@ export function MemberDashboard() {
                   </h3>
 
                 </div>
-                <div className="flex flex-col items-end gap-0.5">
+                <div className="flex flex-col items-end gap-1.5">
                   <p className="text-[12px] leading-[18px] text-[#C0C2B8] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[14px] text-[#B7FF1E]">login</span>
                     {format(new Date(a.check_in_at!), 'hh:mm a')}
                   </p>
                   {a.check_out_at && (
                     <p className="text-[12px] leading-[18px] text-[#C0C2B8] flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-[14px] text-[#FF5964]">logout</span>
                       {format(new Date(a.check_out_at), 'hh:mm a')}
                     </p>
                   )}
