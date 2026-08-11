@@ -89,7 +89,8 @@ export function AdminDashboard() {
     queryKey: ['admin-stats', gymData?.id],
     queryFn: () => getStatsFn({ data: { gymId: gymData!.id } }),
     enabled: !!gymData?.id,
-    staleTime: 30000,
+    staleTime: 0, // Force fresh fetch for real-time accuracy
+    refetchOnWindowFocus: true,
     retry: 1,
   });
 
@@ -97,7 +98,8 @@ export function AdminDashboard() {
     queryKey: ['admin-activity', gymData?.id],
     queryFn: () => getActivityFn({ data: { gymId: gymData!.id } }),
     enabled: !!gymData?.id,
-    staleTime: 30000,
+    staleTime: 0, // Force fresh fetch
+    refetchOnWindowFocus: true,
     retry: 1,
   });
 
@@ -148,6 +150,44 @@ export function AdminDashboard() {
       QRCode.toDataURL(checkinUrl, { width: 400, margin: 2 }).then(setQrUrl);
     }
   }, [gymData]);
+
+  useEffect(() => {
+    if (!gymData?.id) return;
+
+    const channel = supabase
+      .channel('admin-dashboard-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'payments',
+          filter: `gym_id=eq.${gymData.id}`
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['admin-stats', gymData.id] });
+          queryClient.invalidateQueries({ queryKey: ['admin-activity', gymData.id] });
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'attendance',
+          filter: `gym_id=eq.${gymData.id}`
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['admin-stats', gymData.id] });
+          queryClient.invalidateQueries({ queryKey: ['admin-activity', gymData.id] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [gymData?.id, queryClient]);
 
   const handleDownloadQR = () => {
     if (!qrUrl) return;
