@@ -32,6 +32,8 @@ function PaymentsDashboard() {
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState<'all' | 'paid' | 'pending'>('all');
   const [isRecording, setIsRecording] = useState(false);
+  const [memberSearchTerm, setMemberSearchTerm] = useState('');
+  const [isMemberDropdownOpen, setIsMemberDropdownOpen] = useState(false);
   const [newPayment, setNewPayment] = useState({ member_id: '', amount: 0, notes: '' });
 
   const getPaymentsFn = useServerFn(getPaymentsDashboard);
@@ -176,48 +178,103 @@ function PaymentsDashboard() {
           <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-3xl z-[999] p-6 border-t border-white/10">
             <h2 className="text-[22px] font-bold text-white mb-6">Record Payment</h2>
             <div className="space-y-4">
-              <div className="space-y-1">
+              <div className="space-y-1 relative">
                 <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Select Member</label>
-                <select 
-                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none appearance-none"
-                  value={newPayment.member_id}
-                  onChange={e => setNewPayment(prev => ({ ...prev, member_id: e.target.value }))}
-                >
-                  <option value="">Select a member</option>
-                  {members.map((member: any) => (
-                    <option key={member.id} value={member.id}>{member.full_name}</option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <input 
+                    type="text"
+                    className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
+                    placeholder="Search member by name..."
+                    value={memberSearchTerm}
+                    onChange={e => {
+                      setMemberSearchTerm(e.target.value);
+                      setIsMemberDropdownOpen(true);
+                    }}
+                    onFocus={() => setIsMemberDropdownOpen(true)}
+                  />
+                  {isMemberDropdownOpen && (
+                    <div className="absolute top-[calc(100%+4px)] left-0 right-0 bg-[#1e201d] border border-white/10 rounded-xl max-h-[200px] overflow-y-auto z-[1001] shadow-2xl">
+                      {members
+                        .filter((m: any) => 
+                          m.full_name.toLowerCase().includes(memberSearchTerm.toLowerCase())
+                        )
+                        .map((member: any) => (
+                          <div 
+                            key={member.id}
+                            className="px-4 py-3 hover:bg-[#D5FF40]/10 cursor-pointer text-white text-[14px] border-b border-white/5 last:border-0"
+                            onClick={() => {
+                              setNewPayment(prev => ({ 
+                                ...prev, 
+                                member_id: member.id,
+                                amount: member.fee_plans?.amount || 0 
+                              }));
+                              setMemberSearchTerm(member.full_name);
+                              setIsMemberDropdownOpen(false);
+                            }}
+                          >
+                            <div className="font-bold">{member.full_name}</div>
+                            {member.fee_plans && (
+                              <div className="text-[10px] text-[#858A7D] uppercase font-bold tracking-tight">
+                                Plan: {member.fee_plans.name} (₹{member.fee_plans.amount})
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      {members.filter((m: any) => m.full_name.toLowerCase().includes(memberSearchTerm.toLowerCase())).length === 0 && (
+                        <div className="px-4 py-3 text-[#858A7D] text-[12px] italic">No members found</div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
+
               <div className="space-y-1">
-                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Amount (₹)</label>
-                <input 
-                  type="number"
-                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-white focus:border-[#D5FF40] outline-none"
-                  value={newPayment.amount || ''}
-                  onChange={e => setNewPayment(prev => ({ ...prev, amount: Number(e.target.value) }))}
-                  placeholder="0"
-                />
+                <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Plan & Amount (₹)</label>
+                <div className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 flex items-center text-white">
+                  {newPayment.member_id ? (
+                    <div className="flex-1 flex justify-between items-center">
+                      <span className="font-bold text-[14px]">
+                        {members.find((m: any) => m.id === newPayment.member_id)?.fee_plans?.name || 'Manual Amount'}
+                      </span>
+                      <span className="text-[#D5FF40] font-bold">₹{newPayment.amount}</span>
+                    </div>
+                  ) : (
+                    <span className="text-[#858A7D] text-[14px]">Select a member to see plan</span>
+                  )}
+                </div>
+                {newPayment.member_id && !members.find((m: any) => m.id === newPayment.member_id)?.fee_plans && (
+                   <input 
+                     type="number"
+                     className="w-full h-10 mt-2 bg-white/5 border border-white/5 rounded-lg px-3 text-[13px] text-white focus:border-[#D5FF40] outline-none"
+                     placeholder="Enter manual amount"
+                     value={newPayment.amount || ''}
+                     onChange={e => setNewPayment(prev => ({ ...prev, amount: Number(e.target.value) }))}
+                   />
+                )}
               </div>
+
               <div className="space-y-1">
                 <label className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Notes</label>
                 <textarea 
-                  className="w-full h-24 bg-[#1e201d] border border-white/10 rounded-xl p-4 text-white focus:border-[#D5FF40] outline-none resize-none"
+                  className="w-full h-20 bg-[#1e201d] border border-white/10 rounded-xl p-4 text-white focus:border-[#D5FF40] outline-none resize-none"
                   value={newPayment.notes}
                   onChange={e => setNewPayment(prev => ({ ...prev, notes: e.target.value }))}
-                  placeholder="Payment for June..."
+                  placeholder="Payment for current month..."
                 />
               </div>
               <div className="flex gap-3 pt-4">
                 <button 
-                  onClick={() => setIsRecording(false)}
+                  onClick={() => {
+                    setIsRecording(false);
+                    setMemberSearchTerm('');
+                  }}
                   className="flex-1 h-14 bg-white/5 text-[#858A7D] font-bold rounded-2xl active:scale-95 transition-all"
                 >
                   Cancel
                 </button>
                 <button 
                   onClick={handleRecordPayment}
-                  className="flex-[2] h-14 bg-[#D5FF40] text-black font-bold rounded-2xl shadow-[0_8px_20px_rgba(213,255,64,0.2)] active:scale-95 transition-all"
+                  className="flex-1 h-14 bg-[#D5FF40] text-black font-bold rounded-2xl shadow-[0_8px_20px_rgba(213,255,64,0.2)] active:scale-95 transition-all"
                 >
                   Record
                 </button>
