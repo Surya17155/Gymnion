@@ -113,10 +113,24 @@ export function MemberDashboard() {
 
   const nextDue = useMemo(() => {
     if (!profile?.join_date) return 'N/A';
-    // Simple logic for monthly cycle
-    const now = new Date();
-    return format(new Date(now.getFullYear(), now.getMonth() + 1, 1), 'MMM do');
-  }, [profile]);
+    
+    const billingDay = profile.billing_day || new Date(profile.join_date).getDate();
+    const latestPayment = payments
+      ?.filter((p: any) => p.status === 'paid' || p.status === 'paid_verified')
+      .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+    
+    const baseDate = latestPayment ? new Date(latestPayment.created_at) : new Date(profile.join_date);
+    let dueYear = baseDate.getFullYear();
+    let dueMonth = baseDate.getMonth() + 1;
+    
+    if (dueMonth > 11) {
+      dueMonth = dueMonth - 12;
+      dueYear++;
+    }
+    
+    const dueDate = new Date(dueYear, dueMonth, billingDay);
+    return format(dueDate, 'MMM do');
+  }, [profile, payments]);
 
   const isPaymentsEnabled = profile?.gyms?.global_plans?.features 
     ? (profile.gyms.global_plans.features as any).payments !== false 
