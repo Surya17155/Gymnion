@@ -173,7 +173,7 @@ export const getMembers = createServerFn({ method: 'GET' })
   .handler(async ({ data }) => {
     let query = supabaseAdmin
       .from('members')
-      .select('*, fee_plans(name, amount)');
+      .select('*, fee_plans(name, amount), payments(status, payment_month)');
     
     if (data.gymId) {
       query = query.eq('gym_id', data.gymId);
