@@ -113,9 +113,9 @@ function ProfilePage() {
                       inputMode="numeric"
                       placeholder="DD"
                       maxLength={2}
-                      defaultValue={tempProfile.dob ? tempProfile.dob.split('-')[2] : ''}
-                      onBlur={(e) => {
-                        const day = e.target.value.padStart(2, '0').slice(-2);
+                      value={tempProfile.dob ? tempProfile.dob.split('-')[2] : ''}
+                      onChange={(e) => {
+                        const day = e.target.value.replace(/\D/g, '').slice(0, 2);
                         const parts = (tempProfile.dob || '0000-00-00').split('-');
                         setTempProfile((prev: any) => ({...prev, dob: `${parts[0]}-${parts[1]}-${day}`}));
                       }}
