@@ -4,7 +4,7 @@ create a simple project with a white blank page first without wasting more credi
 
 This project was built with [Lovable](https://lovable.dev).
 
-**Live app**: https://gymsync2.lovable.app
+**Live app**: https://gymnion.lovable.app
 
 ## Build with Lovable
 
