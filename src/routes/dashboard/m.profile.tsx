@@ -86,15 +86,20 @@ function ProfilePage() {
 
       console.log('Upload successful:', uploadData);
 
-      // Get the public URL
-      const { data: { publicUrl } } = supabase.storage
+      // Get the signed URL for the private file
+      const { data: signedData, error: signedError } = await supabase.storage
         .from('members')
-        .getPublicUrl(filePath);
+        .createSignedUrl(filePath, 60 * 60 * 24 * 365); // 1 year
 
-      console.log('Generated public URL:', publicUrl);
+      if (signedError) {
+        console.error('Error creating signed URL:', signedError);
+        throw signedError;
+      }
+
+      console.log('Generated signed URL:', signedData.signedUrl);
 
       // Update the profile with the new photo_url
-      await updateMutation.mutateAsync({ photo_url: publicUrl });
+      await updateMutation.mutateAsync({ photo_url: signedData.signedUrl });
       
     } catch (error: any) {
       console.error('Error uploading photo:', error);
