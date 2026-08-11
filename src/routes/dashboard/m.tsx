@@ -124,7 +124,7 @@ export function MemberDashboard() {
     let dueMonth = baseDate.getMonth() + 1;
     
     if (dueMonth > 11) {
-      dueMonth = dueMonth - 12;
+      dueMonth = 0;
       dueYear++;
     }
     
