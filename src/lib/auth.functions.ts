@@ -100,14 +100,14 @@ export const getMyAttendance = createServerFn({ method: 'GET' })
 export const updateMyProfile = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
   .validator((data: any) => z.object({
-    phone: z.string().optional(),
-    email: z.string().optional(),
-    photo_url: z.string().optional(),
-    full_name: z.string().optional(),
-    first_name: z.string().optional(),
-    last_name: z.string().optional(),
-    dob: z.string().optional(),
-    address: z.string().optional()
+    phone: z.string().optional().nullable(),
+    email: z.string().optional().nullable(),
+    photo_url: z.string().optional().nullable(),
+    full_name: z.string().optional().nullable(),
+    first_name: z.string().optional().nullable(),
+    last_name: z.string().optional().nullable(),
+    dob: z.string().optional().nullable(),
+    address: z.string().optional().nullable()
   }).parse(data))
 
   .handler(async ({ data, context }) => {
