@@ -107,52 +107,46 @@ function ProfilePage() {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] text-[#C0C2B8] uppercase font-bold">Date of Birth</label>
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="flex flex-col gap-1">
-                      <input 
-                        type="text" 
-                        inputMode="numeric"
-                        placeholder="DD"
-                        maxLength={2}
-                        value={tempProfile.dob ? tempProfile.dob.split('-')[2] || '' : ''} 
-                        onChange={(e) => {
-                          const day = e.target.value.replace(/\D/g, '');
-                          const parts = (tempProfile.dob || '0000-00-00').split('-');
-                          setTempProfile((prev: any) => ({...prev, dob: `${parts[0]}-${parts[1]}-${day.padStart(2, '0')}`}));
-                        }} 
-                        className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none text-center" 
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <input 
-                        type="text" 
-                        inputMode="numeric"
-                        placeholder="MM"
-                        maxLength={2}
-                        value={tempProfile.dob ? tempProfile.dob.split('-')[1] || '' : ''} 
-                        onChange={(e) => {
-                          const month = e.target.value.replace(/\D/g, '');
-                          const parts = (tempProfile.dob || '0000-00-00').split('-');
-                          setTempProfile((prev: any) => ({...prev, dob: `${parts[0]}-${month.padStart(2, '0')}-${parts[2]}`}));
-                        }} 
-                        className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none text-center" 
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <input 
-                        type="text" 
-                        inputMode="numeric"
-                        placeholder="YYYY"
-                        maxLength={4}
-                        value={tempProfile.dob ? tempProfile.dob.split('-')[0] || '' : ''} 
-                        onChange={(e) => {
-                          const year = e.target.value.replace(/\D/g, '');
-                          const parts = (tempProfile.dob || '0000-00-00').split('-');
-                          setTempProfile((prev: any) => ({...prev, dob: `${year}-${parts[1]}-${parts[2]}`}));
-                        }} 
-                        className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none text-center" 
-                      />
-                    </div>
+                  <div className="flex gap-2">
+                    <input 
+                      type="text" 
+                      inputMode="numeric"
+                      placeholder="DD"
+                      maxLength={2}
+                      value={tempProfile.dob ? tempProfile.dob.split('-')[2] : ''}
+                      onChange={(e) => {
+                        const day = e.target.value.replace(/\D/g, '').slice(0, 2);
+                        const parts = (tempProfile.dob || '0000-00-00').split('-');
+                        setTempProfile((prev: any) => ({...prev, dob: `${parts[0]}-${parts[1]}-${day}`}));
+                      }}
+                      className="w-16 bg-[#1e201d] border border-white/10 rounded-lg px-2 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none text-center" 
+                    />
+                    <input 
+                      type="text" 
+                      inputMode="numeric"
+                      placeholder="MM"
+                      maxLength={2}
+                      value={tempProfile.dob ? tempProfile.dob.split('-')[1] : ''}
+                      onChange={(e) => {
+                        const month = e.target.value.replace(/\D/g, '').slice(0, 2);
+                        const parts = (tempProfile.dob || '0000-00-00').split('-');
+                        setTempProfile((prev: any) => ({...prev, dob: `${parts[0]}-${month}-${parts[2]}`}));
+                      }}
+                      className="w-16 bg-[#1e201d] border border-white/10 rounded-lg px-2 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none text-center" 
+                    />
+                    <input 
+                      type="text" 
+                      inputMode="numeric"
+                      placeholder="YYYY"
+                      maxLength={4}
+                      value={tempProfile.dob ? tempProfile.dob.split('-')[0] : ''}
+                      onChange={(e) => {
+                        const year = e.target.value.replace(/\D/g, '').slice(0, 4);
+                        const parts = (tempProfile.dob || '0000-00-00').split('-');
+                        setTempProfile((prev: any) => ({...prev, dob: `${year}-${parts[1]}-${parts[2]}`}));
+                      }}
+                      className="flex-1 bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none text-center" 
+                    />
                   </div>
                 </div>
                 <div className="flex justify-end gap-2">
@@ -175,12 +169,12 @@ function ProfilePage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <span className="text-[11px] text-[#C0C2B8] uppercase font-bold">Date of Birth</span>
-                    <div className="text-white text-sm">{profile?.dob ? format(new Date(profile.dob), 'dd MMM yyyy') : 'Not provided'}</div>
+                    <div className="text-white text-sm">{profile?.dob && profile.dob !== '0000-00-00' ? format(new Date(profile.dob), 'dd MMM yyyy') : 'Not provided'}</div>
                   </div>
                   <div>
                     <span className="text-[11px] text-[#C0C2B8] uppercase font-bold">Age</span>
                     <div className="text-[#B7FF1E] text-sm font-bold">
-                      {profile?.dob ? `${Math.floor((new Date().getTime() - new Date(profile.dob).getTime()) / (1000 * 60 * 60 * 24 * 365.25))} Years` : 'N/A'}
+                      {profile?.dob && profile.dob !== '0000-00-00' ? `${Math.floor((new Date().getTime() - new Date(profile.dob).getTime()) / (1000 * 60 * 60 * 24 * 365.25))} Years` : 'N/A'}
                     </div>
                   </div>
                 </div>
