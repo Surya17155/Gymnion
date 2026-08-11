@@ -340,6 +340,7 @@ export type Database = {
       members: {
         Row: {
           address: string | null
+          billing_day: number | null
           created_at: string | null
           deleted_at: string | null
           dob: string | null
@@ -359,6 +360,7 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          billing_day?: number | null
           created_at?: string | null
           deleted_at?: string | null
           dob?: string | null
@@ -378,6 +380,7 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          billing_day?: number | null
           created_at?: string | null
           deleted_at?: string | null
           dob?: string | null
