@@ -107,10 +107,53 @@ function ProfilePage() {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] text-[#C0C2B8] uppercase font-bold">Date of Birth</label>
-                  <input type="date" value={tempProfile.dob || ''} onChange={(e) => {
-                    const val = e.target.value;
-                    setTempProfile((prev: any) => ({...prev, dob: val}));
-                  }} className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none w-full" />
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="flex flex-col gap-1">
+                      <input 
+                        type="text" 
+                        inputMode="numeric"
+                        placeholder="DD"
+                        maxLength={2}
+                        value={tempProfile.dob ? tempProfile.dob.split('-')[2] || '' : ''} 
+                        onChange={(e) => {
+                          const day = e.target.value.replace(/\D/g, '');
+                          const parts = (tempProfile.dob || '0000-00-00').split('-');
+                          setTempProfile((prev: any) => ({...prev, dob: `${parts[0]}-${parts[1]}-${day.padStart(2, '0')}`}));
+                        }} 
+                        className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none text-center" 
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <input 
+                        type="text" 
+                        inputMode="numeric"
+                        placeholder="MM"
+                        maxLength={2}
+                        value={tempProfile.dob ? tempProfile.dob.split('-')[1] || '' : ''} 
+                        onChange={(e) => {
+                          const month = e.target.value.replace(/\D/g, '');
+                          const parts = (tempProfile.dob || '0000-00-00').split('-');
+                          setTempProfile((prev: any) => ({...prev, dob: `${parts[0]}-${month.padStart(2, '0')}-${parts[2]}`}));
+                        }} 
+                        className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none text-center" 
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <input 
+                        type="text" 
+                        inputMode="numeric"
+                        placeholder="YYYY"
+                        maxLength={4}
+                        value={tempProfile.dob ? tempProfile.dob.split('-')[0] || '' : ''} 
+                        onChange={(e) => {
+                          const year = e.target.value.replace(/\D/g, '');
+                          const parts = (tempProfile.dob || '0000-00-00').split('-');
+                          setTempProfile((prev: any) => ({...prev, dob: `${year}-${parts[1]}-${parts[2]}`}));
+                        }} 
+                        className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none text-center" 
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="flex justify-end gap-2">
                   <button onClick={() => { setTempProfile(profile); setIsEditingPersonal(false); }} className="text-white text-xs font-bold px-3 py-1 bg-[#333532] rounded-lg">Cancel</button>
