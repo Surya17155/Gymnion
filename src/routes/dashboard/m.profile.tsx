@@ -59,6 +59,39 @@ function ProfilePage() {
     }
   });
 
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !profile?.id) return;
+
+    try {
+      setIsUploading(true);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${profile.id}-${Math.random()}.${fileExt}`;
+      const filePath = `profile-pics/${fileName}`;
+
+      // Upload the file to the 'members' bucket
+      const { error: uploadError } = await supabase.storage
+        .from('members')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get the public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('members')
+        .getPublicUrl(filePath);
+
+      // Update the profile with the new photo_url
+      await updateMutation.mutateAsync({ photo_url: publicUrl });
+      
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      alert('Failed to upload photo. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   if (isLoading) return <div className="bg-[#121411] min-h-screen flex items-center justify-center text-[#B7FF1E]">Loading...</div>;
 
   return (
