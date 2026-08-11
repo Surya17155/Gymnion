@@ -166,8 +166,6 @@ function MembersDashboard() {
                     {status === 'paid' ? 'Paid' : 'Pending'}
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                </div>
               </div>
             );
           })
