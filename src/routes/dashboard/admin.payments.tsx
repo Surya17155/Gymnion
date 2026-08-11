@@ -154,11 +154,6 @@ function PaymentsDashboard() {
                   <p className="text-[12px] text-[#858A7D] font-medium truncate">
                     {payment.created_at ? format(new Date(payment.created_at), 'MMM dd, yyyy') : 'N/A'}
                   </p>
-                  <span className={`text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full ${
-                    payment.status === 'paid' ? 'bg-[#D5FF40]/10 text-[#D5FF40]' : 'bg-[#FF5964]/10 text-[#FF5964]'
-                  }`}>
-                    {payment.status}
-                  </span>
                 </div>
               </div>
             </div>

@@ -135,9 +135,10 @@ function MembersDashboard() {
             const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).toISOString().split('T')[0];
             
             // A member is "paid" if there is a payment record for the current month with status 'paid' or 'paid_verified'
+            // OR if there is a payment record for the current month with any status (assuming manual record = intent to mark as paid)
             const hasPaid = member.payments?.some((p: any) => 
               p.payment_month === startOfMonth && 
-              (p.status === 'paid' || p.status === 'paid_verified')
+              (p.status === 'paid' || p.status === 'paid_verified' || p.amount > 0)
             );
             
             const status = hasPaid ? 'paid' : 'pending';
@@ -164,14 +165,6 @@ function MembersDashboard() {
                   }`}>
                     {status === 'paid' ? 'Paid' : 'Pending'}
                   </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className={`text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full ${
-                    status === 'paid' ? 'bg-[#D5FF40]/10 text-[#D5FF40]' : 'bg-[#FF5964]/10 text-[#FF5964]'
-                  }`}>
-                    {status}
-                  </span>
-                  <span className="material-symbols-outlined text-[#3d3f3b]">chevron_right</span>
                 </div>
               </div>
             );
@@ -200,13 +193,13 @@ function MembersDashboard() {
                 <div className={`w-1.5 h-1.5 rounded-full ${(() => {
                   const currentMonth = new Date();
                   const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).toISOString().split('T')[0];
-                  return selectedMember.payments?.some((p: any) => p.payment_month === startOfMonth && (p.status === 'paid' || p.status === 'paid_verified')) ? 'bg-[#D5FF40]' : 'bg-[#FF5964]';
+                  return selectedMember.payments?.some((p: any) => p.payment_month === startOfMonth && (p.status === 'paid' || p.status === 'paid_verified' || p.amount > 0)) ? 'bg-[#D5FF40]' : 'bg-[#FF5964]';
                 })()}`} />
                 <span className="text-[11px] font-bold text-[#C0C2B8] uppercase tracking-wider">
                   {selectedMember.payments?.some((p: any) => {
                     const currentMonth = new Date();
                     const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).toISOString().split('T')[0];
-                    return p.payment_month === startOfMonth && (p.status === 'paid' || p.status === 'paid_verified');
+                    return p.payment_month === startOfMonth && (p.status === 'paid' || p.status === 'paid_verified' || p.amount > 0);
                   }) ? 'Paid' : 'Pending'}
                 </span>
               </div>
@@ -219,12 +212,12 @@ function MembersDashboard() {
                   <p className={`text-[14px] font-bold ${(() => {
                     const currentMonth = new Date();
                     const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).toISOString().split('T')[0];
-                    return selectedMember.payments?.some((p: any) => p.payment_month === startOfMonth && (p.status === 'paid' || p.status === 'paid_verified')) ? 'text-[#D5FF40]' : 'text-[#FF5964]';
+                    return selectedMember.payments?.some((p: any) => p.payment_month === startOfMonth && (p.status === 'paid' || p.status === 'paid_verified' || p.amount > 0)) ? 'text-[#D5FF40]' : 'text-[#FF5964]';
                   })()}`}>
                     {selectedMember.payments?.some((p: any) => {
                       const currentMonth = new Date();
                       const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).toISOString().split('T')[0];
-                      return p.payment_month === startOfMonth && (p.status === 'paid' || p.status === 'paid_verified');
+                      return p.payment_month === startOfMonth && (p.status === 'paid' || p.status === 'paid_verified' || p.amount > 0);
                     }) ? 'Paid' : 'Pending'}
                   </p>
                 </div>
