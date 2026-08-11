@@ -63,7 +63,7 @@ function ProfilePage() {
       />
       
       <main className="w-full max-w-[480px] px-5 relative z-10 flex flex-col gap-6 pt-8 pb-[120px]">
-        <header className="flex items-center w-full bg-transparent">
+        <header className="flex justify-between items-center px-5 pt-8 pb-4 w-full sticky top-0 z-40 bg-transparent">
           <h1 className="text-[28px] leading-[32px] font-bold text-white tracking-tight">Profile</h1>
         </header>
 
@@ -166,12 +166,35 @@ function ProfilePage() {
         </section>
       </main>
 
-      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#1e201d] border-t border-white/5 px-2 py-2 flex justify-around items-center h-[64px] rounded-t-2xl z-40">
-        <Link to="/dashboard/m" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 rounded-xl min-w-[60px]"><LucideHome className="w-6 h-6 mb-1" /><span className="text-[11px] font-semibold">Home</span></Link>
-        <Link to="/dashboard/m/payments" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 rounded-xl min-w-[60px]"><LucideCreditCard className="w-6 h-6 mb-1" /><span className="text-[11px] font-semibold">Payments</span></Link>
-        <div className="relative -top-6"><button className="w-16 h-16 bg-[#B7FF1E] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgba(213,255,64,0.3)] border-4 border-[#1e201d]"><LucideScanQrCode className="w-[30px] h-[30px] text-[#293500]" /></button></div>
-        <Link to="/dashboard/m/attendance" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 rounded-xl min-w-[60px]"><LucideCalendarDays className="w-6 h-6 mb-1" /><span className="text-[11px] font-semibold">Attendance</span></Link>
-        <Link to="/dashboard/m/profile" className="flex flex-col items-center justify-center text-[#B7FF1E] bg-[#25340D]/20 rounded-xl p-1 min-w-[60px] scale-90"><LucideUser className="w-6 h-6 mb-1" /><span className="text-[11px] font-semibold">Profile</span></Link>
+      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-40 bg-[#1e201d] border-t border-white/5 shadow-lg px-2 py-2 pb-safe flex justify-around items-center h-[64px] rounded-t-lg">
+        <Link to="/dashboard/m" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl w-[72px] h-[64px] transition-colors">
+          <LucideHome className="w-6 h-6 mb-1" />
+          <span className="text-[11px] leading-[14px] font-semibold">Home</span>
+        </Link>
+        
+        <Link to="/dashboard/m/payments" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl w-[72px] h-[64px] transition-colors">
+          <LucideCreditCard className="w-6 h-6 mb-1" />
+          <span className="text-[11px] leading-[14px] font-semibold">Payments</span>
+        </Link>
+        
+        <div className="relative -top-6">
+          <button 
+            onClick={() => window.location.href = '/checkin?scan=true'}
+            className="w-16 h-16 bg-[#B7FF1E] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgba(213,255,64,0.3)] border-4 border-[#1e201d] hover:scale-105 transition-transform"
+          >
+            <LucideScanQrCode className="w-[30px] h-[30px] text-[#293500]" />
+          </button>
+        </div>
+        
+        <Link to="/dashboard/m/attendance" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl w-[72px] h-[64px] transition-colors">
+          <LucideCalendarDays className="w-6 h-6 mb-1" />
+          <span className="text-[11px] leading-[14px] font-semibold">Attendance</span>
+        </Link>
+        
+        <Link to="/dashboard/m/profile" className="flex flex-col items-center justify-center text-[#B7FF1E] bg-[#25340D]/20 rounded-xl p-1 w-[72px] h-[64px] scale-90 transition-all duration-200">
+          <LucideUser className="w-6 h-6 mb-1" />
+          <span className="text-[11px] leading-[14px] font-semibold">Profile</span>
+        </Link>
       </nav>
     </div>
   );
