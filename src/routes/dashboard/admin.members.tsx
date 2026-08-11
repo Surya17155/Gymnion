@@ -172,14 +172,13 @@ function MembersDashboard() {
         )}
       </div>
 
-      {/* MEMBER DETAILS DRAWER */}
       {selectedMember && (
         <>
           <div 
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]" 
             onClick={() => setSelectedMember(null)}
           />
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-[32px] z-[999] px-6 pt-2 pb-safe border-t border-white/10">
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#0D0F0C] rounded-t-[32px] z-[999] px-6 pt-2 pb-safe border-t border-white/10 no-scrollbar overflow-y-auto max-h-[90vh]">
             <div className="w-12 h-1 bg-white/10 rounded-full mx-auto my-4" />
             
             <div className="flex flex-col items-center text-center mb-8">
@@ -205,9 +204,9 @@ function MembersDashboard() {
               </div>
             </div>
 
-            <div className="space-y-6 mb-8 overflow-y-auto max-h-[40vh] pr-2 custom-scrollbar">
+            <div className="space-y-6 mb-8">
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-[#121411] p-4 rounded-2xl border border-white/5">
+                <div className="bg-[#121411] p-4 rounded-2xl border border-white/5 flex flex-col justify-center min-h-[72px]">
                   <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-1">Status</p>
                   <p className={`text-[14px] font-bold ${(() => {
                     const currentMonth = new Date();
@@ -221,31 +220,66 @@ function MembersDashboard() {
                     }) ? 'Paid' : 'Pending'}
                   </p>
                 </div>
-                <div className="bg-[#121411] p-4 rounded-2xl border border-white/5">
+                <div className="bg-[#121411] p-4 rounded-2xl border border-white/5 flex flex-col justify-center min-h-[72px]">
                   <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-1">Renewal</p>
                   <p className="text-[14px] text-white font-bold">{selectedMember.join_date ? format(new Date(selectedMember.join_date), 'dd MMM yyyy') : 'N/A'}</p>
                 </div>
               </div>
 
               <div className="space-y-3">
-                <div className="flex items-center gap-4 p-4 bg-[#121411] rounded-2xl border border-white/5">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#858A7D]">
+                <div className="flex items-center gap-4 p-4 bg-[#121411] rounded-2xl border border-white/5 min-h-[72px]">
+                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#858A7D] flex-shrink-0">
                     <span className="material-symbols-outlined text-[20px]">mail</span>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-0.5">Email</p>
-                    <p className="text-[14px] text-white font-semibold">{selectedMember.email}</p>
+                    <p className="text-[14px] text-white font-semibold truncate">{selectedMember.email}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 p-4 bg-[#121411] rounded-2xl border border-white/5">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#858A7D]">
+                <div className="flex items-center gap-4 p-4 bg-[#121411] rounded-2xl border border-white/5 min-h-[72px]">
+                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#858A7D] flex-shrink-0">
                     <span className="material-symbols-outlined text-[20px]">call</span>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-0.5">Phone</p>
-                    <p className="text-[14px] text-white font-semibold">{selectedMember.phone || 'Not provided'}</p>
+                    <p className="text-[14px] text-white font-semibold truncate">{selectedMember.phone || 'Not provided'}</p>
                   </div>
+                </div>
+
+                <div className="flex items-center gap-4 p-4 bg-[#121411] rounded-2xl border border-white/5 min-h-[72px]">
+                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#858A7D] flex-shrink-0">
+                    <span className="material-symbols-outlined text-[20px]">calendar_today</span>
+                  </div>
+                  <div className="min-w-0 flex-1 flex justify-between items-center pr-2">
+                    <div>
+                      <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-0.5">Date of Birth</p>
+                      <p className="text-[14px] text-white font-semibold">{selectedMember.dob ? format(new Date(selectedMember.dob), 'dd MMM yyyy') : 'Not provided'}</p>
+                    </div>
+                    {selectedMember.dob && (
+                      <div className="text-right">
+                        <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-0.5">Age</p>
+                        <p className="text-[14px] text-[#D5FF40] font-bold">
+                          {Math.floor((new Date().getTime() - new Date(selectedMember.dob).getTime()) / (1000 * 60 * 60 * 24 * 365.25))} Years
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Address Section */}
+              <div className="space-y-3">
+                <div className="p-4 bg-[#121411] rounded-2xl border border-white/5">
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#858A7D] flex-shrink-0">
+                      <span className="material-symbols-outlined text-[20px]">location_on</span>
+                    </div>
+                    <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Address</p>
+                  </div>
+                  <p className="text-[14px] text-white font-semibold leading-relaxed">
+                    {selectedMember.address || 'No address provided'}
+                  </p>
                 </div>
               </div>
 
