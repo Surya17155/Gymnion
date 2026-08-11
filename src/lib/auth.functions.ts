@@ -105,8 +105,10 @@ export const updateMyProfile = createServerFn({ method: 'POST' })
     photo_url: z.string().optional(),
     full_name: z.string().optional(),
     first_name: z.string().optional(),
-    last_name: z.string().optional()
+    last_name: z.string().optional(),
+    dob: z.string().optional()
   }).parse(data))
+
   .handler(async ({ data, context }) => {
     const userId = context.userId;
     const updates: any = {};
