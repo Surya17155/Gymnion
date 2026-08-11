@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useNavigate, redirect } from '@tanstack/react-router';
 import { useState, useRef, useEffect } from 'react';
 import QRCode from 'qrcode';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useServerFn } from '@tanstack/react-start';
 import { getAdminStats, getRecentActivity, getGymDetails } from '@/lib/auth.functions';
@@ -26,6 +26,7 @@ function AdminLayout() {
 
 export function AdminDashboard() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showDropdown, setShowDropdown] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
