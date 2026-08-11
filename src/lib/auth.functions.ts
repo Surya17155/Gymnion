@@ -105,8 +105,10 @@ export const updateMyProfile = createServerFn({ method: 'POST' })
     photo_url: z.string().optional(),
     full_name: z.string().optional(),
     first_name: z.string().optional(),
-    last_name: z.string().optional()
+    last_name: z.string().optional(),
+    dob: z.string().optional()
   }).parse(data))
+
   .handler(async ({ data, context }) => {
     const userId = context.userId;
     const updates: any = {};
@@ -116,6 +118,8 @@ export const updateMyProfile = createServerFn({ method: 'POST' })
     if (data.full_name) updates.full_name = data.full_name;
     if (data.first_name) updates.first_name = data.first_name;
     if (data.last_name) updates.last_name = data.last_name;
+    if (data.dob !== undefined) updates.dob = data.dob;
+
 
     const { error } = await supabaseAdmin
       .from('members')
