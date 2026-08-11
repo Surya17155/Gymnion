@@ -135,9 +135,10 @@ function MembersDashboard() {
             const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).toISOString().split('T')[0];
             
             // A member is "paid" if there is a payment record for the current month with status 'paid' or 'paid_verified'
+            // OR if there is a payment record for the current month with any status (assuming manual record = intent to mark as paid)
             const hasPaid = member.payments?.some((p: any) => 
               p.payment_month === startOfMonth && 
-              (p.status === 'paid' || p.status === 'paid_verified')
+              (p.status === 'paid' || p.status === 'paid_verified' || p.amount > 0)
             );
             
             const status = hasPaid ? 'paid' : 'pending';
