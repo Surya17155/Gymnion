@@ -109,26 +109,27 @@ function ProfilePage() {
         <section className="flex flex-col items-center text-center mt-4 relative">
           <div className="relative group">
             <div className="relative w-32 h-32 rounded-full p-1 bg-gradient-to-br from-[#B7FF1E] to-[#83A51B] mb-6 shadow-[0_0_20px_rgba(183,255,30,0.2)]">
-              <div className="w-full h-full rounded-full overflow-hidden bg-[#333532] border-4 border-[#121411]">
-                <img alt="Profile" className="w-full h-full object-cover" src={profile?.photo_url || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop'} />
+              <div className="w-full h-full rounded-full overflow-hidden bg-[#333532] border-4 border-[#121411] relative">
+                <img alt="Profile" className={`w-full h-full object-cover ${isUploading ? 'opacity-30' : 'opacity-100'}`} src={profile?.photo_url || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop'} />
+                {isUploading && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-6 h-6 border-2 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
               </div>
             </div>
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              className="hidden" 
+              accept="image/*" 
+              onChange={handleFileUpload} 
+              disabled={isUploading}
+            />
             <button 
-              className="absolute bottom-6 right-0 w-10 h-10 bg-[#B7FF1E] border-4 border-[#121411] rounded-full flex items-center justify-center text-[#121411] shadow-lg hover:scale-110 transition-transform"
-              onClick={() => {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'image/*';
-                input.onchange = async (e: any) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    // Logic to handle file upload would go here
-                    // For now, we'll just show the UI is ready
-                    console.log("File selected:", file.name);
-                  }
-                };
-                input.click();
-              }}
+              className="absolute bottom-6 right-0 w-10 h-10 bg-[#B7FF1E] border-4 border-[#121411] rounded-full flex items-center justify-center text-[#121411] shadow-lg hover:scale-110 transition-transform disabled:opacity-50"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploading}
             >
               <LucidePencil className="w-4 h-4" />
             </button>
