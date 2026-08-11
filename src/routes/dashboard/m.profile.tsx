@@ -32,6 +32,7 @@ function ProfilePage() {
   const getMyProfileFn = useServerFn(getMyProfile);
   const updateMyProfileFn = useServerFn(updateMyProfile);
   const queryClient = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ['my-profile'],
@@ -42,6 +43,7 @@ function ProfilePage() {
   const [isEditingPersonal, setIsEditingPersonal] = useState(false);
   const [isEditingContact, setIsEditingContact] = useState(false);
   const [isEditingLocation, setIsEditingLocation] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   
   useEffect(() => {
     if (profile) setTempProfile(profile);
