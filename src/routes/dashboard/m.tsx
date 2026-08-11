@@ -119,7 +119,7 @@ export function MemberDashboard() {
       ?.filter((p: any) => p.status === 'paid' || p.status === 'paid_verified')
       .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
     
-    const baseDate = latestPayment ? new Date(latestPayment.created_at) : new Date(profile.join_date);
+    const baseDate = latestPayment ? new Date(latestPayment.created_at as string) : new Date(profile.join_date);
     let dueYear = baseDate.getFullYear();
     let dueMonth = baseDate.getMonth() + 1;
     
