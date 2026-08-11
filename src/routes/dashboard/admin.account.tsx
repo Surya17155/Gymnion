@@ -185,6 +185,9 @@ function AdminAccount() {
                     if (!signedUrlData?.signedUrl) throw new Error("Failed to get signed URL");
 
                     setFormData(prev => ({ ...prev, photo_url: signedUrlData.signedUrl }));
+                    // Invalidate both gym details queries to update photo everywhere
+                    queryClient.invalidateQueries({ queryKey: ['admin-gym-details'] });
+                    queryClient.invalidateQueries({ queryKey: ['admin-gym-settings'] });
                     setMessage({ type: 'success', text: 'Photo uploaded! Don\'t forget to save changes.' });
                   } catch (err: any) {
                     setMessage({ type: 'error', text: err.message || 'Failed to upload photo' });

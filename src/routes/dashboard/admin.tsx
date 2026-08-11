@@ -247,9 +247,13 @@ export function AdminDashboard() {
           <div className="relative" ref={dropdownRef}>
             <button 
               onClick={() => setShowDropdown(!showDropdown)}
-              className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity text-[#B7FF1E] bg-[#1e201d]/50 border border-white/10 focus:outline-none"
+              className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity text-[#B7FF1E] bg-[#1e201d]/50 border border-white/10 focus:outline-none overflow-hidden"
             >
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 0' }}>person</span>
+              {gymData?.owner_photo_url ? (
+                <img src={gymData.owner_photo_url} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 0' }}>person</span>
+              )}
             </button>
 
             {showDropdown && (
