@@ -339,8 +339,10 @@ export type Database = {
       }
       members: {
         Row: {
+          address: string | null
           created_at: string | null
           deleted_at: string | null
+          dob: string | null
           email: string
           fee_plan_id: string | null
           first_name: string | null
@@ -356,8 +358,10 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          address?: string | null
           created_at?: string | null
           deleted_at?: string | null
+          dob?: string | null
           email: string
           fee_plan_id?: string | null
           first_name?: string | null
@@ -373,8 +377,10 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          address?: string | null
           created_at?: string | null
           deleted_at?: string | null
+          dob?: string | null
           email?: string
           fee_plan_id?: string | null
           first_name?: string | null
