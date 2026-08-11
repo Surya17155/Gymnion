@@ -13,12 +13,15 @@ import {
   LucidePencil,
   LucideCamera,
   LucideCheck,
-  LucideX
+  LucideX,
+  LucideCake
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { getMyProfile, updateMyProfile } from '@/lib/auth.functions';
+import { format } from 'date-fns';
+
 
 export const Route = createFileRoute('/dashboard/m/profile')({
   component: ProfilePage,
