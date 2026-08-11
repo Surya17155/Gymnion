@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useNavigate, redirect } from '@tanstack/react-router';
 import { useState, useRef, useEffect } from 'react';
 import QRCode from 'qrcode';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useServerFn } from '@tanstack/react-start';
 import { getAdminStats, getRecentActivity, getGymDetails } from '@/lib/auth.functions';
@@ -26,6 +26,7 @@ function AdminLayout() {
 
 export function AdminDashboard() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showDropdown, setShowDropdown] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
@@ -89,7 +90,8 @@ export function AdminDashboard() {
     queryKey: ['admin-stats', gymData?.id],
     queryFn: () => getStatsFn({ data: { gymId: gymData!.id } }),
     enabled: !!gymData?.id,
-    staleTime: 30000,
+    staleTime: 0, // Force fresh fetch for real-time accuracy
+    refetchOnWindowFocus: true,
     retry: 1,
   });
 
@@ -97,7 +99,8 @@ export function AdminDashboard() {
     queryKey: ['admin-activity', gymData?.id],
     queryFn: () => getActivityFn({ data: { gymId: gymData!.id } }),
     enabled: !!gymData?.id,
-    staleTime: 30000,
+    staleTime: 0, // Force fresh fetch
+    refetchOnWindowFocus: true,
     retry: 1,
   });
 
@@ -148,6 +151,44 @@ export function AdminDashboard() {
       QRCode.toDataURL(checkinUrl, { width: 400, margin: 2 }).then(setQrUrl);
     }
   }, [gymData]);
+
+  useEffect(() => {
+    if (!gymData?.id) return;
+
+    const channel = supabase
+      .channel('admin-dashboard-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'payments',
+          filter: `gym_id=eq.${gymData.id}`
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['admin-stats', gymData.id] });
+          queryClient.invalidateQueries({ queryKey: ['admin-activity', gymData.id] });
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'attendance',
+          filter: `gym_id=eq.${gymData.id}`
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['admin-stats', gymData.id] });
+          queryClient.invalidateQueries({ queryKey: ['admin-activity', gymData.id] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [gymData?.id, queryClient]);
 
   const handleDownloadQR = () => {
     if (!qrUrl) return;
