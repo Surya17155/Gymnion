@@ -115,7 +115,8 @@ function ProfilePage() {
                     first_name: tempProfile.first_name, 
                     last_name: tempProfile.last_name, 
                     full_name: `${tempProfile.first_name} ${tempProfile.last_name}`,
-                    dob: tempProfile.dob
+                    dob: tempProfile.dob,
+                    address: tempProfile.address
                   })} className="text-[#121411] text-xs font-bold px-3 py-1 bg-[#B7FF1E] rounded-lg">Save</button>
                 </div>
               </div>
@@ -169,6 +170,44 @@ function ProfilePage() {
               <div className="flex flex-col gap-4">
                 <div><span className="text-[11px] text-[#C0C2B8] uppercase font-bold">Email</span><div className="text-white text-sm">{profile?.email}</div></div>
                 <div><span className="text-[11px] text-[#C0C2B8] uppercase font-bold">Phone</span><div className="text-white text-sm">{profile?.phone || 'Not provided'}</div></div>
+              </div>
+            )}
+          </div>
+          
+          {/* Address Card */}
+          <div className="bg-[#121411] rounded-2xl p-4 border border-white/5 shadow-inner">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <LucideMapPin className="w-5 h-5 text-[#B7FF1E]" />
+                <h3 className="text-[18px] font-semibold text-white">Address</h3>
+              </div>
+              {!isEditingLocation && (
+                <button onClick={() => setIsEditingLocation(true)} className="text-[#B7FF1E] p-1"><LucidePencil className="w-4 h-4" /></button>
+              )}
+            </div>
+
+            {isEditingLocation ? (
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[11px] text-[#C0C2B8] uppercase font-bold">Full Address</label>
+                  <textarea 
+                    value={tempProfile.address || ''} 
+                    onChange={(e) => setTempProfile({...tempProfile, address: e.target.value})} 
+                    className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-[#B7FF1E] outline-none min-h-[80px]"
+                    placeholder="Enter your full address"
+                  />
+                </div>
+                <div className="flex justify-end gap-2">
+                  <button onClick={() => { setTempProfile(profile); setIsEditingLocation(false); }} className="text-white text-xs font-bold px-3 py-1 bg-[#333532] rounded-lg">Cancel</button>
+                  <button onClick={() => updateMutation.mutate({ address: tempProfile.address })} className="text-[#121411] text-xs font-bold px-3 py-1 bg-[#B7FF1E] rounded-lg">Save</button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-1">
+                <span className="text-[11px] text-[#C0C2B8] uppercase font-bold">Location</span>
+                <div className="text-white text-sm leading-relaxed">
+                  {profile?.address || 'No address provided'}
+                </div>
               </div>
             )}
           </div>
