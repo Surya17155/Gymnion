@@ -107,7 +107,10 @@ function ProfilePage() {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] text-[#C0C2B8] uppercase font-bold">Date of Birth</label>
-                  <input type="date" value={tempProfile.dob || ''} onChange={(e) => setTempProfile({...tempProfile, dob: e.target.value})} className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none" />
+                  <input type="date" value={tempProfile.dob || ''} onChange={(e) => {
+                    const val = e.target.value;
+                    setTempProfile((prev: any) => ({...prev, dob: val}));
+                  }} className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none w-full" />
                 </div>
                 <div className="flex justify-end gap-2">
                   <button onClick={() => { setTempProfile(profile); setIsEditingPersonal(false); }} className="text-white text-xs font-bold px-3 py-1 bg-[#333532] rounded-lg">Cancel</button>
