@@ -69,6 +69,7 @@ function PaymentsDashboard() {
       await recordPaymentFn({ data: { ...newPayment, gym_id: gymId } });
       toast.success('Payment recorded successfully');
       setIsRecording(false);
+      setMemberSearchTerm('');
       setNewPayment({ member_id: '', amount: 0, notes: '' });
       queryClient.invalidateQueries({ queryKey: ['admin-payments'] });
       queryClient.invalidateQueries({ queryKey: ['admin-stats'] });
