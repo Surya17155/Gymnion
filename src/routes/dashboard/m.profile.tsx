@@ -105,17 +105,41 @@ function ProfilePage() {
                     <input type="text" value={tempProfile.last_name || ''} onChange={(e) => setTempProfile({...tempProfile, last_name: e.target.value})} className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none" />
                   </div>
                 </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[11px] text-[#C0C2B8] uppercase font-bold">Date of Birth</label>
+                  <input type="date" value={tempProfile.dob || ''} onChange={(e) => setTempProfile({...tempProfile, dob: e.target.value})} className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none" />
+                </div>
                 <div className="flex justify-end gap-2">
                   <button onClick={() => { setTempProfile(profile); setIsEditingPersonal(false); }} className="text-white text-xs font-bold px-3 py-1 bg-[#333532] rounded-lg">Cancel</button>
-                  <button onClick={() => updateMutation.mutate({ first_name: tempProfile.first_name, last_name: tempProfile.last_name, full_name: `${tempProfile.first_name} ${tempProfile.last_name}` })} className="text-[#121411] text-xs font-bold px-3 py-1 bg-[#B7FF1E] rounded-lg">Save</button>
+                  <button onClick={() => updateMutation.mutate({ 
+                    first_name: tempProfile.first_name, 
+                    last_name: tempProfile.last_name, 
+                    full_name: `${tempProfile.first_name} ${tempProfile.last_name}`,
+                    dob: tempProfile.dob
+                  })} className="text-[#121411] text-xs font-bold px-3 py-1 bg-[#B7FF1E] rounded-lg">Save</button>
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-4">
-                <div><span className="text-[11px] text-[#C0C2B8] uppercase font-bold">First Name</span><div className="text-white text-sm">{profile?.first_name}</div></div>
-                <div><span className="text-[11px] text-[#C0C2B8] uppercase font-bold">Last Name</span><div className="text-white text-sm">{profile?.last_name}</div></div>
+              <div className="flex flex-col gap-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div><span className="text-[11px] text-[#C0C2B8] uppercase font-bold">First Name</span><div className="text-white text-sm">{profile?.first_name}</div></div>
+                  <div><span className="text-[11px] text-[#C0C2B8] uppercase font-bold">Last Name</span><div className="text-white text-sm">{profile?.last_name}</div></div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="text-[11px] text-[#C0C2B8] uppercase font-bold">Date of Birth</span>
+                    <div className="text-white text-sm">{profile?.dob ? format(new Date(profile.dob), 'dd MMM yyyy') : 'Not provided'}</div>
+                  </div>
+                  <div>
+                    <span className="text-[11px] text-[#C0C2B8] uppercase font-bold">Age</span>
+                    <div className="text-[#B7FF1E] text-sm font-bold">
+                      {profile?.dob ? `${Math.floor((new Date().getTime() - new Date(profile.dob).getTime()) / (1000 * 60 * 60 * 24 * 365.25))} Years` : 'N/A'}
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
+
           </div>
 
           {/* Contact Details Card */}
