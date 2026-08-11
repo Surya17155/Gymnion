@@ -178,11 +178,13 @@ function AdminAccount() {
 
                     if (uploadError) throw uploadError;
 
-                    const { data: { signedUrl } } = await supabase.storage
+                    const { data: signedUrlData } = await supabase.storage
                       .from('gym-assets')
                       .createSignedUrl(filePath, 31536000); // 1 year
 
-                    setFormData(prev => ({ ...prev, photo_url: publicUrl }));
+                    if (!signedUrlData?.signedUrl) throw new Error("Failed to get signed URL");
+
+                    setFormData(prev => ({ ...prev, photo_url: signedUrlData.signedUrl }));
                     setMessage({ type: 'success', text: 'Photo uploaded! Don\'t forget to save changes.' });
                   } catch (err: any) {
                     setMessage({ type: 'error', text: err.message || 'Failed to upload photo' });
