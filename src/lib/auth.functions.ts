@@ -365,8 +365,8 @@ export const getAdminStats = createServerFn({ method: 'GET' })
       // Count unique members who checked in today
       supabaseAdmin.from('attendance').select('member_id').eq('gym_id', gymId).gte('check_in_at', todayStart),
       supabaseAdmin.from('attendance').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).is('check_out_at', null),
-      // Only count verified real payments
-      supabaseAdmin.from('payments').select('amount').eq('gym_id', gymId).gte('created_at', monthStart).eq('status', 'paid_verified'),
+      // Count all paid payments for this month (both verified and manual)
+      supabaseAdmin.from('payments').select('amount').eq('gym_id', gymId).gte('created_at', monthStart).in('status', ['paid', 'paid_verified']),
       supabaseAdmin.from('members').select('*', { count: 'exact', head: true }).eq('gym_id', gymId).eq('status', 'overdue')
     ]);
 
