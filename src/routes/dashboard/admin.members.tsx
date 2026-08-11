@@ -157,16 +157,16 @@ function MembersDashboard() {
               let dueYear = baseDate.getFullYear();
               let dueMonth = baseDate.getMonth();
               
-              // If we have a payment, the next due is one month AFTER that payment's date
-              // If no payment, it's one month AFTER join date
+              // If the current day is already past the billing day of this month, or we just made a payment
               dueMonth += 1;
               
               if (dueMonth > 11) {
-                dueMonth = dueMonth - 12;
+                dueMonth = 0;
                 dueYear++;
               }
               
               const dueDate = new Date(dueYear, dueMonth, billingDay);
+              nextDue = format(dueDate, 'dd MMM yyyy');
 
               nextDue = format(dueDate, 'dd MMM yyyy');
             }
@@ -273,7 +273,7 @@ function MembersDashboard() {
                     let dueMonth = baseDate.getMonth() + 1;
                     
                     if (dueMonth > 11) {
-                      dueMonth = dueMonth - 12;
+                      dueMonth = 0;
                       dueYear++;
                     }
                     

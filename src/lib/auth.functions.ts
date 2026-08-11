@@ -106,7 +106,8 @@ export const updateMyProfile = createServerFn({ method: 'POST' })
     full_name: z.string().optional(),
     first_name: z.string().optional(),
     last_name: z.string().optional(),
-    dob: z.string().optional()
+    dob: z.string().optional(),
+    address: z.string().optional()
   }).parse(data))
 
   .handler(async ({ data, context }) => {
@@ -119,6 +120,7 @@ export const updateMyProfile = createServerFn({ method: 'POST' })
     if (data.first_name) updates.first_name = data.first_name;
     if (data.last_name) updates.last_name = data.last_name;
     if (data.dob !== undefined) updates.dob = data.dob;
+    if (data.address !== undefined) updates.address = data.address;
 
 
     const { error } = await supabaseAdmin
