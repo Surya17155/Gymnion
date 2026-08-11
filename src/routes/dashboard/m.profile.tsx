@@ -89,7 +89,7 @@ function ProfilePage() {
       // Get the signed URL for the private file
       const { data: signedData, error: signedError } = await supabase.storage
         .from('members')
-        .createSignedUrl(filePath, 60 * 60 * 24 * 365); // 1 year
+        .createSignedUrl(filePath, 60 * 60 * 24 * 365); // 1 year, ensures the link persists for the session/profile
 
       if (signedError) {
         console.error('Error creating signed URL:', signedError);
