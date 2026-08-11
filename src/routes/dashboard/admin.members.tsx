@@ -167,8 +167,6 @@ function MembersDashboard() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#3d3f3b]">chevron_right</span>
-                </div>
               </div>
             );
           })
