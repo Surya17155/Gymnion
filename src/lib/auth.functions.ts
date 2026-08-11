@@ -118,6 +118,8 @@ export const updateMyProfile = createServerFn({ method: 'POST' })
     if (data.full_name) updates.full_name = data.full_name;
     if (data.first_name) updates.first_name = data.first_name;
     if (data.last_name) updates.last_name = data.last_name;
+    if (data.dob !== undefined) updates.dob = data.dob;
+
 
     const { error } = await supabaseAdmin
       .from('members')
