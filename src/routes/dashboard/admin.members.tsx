@@ -166,11 +166,6 @@ function MembersDashboard() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full ${
-                    status === 'paid' ? 'bg-[#D5FF40]/10 text-[#D5FF40]' : 'bg-[#FF5964]/10 text-[#FF5964]'
-                  }`}>
-                    {status}
-                  </span>
                   <span className="material-symbols-outlined text-[#3d3f3b]">chevron_right</span>
                 </div>
               </div>
