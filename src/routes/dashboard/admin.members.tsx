@@ -158,21 +158,21 @@ function MembersDashboard() {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-start mb-0.5">
-                    <h3 className="font-bold text-[15px] text-white truncate">{member.full_name}</h3>
-                    <span className={`text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full ${
-                      status === 'paid' ? 'bg-[#D5FF40]/10 text-[#D5FF40]' : 'bg-[#FF5964]/10 text-[#FF5964]'
-                    }`}>
-                      {status}
-                    </span>
-                  </div>
-                  <p className={`text-[12px] font-medium truncate ${
+                  <h3 className="font-bold text-[15px] text-white truncate mb-0.5">{member.full_name}</h3>
+                  <p className={`text-[12px] font-semibold truncate ${
                     status === 'paid' ? 'text-[#D5FF40]' : 'text-[#FF5964]'
                   }`}>
                     {status === 'paid' ? 'Paid' : 'Pending'}
                   </p>
                 </div>
-                <span className="material-symbols-outlined text-[#3d3f3b]">chevron_right</span>
+                <div className="flex items-center gap-2">
+                  <span className={`text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full ${
+                    status === 'paid' ? 'bg-[#D5FF40]/10 text-[#D5FF40]' : 'bg-[#FF5964]/10 text-[#FF5964]'
+                  }`}>
+                    {status}
+                  </span>
+                  <span className="material-symbols-outlined text-[#3d3f3b]">chevron_right</span>
+                </div>
               </div>
             );
           })
