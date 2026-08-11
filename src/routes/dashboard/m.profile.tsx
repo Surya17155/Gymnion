@@ -126,9 +126,9 @@ function ProfilePage() {
                       inputMode="numeric"
                       placeholder="MM"
                       maxLength={2}
-                      defaultValue={tempProfile.dob ? tempProfile.dob.split('-')[1] : ''}
-                      onBlur={(e) => {
-                        const month = e.target.value.padStart(2, '0').slice(-2);
+                      value={tempProfile.dob ? tempProfile.dob.split('-')[1] : ''}
+                      onChange={(e) => {
+                        const month = e.target.value.replace(/\D/g, '').slice(0, 2);
                         const parts = (tempProfile.dob || '0000-00-00').split('-');
                         setTempProfile((prev: any) => ({...prev, dob: `${parts[0]}-${month}-${parts[2]}`}));
                       }}
