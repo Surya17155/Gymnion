@@ -283,6 +283,7 @@ export function MemberDashboard() {
                   <h3 className="text-[18px] leading-[24px] font-semibold text-white">
                     {format(new Date(a.check_in_at!), 'EEEE')}
                   </h3>
+
                 </div>
                 <div className="flex flex-col items-end gap-0.5">
                   <p className="text-[12px] leading-[18px] text-[#C0C2B8] flex items-center gap-1.5">
