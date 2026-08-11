@@ -172,7 +172,6 @@ function MembersDashboard() {
         )}
       </div>
 
-      {/* MEMBER DETAILS DRAWER */}
       {selectedMember && (
         <>
           <div 
