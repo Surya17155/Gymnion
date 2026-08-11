@@ -139,9 +139,9 @@ function ProfilePage() {
                       inputMode="numeric"
                       placeholder="YYYY"
                       maxLength={4}
-                      defaultValue={tempProfile.dob ? tempProfile.dob.split('-')[0] : ''}
-                      onBlur={(e) => {
-                        const year = e.target.value;
+                      value={tempProfile.dob ? tempProfile.dob.split('-')[0] : ''}
+                      onChange={(e) => {
+                        const year = e.target.value.replace(/\D/g, '').slice(0, 4);
                         const parts = (tempProfile.dob || '0000-00-00').split('-');
                         setTempProfile((prev: any) => ({...prev, dob: `${year}-${parts[1]}-${parts[2]}`}));
                       }}
