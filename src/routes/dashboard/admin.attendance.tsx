@@ -2,10 +2,12 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
-import { getAttendanceDashboard, getCurrentGymId, exportGymAttendance } from '@/lib/auth.functions';
+import { getAttendanceDashboard, getCurrentGymId } from '@/lib/auth.functions';
+import { getGymAttendanceData } from '@/lib/attendance.functions';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import * as XLSX from 'xlsx';
 
 export const Route = createFileRoute('/dashboard/admin/attendance')({
   component: AttendanceDashboard,
@@ -28,7 +30,7 @@ function AttendanceDashboard() {
   const [isExporting, setIsExporting] = useState(false);
   const getAttendanceFn = useServerFn(getAttendanceDashboard);
   const getGymIdFn = useServerFn(getCurrentGymId);
-  const exportFn = useServerFn(exportGymAttendance);
+  const getGymAttendanceDataFn = useServerFn(getGymAttendanceData);
   const queryClient = useQueryClient();
 
   const { data: gymId } = useQuery({
@@ -82,9 +84,42 @@ function AttendanceDashboard() {
     if (!gymId) return;
     setIsExporting(true);
     try {
-      const result = await exportFn({ data: { gymId } });
-      toast.success(`Data exported to Google Sheet: ${result.sheetName || 'Success'}`);
+      const data = await getGymAttendanceDataFn({ data: { gymId } });
+      
+      if (!data || data.length === 0) {
+        toast.info("No attendance records to export");
+        return;
+      }
+
+      // Create worksheet
+      const worksheet = XLSX.utils.json_to_sheet(data);
+      
+      // Customize column widths
+      const wscols = [
+        { wch: 12 }, // Date
+        { wch: 15 }, // Month-Year
+        { wch: 20 }, // Member Name
+        { wch: 25 }, // Email
+        { wch: 15 }, // Phone
+        { wch: 12 }, // Check-in
+        { wch: 12 }, // Check-out
+        { wch: 12 }  // Status
+      ];
+      worksheet['!cols'] = wscols;
+
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Attendance");
+      
+      // Generate filename
+      const dateStr = format(new Date(), 'yyyy-MM-dd');
+      const filename = `GymSync_Attendance_${dateStr}.xlsx`;
+      
+      // Download
+      XLSX.writeFile(workbook, filename);
+      
+      toast.success("Attendance report downloaded successfully");
     } catch (err: any) {
+      console.error("Export error:", err);
       toast.error(`Export failed: ${err.message}`);
     } finally {
       setIsExporting(false);
