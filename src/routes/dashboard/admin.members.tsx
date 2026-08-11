@@ -130,37 +130,52 @@ function MembersDashboard() {
         {isLoading ? (
           <div className="text-center py-12 text-[#858A7D]">Loading members...</div>
         ) : (
-          members.map((member: any) => (
-            <div 
-              key={member.id}
-              onClick={() => setSelectedMember(member)}
-              className="bg-[#121411] rounded-2xl p-4 border border-white/5 flex items-center gap-4 active:scale-[0.98] transition-all"
-            >
-              <div className="w-12 h-12 rounded-full bg-[#1e201d] flex items-center justify-center border border-white/10 overflow-hidden">
-                {member.full_name ? (
-                  <span className="text-[14px] font-bold text-[#D5FF40]">
-                    {member.full_name.split(' ').map((n: any) => n[0]).join('').toUpperCase()}
-                  </span>
-                ) : (
-                  <span className="material-symbols-outlined text-[#858A7D]">person</span>
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-start mb-0.5">
-                  <h3 className="font-bold text-[15px] text-white truncate">{member.full_name}</h3>
-                  <span className={`text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full ${
-                    member.payment_status === 'paid' ? 'bg-[#D5FF40]/10 text-[#D5FF40]' : 'bg-[#FF5964]/10 text-[#FF5964]'
-                  }`}>
-                    {member.payment_status || 'Pending'}
-                  </span>
+          members.map((member: any) => {
+            const currentMonth = new Date();
+            const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).toISOString().split('T')[0];
+            
+            // A member is "paid" if there is a payment record for the current month with status 'paid' or 'paid_verified'
+            const hasPaid = member.payments?.some((p: any) => 
+              p.payment_month === startOfMonth && 
+              (p.status === 'paid' || p.status === 'paid_verified')
+            );
+            
+            const status = hasPaid ? 'paid' : 'pending';
+
+            return (
+              <div 
+                key={member.id}
+                onClick={() => setSelectedMember(member)}
+                className="bg-[#121411] rounded-2xl p-4 border border-white/5 flex items-center gap-4 active:scale-[0.98] transition-all"
+              >
+                <div className="w-12 h-12 rounded-full bg-[#1e201d] flex items-center justify-center border border-white/10 overflow-hidden">
+                  {member.full_name ? (
+                    <span className="text-[14px] font-bold text-[#D5FF40]">
+                      {member.full_name.split(' ').map((n: any) => n[0]).join('').toUpperCase()}
+                    </span>
+                  ) : (
+                    <span className="material-symbols-outlined text-[#858A7D]">person</span>
+                  )}
                 </div>
-                <p className="text-[12px] text-[#858A7D] font-medium truncate">
-                  {member.fee_plans?.name || 'No Plan'}
-                </p>
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-start mb-0.5">
+                    <h3 className="font-bold text-[15px] text-white truncate">{member.full_name}</h3>
+                    <span className={`text-[9px] font-black uppercase tracking-[0.05em] px-2 py-0.5 rounded-full ${
+                      status === 'paid' ? 'bg-[#D5FF40]/10 text-[#D5FF40]' : 'bg-[#FF5964]/10 text-[#FF5964]'
+                    }`}>
+                      {status}
+                    </span>
+                  </div>
+                  <p className={`text-[12px] font-medium truncate ${
+                    status === 'paid' ? 'text-[#D5FF40]' : 'text-[#FF5964]'
+                  }`}>
+                    {status === 'paid' ? 'Paid' : 'Pending'}
+                  </p>
+                </div>
+                <span className="material-symbols-outlined text-[#3d3f3b]">chevron_right</span>
               </div>
-              <span className="material-symbols-outlined text-[#3d3f3b]">chevron_right</span>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 
@@ -182,8 +197,18 @@ function MembersDashboard() {
               </div>
               <h2 className="text-[24px] font-bold text-white mb-1">{selectedMember.full_name}</h2>
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#1e201d] rounded-full border border-white/5">
-                <div className={`w-1.5 h-1.5 rounded-full ${selectedMember.payment_status === 'paid' ? 'bg-[#D5FF40]' : 'bg-[#FF5964]'}`} />
-                <span className="text-[11px] font-bold text-[#C0C2B8] uppercase tracking-wider">{selectedMember.payment_status || 'Pending'}</span>
+                <div className={`w-1.5 h-1.5 rounded-full ${(() => {
+                  const currentMonth = new Date();
+                  const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).toISOString().split('T')[0];
+                  return selectedMember.payments?.some((p: any) => p.payment_month === startOfMonth && (p.status === 'paid' || p.status === 'paid_verified')) ? 'bg-[#D5FF40]' : 'bg-[#FF5964]';
+                })()}`} />
+                <span className="text-[11px] font-bold text-[#C0C2B8] uppercase tracking-wider">
+                  {selectedMember.payments?.some((p: any) => {
+                    const currentMonth = new Date();
+                    const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).toISOString().split('T')[0];
+                    return p.payment_month === startOfMonth && (p.status === 'paid' || p.status === 'paid_verified');
+                  }) ? 'Paid' : 'Pending'}
+                </span>
               </div>
             </div>
 
