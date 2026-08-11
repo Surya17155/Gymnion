@@ -590,8 +590,13 @@ export const recordManualPayment = createServerFn({ method: 'POST' })
     source: z.string().default('manual')
   }).parse(data))
   .handler(async ({ data }) => {
+    const now = new Date();
+    // Use the first day of the current month if payment_month is not provided
+    const defaultMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+    
     const insertData: any = {
       ...data,
+      payment_month: data.payment_month || defaultMonth,
       status: 'paid'
     };
     if (insertData.notes === undefined) delete insertData.notes;
