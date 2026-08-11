@@ -122,7 +122,15 @@ function ProfilePage() {
           <div className="relative group">
             <div className="relative w-32 h-32 rounded-full p-1 bg-gradient-to-br from-[#B7FF1E] to-[#83A51B] mb-6 shadow-[0_0_20px_rgba(183,255,30,0.2)]">
               <div className="w-full h-full rounded-full overflow-hidden bg-[#333532] border-4 border-[#121411] relative">
-                <img alt="Profile" className={`w-full h-full object-cover ${isUploading ? 'opacity-30' : 'opacity-100'}`} src={profile?.photo_url || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop'} />
+                <img 
+                  alt="Profile" 
+                  key={profile?.photo_url}
+                  className={`w-full h-full object-cover ${isUploading ? 'opacity-30' : 'opacity-100'}`} 
+                  src={profile?.photo_url || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop'} 
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop';
+                  }}
+                />
                 {isUploading && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-6 h-6 border-2 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
