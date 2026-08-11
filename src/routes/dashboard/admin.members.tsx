@@ -215,8 +215,18 @@ function MembersDashboard() {
             <div className="space-y-6 mb-8 overflow-y-auto max-h-[40vh] pr-2 custom-scrollbar">
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-[#121411] p-4 rounded-2xl border border-white/5">
-                  <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-1">Fee Plan</p>
-                  <p className="text-[14px] text-white font-bold">{selectedMember.fee_plans?.name || 'Standard'}</p>
+                  <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-1">Status</p>
+                  <p className={`text-[14px] font-bold ${(() => {
+                    const currentMonth = new Date();
+                    const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).toISOString().split('T')[0];
+                    return selectedMember.payments?.some((p: any) => p.payment_month === startOfMonth && (p.status === 'paid' || p.status === 'paid_verified')) ? 'text-[#D5FF40]' : 'text-[#FF5964]';
+                  })()}`}>
+                    {selectedMember.payments?.some((p: any) => {
+                      const currentMonth = new Date();
+                      const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).toISOString().split('T')[0];
+                      return p.payment_month === startOfMonth && (p.status === 'paid' || p.status === 'paid_verified');
+                    }) ? 'Paid' : 'Pending'}
+                  </p>
                 </div>
                 <div className="bg-[#121411] p-4 rounded-2xl border border-white/5">
                   <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-1">Renewal</p>
