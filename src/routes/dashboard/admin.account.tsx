@@ -172,15 +172,15 @@ function AdminAccount() {
                     const fileName = `${gym?.id || 'admin'}-${Math.random()}.${fileExt}`;
                     const filePath = `owners/${fileName}`;
 
-                    const { error: uploadError } = await supabase.storage
+                    const { data, error: uploadError } = await supabase.storage
                       .from('gym-assets')
                       .upload(filePath, file);
 
                     if (uploadError) throw uploadError;
 
-                    const { data: { publicUrl } } = supabase.storage
+                    const { data: { signedUrl } } = await supabase.storage
                       .from('gym-assets')
-                      .getPublicUrl(filePath);
+                      .createSignedUrl(filePath, 31536000); // 1 year
 
                     setFormData(prev => ({ ...prev, photo_url: publicUrl }));
                     setMessage({ type: 'success', text: 'Photo uploaded! Don\'t forget to save changes.' });
