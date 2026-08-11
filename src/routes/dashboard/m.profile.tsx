@@ -356,13 +356,24 @@ function ProfilePage() {
       </main>
 
       <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-40 bg-[#1e201d] border-t border-white/5 shadow-lg px-2 py-2 pb-safe flex justify-around items-center h-[64px] rounded-t-lg">
-        <Link to="/dashboard/m" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl w-[72px] h-[64px] transition-colors">
-          <LucideHome className="w-6 h-6 mb-1" />
+        <Link 
+          to="/dashboard/m" 
+          activeOptions={{ exact: true }}
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center p-1 rounded-xl w-[72px] h-[64px] transition-all duration-200"
+        >
+          <span className="material-symbols-outlined mb-1">home</span>
           <span className="text-[11px] leading-[14px] font-semibold">Home</span>
         </Link>
         
-        <Link to="/dashboard/m/payments" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl w-[72px] h-[64px] transition-colors">
-          <LucideCreditCard className="w-6 h-6 mb-1" />
+        <Link 
+          to="/dashboard/m/payments" 
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center p-1 rounded-xl w-[72px] h-[64px] transition-all duration-200"
+        >
+          <span className="material-symbols-outlined mb-1">credit_card</span>
           <span className="text-[11px] leading-[14px] font-semibold">Payments</span>
         </Link>
         
@@ -371,17 +382,27 @@ function ProfilePage() {
             onClick={() => window.location.href = '/checkin?scan=true'}
             className="w-16 h-16 bg-[#B7FF1E] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgba(213,255,64,0.3)] border-4 border-[#1e201d] hover:scale-105 transition-transform"
           >
-            <LucideScanQrCode className="w-[30px] h-[30px] text-[#293500]" />
+            <span className="material-symbols-outlined text-[30px] text-[#293500]">qr_code_scanner</span>
           </button>
         </div>
         
-        <Link to="/dashboard/m/attendance" className="flex flex-col items-center justify-center text-[#C0C2B8] p-1 hover:bg-[#333532] rounded-xl w-[72px] h-[64px] transition-colors">
-          <LucideCalendarDays className="w-6 h-6 mb-1" />
+        <Link 
+          to="/dashboard/m/attendance" 
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center p-1 rounded-xl w-[72px] h-[64px] transition-all duration-200"
+        >
+          <span className="material-symbols-outlined mb-1">calendar_month</span>
           <span className="text-[11px] leading-[14px] font-semibold">Attendance</span>
         </Link>
         
-        <Link to="/dashboard/m/profile" className="flex flex-col items-center justify-center text-[#B7FF1E] bg-[#25340D]/20 rounded-xl p-1 w-[72px] h-[64px] scale-90 transition-all duration-200">
-          <LucideUser className="w-6 h-6 mb-1" />
+        <Link 
+          to="/dashboard/m/profile" 
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center p-1 rounded-xl w-[72px] h-[64px] transition-all duration-200"
+        >
+          <span className="material-symbols-outlined mb-1">person</span>
           <span className="text-[11px] leading-[14px] font-semibold">Profile</span>
         </Link>
       </nav>
