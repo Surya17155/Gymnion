@@ -767,12 +767,3 @@ export const updateAdminPassword = createServerFn({ method: 'POST' })
     return { success: true };
   });
 
-export const exportGymAttendance = createServerFn({ method: 'POST' })
-  .middleware([requireSupabaseAuth])
-  .validator((data: any) => z.object({
-    gymId: z.string()
-  }).parse(data))
-  .handler(async ({ data }) => {
-    const { exportGymAttendanceToSheets } = await import("./attendance.server");
-    return await exportGymAttendanceToSheets(data.gymId);
-  });
