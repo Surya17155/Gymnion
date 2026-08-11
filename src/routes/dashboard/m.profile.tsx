@@ -66,27 +66,44 @@ function ProfilePage() {
     try {
       setIsUploading(true);
       const fileExt = file.name.split('.').pop();
-      const fileName = `${profile.id}-${Math.random()}.${fileExt}`;
+      const fileName = `${profile.id}-${Date.now()}.${fileExt}`;
       const filePath = `profile-pics/${fileName}`;
 
+      console.log('Uploading file to members bucket:', filePath);
+
       // Upload the file to the 'members' bucket
-      const { error: uploadError } = await supabase.storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
         .from('members')
-        .upload(filePath, file);
+        .upload(filePath, file, {
+          upsert: true,
+          contentType: file.type
+        });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Supabase storage upload error:', uploadError);
+        throw uploadError;
+      }
 
-      // Get the public URL
-      const { data: { publicUrl } } = supabase.storage
+      console.log('Upload successful:', uploadData);
+
+      // Get the signed URL for the private file
+      const { data: signedData, error: signedError } = await supabase.storage
         .from('members')
-        .getPublicUrl(filePath);
+        .createSignedUrl(filePath, 60 * 60 * 24 * 365); // 1 year
+
+      if (signedError) {
+        console.error('Error creating signed URL:', signedError);
+        throw signedError;
+      }
+
+      console.log('Generated signed URL:', signedData.signedUrl);
 
       // Update the profile with the new photo_url
-      await updateMutation.mutateAsync({ photo_url: publicUrl });
+      await updateMutation.mutateAsync({ photo_url: signedData.signedUrl });
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading photo:', error);
-      alert('Failed to upload photo. Please try again.');
+      alert(`Failed to upload photo: ${error.message || 'Unknown error'}`);
     } finally {
       setIsUploading(false);
     }
@@ -110,7 +127,15 @@ function ProfilePage() {
           <div className="relative group">
             <div className="relative w-32 h-32 rounded-full p-1 bg-gradient-to-br from-[#B7FF1E] to-[#83A51B] mb-6 shadow-[0_0_20px_rgba(183,255,30,0.2)]">
               <div className="w-full h-full rounded-full overflow-hidden bg-[#333532] border-4 border-[#121411] relative">
-                <img alt="Profile" className={`w-full h-full object-cover ${isUploading ? 'opacity-30' : 'opacity-100'}`} src={profile?.photo_url || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop'} />
+                <img 
+                  alt="Profile" 
+                  key={profile?.photo_url}
+                  className={`w-full h-full object-cover ${isUploading ? 'opacity-30' : 'opacity-100'}`} 
+                  src={profile?.photo_url || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop'} 
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop';
+                  }}
+                />
                 {isUploading && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-6 h-6 border-2 border-[#B7FF1E] border-t-transparent rounded-full animate-spin" />
