@@ -255,8 +255,26 @@ function MembersDashboard() {
                   </p>
                 </div>
                 <div className="bg-[#121411] p-4 rounded-2xl border border-white/5 flex flex-col justify-center min-h-[72px]">
-                  <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-1">Renewal</p>
-                  <p className="text-[14px] text-white font-bold">{selectedMember.join_date ? format(new Date(selectedMember.join_date), 'dd MMM yyyy') : 'N/A'}</p>
+                  <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-1">Next Due</p>
+                  <p className="text-[14px] text-white font-bold">{(() => {
+                    if (!selectedMember.join_date) return 'N/A';
+                    const billingDay = selectedMember.billing_day || new Date(selectedMember.join_date).getDate();
+                    const latestPayment = selectedMember.payments
+                      ?.filter((p: any) => p.status === 'paid' || p.status === 'paid_verified')
+                      .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+                    
+                    const baseDate = latestPayment ? new Date(latestPayment.created_at) : new Date(selectedMember.join_date);
+                    let dueYear = baseDate.getFullYear();
+                    let dueMonth = baseDate.getMonth() + 1;
+                    
+                    if (dueMonth > 11) {
+                      dueMonth = 0;
+                      dueYear++;
+                    }
+                    
+                    const dueDate = new Date(dueYear, dueMonth, billingDay);
+                    return format(dueDate, 'dd MMM yyyy');
+                  })()}</p>
                 </div>
               </div>
 
