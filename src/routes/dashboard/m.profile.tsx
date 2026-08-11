@@ -109,7 +109,7 @@ function ProfilePage() {
                   <label className="text-[11px] text-[#C0C2B8] uppercase font-bold">Date of Birth</label>
                   <input type="date" value={tempProfile.dob || ''} onChange={(e) => {
                     const val = e.target.value;
-                    setTempProfile(prev => ({...prev, dob: val}));
+                    setTempProfile((prev: any) => ({...prev, dob: val}));
                   }} className="bg-[#1e201d] border border-white/10 rounded-lg px-3 py-1.5 text-white text-sm focus:border-[#B7FF1E] outline-none w-full" />
                 </div>
                 <div className="flex justify-end gap-2">
