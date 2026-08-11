@@ -132,19 +132,39 @@ function MembersDashboard() {
         ) : (
           members.map((member: any) => {
             const currentMonth = new Date();
-            // Start of month in local time then to ISO date string (YYYY-MM-DD)
             const year = currentMonth.getFullYear();
             const month = String(currentMonth.getMonth() + 1).padStart(2, '0');
             const startOfMonth = `${year}-${month}-01`;
             
-            // A member is "paid" if there is a payment record for the current month with status 'paid' or 'paid_verified'
-            // We check against the exact payment_month string from the DB
             const hasPaid = member.payments?.some((p: any) => 
               p.payment_month === startOfMonth && 
               (p.status === 'paid' || p.status === 'paid_verified')
             );
             
             const status = hasPaid ? 'paid' : 'pending';
+
+            // Calculate next due date
+            let nextDue = 'N/A';
+            if (member.join_date) {
+              const billingDay = member.billing_day || new Date(member.join_date).getDate();
+              const latestPayment = member.payments
+                ?.filter((p: any) => p.status === 'paid' || p.status === 'paid_verified')
+                .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+              
+              const baseDate = latestPayment ? new Date(latestPayment.created_at) : new Date(member.join_date);
+              
+              // Next due is the billingDay of the month following the baseDate
+              let dueYear = baseDate.getFullYear();
+              let dueMonth = baseDate.getMonth() + 1; // Month is 0-indexed, so +1 gives next month
+              
+              if (dueMonth > 11) {
+                dueMonth = 0;
+                dueYear++;
+              }
+              
+              const dueDate = new Date(dueYear, dueMonth, billingDay);
+              nextDue = format(dueDate, 'dd MMM yyyy');
+            }
 
             return (
               <div 
@@ -162,7 +182,10 @@ function MembersDashboard() {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-[15px] text-white truncate mb-0.5">{member.full_name}</h3>
+                  <div className="flex justify-between items-start">
+                    <h3 className="font-bold text-[15px] text-white truncate mb-0.5">{member.full_name}</h3>
+                    <span className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider">Due: {nextDue}</span>
+                  </div>
                   <p className={`text-[12px] font-semibold truncate ${
                     status === 'paid' ? 'text-[#D5FF40]' : 'text-[#FF5964]'
                   }`}>
