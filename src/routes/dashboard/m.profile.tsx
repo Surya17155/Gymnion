@@ -66,27 +66,39 @@ function ProfilePage() {
     try {
       setIsUploading(true);
       const fileExt = file.name.split('.').pop();
-      const fileName = `${profile.id}-${Math.random()}.${fileExt}`;
+      const fileName = `${profile.id}-${Date.now()}.${fileExt}`;
       const filePath = `profile-pics/${fileName}`;
 
-      // Upload the file to the 'members' bucket
-      const { error: uploadError } = await supabase.storage
-        .from('members')
-        .upload(filePath, file);
+      console.log('Uploading file to members bucket:', filePath);
 
-      if (uploadError) throw uploadError;
+      // Upload the file to the 'members' bucket
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('members')
+        .upload(filePath, file, {
+          upsert: true,
+          contentType: file.type
+        });
+
+      if (uploadError) {
+        console.error('Supabase storage upload error:', uploadError);
+        throw uploadError;
+      }
+
+      console.log('Upload successful:', uploadData);
 
       // Get the public URL
       const { data: { publicUrl } } = supabase.storage
         .from('members')
         .getPublicUrl(filePath);
 
+      console.log('Generated public URL:', publicUrl);
+
       // Update the profile with the new photo_url
       await updateMutation.mutateAsync({ photo_url: publicUrl });
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading photo:', error);
-      alert('Failed to upload photo. Please try again.');
+      alert(`Failed to upload photo: ${error.message || 'Unknown error'}`);
     } finally {
       setIsUploading(false);
     }
