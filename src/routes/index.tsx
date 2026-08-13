@@ -59,6 +59,16 @@ function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative min-h-[100svh] flex flex-col pt-20 overflow-hidden">
+        {/* Logo — top-left corner of hero */}
+        <motion.img
+          src={logoAsset.url}
+          alt="Gymnion Logo"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="absolute top-6 left-6 z-20 h-10 md:h-12 w-auto"
+        />
+
         {/* Background Layer */}
         <motion.div 
           style={{ y: bgY }}
