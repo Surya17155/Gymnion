@@ -4,7 +4,7 @@ import { ArrowRight, Menu } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getAuthUserRole } from "@/lib/auth.functions";
 import logoAsset from "@/assets/gymnion-logo.png.asset.json";
-import heroBgAsset from "@/assets/gymnion-hero-bg.png.asset.json";
+import heroBgAsset from "@/assets/landing-bg-new.png.asset.json";
 import { TextReveal } from "@/components/ui/text-reveal-animation";
 
 export const Route = createFileRoute("/")({
