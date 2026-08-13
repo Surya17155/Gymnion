@@ -83,8 +83,8 @@ function LandingPage() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              <h1 className="text-[clamp(3.4rem,13vw,5.3rem)] font-bold leading-[0.95] mb-6 tracking-tighter">
-                Run your gym <br className="hidden md:block" />
+              <h1 className="text-[clamp(2.8rem,10vw,4.5rem)] font-bold leading-[1.05] mb-6 tracking-tighter">
+                Run your gym <br />
                 with <span className="text-[#C8FF38] inline-block"><TextReveal word="clarity." /></span>
               </h1>
             </motion.div>
