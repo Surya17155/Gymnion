@@ -76,14 +76,14 @@ function LandingPage() {
         </motion.div>
 
         {/* Content Layer */}
-        <div className="relative z-10 flex flex-col flex-1 px-6 max-w-7xl mx-auto w-full pt-12 md:pt-24">
+        <div className="relative z-10 flex flex-col flex-1 px-6 max-w-7xl mx-auto w-full pt-8 md:pt-16">
           <div className="max-w-[800px]">
             <motion.div
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              <h1 className="text-[clamp(2.8rem,10vw,4.5rem)] font-bold leading-[1.05] mb-6 tracking-tighter">
+              <h1 className="text-[clamp(2.8rem,10vw,4.5rem)] font-bold leading-[1.05] mb-4 tracking-tighter">
                 Run your gym <br />
                 with <span className="text-[#C8FF38] inline-block"><TextReveal word="clarity." /></span>
               </h1>
@@ -93,9 +93,10 @@ function LandingPage() {
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-              className="text-lg md:text-xl text-[#AAB2AA] mb-10 max-w-[330px] leading-relaxed"
+              className="text-base md:text-lg text-[#AAB2AA] mb-8 max-w-[320px] leading-snug"
             >
-              Track attendance, payments, fees, and revenue in one clear dashboard.
+              Track attendance, payments, fees, and revenue <br className="hidden sm:block" />
+              in one clear dashboard.
             </motion.p>
 
             <motion.div 
@@ -105,9 +106,9 @@ function LandingPage() {
             >
               <Link 
                 to="/auth/login" 
-                className="inline-flex items-center gap-2 bg-[#C8FF38] text-[#101311] px-8 h-[52px] rounded-full font-bold text-lg hover:bg-[#B6F028] transition-transform active:scale-[0.98]"
+                className="inline-flex items-center gap-2 bg-[#C8FF38] text-[#101311] px-6 h-[46px] rounded-xl font-bold text-base hover:bg-[#B6F028] transition-transform active:scale-[0.98]"
               >
-                Get started <ArrowRight size={20} />
+                Get started <ArrowRight size={18} />
               </Link>
             </motion.div>
           </div>
