@@ -4,6 +4,8 @@ import { ArrowRight, Menu } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getAuthUserRole } from "@/lib/auth.functions";
 import logoAsset from "@/assets/gymnion-logo.png.asset.json";
+import heroBgAsset from "@/assets/gymnion-hero-bg.png.asset.json";
+import { TextReveal } from "@/components/ui/text-reveal-animation";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
@@ -21,16 +23,28 @@ export const Route = createFileRoute("/")({
 function LandingPage() {
   const { scrollY } = useScroll();
   const navBackground = useTransform(scrollY, [0, 100], ["rgba(16, 19, 17, 0)", "rgba(16, 19, 17, 0.95)"]);
+  const bgY = useTransform(scrollY, [0, 500], [0, -50]);
+
+  // Metric props (would come from CMS or API in real app)
+  const monthLabel = "This month";
+  const monthlyRevenue = "₹1,84,500";
+  const feeCollectionRate = "86%";
 
   return (
-    <div className="min-h-screen bg-[#101311] text-[#F8FAF7]">
+    <div className="min-h-screen bg-[#101311] text-[#F8FAF7] overflow-x-hidden">
       {/* Sticky Nav */}
       <motion.nav 
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.45, ease: "easeOut" }}
         style={{ backgroundColor: navBackground }}
         className="fixed top-0 w-full z-50 transition-all duration-300 border-b border-transparent hover:border-white/10"
       >
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <img src={logoAsset.url} alt="Gymnion" className="h-10" />
+          <div className="flex items-center gap-2">
+            <img src={logoAsset.url} alt="Gymnion Logo" className="h-8 w-auto" />
+            <span className="text-xl font-bold tracking-tight">Gymnion</span>
+          </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#AAB2AA]">
             <a href="#features" className="hover:text-[#C8FF38]">Features</a>
             <a href="#pricing" className="hover:text-[#C8FF38]">Pricing</a>
@@ -40,54 +54,80 @@ function LandingPage() {
               Get Started
             </Link>
           </div>
-          <button className="md:hidden text-[#F8FAF7]">
+          <button className="md:hidden text-[#F8FAF7] p-2 min-h-[44px] min-w-[44px]">
             <Menu />
           </button>
         </div>
       </motion.nav>
 
-      {/* Hero */}
-      <section className="relative h-screen flex items-center justify-center pt-20 overflow-hidden">
+      {/* Hero Section */}
+      <section className="relative min-h-[100svh] flex flex-col pt-20 overflow-hidden">
+        {/* Background Layer */}
         <motion.div 
-          initial={{ scale: 1.03 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
+          style={{ y: bgY }}
           className="absolute inset-0 z-0"
         >
-          <div className="absolute inset-0 bg-black/60 z-10" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#101311] z-20" />
           <img 
-            src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop" 
-            alt="Gym training" 
-            className="w-full h-full object-cover"
+            src={heroBgAsset.url} 
+            alt="" 
+            className="w-full h-full object-cover object-[center_top]"
           />
+          <div className="absolute inset-0 bg-black/20" /> {/* Subtle overlay for contrast */}
         </motion.div>
-        <div className="relative z-10 text-center px-6">
-          <motion.h1 
-            initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
-            className="text-6xl md:text-8xl font-black mb-6"
-          >
-            Run the gym<br />your members love.
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-xl md:text-2xl text-[#AAB2AA] mb-10 max-w-2xl mx-auto"
-          >
-            Gymnion brings members, classes, payments, and everyday operations into one clear workspace.
-          </motion.p>
-          <motion.div 
-            initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
-            <Link to="/auth/login" className="bg-[#C8FF38] text-[#101311] px-10 py-4 rounded-full font-bold text-lg hover:bg-[#B6F028]">
-              Get Started
-            </Link>
-            <a href="#features" className="flex items-center gap-2 text-[#F8FAF7] font-medium">
-              Explore features <ArrowRight size={20} />
-            </a>
-          </motion.div>
+
+        {/* Content Layer */}
+        <div className="relative z-10 flex flex-col flex-1 px-6 max-w-7xl mx-auto w-full pt-12 md:pt-24">
+          <div className="max-w-[800px]">
+            <motion.div
+              initial={{ y: 24, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+            >
+              <h1 className="text-[clamp(3.4rem,13vw,5.3rem)] font-bold leading-[0.95] mb-6 tracking-tighter">
+                Run your gym <br className="hidden md:block" />
+                with <span className="text-[#C8FF38] inline-block"><TextReveal word="clarity." /></span>
+              </h1>
+            </motion.div>
+
+            <motion.p 
+              initial={{ y: 24, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+              className="text-lg md:text-xl text-[#AAB2AA] mb-10 max-w-[330px] leading-relaxed"
+            >
+              Track attendance, payments, fees, and revenue in one clear dashboard.
+            </motion.p>
+
+            <motion.div 
+              initial={{ y: 24, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+            >
+              <Link 
+                to="/auth/login" 
+                className="inline-flex items-center gap-2 bg-[#C8FF38] text-[#101311] px-8 h-[52px] rounded-full font-bold text-lg hover:bg-[#B6F028] transition-transform active:scale-[0.98]"
+              >
+                Get started <ArrowRight size={20} />
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Revenue Card Metrics Overlay */}
+          <div className="mt-auto pb-20 md:pb-32 relative">
+             {/* Note: This positions text over the existing card shell in the background image */}
+             <div className="max-w-[342px] mx-auto md:mx-0 md:ml-4 translate-y-8">
+               <div className="flex justify-between items-start mb-1">
+                 <span className="text-xs font-medium text-[#AAB2AA] tracking-wider uppercase">{monthLabel}</span>
+               </div>
+               <div className="text-3xl font-bold mb-4">{monthlyRevenue}</div>
+               <div className="flex justify-end">
+                  <span className="text-[10px] font-bold text-[#C8FF38] mb-1">{feeCollectionRate} fees collected</span>
+               </div>
+             </div>
+          </div>
         </div>
       </section>
+
 
       {/* Trust Strip */}
       <section className="bg-[#F4F6F1] py-16">
