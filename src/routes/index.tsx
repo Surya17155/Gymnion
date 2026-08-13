@@ -33,41 +33,34 @@ function LandingPage() {
   return (
     <div className="min-h-screen bg-[#101311] text-[#F8FAF7] overflow-x-hidden">
       {/* Sticky Nav */}
-      <motion.nav 
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.45, ease: "easeOut" }}
-        style={{ backgroundColor: navBackground }}
-        className="fixed top-0 w-full z-50 transition-all duration-300 border-b border-transparent hover:border-white/10"
-      >
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <span className="text-xl font-bold tracking-tight">Gymnion</span>
+      <div className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-50">
+        <motion.nav 
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+          className="bg-[#101311]/80 backdrop-blur-md border border-white/10 rounded-full px-6 h-16 flex items-center justify-between shadow-2xl"
+        >
+          <div className="flex items-center gap-2">
+            <img src={logoAsset.url} alt="Logo" className="h-6 w-auto" />
+            <span className="text-xl font-bold tracking-tight">Gymnion</span>
+          </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#AAB2AA]">
             <a href="#features" className="hover:text-[#C8FF38]">Features</a>
             <a href="#pricing" className="hover:text-[#C8FF38]">Pricing</a>
             <a href="#about" className="hover:text-[#C8FF38]">About</a>
             <a href="#contact" className="hover:text-[#C8FF38]">Contact</a>
-            <Link to="/auth/login" className="bg-[#C8FF38] text-[#101311] px-6 py-2.5 rounded-full font-bold hover:bg-[#B6F028]">
+            <Link to="/auth/login" className="bg-[#C8FF38] text-[#101311] px-5 py-2 rounded-full font-bold hover:bg-[#B6F028] text-xs uppercase tracking-wider">
               Get Started
             </Link>
           </div>
-          <button className="md:hidden text-[#F8FAF7] p-2 min-h-[44px] min-w-[44px]">
-            <Menu />
+          <button className="md:hidden text-[#F8FAF7] p-2">
+            <Menu size={20} />
           </button>
-        </div>
-      </motion.nav>
+        </motion.nav>
+      </div>
 
       {/* Hero Section */}
-      <section className="relative min-h-[100svh] flex flex-col pt-20 overflow-hidden">
-        {/* Logo — top-left corner of hero */}
-        <motion.img
-          src={logoAsset.url}
-          alt="Gymnion Logo"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="absolute top-6 left-6 z-20 h-10 md:h-12 w-auto"
-        />
+      <section className="relative min-h-[100svh] flex flex-col pt-24 overflow-hidden">
 
         {/* Background Layer */}
         <motion.div 
