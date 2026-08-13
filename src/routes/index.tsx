@@ -3,7 +3,7 @@ import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { ArrowRight, Menu } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getAuthUserRole } from "@/lib/auth.functions";
-import logoAsset from "@/assets/gymnion-logo.png.asset.json";
+import logoAsset from "@/assets/gymnion-logo-new.png.asset.json";
 import heroBgAsset from "@/assets/landing-bg-new.png.asset.json";
 import { TextReveal } from "@/components/ui/text-reveal-animation";
 
@@ -41,10 +41,7 @@ function LandingPage() {
         className="fixed top-0 w-full z-50 transition-all duration-300 border-b border-transparent hover:border-white/10"
       >
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <img src={logoAsset.url} alt="Gymnion Logo" className="h-8 w-auto" />
-            <span className="text-xl font-bold tracking-tight">Gymnion</span>
-          </div>
+          <span className="text-xl font-bold tracking-tight">Gymnion</span>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#AAB2AA]">
             <a href="#features" className="hover:text-[#C8FF38]">Features</a>
             <a href="#pricing" className="hover:text-[#C8FF38]">Pricing</a>
@@ -62,6 +59,16 @@ function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative min-h-[100svh] flex flex-col pt-20 overflow-hidden">
+        {/* Logo — top-left corner of hero */}
+        <motion.img
+          src={logoAsset.url}
+          alt="Gymnion Logo"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="absolute top-6 left-6 z-20 h-10 md:h-12 w-auto"
+        />
+
         {/* Background Layer */}
         <motion.div 
           style={{ y: bgY }}
