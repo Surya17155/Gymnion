@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as CheckinRouteImport } from './routes/checkin'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
@@ -42,11 +41,6 @@ import { Route as DashboardSuperAdminGymsGymIdRouteImport } from './routes/dashb
 import { Route as DashboardSuperAdminGymsAddRouteImport } from './routes/dashboard/super-admin.gyms.add'
 import { Route as DashboardAdminPlansEditPlanIdRouteImport } from './routes/dashboard/admin.plans.edit.$planId'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CheckinRoute = CheckinRouteImport.update({
   id: '/checkin',
   path: '/checkin',
@@ -214,7 +208,6 @@ const DashboardAdminPlansEditPlanIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/checkin': typeof CheckinRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
@@ -248,7 +241,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/checkin': typeof CheckinRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
@@ -279,7 +271,6 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/checkin': typeof CheckinRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
@@ -315,7 +306,6 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/checkin'
     | '/dashboard'
     | '/auth/forgot-password'
@@ -349,7 +339,6 @@ export interface FileRouteTypes {
     | '/dashboard/admin/plans/edit/$planId'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/checkin'
     | '/dashboard'
     | '/auth/forgot-password'
@@ -379,7 +368,6 @@ export interface FileRouteTypes {
     | '/dashboard/admin/plans/edit/$planId'
   id:
     | '__root__'
-    | '/'
     | '/checkin'
     | '/dashboard'
     | '/auth/forgot-password'
@@ -414,7 +402,6 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   CheckinRoute: typeof CheckinRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
@@ -425,13 +412,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/checkin': {
       id: '/checkin'
       path: '/checkin'
@@ -763,7 +743,6 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   CheckinRoute: CheckinRoute,
   DashboardRoute: DashboardRouteWithChildren,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
