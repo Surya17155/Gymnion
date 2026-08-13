@@ -41,10 +41,7 @@ function LandingPage() {
         className="fixed top-0 w-full z-50 transition-all duration-300 border-b border-transparent hover:border-white/10"
       >
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <img src={logoAsset.url} alt="Gymnion Logo" className="h-8 w-auto" />
-            <span className="text-xl font-bold tracking-tight">Gymnion</span>
-          </div>
+          <span className="text-xl font-bold tracking-tight">Gymnion</span>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#AAB2AA]">
             <a href="#features" className="hover:text-[#C8FF38]">Features</a>
             <a href="#pricing" className="hover:text-[#C8FF38]">Pricing</a>
