@@ -40,9 +40,9 @@ function LandingPage() {
           transition={{ duration: 0.45, ease: "easeOut" }}
           className="bg-[#101311]/80 backdrop-blur-md border border-white/10 rounded-full px-6 h-16 flex items-center justify-between shadow-2xl"
         >
-          <div className="flex items-center gap-2">
-            <img src={logoAsset.url} alt="Logo" className="h-6 w-auto" />
-            <span className="text-xl font-bold tracking-tight">Gymnion</span>
+          <div className="flex items-center gap-2.5">
+            <img src={logoAsset.url} alt="Logo" className="h-8 w-auto" />
+            <span className="text-lg font-bold tracking-tight">Gymnion</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#AAB2AA]">
             <a href="#features" className="hover:text-[#C8FF38]">Features</a>
