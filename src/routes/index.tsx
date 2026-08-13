@@ -93,7 +93,7 @@ function LandingPage() {
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-              className="text-base md:text-lg text-[#AAB2AA] mb-8 max-w-[320px] leading-snug"
+              className="text-base md:text-lg text-[#AAB2AA] mb-4 max-w-[320px] leading-snug"
             >
               Track attendance, payments, fees, and revenue <br className="hidden sm:block" />
               in one clear dashboard.
