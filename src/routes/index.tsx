@@ -47,8 +47,21 @@ function LandingPage() {
       </motion.nav>
 
       {/* Hero */}
-      <section className="relative h-screen flex items-center justify-center pt-20">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#101311]" />
+      <section className="relative h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <motion.div 
+          initial={{ scale: 1.03 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="absolute inset-0 z-0"
+        >
+          <div className="absolute inset-0 bg-black/60 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#101311] z-20" />
+          <img 
+            src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop" 
+            alt="Gym training" 
+            className="w-full h-full object-cover"
+          />
+        </motion.div>
         <div className="relative z-10 text-center px-6">
           <motion.h1 
             initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
