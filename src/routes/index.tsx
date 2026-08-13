@@ -99,32 +99,81 @@ function LandingPage() {
               in one clear dashboard.
             </motion.p>
 
+          </div>
+
+          {/* Central Revenue Card */}
+          <motion.div 
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-10 flex-1 flex items-center justify-center px-6"
+          >
+            <div className="w-full max-w-[340px] p-5 rounded-[24px] border-2 border-[#D5FF40]/40 bg-transparent backdrop-blur-[2px]">
+              {/* Top Section */}
+              <div className="flex justify-between items-start mb-5">
+                <div className="flex flex-col">
+                  <span className="text-[#A0A0A0] text-[13px] font-medium mb-1 tracking-wide uppercase">This month</span>
+                  <h2 className="text-4xl font-bold tracking-tight text-[#F8FAF7]">₹1,84,500</h2>
+                </div>
+                {/* Circular Progress Ring */}
+                <svg className="w-16 h-16 flex-shrink-0 transform -rotate-90" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.1)" strokeWidth="14" fill="transparent"></circle>
+                  <circle 
+                    cx="50" 
+                    cy="50" 
+                    r="40" 
+                    stroke="#D5FF40" 
+                    strokeWidth="14" 
+                    fill="transparent" 
+                    strokeDasharray="251.2" 
+                    strokeDashoffset="35.168" 
+                    strokeLinecap="round"
+                    style={{ filter: "drop-shadow(0 0 8px rgba(213, 255, 64, 0.4))" }}
+                  ></circle>
+                </svg>
+              </div>
+
+              {/* Divider */}
+              <div className="h-[1px] bg-white/10 w-full mb-5" />
+
+              {/* Bottom Section */}
+              <div className="flex justify-between items-end h-[70px]">
+                {/* Left: Bar Chart */}
+                <div className="flex items-end space-x-2.5 h-full pb-1">
+                  <div className="w-5 h-[30%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm opacity-80"></div>
+                  <div className="w-5 h-[60%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm opacity-90"></div>
+                  <div className="w-5 h-[90%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm shadow-[0_0_15px_rgba(213,255,64,0.3)]"></div>
+                </div>
+                
+                {/* Right: Linear Progress */}
+                <div className="flex flex-col items-end justify-end pb-1 w-[48%]">
+                  <div className="text-sm font-medium mb-2.5">
+                    <span className="text-[#D5FF40] font-bold">86%</span>
+                    <span className="text-[#A0A0A0] ml-1.5">fees collected</span>
+                  </div>
+                  <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full bg-[#D5FF40] rounded-full shadow-[0_0_10px_rgba(213,255,64,0.4)]" style={{ width: '86%' }}></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Bottom CTA */}
+          <div className="relative z-10 w-full px-6 max-w-7xl mx-auto pb-12 md:pb-20 mt-auto">
             <motion.div 
-              initial={{ y: 24, opacity: 0 }}
+              initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+              transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+              className="flex justify-center md:justify-start"
             >
               <Link 
                 to="/auth/login" 
-                className="inline-flex items-center gap-2 bg-[#C8FF38] text-[#101311] px-6 h-[46px] rounded-xl font-bold text-base hover:bg-[#B6F028] transition-transform active:scale-[0.98]"
+                className="inline-flex items-center gap-2 bg-[#C8FF38] text-[#101311] px-6 h-[46px] rounded-xl font-bold text-base hover:bg-[#B6F028] transition-all active:scale-[0.98] shadow-[0_8px_20px_rgba(200,255,56,0.2)]"
               >
                 Get started <ArrowRight size={18} />
               </Link>
             </motion.div>
-          </div>
-
-          {/* Revenue Card Metrics Overlay */}
-          <div className="mt-auto pb-20 md:pb-32 relative">
-             {/* Note: This positions text over the existing card shell in the background image */}
-             <div className="max-w-[342px] mx-auto md:mx-0 md:ml-4 translate-y-8">
-               <div className="flex justify-between items-start mb-1">
-                 <span className="text-xs font-medium text-[#AAB2AA] tracking-wider uppercase">{monthLabel}</span>
-               </div>
-               <div className="text-3xl font-bold mb-4">{monthlyRevenue}</div>
-               <div className="flex justify-end">
-                  <span className="text-[10px] font-bold text-[#C8FF38] mb-1">{feeCollectionRate} fees collected</span>
-               </div>
-             </div>
           </div>
         </div>
       </section>
