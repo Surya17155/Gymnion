@@ -385,7 +385,7 @@ function LandingPage() {
           {/* Timeline Section */}
           <div className="relative">
             {/* Continuous vertical line */}
-            <div className="absolute left-[1.25rem] top-8 bottom-[-4rem] w-[2px] bg-[#B7FF1E] shadow-[0_0_10px_#B7FF1E] z-0"></div>
+            <div className="absolute left-[1.25rem] top-8 bottom-[-9rem] w-[2px] bg-[#B7FF1E] shadow-[0_0_10px_#B7FF1E] z-0"></div>
 
             {/* Step 1 */}
             <section className="relative pl-14 mb-16">
@@ -549,12 +549,13 @@ function LandingPage() {
           </div>
         </div>
 
-        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 overflow-hidden -translate-x-2">
-          {/* Top Vertical Line Segment */}
-          <div className="absolute left-[24px] top-0 w-[2px] h-12 bg-gradient-to-b from-transparent to-[#A8FF16] shadow-[0_0_10px_#A8FF16] z-10"></div>
-          
+        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 -translate-x-3">
+          {/* Continuous vertical line flowing in from the previous section */}
+          <div className="absolute left-[40px] top-[-120px] bottom-16 w-[2px] bg-[#A8FF16] z-0 shadow-[0_0_10px_#A8FF16,0_0_20px_rgba(168,255,22,0.4)]"></div>
+
           {/* BEGIN: Header Section */}
-          <header className="text-center relative z-10 mb-12 flex flex-col items-center pl-4 pr-12">
+          <header className="text-center relative z-10 mb-12 flex flex-col items-center">
+
             {/* Pill Badge */}
             <div className="inline-flex items-center justify-center px-6 py-2 rounded-full border border-[#A8FF16]/50 bg-[#0F1115]/80 backdrop-blur-sm mb-6 text-[10px] font-bold tracking-[0.2em] text-[#A8FF16] uppercase shadow-[0_0_15px_rgba(168,255,22,0.2)]">
               Keep the day moving
@@ -572,8 +573,7 @@ function LandingPage() {
 
           {/* BEGIN: Main Content Area (Cards & Timeline) */}
           <div className="relative pr-2 pl-16">
-            {/* The continuous vertical line */}
-            <div className="absolute left-[-40px] top-0 bottom-[-60px] w-[2px] bg-[#A8FF16] z-0 shadow-[0_0_10px_#A8FF16,0_0_20px_rgba(168,255,22,0.4)]"></div>
+
             
             {/* BEGIN: Card 03 (Track every payment) */}
             <div className="relative mb-16">
@@ -703,15 +703,8 @@ function LandingPage() {
               </div>
             </div>
           </div>
-          
-          {/* Bottom Checkmark icon on the line */}
-          <div className="absolute left-[24px] bottom-12 translate-x-[-50%] z-20">
-            <div className="w-8 h-8 rounded-full bg-[#A8FF16] border-4 border-[#0F1115] shadow-[0_0_15px_#A8FF16] flex items-center justify-center">
-              <svg fill="none" height="14" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 13L9 17L19 7" stroke="#0F1115" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3"></path>
-              </svg>
-            </div>
-          </div>
+
+
         </main>
       </section>
 
