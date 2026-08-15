@@ -549,7 +549,7 @@ function LandingPage() {
           </div>
         </div>
 
-        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-[1.3rem]">
+        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-[1.35rem]">
           {/* Continuous vertical line flowing in from the previous section */}
           <div className="absolute left-[1.25rem] top-[-120px] bottom-16 w-[2px] bg-[#B7FF1E] z-0 shadow-[0_0_10px_#B7FF1E] translate-x-1.5"></div>
 
