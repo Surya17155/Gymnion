@@ -672,7 +672,7 @@ function LandingPage() {
                       <div className="w-full bg-lime-500 rounded-t-sm h-[80%] shadow-[0_0_10px_rgba(132,204,22,0.4)]"></div>
                       <div className="w-full bg-gray-700/50 rounded-t-sm h-[40%]"></div>
                       <div className="w-full bg-gray-700/50 rounded-t-sm h-[60%]"></div>
-                      <div className="w-full bg-[#A8FF16] rounded-t-sm h-[100%] shadow-[0_0_15px_#A8FF16]"></div>
+                      <div className="w-full bg-[#B7FF1E] rounded-t-sm h-[100%] shadow-[0_0_15px_#B7FF1E]"></div>
                       <div className="w-full bg-gray-700/50 rounded-t-sm h-[45%]"></div>
                     </div>
                   </div>
