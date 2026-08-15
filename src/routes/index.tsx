@@ -549,9 +549,9 @@ function LandingPage() {
           </div>
         </div>
 
-        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-2">
+        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-4">
           {/* Continuous vertical line flowing in from the previous section */}
-          <div className="absolute left-[18px] top-[-120px] bottom-16 w-[2px] bg-[#A8FF16] z-0 shadow-[0_0_10px_#A8FF16,0_0_20px_rgba(168,255,22,0.4)]"></div>
+          <div className="absolute left-[18px] top-[-120px] bottom-16 w-[2px] bg-[#A8FF16] z-0 shadow-[0_0_10px_#A8FF16,0_0_20px_rgba(168,255,22,0.4)] translate-x-1.5"></div>
 
           {/* BEGIN: Header Section */}
           <header className="text-center relative z-10 mb-12 flex flex-col items-center">
@@ -561,8 +561,8 @@ function LandingPage() {
               Keep the day moving
             </div>
             {/* Headline */}
-            <h1 className="text-4xl font-bold leading-tight mb-4 tracking-tight text-left w-full">
-              <span className="text-white">Collect with confidence.</span><br />
+            <h1 className="text-3xl font-bold leading-tight mb-4 tracking-tight text-left w-full">
+              <span className="text-white block">Collect with confidence.</span>
               <span className="text-white">See the </span><span className="text-[#A8FF16] drop-shadow-[0_0_15px_rgba(168,255,22,0.6)]">full picture.</span>
             </h1>
             {/* Subheadline */}
