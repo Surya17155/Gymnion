@@ -685,7 +685,7 @@ function LandingPage() {
                       </svg>
                     </div>
                     <div className="flex gap-1">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#A8FF16]"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#B7FF1E]"></div>
                       <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
                       <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
                     </div>
