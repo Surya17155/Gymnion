@@ -572,8 +572,7 @@ function LandingPage() {
 
           {/* BEGIN: Main Content Area (Cards & Timeline) */}
           <div className="relative pr-2 pl-16">
-            {/* The continuous vertical line */}
-            <div className="absolute left-[-40px] top-0 bottom-[-60px] w-[2px] bg-[#A8FF16] z-0 shadow-[0_0_10px_#A8FF16,0_0_20px_rgba(168,255,22,0.4)]"></div>
+
             
             {/* BEGIN: Card 03 (Track every payment) */}
             <div className="relative mb-16">
