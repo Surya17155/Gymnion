@@ -369,7 +369,7 @@ function LandingPage() {
           </svg>
         </div>
 
-        <main className="relative z-10 px-6 max-w-md mx-auto">
+        <main className="relative z-10 px-6 max-w-md mx-auto -translate-x-2">
           {/* Header Section */}
           <header className="mb-12">
             <p className="text-[#c3c8be] text-xs tracking-wider uppercase mb-3 font-medium">How it works</p>
@@ -549,7 +549,7 @@ function LandingPage() {
           </div>
         </div>
 
-        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 overflow-hidden">
+        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 overflow-hidden -translate-x-2">
           {/* Top Vertical Line Segment */}
           <div className="absolute left-[24px] top-0 w-[2px] h-12 bg-gradient-to-b from-transparent to-[#A8FF16] shadow-[0_0_10px_#A8FF16] z-10"></div>
           
