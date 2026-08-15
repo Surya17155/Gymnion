@@ -529,29 +529,6 @@ function LandingPage() {
         </main>
       </section>
 
-      {/* Continuation: Collect with Confidence Section */}
-      <section className="relative py-24 bg-[#000000] overflow-hidden border-t border-white/5">
-        {/* Background Effects matching the provided code */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80">
-            <svg className="absolute -top-20 -right-20 w-[400px] h-[400px] opacity-40" viewBox="0 0 100 100">
-              <circle cx="100" cy="0" fill="none" r="40" stroke="#B7FF1E" strokeWidth="0.2"></circle>
-              <circle cx="100" cy="0" fill="none" r="60" stroke="#B7FF1E" strokeWidth="0.1"></circle>
-              <circle cx="100" cy="0" fill="none" r="80" stroke="#B7FF1E" strokeWidth="0.05"></circle>
-            </svg>
-          </div>
-          <div className="absolute bottom-0 left-0 w-80 h-80">
-            <svg className="absolute -bottom-20 -left-20 w-[400px] h-[400px] opacity-40" viewBox="0 0 100 100">
-              <circle cx="0" cy="100" fill="none" r="40" stroke="#B7FF1E" strokeWidth="0.2"></circle>
-              <circle cx="0" cy="100" fill="none" r="60" stroke="#B7FF1E" strokeWidth="0.1"></circle>
-              <circle cx="0" cy="100" fill="none" r="80" stroke="#B7FF1E" strokeWidth="0.05"></circle>
-            </svg>
-          </div>
-        </div>
-
-
-
-      {/* Product Journey (Existing) */}
       <section className="py-24 bg-[#101311]">
         <div className="max-w-7xl mx-auto px-6 mb-16">
           <h2 className="text-5xl font-black mb-6">From first check-in to lasting loyalty.</h2>
