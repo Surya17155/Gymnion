@@ -557,7 +557,7 @@ function LandingPage() {
           <header className="text-center relative z-10 mb-12 flex flex-col items-center">
 
             {/* Pill Badge */}
-            <div className="inline-flex items-center justify-center px-6 py-2 rounded-full border border-[#A8FF16]/50 bg-[#0F1115]/80 backdrop-blur-sm mb-6 text-[10px] font-bold tracking-[0.2em] text-[#A8FF16] uppercase shadow-[0_0_15px_rgba(168,255,22,0.2)]">
+            <div className="inline-flex items-center justify-center px-6 py-2 rounded-full border border-[#B7FF1E]/50 bg-[#0F1115]/80 backdrop-blur-sm mb-6 text-[10px] font-bold tracking-[0.2em] text-[#B7FF1E] uppercase shadow-[0_0_15px_rgba(183,255,30,0.2)]">
               Keep the day moving
             </div>
             {/* Headline */}
