@@ -190,101 +190,148 @@ function LandingPage() {
         <div className="relative z-10 max-w-7xl mx-auto px-6">
           <div className="flex flex-col lg:flex-row gap-16">
             <div className="lg:w-1/3 lg:sticky lg:top-32 h-fit">
-              <h2 className="text-5xl font-black leading-tight mb-6">Everything your gym needs to keep moving.</h2>
-              <p className="text-xl text-[#AAB2AA]">A focused system for the work that happens before, during, and after every class.</p>
+              <p className="text-[#9a9a9a] font-semibold text-[11px] uppercase tracking-widest mb-2">BUILT FOR DAILY OPERATIONS</p>
+              <h2 className="text-white text-5xl font-bold tracking-tighter leading-tight mb-6">
+                Two essentials. One <span className="text-[#d5ff40]">clear system</span>.
+              </h2>
+              <p className="text-[#9a9a9a] text-xl leading-relaxed">
+                Gymnion keeps attendance and member payments visible, accurate, and easy to act on.
+              </p>
             </div>
             
-            <div className="lg:w-2/3 space-y-24">
-              {/* Feature A */}
+            <div className="lg:w-2/3 flex flex-col md:flex-row gap-8 items-start">
+              {/* Attendance Card */}
               <motion.div 
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="group cursor-pointer"
+                className="w-full max-w-sm rounded-xl p-6 border border-[#d5ff40]/30 bg-[#151515] shadow-[inset_0_0_15px_rgba(213,255,64,0.05)] relative overflow-hidden group"
               >
-                <div className="aspect-[16/10] rounded-2xl overflow-hidden mb-8 bg-[#181D19]">
-                  <img 
-                    src="https://images.unsplash.com/photo-1571902251103-d71b5633faa7?q=80&w=2070&auto=format&fit=crop" 
-                    alt="Class scheduling" 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-lg border border-[#d5ff40] flex items-center justify-center text-[#d5ff40] shrink-0">
+                    <svg className="w-6 h-6 fill-none stroke-current stroke-[1.5] stroke-linecap-round stroke-linejoin-round" viewBox="0 0 24 24">
+                      <rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect>
+                      <path d="M9 12l2 2 4-4"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold leading-tight mb-2 text-[#f0f2eb]">Attendance that<br/>stays accurate.</h3>
+                    <p className="text-sm text-[#9a9a9a] leading-snug">See who checked in, who missed today, and what needs attention.</p>
+                  </div>
                 </div>
-                <h3 className="text-3xl font-bold mb-4">Class scheduling</h3>
-                <p className="text-xl text-[#AAB2AA]">Publish sessions, manage capacity, and keep trainers and members in sync.</p>
+
+                <div className="bg-[#111111] rounded-xl border border-[#2a2a2a] overflow-hidden">
+                  <div className="flex justify-between items-center px-4 py-3 border-b border-[#2a2a2a]">
+                    <span className="text-xs font-medium text-[#9a9a9a] uppercase tracking-wider">Status</span>
+                    <span className="text-xs font-medium text-[#9a9a9a] uppercase tracking-wider">Check-Ins Today</span>
+                  </div>
+                  <div className="flex flex-col">
+                    {[
+                      { initials: "AR", time: "9:12 AM", status: "present" },
+                      { initials: "MS", time: "8:45 AM", status: "present" },
+                      { initials: "RK", time: "Absent", status: "absent" }
+                    ].map((row, i) => (
+                      <div key={i} className="flex justify-between items-center px-4 py-3 border-b border-[#2a2a2a] last:border-0">
+                        <div className="w-1/3">
+                          <div className="w-8 h-8 rounded-full bg-[#1a1c19] flex items-center justify-center text-xs font-medium text-[#f0f2eb]">{row.initials}</div>
+                        </div>
+                        <div className="w-1/3 flex justify-center">
+                          {row.status === 'present' ? (
+                            <svg className="w-5 h-5 text-[#d5ff40] fill-none stroke-current stroke-[1.5] stroke-linecap-round stroke-linejoin-round" viewBox="0 0 24 24">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <path d="M9 12l2 2 4-4"></path>
+                            </svg>
+                          ) : (
+                            <svg className="w-5 h-5 text-[#9a9a9a] fill-none stroke-current stroke-[1.5] stroke-linecap-round stroke-linejoin-round" viewBox="0 0 24 24">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <line x1="8" x2="16" y1="12" y2="12"></line>
+                            </svg>
+                          )}
+                        </div>
+                        <div className={`flex justify-end items-center gap-2 w-1/3 text-sm ${row.status === 'present' ? 'text-[#f0f2eb]' : 'text-[#9a9a9a]'}`}>
+                          <span>{row.time}</span>
+                          <svg className="w-4 h-4 text-[#9a9a9a] fill-none stroke-current stroke-[1.5] stroke-linecap-round stroke-linejoin-round" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-between items-center px-4 py-4">
+                    <span className="text-xs font-medium text-[#9a9a9a] uppercase tracking-wider">Total Check-Ins</span>
+                    <span className="text-xl font-bold text-[#d5ff40]">24</span>
+                  </div>
+                </div>
               </motion.div>
 
-              {/* Feature B */}
+              {/* Payments Card */}
               <motion.div 
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-[#181D19] p-12 rounded-2xl border border-white/5"
+                transition={{ delay: 0.1 }}
+                className="w-full max-w-sm rounded-xl p-6 border border-[#d5ff40]/30 bg-[#151515] shadow-[inset_0_0_15px_rgba(213,255,64,0.05)] relative overflow-hidden group"
               >
-                <h3 className="text-3xl font-bold mb-4">Member management</h3>
-                <p className="text-xl text-[#AAB2AA] mb-12">See every member’s activity, membership status, notes, and next action in one profile.</p>
-                <div className="h-64 rounded-xl bg-[#101311] border border-white/10 p-6 flex flex-col gap-4 overflow-hidden relative">
-                  <div className="flex items-center gap-4 opacity-40">
-                    <div className="w-10 h-10 rounded-full bg-[#181D19]" />
-                    <div className="space-y-2">
-                      <div className="w-32 h-3 bg-[#181D19] rounded" />
-                      <div className="w-20 h-2 bg-[#181D19] rounded" />
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-lg border border-[#d5ff40] flex items-center justify-center text-[#d5ff40] shrink-0">
+                    <svg className="w-6 h-6 fill-none stroke-current stroke-[1.5] stroke-linecap-round stroke-linejoin-round" viewBox="0 0 24 24">
+                      <rect height="14" rx="2" ry="2" width="18" x="3" y="5"></rect>
+                      <line x1="3" x2="21" y1="10" y2="10"></line>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold leading-tight mb-2 text-[#f0f2eb]">Payments that<br/>stay on track.</h3>
+                    <p className="text-sm text-[#9a9a9a] leading-snug">Track collected fees, pending payments, and overdue memberships in one place.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 items-center">
+                  <div className="flex-1 bg-[#111111] rounded-xl border border-[#2a2a2a] p-4 flex flex-col gap-4">
+                    <div className="flex justify-between items-center text-sm">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#d5ff40]"></span>
+                        <span className="text-[#f0f2eb] font-medium">Paid</span>
+                      </div>
+                      <span className="text-[#d5ff40] font-medium">64</span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm border-t border-[#2a2a2a] pt-4">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#ffc107]"></span>
+                        <span className="text-[#f0f2eb] font-medium">Pending</span>
+                      </div>
+                      <span className="text-[#ffc107] font-medium">18</span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm border-t border-[#2a2a2a] pt-4">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#ff4d4f]"></span>
+                        <span className="text-[#f0f2eb] font-medium">Overdue</span>
+                      </div>
+                      <span className="text-[#ff4d4f] font-medium">7</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 p-4 rounded-lg bg-[#C8FF38]/10 border border-[#C8FF38]/20 translate-x-4">
-                    <div className="w-10 h-10 rounded-full bg-[#C8FF38]/20 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-[#C8FF38]" />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="w-40 h-3 bg-[#C8FF38]/30 rounded" />
-                      <div className="w-24 h-2 bg-[#C8FF38]/20 rounded" />
-                    </div>
-                    <div className="ml-auto px-3 py-1 rounded-full bg-[#C8FF38] text-[#101311] text-[10px] font-bold">ACTIVE</div>
-                  </div>
-                  <div className="flex items-center gap-4 opacity-40">
-                    <div className="w-10 h-10 rounded-full bg-[#181D19]" />
-                    <div className="space-y-2">
-                      <div className="w-28 h-3 bg-[#181D19] rounded" />
-                      <div className="w-36 h-2 bg-[#181D19] rounded" />
+
+                  <div className="w-28 h-28 relative flex items-center justify-center shrink-0">
+                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" fill="none" r="45" stroke="#222" strokeWidth="8"></circle>
+                      {/* Overdue (Red) */}
+                      <circle className="origin-center rotate-[15deg]" cx="50" cy="50" fill="none" r="45" stroke="#ff4d4f" strokeDasharray="20 262.6" strokeDashoffset="0" strokeWidth="8"></circle>
+                      {/* Pending (Yellow) */}
+                      <circle className="origin-center rotate-[15deg]" cx="50" cy="50" fill="none" r="45" stroke="#ffc107" strokeDasharray="40 242.6" strokeDashoffset="-22" strokeWidth="8"></circle>
+                      {/* Paid (Green) */}
+                      <circle className="origin-center rotate-[15deg]" cx="50" cy="50" fill="none" r="45" stroke="#d5ff40" strokeDasharray="190 92.6" strokeDashoffset="-64" strokeLinecap="round" strokeWidth="8"></circle>
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                      <span className="text-[8px] font-medium text-[#9a9a9a] leading-tight uppercase tracking-widest mt-1">Collection<br/>Progress</span>
+                      <div className="text-2xl font-bold text-[#d5ff40] leading-none flex items-baseline">
+                        73<span className="text-sm">%</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </motion.div>
-
-              {/* Feature C & D */}
-              <div className="grid md:grid-cols-2 gap-12">
-                <motion.div 
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="aspect-square rounded-2xl bg-[#C8FF38] p-12 mb-8 flex flex-col justify-end text-[#101311]">
-                     <div className="w-16 h-1 bg-[#101311]/20 mb-6" />
-                     <h3 className="text-3xl font-black mb-4">Payments that stay on track</h3>
-                  </div>
-                  <p className="text-lg text-[#AAB2AA]">Handle subscriptions, renewals, and payment status without chasing spreadsheets.</p>
-                </motion.div>
-
-                <motion.div 
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="group cursor-pointer"
-                >
-                  <div className="aspect-square rounded-2xl overflow-hidden mb-8 bg-[#181D19]">
-                    <img 
-                      src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=2070&auto=format&fit=crop" 
-                      alt="Analytics" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
-                  <h3 className="text-3xl font-bold mb-4">Your gym, visible at a glance</h3>
-                  <p className="text-lg text-[#AAB2AA]">Make better daily decisions with a clear view of attendance, activity, and revenue.</p>
-                </motion.div>
-              </div>
             </div>
           </div>
         </div>
       </section>
+
 
       {/* Product Journey */}
       <section className="py-24 bg-[#101311]">
