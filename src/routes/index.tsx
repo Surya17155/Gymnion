@@ -563,7 +563,7 @@ function LandingPage() {
             {/* Headline */}
             <h1 className="text-3xl font-bold leading-tight mb-4 tracking-tight text-left w-full">
               <span className="text-white block">Collect with confidence.</span>
-              <span className="text-white">See the </span><span className="text-[#A8FF16] drop-shadow-[0_0_15px_rgba(168,255,22,0.6)]">full picture.</span>
+              <span className="text-white">See the </span><span className="text-[#B7FF1E] drop-shadow-[0_0_15px_rgba(183,255,30,0.6)]">full picture.</span>
             </h1>
             {/* Subheadline */}
             <p className="text-gray-400 text-base max-w-sm font-medium leading-relaxed text-left w-full">
