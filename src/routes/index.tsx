@@ -585,11 +585,11 @@ function LandingPage() {
               <div className="bg-gradient-to-br from-[#111317] to-black rounded-[20px] border border-[#B7FF1E] p-6 relative z-10 shadow-[0_0_20px_rgba(183,255,30,0.2)]">
                 {/* Card Header */}
                 <div className="flex items-start mb-6">
-                  <div className="w-12 h-12 rounded-xl border border-[#A8FF16]/40 flex items-center justify-center bg-[#16191D]/50 shadow-[0_0_15px_rgba(168,255,22,0.15)] shrink-0 mr-4">
+                  <div className="w-12 h-12 rounded-xl border border-[#B7FF1E]/40 flex items-center justify-center bg-[#16191D]/50 shadow-[0_0_15px_rgba(183,255,30,0.15)] shrink-0 mr-4">
                     <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                      <rect height="14" rx="2" stroke="#A8FF16" strokeWidth="1.5" width="20" x="2" y="5"></rect>
-                      <path d="M2 10H22" stroke="#A8FF16" strokeWidth="1.5"></path>
-                      <rect fill="#A8FF16" height="2" rx="0.5" width="4" x="6" y="14"></rect>
+                      <rect height="14" rx="2" stroke="#B7FF1E" strokeWidth="1.5" width="20" x="2" y="5"></rect>
+                      <path d="M2 10H22" stroke="#B7FF1E" strokeWidth="1.5"></path>
+                      <rect fill="#B7FF1E" height="2" rx="0.5" width="4" x="6" y="14"></rect>
                     </svg>
                   </div>
                   <div>
