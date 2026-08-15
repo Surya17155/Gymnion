@@ -554,18 +554,18 @@ function LandingPage() {
           <div className="absolute left-[0.25rem] top-[290px] bottom-16 w-[2px] bg-[#B7FF1E] z-0 shadow-[0_0_10px_#B7FF1E]"></div>
 
           {/* BEGIN: Header Section */}
-          <header className="text-center relative z-10 mb-12 flex flex-col items-center pr-8">
-
+          <header className="relative z-10 mb-12 flex flex-col items-start px-6">
             {/* Pill Badge */}
             <div className="inline-flex items-center justify-center px-6 py-2 rounded-full border border-[#B7FF1E]/50 bg-[#0F1115]/80 backdrop-blur-sm mb-6 text-[10px] font-bold tracking-[0.2em] text-[#B7FF1E] uppercase shadow-[0_0_15px_rgba(183,255,30,0.2)]">
               Keep the day moving
             </div>
             {/* Headline */}
-            <h1 className="text-3xl font-bold leading-tight mb-4 tracking-tight text-center w-full">
-              <span className="text-white block">Collect with confidence.</span>
+            <h1 className="text-4xl font-bold leading-tight mb-4 tracking-tight text-white">
+              Collect with <br />
+              <span className="text-[#B7FF1E] drop-shadow-[0_0_15px_rgba(183,255,30,0.6)]">confidence.</span>
             </h1>
             {/* Subheadline */}
-            <p className="text-gray-400 text-base max-w-sm font-medium leading-relaxed text-center w-full">
+            <p className="text-[#c3c8be] text-base font-medium leading-relaxed pr-4">
               Follow every membership payment and understand how your gym is performing.
             </p>
           </header>
