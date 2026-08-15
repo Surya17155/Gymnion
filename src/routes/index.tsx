@@ -549,12 +549,13 @@ function LandingPage() {
           </div>
         </div>
 
-        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 overflow-hidden -translate-x-2">
-          {/* Top Vertical Line Segment */}
-          <div className="absolute left-[24px] top-0 w-[2px] h-12 bg-gradient-to-b from-transparent to-[#A8FF16] shadow-[0_0_10px_#A8FF16] z-10"></div>
-          
+        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 -translate-x-3">
+          {/* Continuous vertical line flowing in from the previous section */}
+          <div className="absolute left-[40px] top-[-120px] bottom-16 w-[2px] bg-[#A8FF16] z-0 shadow-[0_0_10px_#A8FF16,0_0_20px_rgba(168,255,22,0.4)]"></div>
+
           {/* BEGIN: Header Section */}
-          <header className="text-center relative z-10 mb-12 flex flex-col items-center pl-4 pr-12">
+          <header className="text-center relative z-10 mb-12 flex flex-col items-center">
+
             {/* Pill Badge */}
             <div className="inline-flex items-center justify-center px-6 py-2 rounded-full border border-[#A8FF16]/50 bg-[#0F1115]/80 backdrop-blur-sm mb-6 text-[10px] font-bold tracking-[0.2em] text-[#A8FF16] uppercase shadow-[0_0_15px_rgba(168,255,22,0.2)]">
               Keep the day moving
