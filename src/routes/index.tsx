@@ -385,7 +385,7 @@ function LandingPage() {
           {/* Timeline Section */}
           <div className="relative">
             {/* Continuous vertical line */}
-            <div className="absolute left-[1.25rem] top-8 bottom-[-4rem] w-[2px] bg-[#B7FF1E] shadow-[0_0_10px_#B7FF1E] z-0"></div>
+            <div className="absolute left-[1.25rem] top-8 bottom-[-9rem] w-[2px] bg-[#B7FF1E] shadow-[0_0_10px_#B7FF1E] z-0"></div>
 
             {/* Step 1 */}
             <section className="relative pl-14 mb-16">
