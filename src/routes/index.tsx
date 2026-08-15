@@ -1,4 +1,5 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { useRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { ArrowRight, Menu } from "lucide-react";
@@ -16,15 +17,24 @@ export const Route = createFileRoute("/")({
 function LandingPage() {
   const { scrollY } = useScroll();
   const bgY = useTransform(scrollY, [0, 500], [0, -50]);
+  const heroRef = useRef(null);
+  const isHeroInView = useInView(heroRef, { once: false, amount: 0.1 });
 
   useEffect(() => {
     const checkAuth = async () => {
+      // Use getSession but be aware it might not be ready during hydration
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
+        console.log("Session found, fetching role...");
         const role = await getAuthUserRole();
-        if (role === 'super_admin') window.location.href = '/dashboard/super-admin';
-        else if (role === 'admin' || role === 'gym_admin') window.location.href = '/dashboard/admin';
-        else if (role === 'member') window.location.href = '/dashboard/m';
+        console.log("Role found:", role);
+        if (role === 'super_admin') {
+          window.location.replace('/dashboard/super-admin');
+        } else if (role === 'admin' || role === 'gym_admin') {
+          window.location.replace('/dashboard/admin');
+        } else if (role === 'member') {
+          window.location.replace('/dashboard/m');
+        }
       }
     };
     checkAuth();
@@ -36,8 +46,8 @@ function LandingPage() {
       <div className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-50">
         <motion.nav 
           initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.45, ease: "easeOut" }}
+          animate={isHeroInView ? { y: 0, opacity: 1 } : { y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="bg-[#101311]/80 backdrop-blur-md border border-white/10 rounded-full px-6 h-16 flex items-center justify-between shadow-2xl"
         >
           <div className="flex items-center gap-2.5">
@@ -60,7 +70,7 @@ function LandingPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative min-h-[100svh] flex flex-col pt-24 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[100svh] flex flex-col pt-24 overflow-hidden">
         {/* Background Layer */}
         <motion.div 
           style={{ y: bgY }}
@@ -79,7 +89,7 @@ function LandingPage() {
           <div className="max-w-[800px]">
             <motion.div
               initial={{ y: 24, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
+              animate={isHeroInView ? { y: 0, opacity: 1 } : { y: 0, opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
               <h1 className="text-[clamp(2.8rem,10vw,4.5rem)] font-bold leading-[1.05] mb-4 tracking-tighter">
@@ -90,7 +100,7 @@ function LandingPage() {
 
             <motion.p 
               initial={{ y: 24, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
+              animate={isHeroInView ? { y: 0, opacity: 1 } : { y: 0, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
               className="text-base md:text-lg text-[#AAB2AA] mb-4 max-w-[320px] leading-snug"
             >
@@ -102,7 +112,7 @@ function LandingPage() {
           {/* Central Revenue Card */}
           <motion.div 
             initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
+            animate={isHeroInView ? { y: 0, opacity: 1 } : { y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10 flex-1 flex items-center justify-center px-6"
           >
@@ -152,7 +162,7 @@ function LandingPage() {
           <div className="relative z-10 w-full px-6 max-w-7xl mx-auto pb-12 md:pb-20 mt-auto">
             <motion.div 
               initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
+              animate={isHeroInView ? { y: 0, opacity: 1 } : { y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
               className="flex justify-center md:justify-start"
             >
