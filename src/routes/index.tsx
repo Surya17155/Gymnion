@@ -320,7 +320,189 @@ function LandingPage() {
       </section>
 
 
-      {/* Product Journey */}
+      {/* How It Works Section */}
+      <section id="how-it-works" className="relative py-24 bg-[#000000] overflow-hidden">
+        {/* Atmospheric Glows */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_30%,rgba(213,255,64,0.15)_0%,transparent_60%)] pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_90%_90%,rgba(213,255,64,0.1)_0%,transparent_50%)] pointer-events-none"></div>
+
+        {/* Background decorative circles */}
+        <div className="absolute top-0 right-0 w-80 h-80 pointer-events-none overflow-hidden">
+          <svg className="absolute -top-20 -right-20 w-[400px] h-[400px] opacity-40" viewBox="0 0 100 100">
+            <circle cx="100" cy="0" fill="none" r="40" stroke="#B7FF1E" strokeWidth="0.2"></circle>
+            <circle cx="100" cy="0" fill="none" r="60" stroke="#B7FF1E" strokeWidth="0.1"></circle>
+            <circle cx="100" cy="0" fill="none" r="80" stroke="#B7FF1E" strokeWidth="0.05"></circle>
+          </svg>
+        </div>
+        <div className="absolute bottom-0 left-0 w-80 h-80 pointer-events-none overflow-hidden">
+          <svg className="absolute -bottom-20 -left-20 w-[400px] h-[400px] opacity-40" viewBox="0 0 100 100">
+            <circle cx="0" cy="100" fill="none" r="40" stroke="#B7FF1E" strokeWidth="0.2"></circle>
+            <circle cx="0" cy="100" fill="none" r="60" stroke="#B7FF1E" strokeWidth="0.1"></circle>
+            <circle cx="0" cy="100" fill="none" r="80" stroke="#B7FF1E" strokeWidth="0.05"></circle>
+          </svg>
+        </div>
+
+        <main className="relative z-10 px-6 max-w-md mx-auto">
+          {/* Header Section */}
+          <header className="mb-12">
+            <p className="text-[#c3c8be] text-xs tracking-wider uppercase mb-3 font-medium">How it works</p>
+            <h1 className="text-4xl font-bold leading-tight mb-4 text-white">
+              Start simple.<br />
+              Stay <span className="text-[#d5ff40]">organised.</span>
+            </h1>
+            <p className="text-[#c3c8be] text-base leading-relaxed pr-4">
+              Set up your member list, then keep every daily check-in clear and current.
+            </p>
+          </header>
+
+          {/* Timeline Section */}
+          <div className="relative">
+            {/* Continuous vertical line */}
+            <div className="absolute left-[1.25rem] top-8 bottom-[-4rem] w-[2px] bg-[#B7FF1E] shadow-[0_0_10px_#B7FF1E] z-0"></div>
+
+            {/* Step 1 */}
+            <section className="relative pl-14 mb-16">
+              {/* Number Badge */}
+              <div className="absolute left-0 top-1 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
+                <span className="text-[#d5ff40] font-bold text-lg">01</span>
+              </div>
+              <div className="mb-6">
+                {/* Person Add Icon */}
+                <div className="text-[#B7FF1E] mb-4">
+                  <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                    <path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                  </svg>
+                </div>
+                <h2 className="text-xl font-semibold text-white mb-2">Add your members</h2>
+                <p className="text-[#c3c8be] text-sm leading-relaxed pr-2">
+                  Create clear member profiles with the details your gym needs.
+                </p>
+              </div>
+              {/* UI Mockup Card 1 */}
+              <div className="bg-[#1e201d] rounded-2xl border border-[#B7FF1E] p-4 shadow-[0_0_15px_rgba(183,255,30,0.3)]">
+                <div className="space-y-4">
+                  {/* Member Items */}
+                  {[
+                    { initials: "AT", w1: "w-16", w2: "w-10" },
+                    { initials: "RK", w1: "w-16", w2: "w-12" },
+                    { initials: "JM", w1: "w-14", w2: "w-8" }
+                  ].map((member, i) => (
+                    <div key={i} className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-[#121411] border border-white/10 flex items-center justify-center text-[#d5ff40] font-medium text-sm">
+                          {member.initials}
+                        </div>
+                        <div className="space-y-1.5">
+                          <div className={`h-2 ${member.w1} bg-white/20 rounded`}></div>
+                          <div className={`h-1.5 ${member.w2} bg-white/10 rounded`}></div>
+                        </div>
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-[#121411] border border-white/10 flex items-center justify-center">
+                        <div className="flex gap-0.5">
+                          <div className="w-1 h-1 bg-white/50 rounded-full"></div>
+                          <div className="w-1 h-1 bg-white/50 rounded-full"></div>
+                          <div className="w-1 h-1 bg-white/50 rounded-full"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {/* Empty Input Area */}
+                  <div className="h-10 rounded-lg border border-[#d5ff40]/40 bg-[#121411]/50 mt-2"></div>
+                </div>
+              </div>
+            </section>
+
+            {/* Step 2 */}
+            <section className="relative pl-14">
+              {/* Number Badge */}
+              <div className="absolute left-0 top-1 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
+                <span className="text-[#d5ff40] font-bold text-lg">02</span>
+              </div>
+              <div className="mb-6">
+                {/* Calendar Icon */}
+                <div className="text-[#B7FF1E] mb-4">
+                  <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                    <rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect>
+                    <line x1="16" x2="16" y1="2" y2="6"></line>
+                    <line x1="8" x2="8" y1="2" y2="6"></line>
+                    <line x1="3" x2="21" y1="10" y2="10"></line>
+                  </svg>
+                </div>
+                <h2 className="text-xl font-semibold text-white mb-2">Record daily attendance</h2>
+                <p className="text-[#c3c8be] text-sm leading-relaxed pr-2">
+                  Mark check-ins in seconds and spot missed visits immediately.
+                </p>
+              </div>
+              {/* UI Mockup Card 2 */}
+              <div className="bg-[#1e201d] rounded-2xl border border-[#B7FF1E] shadow-[0_0_15px_rgba(183,255,30,0.3)] overflow-hidden">
+                {/* Card Header */}
+                <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
+                  <div className="flex items-center gap-2 text-[#c3c8be] text-sm">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect>
+                      <line x1="16" x2="16" y1="2" y2="6"></line>
+                      <line x1="8" x2="8" y1="2" y2="6"></line>
+                      <line x1="3" x2="21" y1="10" y2="10"></line>
+                    </svg>
+                    <span>16 May 2025</span>
+                  </div>
+                  <svg className="w-4 h-4 text-white/50" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </div>
+                {/* Card Body */}
+                <div className="p-4 space-y-4">
+                  {/* Attendance Item Checked */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#121411] border border-white/10 flex items-center justify-center text-[#d5ff40] font-medium text-sm">AT</div>
+                      <div className="h-2 w-16 bg-white/20 rounded"></div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="text-xs text-[#c3c8be]">07:12</span>
+                      <div className="w-8 h-8 rounded-md border border-[#d5ff40] flex items-center justify-center bg-[#d5ff40]/10">
+                        <svg className="w-5 h-5 text-[#d5ff40]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Attendance Item Checked */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#121411] border border-white/10 flex items-center justify-center text-[#d5ff40] font-medium text-sm">RK</div>
+                      <div className="h-2 w-16 bg-white/20 rounded"></div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="text-xs text-[#c3c8be]">07:08</span>
+                      <div className="w-8 h-8 rounded-md border border-[#d5ff40] flex items-center justify-center bg-[#d5ff40]/10">
+                        <svg className="w-5 h-5 text-[#d5ff40]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Attendance Item Unchecked */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#121411] border border-white/10 flex items-center justify-center text-[#d5ff40] font-medium text-sm opacity-50">JM</div>
+                      <div className="h-2 w-14 bg-white/10 rounded"></div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="text-xs text-white/20">—</span>
+                      <div className="w-8 h-8 rounded-md border border-white/10 flex items-center justify-center bg-[#121411]">
+                        <div className="w-3 h-0.5 bg-white/30 rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </main>
+      </section>
+
+      {/* Product Journey (Existing) */}
       <section className="py-24 bg-[#101311]">
         <div className="max-w-7xl mx-auto px-6 mb-16">
           <h2 className="text-5xl font-black mb-6">From first check-in to lasting loyalty.</h2>
