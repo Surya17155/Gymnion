@@ -565,7 +565,7 @@ function LandingPage() {
               <span className="text-[#B7FF1E] drop-shadow-[0_0_15px_rgba(183,255,30,0.6)]">confidence.</span>
             </h1>
             {/* Subheadline */}
-            <p className="text-[#c3c8be] text-base font-medium leading-relaxed pr-4">
+            <p className="text-[#c3c8be] text-base font-medium leading-relaxed pr-0 text-center">
               Follow every membership payment and understand how your gym is performing.
             </p>
           </header>
