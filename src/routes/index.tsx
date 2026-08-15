@@ -735,62 +735,108 @@ function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-24 bg-[#F4F6F1] text-[#151916]">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-5xl font-black mb-8">Simple plans for every stage of growth.</h2>
-          <div className="flex items-center justify-center gap-4 mb-16">
-            <span className="font-medium text-[#AAB2AA]">Monthly</span>
-            <div className="w-14 h-8 bg-[#151916] rounded-full p-1 flex items-center cursor-pointer">
-              <div className="w-6 h-6 bg-[#C8FF38] rounded-full" />
+      <section id="pricing" className="py-24 bg-[#121411] text-[#e3e3dd] border-t border-white/5">
+        <div className="max-w-[480px] mx-auto px-6">
+          <header className="flex flex-col gap-2 mb-12">
+            <span className="text-[11px] font-semibold text-[#858A7D] uppercase tracking-[0.2em]">Pricing</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+              Simple plans.<br/>
+              Built for your <span className="text-[#B7FF1E]">gym.</span>
+            </h2>
+            <p className="text-sm text-[#858A7D] mt-2 leading-relaxed">
+              Choose the plan that fits your gym today, then grow when you are ready.
+            </p>
+          </header>
+
+          <div className="flex flex-col gap-4">
+            {/* Basic Card */}
+            <div className="bg-[#1e201d] rounded-2xl p-6 border border-white/5 relative overflow-hidden transition-all duration-300 hover:border-[#B7FF1E]/30">
+              <div className="flex flex-col gap-4">
+                <h3 className="text-xl font-bold text-white">Basic</h3>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-white">₹999</span>
+                  <span className="text-xs text-[#858A7D]">/ month</span>
+                </div>
+                <p className="text-xs text-[#858A7D] border-b border-white/5 pb-4">
+                  The essentials for a well-run gym.
+                </p>
+                <ul className="flex flex-col gap-3 pt-2">
+                  <li className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span className="text-sm text-white">Attendance management</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span className="text-sm text-white">Payment integration</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span className="text-sm text-white">Up to 100 members</span>
+                  </li>
+                </ul>
+                <button className="w-full h-12 rounded-full border border-[#B7FF1E] text-[#B7FF1E] text-xs font-bold mt-4 transition-all hover:bg-[#B7FF1E]/10 active:scale-[0.98]">
+                  Choose Basic
+                </button>
+              </div>
             </div>
-            <span className="font-medium">Annual <span className="text-[#B6F028] ml-2">Save 20%</span></span>
+
+            {/* Standard Card */}
+            <div className="bg-[#1e201d] rounded-2xl p-6 border-2 border-[#B7FF1E] relative overflow-hidden shadow-[0_0_30px_rgba(183,255,30,0.15)] transition-all duration-300">
+              <div className="flex flex-col gap-4">
+                <div className="bg-[#B7FF1E] text-[#293500] text-[10px] font-black px-3 py-1 rounded-full w-max mb-2 tracking-wider">
+                  MOST POPULAR
+                </div>
+                <h3 className="text-xl font-bold text-white">Standard</h3>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-white">₹1,499</span>
+                  <span className="text-xs text-[#858A7D]">/ month</span>
+                </div>
+                <p className="text-xs text-[#858A7D] border-b border-white/5 pb-4">
+                  More room to grow, with support when you need it.
+                </p>
+                <ul className="flex flex-col gap-3 pt-2">
+                  <li className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span className="text-sm text-white">Everything in Basic</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span className="text-sm text-white">Up to 500 members</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span className="text-sm text-white">Fee reminders for members</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span className="text-sm text-white">Priority support</span>
+                  </li>
+                </ul>
+                <button className="w-full h-12 rounded-full bg-[#B7FF1E] text-[#293500] text-xs font-bold mt-4 transition-all hover:bg-[#83A51B] active:scale-[0.98] shadow-[0_0_15px_rgba(183,255,30,0.3)]">
+                  Choose Standard
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
-            <div className="p-10 rounded-2xl bg-white border border-[#151916]/5 flex flex-col items-start text-left">
-              <h3 className="text-2xl font-bold mb-2">Basic</h3>
-              <div className="flex items-baseline gap-1 mb-8">
-                <span className="text-4xl font-black">Rs. 999</span>
-                <span className="text-[#AAB2AA]">/mo</span>
-              </div>
-              <ul className="space-y-4 mb-12 text-[#AAB2AA]">
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#C8FF38]" /> Up to 100 members</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#C8FF38]" /> Attendance management</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#C8FF38]" /> Payment Management</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#C8FF38]" /> Email support</li>
-              </ul>
-              <button className="w-full py-4 rounded-full border-2 border-[#151916] font-bold mt-auto hover:bg-[#151916] hover:text-white transition-colors">Choose Basic</button>
-            </div>
-
-            <div className="p-10 rounded-2xl bg-[#101311] text-[#F8FAF7] border border-white/10 flex flex-col items-start text-left relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 bg-[#C8FF38] text-[#101311] text-xs font-black py-1.5 text-center">MOST POPULAR</div>
-              <h3 className="text-2xl font-bold mb-2 mt-4">Pro</h3>
-              <div className="flex items-baseline gap-1 mb-8">
-                <span className="text-4xl font-black">Rs. 1999</span>
-                <span className="text-[#AAB2AA]">/mo</span>
-              </div>
-              <ul className="space-y-4 mb-12 text-[#AAB2AA]">
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#C8FF38]" /> Up to 500 members</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#C8FF38]" /> Everything in Basic</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#C8FF38]" /> Automated reminders</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#C8FF38]" /> Priority Support</li>
-              </ul>
-              <button className="w-full py-4 rounded-full bg-[#C8FF38] text-[#101311] font-bold mt-auto hover:bg-[#B6F028] transition-colors">Start Pro</button>
-            </div>
-
-            <div className="p-10 rounded-2xl bg-white border border-[#151916]/5 flex flex-col items-start text-left">
-              <h3 className="text-2xl font-bold mb-2">Enterprise</h3>
-              <div className="flex items-baseline gap-1 mb-8">
-                <span className="text-4xl font-black">Custom</span>
-              </div>
-              <ul className="space-y-4 mb-12 text-[#AAB2AA]">
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#C8FF38]" /> Unlimited members</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#C8FF38]" /> Custom branding</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#C8FF38]" /> Dedicated account manager</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#C8FF38]" /> API Access</li>
-              </ul>
-              <button className="w-full py-4 rounded-full border-2 border-[#151916] font-bold mt-auto hover:bg-[#151916] hover:text-white transition-colors">Contact Sales</button>
-            </div>
+          <div className="text-center mt-12">
+            <p className="text-xs text-[#858A7D]">
+              Change your plan whenever your gym needs change.
+            </p>
           </div>
         </div>
       </section>
