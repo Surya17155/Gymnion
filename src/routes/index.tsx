@@ -178,10 +178,10 @@ function LandingPage() {
           <div className="flex flex-col lg:flex-row gap-16">
             <div className="lg:w-1/3 lg:sticky lg:top-32 h-fit">
               <p className="text-[#9a9a9a] font-semibold text-[11px] uppercase tracking-widest mb-2">BUILT FOR DAILY OPERATIONS</p>
-              <h2 className="text-white text-5xl font-bold tracking-tighter leading-tight mb-6">
-                Two essentials. One <span className="text-[#d5ff40]">clear system</span>.
+              <h2 className="text-white text-4xl md:text-5xl font-bold tracking-tighter leading-tight mb-6">
+                Two essentials. One <span className="text-[#d5ff40] whitespace-nowrap">clear system</span>.
               </h2>
-              <p className="text-[#9a9a9a] text-xl leading-relaxed">
+              <p className="text-[#9a9a9a] text-lg md:text-xl leading-relaxed">
                 Gymnion keeps attendance and member payments visible, accurate, and easy to act on.
               </p>
             </div>
