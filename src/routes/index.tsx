@@ -78,8 +78,7 @@ function LandingPage() {
             alt="" 
             className="w-full h-full object-cover object-[center_top]"
           />
-          <div className="absolute inset-0 bg-black/20" />
-        </motion.div>
+        </div>
 
         {/* Content Layer */}
         <div className="relative z-10 flex flex-col flex-1 px-6 max-w-7xl mx-auto w-full pt-8 md:pt-16">
@@ -93,7 +92,7 @@ function LandingPage() {
                 Run your gym <br />
                 with <span className="text-[#C8FF38] inline-block"><TextReveal word="clarity." /></span>
               </h1>
-            </motion.div>
+            </div>
 
             <p 
               initial={{ y: 24, opacity: 0 }}
