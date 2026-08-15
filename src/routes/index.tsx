@@ -636,7 +636,7 @@ function LandingPage() {
             {/* BEGIN: Card 04 (Review your revenue) */}
             <div className="relative">
               {/* Step Number */}
-              <div className="absolute left-[-56px] top-0 w-8 h-8 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-sm z-10 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
+              <div className="absolute left-[-64px] top-[-8px] w-10 h-10 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-base z-20 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
                 04
               </div>
 
