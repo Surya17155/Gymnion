@@ -369,7 +369,7 @@ function LandingPage() {
           </svg>
         </div>
 
-        <main className="relative z-10 px-6 max-w-md mx-auto -translate-x-2">
+        <main className="relative z-10 px-6 max-w-md mx-auto -translate-x-[0.32rem]">
           {/* Header Section */}
           <header className="mb-12">
             <p className="text-[#c3c8be] text-xs tracking-wider uppercase mb-3 font-medium">How it works</p>
@@ -549,21 +549,21 @@ function LandingPage() {
           </div>
         </div>
 
-        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-4">
+        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-[1.35rem]">
           {/* Continuous vertical line flowing in from the previous section */}
-          <div className="absolute left-[18px] top-[-120px] bottom-16 w-[2px] bg-[#A8FF16] z-0 shadow-[0_0_10px_#A8FF16,0_0_20px_rgba(168,255,22,0.4)] translate-x-1.5"></div>
+          <div className="absolute left-[1.25rem] top-[-120px] bottom-16 w-[2px] bg-[#B7FF1E] z-0 shadow-[0_0_10px_#B7FF1E] translate-x-1.5"></div>
 
           {/* BEGIN: Header Section */}
           <header className="text-center relative z-10 mb-12 flex flex-col items-center">
 
             {/* Pill Badge */}
-            <div className="inline-flex items-center justify-center px-6 py-2 rounded-full border border-[#A8FF16]/50 bg-[#0F1115]/80 backdrop-blur-sm mb-6 text-[10px] font-bold tracking-[0.2em] text-[#A8FF16] uppercase shadow-[0_0_15px_rgba(168,255,22,0.2)]">
+            <div className="inline-flex items-center justify-center px-6 py-2 rounded-full border border-[#B7FF1E]/50 bg-[#0F1115]/80 backdrop-blur-sm mb-6 text-[10px] font-bold tracking-[0.2em] text-[#B7FF1E] uppercase shadow-[0_0_15px_rgba(183,255,30,0.2)]">
               Keep the day moving
             </div>
             {/* Headline */}
             <h1 className="text-3xl font-bold leading-tight mb-4 tracking-tight text-left w-full">
               <span className="text-white block">Collect with confidence.</span>
-              <span className="text-white">See the </span><span className="text-[#A8FF16] drop-shadow-[0_0_15px_rgba(168,255,22,0.6)]">full picture.</span>
+              <span className="text-white">See the </span><span className="text-[#B7FF1E] drop-shadow-[0_0_15px_rgba(183,255,30,0.6)]">full picture.</span>
             </h1>
             {/* Subheadline */}
             <p className="text-gray-400 text-base max-w-sm font-medium leading-relaxed text-left w-full">
@@ -578,18 +578,18 @@ function LandingPage() {
             {/* BEGIN: Card 03 (Track every payment) */}
             <div className="relative mb-16">
               {/* Step Number */}
-              <div className="absolute left-[-56px] top-0 w-8 h-8 rounded-full bg-[#0F1115] border-2 border-[#A8FF16] flex items-center justify-center text-[#A8FF16] font-bold text-sm z-10 shadow-[0_0_15px_rgba(168,255,22,0.6),inset_0_0_10px_rgba(168,255,22,0.2)]">
+              <div className="absolute left-[-56px] top-0 w-8 h-8 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-sm z-10 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
                 03
               </div>
 
-              <div className="bg-gradient-to-br from-[#111317] to-black rounded-[20px] border border-[#A8FF16] p-6 relative z-10 shadow-[0_0_20px_rgba(168,255,22,0.2)]">
+              <div className="bg-gradient-to-br from-[#111317] to-black rounded-[20px] border border-[#B7FF1E] p-6 relative z-10 shadow-[0_0_20px_rgba(183,255,30,0.2)]">
                 {/* Card Header */}
                 <div className="flex items-start mb-6">
-                  <div className="w-12 h-12 rounded-xl border border-[#A8FF16]/40 flex items-center justify-center bg-[#16191D]/50 shadow-[0_0_15px_rgba(168,255,22,0.15)] shrink-0 mr-4">
+                  <div className="w-12 h-12 rounded-xl border border-[#B7FF1E]/40 flex items-center justify-center bg-[#16191D]/50 shadow-[0_0_15px_rgba(183,255,30,0.15)] shrink-0 mr-4">
                     <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                      <rect height="14" rx="2" stroke="#A8FF16" strokeWidth="1.5" width="20" x="2" y="5"></rect>
-                      <path d="M2 10H22" stroke="#A8FF16" strokeWidth="1.5"></path>
-                      <rect fill="#A8FF16" height="2" rx="0.5" width="4" x="6" y="14"></rect>
+                      <rect height="14" rx="2" stroke="#B7FF1E" strokeWidth="1.5" width="20" x="2" y="5"></rect>
+                      <path d="M2 10H22" stroke="#B7FF1E" strokeWidth="1.5"></path>
+                      <rect fill="#B7FF1E" height="2" rx="0.5" width="4" x="6" y="14"></rect>
                     </svg>
                   </div>
                   <div>
@@ -601,13 +601,13 @@ function LandingPage() {
                 <div className="space-y-3">
                   {/* Paid Row */}
                   <div className="bg-[#1C2026] rounded-xl p-4 flex items-center border border-white/5">
-                    <div className="w-3 h-3 rounded-full bg-[#A8FF16] shadow-[0_0_8px_#A8FF16] mr-3"></div>
+                    <div className="w-3 h-3 rounded-full bg-[#B7FF1E] shadow-[0_0_8px_#B7FF1E] mr-3"></div>
                     <span className="text-white font-medium text-sm w-20">Paid</span>
                     <div className="flex-1 flex gap-2">
                       <div className="h-2 bg-gray-700/50 rounded-full w-16"></div>
                       <div className="h-2 bg-gray-700/50 rounded-full w-10"></div>
                     </div>
-                    <div className="h-3 bg-[#A8FF16] rounded-full w-12 shadow-[0_0_10px_#A8FF16]"></div>
+                    <div className="h-3 bg-[#B7FF1E] rounded-full w-12 shadow-[0_0_10px_#B7FF1E]"></div>
                   </div>
                   {/* Pending Row */}
                   <div className="bg-[#1C2026] rounded-xl p-4 flex items-center border border-yellow-500/20 shadow-[inset_0_0_20px_rgba(234,179,8,0.05)]">
@@ -636,18 +636,18 @@ function LandingPage() {
             {/* BEGIN: Card 04 (Review your revenue) */}
             <div className="relative">
               {/* Step Number */}
-              <div className="absolute left-[-56px] top-0 w-8 h-8 rounded-full bg-[#0F1115] border-2 border-[#A8FF16] flex items-center justify-center text-[#A8FF16] font-bold text-sm z-10 shadow-[0_0_15px_rgba(168,255,22,0.6),inset_0_0_10px_rgba(168,255,22,0.2)]">
+              <div className="absolute left-[-56px] top-0 w-8 h-8 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-sm z-10 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
                 04
               </div>
 
-              <div className="bg-gradient-to-br from-[#111317] to-black rounded-[20px] border border-[#A8FF16] p-6 relative z-10 shadow-[0_0_20px_rgba(168,255,22,0.2)]">
+              <div className="bg-gradient-to-br from-[#111317] to-black rounded-[20px] border border-[#B7FF1E] p-6 relative z-10 shadow-[0_0_20px_rgba(183,255,30,0.2)]">
                 {/* Card Header */}
                 <div className="flex items-start mb-6">
-                  <div className="w-12 h-12 rounded-xl border border-[#A8FF16]/40 flex items-center justify-center bg-[#16191D]/50 shadow-[0_0_15px_rgba(168,255,22,0.15)] shrink-0 mr-4">
+                  <div className="w-12 h-12 rounded-xl border border-[#B7FF1E]/40 flex items-center justify-center bg-[#16191D]/50 shadow-[0_0_15px_rgba(183,255,30,0.15)] shrink-0 mr-4">
                     <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                      <rect height="6" rx="1" stroke="#A8FF16" strokeWidth="1.5" width="4" x="4" y="14"></rect>
-                      <rect height="10" rx="1" stroke="#A8FF16" strokeWidth="1.5" width="4" x="10" y="10"></rect>
-                      <rect height="16" rx="1" stroke="#A8FF16" strokeWidth="1.5" width="4" x="16" y="4"></rect>
+                      <rect height="6" rx="1" stroke="#B7FF1E" strokeWidth="1.5" width="4" x="4" y="14"></rect>
+                      <rect height="10" rx="1" stroke="#B7FF1E" strokeWidth="1.5" width="4" x="10" y="10"></rect>
+                      <rect height="16" rx="1" stroke="#B7FF1E" strokeWidth="1.5" width="4" x="16" y="4"></rect>
                     </svg>
                   </div>
                   <div>
@@ -672,20 +672,20 @@ function LandingPage() {
                       <div className="w-full bg-lime-500 rounded-t-sm h-[80%] shadow-[0_0_10px_rgba(132,204,22,0.4)]"></div>
                       <div className="w-full bg-gray-700/50 rounded-t-sm h-[40%]"></div>
                       <div className="w-full bg-gray-700/50 rounded-t-sm h-[60%]"></div>
-                      <div className="w-full bg-[#A8FF16] rounded-t-sm h-[100%] shadow-[0_0_15px_#A8FF16]"></div>
+                      <div className="w-full bg-[#B7FF1E] rounded-t-sm h-[100%] shadow-[0_0_15px_#B7FF1E]"></div>
                       <div className="w-full bg-gray-700/50 rounded-t-sm h-[45%]"></div>
                     </div>
                   </div>
                   {/* Donut Chart Block */}
                   <div className="w-24 bg-[#1C2026] border border-white/5 rounded-xl p-3 flex flex-col items-center justify-center gap-2">
                     <div className="relative w-12 h-12">
-                      <svg className="w-full h-full drop-shadow-[0_0_8px_#A8FF16]" viewBox="0 0 36 36">
+                      <svg className="w-full h-full drop-shadow-[0_0_8px_#B7FF1E]" viewBox="0 0 36 36">
                         <circle cx="18" cy="18" fill="none" r="16" stroke="#1F2937" strokeWidth="4"></circle>
-                        <circle cx="18" cy="18" fill="none" r="16" stroke="#A8FF16" strokeDasharray="75 100" strokeLinecap="round" strokeWidth="4" transform="rotate(-90 18 18)"></circle>
+                        <circle cx="18" cy="18" fill="none" r="16" stroke="#B7FF1E" strokeDasharray="75 100" strokeLinecap="round" strokeWidth="4" transform="rotate(-90 18 18)"></circle>
                       </svg>
                     </div>
                     <div className="flex gap-1">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#A8FF16]"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#B7FF1E]"></div>
                       <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
                       <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
                     </div>
