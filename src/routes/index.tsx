@@ -582,7 +582,7 @@ function LandingPage() {
                 03
               </div>
 
-              <div className="bg-gradient-to-br from-[#111317] to-black rounded-[20px] border border-[#A8FF16] p-6 relative z-10 shadow-[0_0_20px_rgba(168,255,22,0.2)]">
+              <div className="bg-gradient-to-br from-[#111317] to-black rounded-[20px] border border-[#B7FF1E] p-6 relative z-10 shadow-[0_0_20px_rgba(183,255,30,0.2)]">
                 {/* Card Header */}
                 <div className="flex items-start mb-6">
                   <div className="w-12 h-12 rounded-xl border border-[#A8FF16]/40 flex items-center justify-center bg-[#16191D]/50 shadow-[0_0_15px_rgba(168,255,22,0.15)] shrink-0 mr-4">
