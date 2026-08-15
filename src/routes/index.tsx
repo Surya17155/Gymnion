@@ -19,12 +19,19 @@ function LandingPage() {
 
   useEffect(() => {
     const checkAuth = async () => {
+      // Use getSession but be aware it might not be ready during hydration
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
+        console.log("Session found, fetching role...");
         const role = await getAuthUserRole();
-        if (role === 'super_admin') window.location.href = '/dashboard/super-admin';
-        else if (role === 'admin' || role === 'gym_admin') window.location.href = '/dashboard/admin';
-        else if (role === 'member') window.location.href = '/dashboard/m';
+        console.log("Role found:", role);
+        if (role === 'super_admin') {
+          window.location.replace('/dashboard/super-admin');
+        } else if (role === 'admin' || role === 'gym_admin') {
+          window.location.replace('/dashboard/admin');
+        } else if (role === 'member') {
+          window.location.replace('/dashboard/m');
+        }
       }
     };
     checkAuth();
