@@ -207,12 +207,13 @@ function LandingPage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-6">
           <div className="flex flex-col lg:flex-row gap-16">
-          <div className="lg:w-1/3 lg:sticky lg:top-32 h-fit">
-            <h2 className="text-5xl font-black leading-tight mb-6">Everything your gym needs to keep moving.</h2>
-            <p className="text-xl text-[#AAB2AA]">A focused system for the work that happens before, during, and after every class.</p>
-          </div>
-          
-          <div className="lg:w-2/3 space-y-24">
+            <div className="lg:w-1/3 lg:sticky lg:top-32 h-fit">
+              <h2 className="text-5xl font-black leading-tight mb-6">Everything your gym needs to keep moving.</h2>
+              <p className="text-xl text-[#AAB2AA]">A focused system for the work that happens before, during, and after every class.</p>
+            </div>
+            
+            <div className="lg:w-2/3 space-y-24">
+
             {/* Feature A */}
             <motion.div 
               initial={{ opacity: 0, y: 40 }}
