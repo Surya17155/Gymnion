@@ -9,15 +9,6 @@ import { TextReveal } from "@/components/ui/text-reveal-animation";
 import featuresBgAsset from "@/assets/features-bg.png.asset.json";
 
 export const Route = createFileRoute("/")({
-  beforeLoad: async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      const role = await getAuthUserRole();
-      if (role === 'super_admin') throw redirect({ to: '/dashboard/super-admin' });
-      if (role === 'admin' || role === 'gym_admin') throw redirect({ to: '/dashboard/admin' });
-      if (role === 'member') throw redirect({ to: '/dashboard/m' });
-    }
-  },
   component: LandingPage,
 });
 
