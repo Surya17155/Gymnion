@@ -324,9 +324,13 @@ function LandingPage() {
                       </div>
                     </div>
                   </div>
+                  </div>
                 </div>
-              </div>
               </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
           </div>
         </div>
       </section>
