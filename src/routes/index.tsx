@@ -816,38 +816,129 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* Footer & Contact */}
-      <footer className="py-24 bg-[#101311] text-[#AAB2AA]">
+      {/* CTA & Contact */}
+      <section id="contact" className="relative py-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-24 mb-24">
-            <div>
-              <h2 className="text-5xl font-black text-[#F8FAF7] mb-8 leading-tight">Ready to run a better gym?</h2>
-              <p className="text-xl mb-12">Tell us about your gym and we’ll help you choose the right starting point.</p>
-              <div className="space-y-6 text-[#F8FAF7]">
-                <p className="flex items-center gap-4 text-lg"><span className="w-6 h-[1px] bg-[#C8FF38]" /> hello@gymnion.com</p>
-                <p className="flex items-center gap-4 text-lg"><span className="w-6 h-[1px] bg-[#C8FF38]" /> +91 98765 43210</p>
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-[#1e201d] border border-[#B7FF1E]/20 rounded-[32px] p-8 md:p-16 relative overflow-hidden"
+          >
+            {/* Background Glow */}
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#B7FF1E]/10 blur-[100px] rounded-full" />
+            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-[#B7FF1E]/5 blur-[100px] rounded-full" />
+
+            <div className="relative z-10 grid lg:grid-cols-2 gap-16 items-center">
+              <div>
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tighter leading-[1.1]">
+                    Ready to run a <br />
+                    <span className="text-[#B7FF1E]">better gym?</span>
+                  </h2>
+                  <p className="text-lg text-[#858A7D] mb-10 max-w-md leading-relaxed">
+                    Join the gyms that choose clarity over chaos. Start your journey with Gymnion today.
+                  </p>
+                </motion.div>
+
+                <div className="space-y-6">
+                  <motion.a 
+                    href="mailto:surya.17155@gmail.com"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 }}
+                    className="flex items-center gap-4 group cursor-pointer"
+                  >
+                    <div className="w-12 h-12 rounded-2xl bg-[#B7FF1E]/10 flex items-center justify-center group-hover:bg-[#B7FF1E] transition-all duration-300">
+                      <svg className="w-5 h-5 text-[#B7FF1E] group-hover:text-[#293500]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold">Email us</p>
+                      <p className="text-white font-medium">surya.17155@gmail.com</p>
+                    </div>
+                  </motion.a>
+
+                  <motion.a 
+                    href="tel:+919389903074"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4 }}
+                    className="flex items-center gap-4 group cursor-pointer"
+                  >
+                    <div className="w-12 h-12 rounded-2xl bg-[#B7FF1E]/10 flex items-center justify-center group-hover:bg-[#B7FF1E] transition-all duration-300">
+                      <svg className="w-5 h-5 text-[#B7FF1E] group-hover:text-[#293500]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold">Call us</p>
+                      <p className="text-white font-medium">+91 9389903074</p>
+                    </div>
+                  </motion.a>
+                </div>
               </div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="bg-black/40 backdrop-blur-sm border border-white/5 p-8 rounded-3xl"
+              >
+                <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Name</label>
+                      <input type="text" placeholder="Your Name" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Email</label>
+                      <input type="email" placeholder="work@gym.com" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Gym Name</label>
+                    <input type="text" placeholder="The Iron Hub" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Message</label>
+                    <textarea placeholder="Tell us about your needs..." rows={3} className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all resize-none"></textarea>
+                  </div>
+                  <button className="w-full py-4 rounded-xl bg-[#B7FF1E] text-[#293500] font-bold hover:bg-[#83A51B] transition-all active:scale-[0.98] shadow-[0_10px_20px_rgba(183,255,30,0.15)] mt-2">
+                    Send message
+                  </button>
+                </form>
+              </motion.div>
             </div>
-            <form className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <input type="text" placeholder="Name" className="w-full bg-[#181D19] border border-white/10 rounded-xl p-4 text-[#F8FAF7] focus:border-[#C8FF38] outline-none" />
-                <input type="email" placeholder="Work email" className="w-full bg-[#181D19] border border-white/10 rounded-xl p-4 text-[#F8FAF7] focus:border-[#C8FF38] outline-none" />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Simplified Footer */}
+      <footer className="pb-12 pt-0 text-[#858A7D]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[11px] uppercase tracking-widest font-bold">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <img src={logoAsset.url} alt="Gymnion" className="h-4 opacity-50" />
+                <span className="opacity-50">Gymnion</span>
               </div>
-              <input type="text" placeholder="Gym name" className="w-full bg-[#181D19] border border-white/10 rounded-xl p-4 text-[#F8FAF7] focus:border-[#C8FF38] outline-none" />
-              <textarea placeholder="Message" rows={4} className="w-full bg-[#181D19] border border-white/10 rounded-xl p-4 text-[#F8FAF7] focus:border-[#C8FF38] outline-none resize-none"></textarea>
-              <button className="w-full py-4 rounded-full bg-[#C8FF38] text-[#101311] font-bold hover:bg-[#B6F028] transition-colors">Send message</button>
-            </form>
-          </div>
-          <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-sm">
-            <div className="flex items-center gap-4">
-              <img src={logoAsset.url} alt="Gymnion" className="h-6 opacity-50" />
-              <span>© 2026 Gymnion. All rights reserved.</span>
+              <span className="opacity-30 tracking-normal">© 2026</span>
             </div>
             <div className="flex gap-8">
-              <a href="#" className="hover:text-[#F8FAF7]">Features</a>
-              <a href="#" className="hover:text-[#F8FAF7]">Pricing</a>
-              <a href="#" className="hover:text-[#F8FAF7]">About</a>
-              <a href="#" className="hover:text-[#F8FAF7]">Contact</a>
+              <a href="#features" className="hover:text-[#B7FF1E] transition-colors">Features</a>
+              <a href="#pricing" className="hover:text-[#B7FF1E] transition-colors">Pricing</a>
+              <a href="#about" className="hover:text-[#B7FF1E] transition-colors">About</a>
+              <a href="#contact" className="hover:text-[#B7FF1E] transition-colors">Contact</a>
             </div>
           </div>
         </div>
@@ -855,3 +946,4 @@ function LandingPage() {
     </div>
   );
 }
+
