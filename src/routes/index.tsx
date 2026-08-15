@@ -169,8 +169,8 @@ function LandingPage() {
               >
                 Get started <ArrowRight size={18} />
               </Link>
-            </div>
             </motion.div>
+          </div>
         </div>
       </section>
 
@@ -324,13 +324,9 @@ function LandingPage() {
                       </div>
                     </div>
                   </div>
-                  </div>
                 </div>
               </motion.div>
             </div>
-          </div>
-        </div>
-      </section>
           </div>
         </div>
       </section>
