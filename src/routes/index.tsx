@@ -601,7 +601,7 @@ function LandingPage() {
                 <div className="space-y-3">
                   {/* Paid Row */}
                   <div className="bg-[#1C2026] rounded-xl p-4 flex items-center border border-white/5">
-                    <div className="w-3 h-3 rounded-full bg-[#A8FF16] shadow-[0_0_8px_#A8FF16] mr-3"></div>
+                    <div className="w-3 h-3 rounded-full bg-[#B7FF1E] shadow-[0_0_8px_#B7FF1E] mr-3"></div>
                     <span className="text-white font-medium text-sm w-20">Paid</span>
                     <div className="flex-1 flex gap-2">
                       <div className="h-2 bg-gray-700/50 rounded-full w-16"></div>
