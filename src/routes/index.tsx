@@ -679,7 +679,7 @@ function LandingPage() {
                   {/* Donut Chart Block */}
                   <div className="w-24 bg-[#1C2026] border border-white/5 rounded-xl p-3 flex flex-col items-center justify-center gap-2">
                     <div className="relative w-12 h-12">
-                      <svg className="w-full h-full drop-shadow-[0_0_8px_#A8FF16]" viewBox="0 0 36 36">
+                      <svg className="w-full h-full drop-shadow-[0_0_8px_#B7FF1E]" viewBox="0 0 36 36">
                         <circle cx="18" cy="18" fill="none" r="16" stroke="#1F2937" strokeWidth="4"></circle>
                         <circle cx="18" cy="18" fill="none" r="16" stroke="#A8FF16" strokeDasharray="75 100" strokeLinecap="round" strokeWidth="4" transform="rotate(-90 18 18)"></circle>
                       </svg>
