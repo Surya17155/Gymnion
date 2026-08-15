@@ -549,36 +549,36 @@ function LandingPage() {
           </div>
         </div>
 
-        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-[1.35rem]">
+        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-8">
           {/* Timeline line connecting only points 03 and 04 */}
-          <div className="absolute left-[1.25rem] top-[290px] bottom-16 w-[2px] bg-[#B7FF1E] z-0 shadow-[0_0_10px_#B7FF1E] translate-x-1.5"></div>
+          <div className="absolute left-[0.25rem] top-[290px] bottom-16 w-[2px] bg-[#B7FF1E] z-0 shadow-[0_0_10px_#B7FF1E]"></div>
 
           {/* BEGIN: Header Section */}
-          <header className="text-center relative z-10 mb-12 flex flex-col items-center">
+          <header className="text-center relative z-10 mb-12 flex flex-col items-center pr-8">
 
             {/* Pill Badge */}
             <div className="inline-flex items-center justify-center px-6 py-2 rounded-full border border-[#B7FF1E]/50 bg-[#0F1115]/80 backdrop-blur-sm mb-6 text-[10px] font-bold tracking-[0.2em] text-[#B7FF1E] uppercase shadow-[0_0_15px_rgba(183,255,30,0.2)]">
               Keep the day moving
             </div>
             {/* Headline */}
-            <h1 className="text-3xl font-bold leading-tight mb-4 tracking-tight text-left w-full">
+            <h1 className="text-3xl font-bold leading-tight mb-4 tracking-tight text-center w-full">
               <span className="text-white block">Collect with confidence.</span>
               <span className="text-white">See the </span><span className="text-[#B7FF1E] drop-shadow-[0_0_15px_rgba(183,255,30,0.6)]">full picture.</span>
             </h1>
             {/* Subheadline */}
-            <p className="text-gray-400 text-base max-w-sm font-medium leading-relaxed text-left w-full">
+            <p className="text-gray-400 text-base max-w-sm font-medium leading-relaxed text-center w-full">
               Follow every membership payment and understand how your gym is performing.
             </p>
           </header>
 
           {/* BEGIN: Main Content Area (Cards & Timeline) */}
-          <div className="relative pr-2 pl-16">
+          <div className="relative pr-8 pl-12">
 
             
             {/* BEGIN: Card 03 (Track every payment) */}
             <div className="relative mb-16">
               {/* Step Number */}
-              <div className="absolute left-[-56px] top-0 w-8 h-8 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-sm z-10 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
+              <div className="absolute left-[-64px] top-[-8px] w-10 h-10 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-base z-20 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
                 03
               </div>
 
@@ -636,7 +636,7 @@ function LandingPage() {
             {/* BEGIN: Card 04 (Review your revenue) */}
             <div className="relative">
               {/* Step Number */}
-              <div className="absolute left-[-56px] top-0 w-8 h-8 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-sm z-10 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
+              <div className="absolute left-[-64px] top-[-8px] w-10 h-10 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-base z-20 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
                 04
               </div>
 
