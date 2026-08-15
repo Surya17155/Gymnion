@@ -703,15 +703,8 @@ function LandingPage() {
               </div>
             </div>
           </div>
-          
-          {/* Bottom Checkmark icon on the line */}
-          <div className="absolute left-[24px] bottom-12 translate-x-[-50%] z-20">
-            <div className="w-8 h-8 rounded-full bg-[#A8FF16] border-4 border-[#0F1115] shadow-[0_0_15px_#A8FF16] flex items-center justify-center">
-              <svg fill="none" height="14" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 13L9 17L19 7" stroke="#0F1115" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3"></path>
-              </svg>
-            </div>
-          </div>
+
+
         </main>
       </section>
 
