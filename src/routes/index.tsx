@@ -502,6 +502,193 @@ function LandingPage() {
         </main>
       </section>
 
+      {/* Continuation: Collect with Confidence Section */}
+      <section className="relative py-24 bg-[#000000] overflow-hidden border-t border-white/5">
+        {/* Background Effects matching the provided code */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80">
+            <svg className="absolute -top-20 -right-20 w-[400px] h-[400px] opacity-40" viewBox="0 0 100 100">
+              <circle cx="100" cy="0" fill="none" r="40" stroke="#B7FF1E" strokeWidth="0.2"></circle>
+              <circle cx="100" cy="0" fill="none" r="60" stroke="#B7FF1E" strokeWidth="0.1"></circle>
+              <circle cx="100" cy="0" fill="none" r="80" stroke="#B7FF1E" strokeWidth="0.05"></circle>
+            </svg>
+          </div>
+          <div className="absolute bottom-0 left-0 w-80 h-80">
+            <svg className="absolute -bottom-20 -left-20 w-[400px] h-[400px] opacity-40" viewBox="0 0 100 100">
+              <circle cx="0" cy="100" fill="none" r="40" stroke="#B7FF1E" strokeWidth="0.2"></circle>
+              <circle cx="0" cy="100" fill="none" r="60" stroke="#B7FF1E" strokeWidth="0.1"></circle>
+              <circle cx="0" cy="100" fill="none" r="80" stroke="#B7FF1E" strokeWidth="0.05"></circle>
+            </svg>
+          </div>
+        </div>
+
+        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 overflow-hidden">
+          {/* Top Vertical Line Segment */}
+          <div className="absolute left-[24px] top-0 w-[2px] h-12 bg-gradient-to-b from-transparent to-[#A8FF16] shadow-[0_0_10px_#A8FF16] z-10"></div>
+          
+          {/* BEGIN: Header Section */}
+          <header className="text-center relative z-10 mb-12 flex flex-col items-center pl-8">
+            {/* Pill Badge */}
+            <div className="inline-flex items-center justify-center px-6 py-2 rounded-full border border-[#A8FF16]/50 bg-[#0F1115]/80 backdrop-blur-sm mb-6 text-[10px] font-bold tracking-[0.2em] text-[#A8FF16] uppercase shadow-[0_0_15px_rgba(168,255,22,0.2)]">
+              Keep the day moving
+            </div>
+            {/* Headline */}
+            <h1 className="text-4xl font-bold leading-tight mb-4 tracking-tight text-left w-full">
+              <span className="text-white">Collect with confidence.</span><br />
+              <span className="text-white">See the </span><span className="text-[#A8FF16] drop-shadow-[0_0_15px_rgba(168,255,22,0.6)]">full picture.</span>
+            </h1>
+            {/* Subheadline */}
+            <p className="text-gray-400 text-base max-w-sm font-medium leading-relaxed text-left w-full">
+              Follow every membership payment and understand how your gym is performing.
+            </p>
+          </header>
+
+          {/* BEGIN: Main Content Area (Cards & Timeline) */}
+          <div className="relative pr-2 pl-16">
+            {/* The continuous vertical line */}
+            <div className="absolute left-[-40px] top-0 bottom-[-60px] w-[2px] bg-[#A8FF16] z-0 shadow-[0_0_10px_#A8FF16,0_0_20px_rgba(168,255,22,0.4)]"></div>
+            
+            {/* BEGIN: Card 03 (Track every payment) */}
+            <div className="relative mb-16">
+              {/* Step Number */}
+              <div className="absolute left-[-56px] top-0 w-8 h-8 rounded-full bg-[#0F1115] border-2 border-[#A8FF16] flex items-center justify-center text-[#A8FF16] font-bold text-sm z-10 shadow-[0_0_15px_rgba(168,255,22,0.6),inset_0_0_10px_rgba(168,255,22,0.2)]">
+                03
+              </div>
+
+              <div className="bg-gradient-to-br from-[#111317] to-black rounded-[20px] border border-[#A8FF16] p-6 relative z-10 shadow-[0_0_20px_rgba(168,255,22,0.2)]">
+                {/* Card Header */}
+                <div className="flex items-start mb-6">
+                  <div className="w-12 h-12 rounded-xl border border-[#A8FF16]/40 flex items-center justify-center bg-[#16191D]/50 shadow-[0_0_15px_rgba(168,255,22,0.15)] shrink-0 mr-4">
+                    <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                      <rect height="14" rx="2" stroke="#A8FF16" strokeWidth="1.5" width="20" x="2" y="5"></rect>
+                      <path d="M2 10H22" stroke="#A8FF16" strokeWidth="1.5"></path>
+                      <rect fill="#A8FF16" height="2" rx="0.5" width="4" x="6" y="14"></rect>
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-white mb-1">Track every payment</h2>
+                    <p className="text-sm text-gray-400 leading-tight">See collected fees, pending renewals, and overdue memberships at a glance.</p>
+                  </div>
+                </div>
+                {/* Status List */}
+                <div className="space-y-3">
+                  {/* Paid Row */}
+                  <div className="bg-[#1C2026] rounded-xl p-4 flex items-center border border-white/5">
+                    <div className="w-3 h-3 rounded-full bg-[#A8FF16] shadow-[0_0_8px_#A8FF16] mr-3"></div>
+                    <span className="text-white font-medium text-sm w-20">Paid</span>
+                    <div className="flex-1 flex gap-2">
+                      <div className="h-2 bg-gray-700/50 rounded-full w-16"></div>
+                      <div className="h-2 bg-gray-700/50 rounded-full w-10"></div>
+                    </div>
+                    <div className="h-3 bg-[#A8FF16] rounded-full w-12 shadow-[0_0_10px_#A8FF16]"></div>
+                  </div>
+                  {/* Pending Row */}
+                  <div className="bg-[#1C2026] rounded-xl p-4 flex items-center border border-yellow-500/20 shadow-[inset_0_0_20px_rgba(234,179,8,0.05)]">
+                    <div className="w-3 h-3 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.8)] mr-3"></div>
+                    <span className="text-white font-medium text-sm w-20">Pending</span>
+                    <div className="flex-1 flex gap-2">
+                      <div className="h-2 bg-gray-700/50 rounded-full w-12"></div>
+                      <div className="h-2 bg-gray-700/50 rounded-full w-8"></div>
+                    </div>
+                    <div className="h-3 bg-yellow-400 rounded-full w-12 shadow-[0_0_10px_rgba(250,204,21,0.6)]"></div>
+                  </div>
+                  {/* Overdue Row */}
+                  <div className="bg-[#1C2026] rounded-xl p-4 flex items-center border border-red-500/20 shadow-[inset_0_0_20px_rgba(239,68,68,0.05)]">
+                    <div className="w-3 h-3 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.8)] mr-3"></div>
+                    <span className="text-white font-medium text-sm w-20">Overdue</span>
+                    <div className="flex-1 flex gap-2">
+                      <div className="h-2 bg-gray-700/50 rounded-full w-14"></div>
+                      <div className="h-2 bg-gray-700/50 rounded-full w-8"></div>
+                    </div>
+                    <div className="h-3 bg-red-400 rounded-full w-12 shadow-[0_0_10px_rgba(248,113,113,0.6)]"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* BEGIN: Card 04 (Review your revenue) */}
+            <div className="relative">
+              {/* Step Number */}
+              <div className="absolute left-[-56px] top-0 w-8 h-8 rounded-full bg-[#0F1115] border-2 border-[#A8FF16] flex items-center justify-center text-[#A8FF16] font-bold text-sm z-10 shadow-[0_0_15px_rgba(168,255,22,0.6),inset_0_0_10px_rgba(168,255,22,0.2)]">
+                04
+              </div>
+
+              <div className="bg-gradient-to-br from-[#111317] to-black rounded-[20px] border border-[#A8FF16] p-6 relative z-10 shadow-[0_0_20px_rgba(168,255,22,0.2)]">
+                {/* Card Header */}
+                <div className="flex items-start mb-6">
+                  <div className="w-12 h-12 rounded-xl border border-[#A8FF16]/40 flex items-center justify-center bg-[#16191D]/50 shadow-[0_0_15px_rgba(168,255,22,0.15)] shrink-0 mr-4">
+                    <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                      <rect height="6" rx="1" stroke="#A8FF16" strokeWidth="1.5" width="4" x="4" y="14"></rect>
+                      <rect height="10" rx="1" stroke="#A8FF16" strokeWidth="1.5" width="4" x="10" y="10"></rect>
+                      <rect height="16" rx="1" stroke="#A8FF16" strokeWidth="1.5" width="4" x="16" y="4"></rect>
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-white mb-1">Review your revenue</h2>
+                    <p className="text-sm text-gray-400 leading-tight">Use a clear monthly view to make better decisions for your gym.</p>
+                  </div>
+                </div>
+                {/* Charts Area */}
+                <div className="flex gap-4 mb-4">
+                  {/* Bar Chart Block */}
+                  <div className="flex-1 bg-[#1C2026] border border-white/5 rounded-xl p-4 flex flex-col justify-end h-32 relative overflow-hidden">
+                    {/* Background grid lines */}
+                    <div className="absolute inset-0 p-4 flex flex-col justify-between pointer-events-none opacity-20">
+                      <div className="w-full h-px bg-gray-500"></div>
+                      <div className="w-full h-px bg-gray-500"></div>
+                      <div className="w-full h-px bg-gray-500"></div>
+                    </div>
+                    {/* Bars */}
+                    <div className="flex items-end justify-between gap-1.5 h-20 relative z-10">
+                      <div className="w-full bg-gray-700/50 rounded-t-sm h-[30%]"></div>
+                      <div className="w-full bg-gray-700/50 rounded-t-sm h-[50%]"></div>
+                      <div className="w-full bg-lime-500 rounded-t-sm h-[80%] shadow-[0_0_10px_rgba(132,204,22,0.4)]"></div>
+                      <div className="w-full bg-gray-700/50 rounded-t-sm h-[40%]"></div>
+                      <div className="w-full bg-gray-700/50 rounded-t-sm h-[60%]"></div>
+                      <div className="w-full bg-[#A8FF16] rounded-t-sm h-[100%] shadow-[0_0_15px_#A8FF16]"></div>
+                      <div className="w-full bg-gray-700/50 rounded-t-sm h-[45%]"></div>
+                    </div>
+                  </div>
+                  {/* Donut Chart Block */}
+                  <div className="w-24 bg-[#1C2026] border border-white/5 rounded-xl p-3 flex flex-col items-center justify-center gap-2">
+                    <div className="relative w-12 h-12">
+                      <svg className="w-full h-full drop-shadow-[0_0_8px_#A8FF16]" viewBox="0 0 36 36">
+                        <circle cx="18" cy="18" fill="none" r="16" stroke="#1F2937" strokeWidth="4"></circle>
+                        <circle cx="18" cy="18" fill="none" r="16" stroke="#A8FF16" strokeDasharray="75 100" strokeLinecap="round" strokeWidth="4" transform="rotate(-90 18 18)"></circle>
+                      </svg>
+                    </div>
+                    <div className="flex gap-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#A8FF16]"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                    </div>
+                  </div>
+                </div>
+                {/* Bottom Mini Stats */}
+                <div className="grid grid-cols-3 gap-3">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="bg-[#1C2026] border border-white/5 rounded-xl p-3">
+                      <div className="w-full h-2 bg-gray-700/50 rounded-full mb-2"></div>
+                      <div className="w-2/3 h-1.5 bg-gray-700/30 rounded-full"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Bottom Checkmark icon on the line */}
+          <div className="absolute left-[24px] bottom-12 translate-x-[-50%] z-20">
+            <div className="w-8 h-8 rounded-full bg-[#A8FF16] border-4 border-[#0F1115] shadow-[0_0_15px_#A8FF16] flex items-center justify-center">
+              <svg fill="none" height="14" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 13L9 17L19 7" stroke="#0F1115" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3"></path>
+              </svg>
+            </div>
+          </div>
+        </main>
+      </section>
+
+
       {/* Product Journey (Existing) */}
       <section className="py-24 bg-[#101311]">
         <div className="max-w-7xl mx-auto px-6 mb-16">
