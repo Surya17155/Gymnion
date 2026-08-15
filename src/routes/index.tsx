@@ -551,7 +551,7 @@ function LandingPage() {
 
         <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-2">
           {/* Timeline line connecting only points 03 and 04 */}
-          <div className="absolute left-[0.25rem] top-[290px] bottom-16 w-[2px] bg-[#B7FF1E] z-0 shadow-[0_0_10px_#B7FF1E]"></div>
+          <div className="absolute left-[0.85rem] top-[290px] bottom-16 w-[2px] bg-[#B7FF1E] z-0 shadow-[0_0_10px_#B7FF1E]"></div>
 
           {/* BEGIN: Header Section */}
           <header className="relative z-10 mb-12 flex flex-col items-start px-6">
