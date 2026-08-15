@@ -549,9 +549,9 @@ function LandingPage() {
           </div>
         </div>
 
-        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 -translate-x-1">
+        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-0.5">
           {/* Continuous vertical line flowing in from the previous section */}
-          <div className="absolute left-[33px] top-[-120px] bottom-16 w-[2px] bg-[#A8FF16] z-0 shadow-[0_0_10px_#A8FF16,0_0_20px_rgba(168,255,22,0.4)]"></div>
+          <div className="absolute left-[20px] top-[-120px] bottom-16 w-[2px] bg-[#A8FF16] z-0 shadow-[0_0_10px_#A8FF16,0_0_20px_rgba(168,255,22,0.4)]"></div>
 
           {/* BEGIN: Header Section */}
           <header className="text-center relative z-10 mb-12 flex flex-col items-center">
