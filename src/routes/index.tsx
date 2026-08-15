@@ -6,6 +6,7 @@ import { getAuthUserRole } from "@/lib/auth.functions";
 import logoAsset from "@/assets/gymnion-logo-new.png.asset.json";
 import heroBgAsset from "@/assets/landing-bg-new.png.asset.json";
 import { TextReveal } from "@/components/ui/text-reveal-animation";
+import featuresBgAsset from "@/assets/features-bg.png.asset.json";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
@@ -194,8 +195,18 @@ function LandingPage() {
       </section>
 
       {/* Features */}
-      <section id="features" className="py-24 max-w-7xl mx-auto px-6">
-        <div className="flex flex-col lg:flex-row gap-16">
+      <section id="features" className="relative py-24 overflow-hidden">
+        {/* Features Background Layer */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={featuresBgAsset.url} 
+            alt="" 
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
+          <div className="flex flex-col lg:flex-row gap-16">
           <div className="lg:w-1/3 lg:sticky lg:top-32 h-fit">
             <h2 className="text-5xl font-black leading-tight mb-6">Everything your gym needs to keep moving.</h2>
             <p className="text-xl text-[#AAB2AA]">A focused system for the work that happens before, during, and after every class.</p>
