@@ -708,31 +708,6 @@ function LandingPage() {
       </section>
 
 
-      {/* Product Journey (Existing) */}
-      <section className="py-24 bg-[#101311]">
-        <div className="max-w-7xl mx-auto px-6 mb-16">
-          <h2 className="text-5xl font-black mb-6">From first check-in to lasting loyalty.</h2>
-        </div>
-        <div className="flex overflow-x-auto no-scrollbar gap-8 px-6 md:px-[calc((100vw-1280px)/2+24px)] pb-12">
-          {[
-            { title: "Welcome members", desc: "Fast check-in and a clear member profile.", img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070" },
-            { title: "Fill every class", desc: "Schedules, capacity, and reminders.", img: "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=2070" },
-            { title: "Keep payments current", desc: "Transparent subscription status.", img: "https://images.unsplash.com/photo-1556742044-3c52d6e88c62?q=80&w=2070" },
-            { title: "Grow with clarity", desc: "Operational insights for better decisions.", img: "https://images.unsplash.com/photo-1590233649088-e81e1b1ffecb?q=80&w=2070" }
-          ].map((item, i) => (
-            <motion.div 
-              key={i}
-              className="flex-shrink-0 w-80 md:w-[400px] h-[500px] rounded-2xl overflow-hidden relative group"
-            >
-              <img src={item.img} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt={item.title} />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-10 flex flex-col justify-end">
-                <h4 className="text-2xl font-bold mb-2">{item.title}</h4>
-                <p className="text-[#AAB2AA]">{item.desc}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
 
       {/* Pricing */}
       <section id="pricing" className="py-24 bg-[#121411] text-[#e3e3dd] border-t border-white/5">
