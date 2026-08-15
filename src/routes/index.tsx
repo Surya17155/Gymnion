@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { ArrowRight, Menu } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getAuthUserRole } from "@/lib/auth.functions";
@@ -15,6 +16,19 @@ export const Route = createFileRoute("/")({
 function LandingPage() {
   const { scrollY } = useScroll();
   const bgY = useTransform(scrollY, [0, 500], [0, -50]);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const role = await getAuthUserRole();
+        if (role === 'super_admin') window.location.href = '/dashboard/super-admin';
+        else if (role === 'admin' || role === 'gym_admin') window.location.href = '/dashboard/admin';
+        else if (role === 'member') window.location.href = '/dashboard/m';
+      }
+    };
+    checkAuth();
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#101311] text-[#F8FAF7] overflow-x-hidden">
