@@ -214,6 +214,7 @@ function LandingPage() {
             
             <div className="lg:w-2/3 space-y-24">
 
+
             {/* Feature A */}
             <motion.div 
               initial={{ opacity: 0, y: 40 }}
