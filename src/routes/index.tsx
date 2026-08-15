@@ -549,23 +549,23 @@ function LandingPage() {
           </div>
         </div>
 
-        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-8">
+        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-2">
           {/* Timeline line connecting only points 03 and 04 */}
-          <div className="absolute left-[0.25rem] top-[290px] bottom-16 w-[2px] bg-[#B7FF1E] z-0 shadow-[0_0_10px_#B7FF1E]"></div>
+          <div className="absolute left-[0.85rem] top-[290px] bottom-16 w-[2px] bg-[#B7FF1E] z-0 shadow-[0_0_10px_#B7FF1E]"></div>
 
           {/* BEGIN: Header Section */}
-          <header className="text-center relative z-10 mb-12 flex flex-col items-center pr-8">
-
+          <header className="relative z-10 mb-12 flex flex-col items-start px-6">
             {/* Pill Badge */}
             <div className="inline-flex items-center justify-center px-6 py-2 rounded-full border border-[#B7FF1E]/50 bg-[#0F1115]/80 backdrop-blur-sm mb-6 text-[10px] font-bold tracking-[0.2em] text-[#B7FF1E] uppercase shadow-[0_0_15px_rgba(183,255,30,0.2)]">
               Keep the day moving
             </div>
             {/* Headline */}
-            <h1 className="text-3xl font-bold leading-tight mb-4 tracking-tight text-center w-full">
-              <span className="text-white block">Collect with confidence.</span>
+            <h1 className="text-4xl font-bold leading-tight mb-4 tracking-tight text-white">
+              Collect with <br />
+              <span className="text-[#B7FF1E] drop-shadow-[0_0_15px_rgba(183,255,30,0.6)]">confidence.</span>
             </h1>
             {/* Subheadline */}
-            <p className="text-gray-400 text-base max-w-sm font-medium leading-relaxed text-center w-full">
+            <p className="text-[#c3c8be] text-base font-medium leading-relaxed pr-4">
               Follow every membership payment and understand how your gym is performing.
             </p>
           </header>
@@ -577,7 +577,7 @@ function LandingPage() {
             {/* BEGIN: Card 03 (Track every payment) */}
             <div className="relative mb-16">
               {/* Step Number */}
-              <div className="absolute left-[-78px] top-[-8px] w-10 h-10 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-base z-20 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
+              <div className="absolute left-[-54px] top-[-8px] w-10 h-10 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-base z-20 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
                 03
               </div>
 
@@ -635,7 +635,7 @@ function LandingPage() {
             {/* BEGIN: Card 04 (Review your revenue) */}
             <div className="relative">
               {/* Step Number */}
-              <div className="absolute left-[-78px] top-[-8px] w-10 h-10 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-base z-20 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
+              <div className="absolute left-[-54px] top-[-8px] w-10 h-10 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-base z-20 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
                 04
               </div>
 
