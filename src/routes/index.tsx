@@ -1,4 +1,4 @@
-import { useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { ArrowRight, Menu } from "lucide-react";
@@ -41,7 +41,7 @@ function LandingPage() {
     <div className="min-h-screen bg-[#101311] text-[#F8FAF7] overflow-x-hidden">
       {/* Sticky Nav */}
       <div className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-50">
-        <nav 
+        <motion.nav 
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -63,14 +63,14 @@ function LandingPage() {
           <button className="md:hidden text-[#F8FAF7] p-2">
             <Menu size={20} />
           </button>
-        </nav>
+        </motion.nav>
       </div>
 
       {/* Hero Section */}
       <section className="relative min-h-[100svh] flex flex-col pt-24 overflow-hidden">
         {/* Background Layer */}
-        <div 
-          style={{ transform: `translateY(${scrollY.get() * -0.1}px)` }}
+        <motion.div 
+          style={{ y: bgY }}
           className="absolute inset-0 z-0"
         >
           <img 
@@ -78,12 +78,13 @@ function LandingPage() {
             alt="" 
             className="w-full h-full object-cover object-[center_top]"
           />
-        </div>
+          <div className="absolute inset-0 bg-black/20" />
+        </motion.div>
 
         {/* Content Layer */}
         <div className="relative z-10 flex flex-col flex-1 px-6 max-w-7xl mx-auto w-full pt-8 md:pt-16">
           <div className="max-w-[800px]">
-            <div
+            <motion.div
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
@@ -92,9 +93,9 @@ function LandingPage() {
                 Run your gym <br />
                 with <span className="text-[#C8FF38] inline-block"><TextReveal word="clarity." /></span>
               </h1>
-            </div>
+            </motion.div>
 
-            <p 
+            <motion.p 
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
@@ -102,11 +103,11 @@ function LandingPage() {
             >
               Track attendance, payments, fees, and revenue <br className="hidden sm:block" />
               in one clear dashboard.
-            </p>
+            </motion.p>
           </div>
 
           {/* Central Revenue Card */}
-          <div 
+          <motion.div 
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
@@ -152,11 +153,11 @@ function LandingPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Bottom CTA */}
           <div className="relative z-10 w-full px-6 max-w-7xl mx-auto pb-12 md:pb-20 mt-auto">
-            <div 
+            <motion.div 
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
@@ -169,7 +170,7 @@ function LandingPage() {
                 Get started <ArrowRight size={18} />
               </Link>
             </div>
-          </div>
+            </motion.div>
         </div>
       </section>
 
@@ -199,7 +200,7 @@ function LandingPage() {
             
             <div className="lg:w-2/3 flex flex-col md:flex-row gap-8 items-start">
               {/* Attendance Card */}
-              <div 
+              <motion.div 
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -258,10 +259,10 @@ function LandingPage() {
                     <span className="text-xl font-bold text-[#d5ff40]">24</span>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Payments Card */}
-              <div 
+              <motion.div 
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -325,7 +326,7 @@ function LandingPage() {
                   </div>
                 </div>
               </div>
-            </div>
+              </motion.div>
           </div>
         </div>
       </section>
