@@ -607,7 +607,7 @@ function LandingPage() {
                       <div className="h-2 bg-gray-700/50 rounded-full w-16"></div>
                       <div className="h-2 bg-gray-700/50 rounded-full w-10"></div>
                     </div>
-                    <div className="h-3 bg-[#A8FF16] rounded-full w-12 shadow-[0_0_10px_#A8FF16]"></div>
+                    <div className="h-3 bg-[#B7FF1E] rounded-full w-12 shadow-[0_0_10px_#B7FF1E]"></div>
                   </div>
                   {/* Pending Row */}
                   <div className="bg-[#1C2026] rounded-xl p-4 flex items-center border border-yellow-500/20 shadow-[inset_0_0_20px_rgba(234,179,8,0.05)]">
