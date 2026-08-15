@@ -162,19 +162,6 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* Trust Strip */}
-      <section className="bg-[#F4F6F1] py-16">
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12 text-[#151916]">
-          {["Member-first operations", "Payments in one place", "Clear daily visibility"].map((point) => (
-            <div key={point} className="flex items-center gap-4">
-              <div className="w-8 h-8 rounded-full bg-[#C8FF38]/20 flex items-center justify-center">
-                <div className="w-3 h-3 rounded-full bg-[#C8FF38]" />
-              </div>
-              <span className="font-bold text-lg">{point}</span>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* Features */}
       <section id="features" className="relative py-24 overflow-hidden">
