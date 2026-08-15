@@ -303,6 +303,7 @@ function LandingPage() {
         </div>
       </section>
 
+
       {/* Product Journey */}
       <section className="py-24 bg-[#101311]">
         <div className="max-w-7xl mx-auto px-6 mb-16">
