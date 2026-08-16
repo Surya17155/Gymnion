@@ -177,7 +177,7 @@ function SuperAdminPayments() {
               const isPaid = (gym.settings as any)?.payment_status === 'paid' && !isOverdue;
               
               const manualPrice = (gym.settings as any)?.manual_pricing;
-              const planName = manualPrice ? `Manual Pricing: ₹${manualPrice}` : ((gym as any).global_plans?.name || 'Standard Plan');
+              const planName = gym.plan_tier === 'free' ? '' : (manualPrice ? `Manual Pricing: ₹${manualPrice}` : ((gym as any).global_plans?.name || 'Standard Plan'));
               
               return (
                 <div key={gym.id} className={`bg-[#1A1D18] border border-white/5 rounded-2xl p-4 flex items-center gap-4 hover:border-[#B7FF1E]/30 active:scale-[0.98] transition-all duration-200 cursor-pointer group shadow-sm shadow-black/20 ${!isPaid && gym.plan_tier !== 'free' ? 'border-l-4 border-l-[#FF5964]' : 'border-l-4 border-l-transparent'}`}>
@@ -191,7 +191,7 @@ function SuperAdminPayments() {
                         {gym.plan_tier === 'free' ? 'Free' : (isPaid ? 'Paid' : 'Due')}
                       </span>
                     </div>
-                    <p className="text-[12px] font-medium text-[#858A7D] truncate italic">{planName}</p>
+                    {planName && <p className="text-[12px] font-medium text-[#858A7D] truncate italic">{planName}</p>}
                     <div className="flex items-center gap-1.5 mt-1">
                       <span className={`material-symbols-outlined text-[14px] ${!isPaid && gym.plan_tier !== 'free' ? 'text-[#FF5964]' : 'text-[#B7FF1E]'}`}>event</span>
                       <p className={`text-[11px] font-bold ${!isPaid && gym.plan_tier !== 'free' ? 'text-[#FF5964]' : 'text-[#858A7D]'}`}>
