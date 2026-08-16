@@ -439,9 +439,9 @@ function LandingPage() {
             </section>
 
             {/* Step 2 */}
-            <section className="relative pl-14">
+            <section className="relative pl-14 lg:pl-20 mb-16 lg:mb-0">
               {/* Number Badge */}
-              <div className="absolute left-0 top-1 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
+              <div className="absolute left-0 lg:left-0 lg:-translate-x-1/2 top-1 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
                 <span className="text-[#d5ff40] font-bold text-lg">02</span>
               </div>
               <div className="mb-6">
@@ -454,8 +454,8 @@ function LandingPage() {
                     <line x1="3" x2="21" y1="10" y2="10"></line>
                   </svg>
                 </div>
-                <h2 className="text-xl font-semibold text-white mb-2">Record daily attendance</h2>
-                <p className="text-[#c3c8be] text-sm leading-relaxed pr-2">
+                <h2 className="text-xl font-semibold text-white mb-2 lg:text-3xl">Record daily attendance</h2>
+                <p className="text-[#c3c8be] text-sm lg:text-base leading-relaxed pr-2 lg:pr-0 lg:max-w-sm">
                   Mark check-ins in seconds and spot missed visits immediately.
                 </p>
               </div>
