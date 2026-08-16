@@ -45,7 +45,7 @@ function PaymentsDashboard() {
 
   const { data: gymId } = useQuery({
     queryKey: ['current-gym-id'],
-    queryFn: () => getGymIdFn(),
+    queryFn: () => getGymIdFn({ data: undefined }),
   });
 
   const { data: subStatus } = useQuery({
