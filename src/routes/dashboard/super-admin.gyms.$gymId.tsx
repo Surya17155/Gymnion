@@ -328,7 +328,8 @@ function GymDetailScreen() {
                     ownerLastName: (gym as any).owner_last_name || '',
                     ownerName: gym.owner_name || '',
                     ownerEmail: gym.owner_email || '',
-                    ownerPhone: gym.owner_phone || ''
+                    ownerPhone: gym.owner_phone || '',
+                    ownerDob: (gym as any).owner_dob || ''
                   });
                 }}
                 className="text-[#B7FF1E] flex items-center gap-1 active:scale-90 transition-transform"
