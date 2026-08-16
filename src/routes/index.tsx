@@ -97,24 +97,23 @@ function LandingPage() {
         </motion.div>
 
         {/* Content Layer */}
-        <div className="relative z-10 flex flex-col flex-1 px-6 max-w-7xl mx-auto w-full pt-8 md:pt-16">
-          <div className="max-w-[800px]">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center flex-1 px-6 max-w-7xl mx-auto w-full pt-8 md:pt-16">
+          <div className="max-w-[800px] lg:w-1/2">
             <motion.div
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              <h1 className="text-[clamp(2.8rem,10vw,4.5rem)] font-bold leading-[1.05] mb-4 tracking-tighter">
+              <h1 className="text-[clamp(2.8rem,10vw,4.5rem)] font-bold leading-[1.05] mb-4 tracking-tighter text-center lg:text-left">
                 Run your gym <br />
                 with <span className="text-[#C8FF38] inline-block"><TextReveal word="clarity." /></span>
               </h1>
             </motion.div>
-
             <motion.p 
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-              className="text-base md:text-lg text-[#AAB2AA] mb-4 max-w-[320px] leading-snug"
+              className="text-base md:text-lg text-[#AAB2AA] mb-4 max-w-[320px] lg:max-w-[450px] leading-snug mx-auto lg:mx-0 text-center lg:text-left"
             >
               Track attendance, payments, fees, and revenue <br className="hidden sm:block" />
               in one clear dashboard.
@@ -171,12 +170,12 @@ function LandingPage() {
           </motion.div>
 
           {/* Bottom CTA */}
-          <div className="relative z-10 w-full px-6 max-w-7xl mx-auto pb-12 md:pb-20 mt-auto">
+          <div className="relative z-10 w-full px-6 max-w-7xl mx-auto pb-12 md:pb-20 mt-auto lg:px-0">
             <motion.div 
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-              className="flex justify-center md:justify-start"
+              className="flex justify-center lg:justify-start"
             >
               <Link 
                 to="/auth/login" 
@@ -202,18 +201,18 @@ function LandingPage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6">
-          <div className="flex flex-col lg:flex-row gap-16">
-            <div className="lg:w-1/3 lg:sticky lg:top-32 h-fit">
+          <div className="flex flex-col lg:flex-row gap-16 lg:items-center">
+            <div className="lg:w-1/2">
               <p className="text-[#9a9a9a] font-semibold text-[11px] uppercase tracking-widest mb-2">BUILT FOR DAILY OPERATIONS</p>
-              <h2 className="text-white text-4xl md:text-5xl font-bold tracking-tighter leading-tight mb-6">
+              <h2 className="text-white text-4xl md:text-6xl font-bold tracking-tighter leading-tight mb-6">
                 Two essentials<br />One <span className="text-[#d5ff40] whitespace-nowrap">clear system</span>.
               </h2>
-              <p className="text-[#9a9a9a] text-lg md:text-xl leading-relaxed">
+              <p className="text-[#9a9a9a] text-lg md:text-xl leading-relaxed max-w-[480px]">
                 Gymnion keeps attendance and member payments visible, accurate, and easy to act on.
               </p>
             </div>
             
-            <div className="lg:w-2/3 flex flex-col md:flex-row gap-8 items-start">
+            <div className="lg:w-1/2 flex flex-col md:flex-row gap-8 items-start">
               {/* Attendance Card */}
               <motion.div 
                 initial={{ opacity: 0, y: 40 }}
@@ -369,39 +368,39 @@ function LandingPage() {
           </svg>
         </div>
 
-        <main className="relative z-10 px-6 max-w-md mx-auto -translate-x-[0.32rem]">
+        <main className="relative z-10 px-6 max-w-md lg:max-w-7xl mx-auto lg:translate-x-0 -translate-x-[0.32rem]">
           {/* Header Section */}
-          <header className="mb-12">
+          <header className="mb-12 lg:mb-20 lg:text-center">
             <p className="text-[#c3c8be] text-xs tracking-wider uppercase mb-3 font-medium">How it works</p>
-            <h1 className="text-4xl font-bold leading-tight mb-4 text-white">
+            <h1 className="text-4xl lg:text-6xl font-bold leading-tight mb-4 text-white">
               Start simple.<br />
               Stay <span className="text-[#d5ff40]">organised.</span>
             </h1>
-            <p className="text-[#c3c8be] text-base leading-relaxed pr-4">
+            <p className="text-[#c3c8be] text-base lg:text-xl leading-relaxed pr-4 lg:pr-0 lg:max-w-2xl lg:mx-auto">
               Set up your member list, then keep every daily check-in clear and current.
             </p>
           </header>
 
           {/* Timeline Section */}
-          <div className="relative">
+          <div className="relative lg:grid lg:grid-cols-2 lg:gap-x-24 lg:gap-y-32">
             {/* Continuous vertical line */}
-            <div className="absolute left-[1.25rem] top-8 bottom-[-9rem] w-[2px] bg-[#B7FF1E] shadow-[0_0_10px_#B7FF1E] z-0"></div>
+            <div className="absolute left-[1.25rem] lg:left-1/2 lg:-translate-x-1/2 top-8 bottom-[-9rem] w-[2px] bg-[#B7FF1E] shadow-[0_0_10px_#B7FF1E] z-0"></div>
 
             {/* Step 1 */}
-            <section className="relative pl-14 mb-16">
+            <section className="relative pl-14 lg:pl-0 lg:text-right lg:pr-20 mb-16 lg:mb-0">
               {/* Number Badge */}
-              <div className="absolute left-0 top-1 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
+              <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 top-1 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
                 <span className="text-[#d5ff40] font-bold text-lg">01</span>
               </div>
               <div className="mb-6">
                 {/* Person Add Icon */}
-                <div className="text-[#B7FF1E] mb-4">
+                <div className="text-[#B7FF1E] mb-4 lg:flex lg:justify-end">
                   <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                     <path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                   </svg>
                 </div>
-                <h2 className="text-xl font-semibold text-white mb-2">Add your members</h2>
-                <p className="text-[#c3c8be] text-sm leading-relaxed pr-2">
+                <h2 className="text-xl font-semibold text-white mb-2 lg:text-3xl">Add your members</h2>
+                <p className="text-[#c3c8be] text-sm lg:text-base leading-relaxed pr-2 lg:pr-0 lg:max-w-sm lg:ml-auto">
                   Create clear member profiles with the details your gym needs.
                 </p>
               </div>
@@ -440,9 +439,9 @@ function LandingPage() {
             </section>
 
             {/* Step 2 */}
-            <section className="relative pl-14">
+            <section className="relative pl-14 lg:pl-20 mb-16 lg:mb-0">
               {/* Number Badge */}
-              <div className="absolute left-0 top-1 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
+              <div className="absolute left-0 lg:left-0 lg:-translate-x-1/2 top-1 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
                 <span className="text-[#d5ff40] font-bold text-lg">02</span>
               </div>
               <div className="mb-6">
@@ -455,8 +454,8 @@ function LandingPage() {
                     <line x1="3" x2="21" y1="10" y2="10"></line>
                   </svg>
                 </div>
-                <h2 className="text-xl font-semibold text-white mb-2">Record daily attendance</h2>
-                <p className="text-[#c3c8be] text-sm leading-relaxed pr-2">
+                <h2 className="text-xl font-semibold text-white mb-2 lg:text-3xl">Record daily attendance</h2>
+                <p className="text-[#c3c8be] text-sm lg:text-base leading-relaxed pr-2 lg:pr-0 lg:max-w-sm">
                   Mark check-ins in seconds and spot missed visits immediately.
                 </p>
               </div>
@@ -530,7 +529,7 @@ function LandingPage() {
       </section>
 
       {/* Continuation: Collect with Confidence Section */}
-      <section className="relative py-24 bg-[#000000] overflow-hidden border-t border-white/5">
+      <section className="relative py-24 lg:py-48 bg-[#000000] overflow-hidden border-t border-white/5">
         {/* Background Effects matching the provided code */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80">
@@ -549,35 +548,35 @@ function LandingPage() {
           </div>
         </div>
 
-        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-8">
+        <main className="max-w-md lg:max-w-7xl mx-auto relative pt-12 pb-24 px-4 translate-x-8 lg:translate-x-0">
           {/* Timeline line connecting only points 03 and 04 */}
-          <div className="absolute left-[0.25rem] top-[290px] bottom-16 w-[2px] bg-[#B7FF1E] z-0 shadow-[0_0_10px_#B7FF1E]"></div>
+          <div className="absolute left-[0.25rem] lg:left-1/2 lg:-translate-x-1/2 top-[290px] lg:top-[380px] bottom-16 w-[2px] bg-[#B7FF1E] z-0 shadow-[0_0_10px_#B7FF1E]"></div>
 
           {/* BEGIN: Header Section */}
-          <header className="relative z-10 mb-12 flex flex-col items-center px-6 -translate-x-8">
+          <header className="relative z-10 mb-12 lg:mb-24 flex flex-col items-center px-6 -translate-x-8 lg:translate-x-0">
             {/* Pill Badge */}
             <div className="inline-flex items-center justify-center px-6 py-2 rounded-full border border-[#B7FF1E]/50 bg-[#0F1115]/80 backdrop-blur-sm mb-6 text-[10px] font-bold tracking-[0.2em] text-[#B7FF1E] uppercase shadow-[0_0_15px_rgba(183,255,30,0.2)]">
               Keep the day moving
             </div>
             {/* Headline */}
-            <h1 className="text-4xl font-bold leading-tight mb-4 tracking-tight text-white text-center">
+            <h1 className="text-4xl lg:text-6xl font-bold leading-tight mb-4 tracking-tight text-white text-center">
               Collect with <br />
               <span className="text-[#B7FF1E] drop-shadow-[0_0_15px_rgba(183,255,30,0.6)]">confidence.</span>
             </h1>
             {/* Subheadline */}
-            <p className="text-[#c3c8be] text-base font-medium leading-relaxed pr-0 text-center">
+            <p className="text-[#c3c8be] text-base lg:text-xl font-medium leading-relaxed pr-0 text-center lg:max-w-2xl">
               Follow every membership payment and understand how your gym is performing.
             </p>
           </header>
 
           {/* BEGIN: Main Content Area (Cards & Timeline) */}
-          <div className="relative pr-8 pl-12">
+          <div className="relative pr-8 pl-12 lg:grid lg:grid-cols-2 lg:gap-x-24 lg:gap-y-32 lg:pr-0 lg:pl-0">
 
             
             {/* BEGIN: Card 03 (Track every payment) */}
-            <div className="relative mb-16">
+            <div className="relative mb-16 lg:mb-0 lg:text-right lg:pr-20">
               {/* Step Number */}
-              <div className="absolute left-[-78px] top-[-8px] w-10 h-10 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-base z-20 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
+              <div className="absolute left-[-78px] lg:left-full lg:ml-[-20px] lg:-translate-x-1/2 top-[-8px] w-10 h-10 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-base z-20 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
                 03
               </div>
 
@@ -633,9 +632,9 @@ function LandingPage() {
             </div>
 
             {/* BEGIN: Card 04 (Review your revenue) */}
-            <div className="relative">
+            <div className="relative lg:pl-20">
               {/* Step Number */}
-              <div className="absolute left-[-78px] top-[-8px] w-10 h-10 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-base z-20 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
+              <div className="absolute left-[-78px] lg:left-0 lg:-translate-x-1/2 top-[-8px] w-10 h-10 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-base z-20 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
                 04
               </div>
 
@@ -711,19 +710,19 @@ function LandingPage() {
 
       {/* Pricing */}
       <section id="pricing" className="py-24 bg-[#121411] text-[#e3e3dd] border-t border-white/5">
-        <div className="max-w-[480px] mx-auto px-6">
-          <header className="flex flex-col gap-2 mb-12">
+        <div className="max-w-[480px] lg:max-w-7xl mx-auto px-6">
+          <header className="flex flex-col gap-2 mb-12 lg:mb-20 lg:text-center">
             <span className="text-[11px] font-semibold text-[#858A7D] uppercase tracking-[0.2em]">Pricing</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+            <h2 className="text-3xl md:text-6xl font-bold text-white leading-tight">
               Simple plans.<br/>
               Built for your <span className="text-[#B7FF1E]">gym.</span>
             </h2>
-            <p className="text-sm text-[#858A7D] mt-2 leading-relaxed">
+            <p className="text-sm lg:text-xl text-[#858A7D] mt-2 leading-relaxed lg:max-w-2xl lg:mx-auto">
               Choose the plan that fits your gym today, then grow when you are ready.
             </p>
           </header>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col lg:grid lg:grid-cols-2 lg:max-w-5xl lg:mx-auto gap-4 lg:gap-8">
             {/* Basic Card */}
             <div className="bg-[#1e201d] rounded-2xl p-6 border border-white/5 relative overflow-hidden transition-all duration-300 hover:border-[#B7FF1E]/30">
               <div className="flex flex-col gap-4">
