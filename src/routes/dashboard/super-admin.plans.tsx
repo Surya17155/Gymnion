@@ -330,23 +330,52 @@ function SuperAdminPlans() {
                         <p className="text-xs text-[#C0C2B8]">Manual Pricing Enabled</p>
                       </div>
                     </div>
-                    <button 
-                      onClick={() => {
-                        setSelectedGymForOverride(gym);
-                        setCustomMonthlyPrice(currentPrice?.toString() || '');
-                        const settings = gym.settings as any;
-                        const features = settings?.features || {};
-                        setOverrideForm({
-                          payment_management: !!features.payment_management,
-                          attendance_management: !!features.attendance_management
-                        });
-                        setIsAddingOverride(true);
-                      }}
-                      className="text-[#B7FF1E] p-2 hover:bg-[#B7FF1E]/10 rounded-lg transition-colors"
-                      title="Edit Override"
-                    >
-                      <span className="material-symbols-outlined text-sm">edit</span>
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button 
+                        onClick={() => {
+                          setSelectedGymForOverride(gym);
+                          setCustomMonthlyPrice(currentPrice?.toString() || '');
+                          const settings = gym.settings as any;
+                          const features = settings?.features || {};
+                          setOverrideForm({
+                            payment_management: !!features.payment_management,
+                            attendance_management: !!features.attendance_management
+                          });
+                          setIsAddingOverride(true);
+                        }}
+                        className="text-[#c9f232] p-2 hover:bg-[#c9f232]/10 rounded-lg transition-colors"
+                        title="Edit Override"
+                      >
+                        <span className="material-symbols-outlined text-sm">edit</span>
+                      </button>
+                      <button 
+                        onClick={async () => {
+                          if (window.confirm(`Remove manual pricing for ${gym.name}?`)) {
+                            try {
+                              const newSettings = { ...(gym.settings as any) };
+                              delete newSettings.manual_pricing;
+                              delete newSettings.features;
+                              
+                              const { error } = await supabase
+                                .from('gyms')
+                                .update({ settings: newSettings })
+                                .eq('id', gym.id);
+
+                              if (error) throw error;
+                              toast.success(`Manual pricing removed for ${gym.name}`);
+                              queryClient.invalidateQueries({ queryKey: ['gyms-with-overrides'] });
+                              queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
+                            } catch (err: any) {
+                              toast.error(err.message || "Failed to remove manual pricing");
+                            }
+                          }
+                        }}
+                        className="text-[#FF5964] p-2 hover:bg-[#FF5964]/10 rounded-lg transition-colors"
+                        title="Remove Override"
+                      >
+                        <span className="material-symbols-outlined text-sm">delete</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
