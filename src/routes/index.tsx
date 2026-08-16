@@ -368,15 +368,15 @@ function LandingPage() {
           </svg>
         </div>
 
-        <main className="relative z-10 px-6 max-w-md mx-auto -translate-x-[0.32rem]">
+        <main className="relative z-10 px-6 max-w-md lg:max-w-7xl mx-auto lg:translate-x-0 -translate-x-[0.32rem]">
           {/* Header Section */}
-          <header className="mb-12">
+          <header className="mb-12 lg:mb-20 lg:text-center">
             <p className="text-[#c3c8be] text-xs tracking-wider uppercase mb-3 font-medium">How it works</p>
-            <h1 className="text-4xl font-bold leading-tight mb-4 text-white">
+            <h1 className="text-4xl lg:text-6xl font-bold leading-tight mb-4 text-white">
               Start simple.<br />
               Stay <span className="text-[#d5ff40]">organised.</span>
             </h1>
-            <p className="text-[#c3c8be] text-base leading-relaxed pr-4">
+            <p className="text-[#c3c8be] text-base lg:text-xl leading-relaxed pr-4 lg:pr-0 lg:max-w-2xl lg:mx-auto">
               Set up your member list, then keep every daily check-in clear and current.
             </p>
           </header>
