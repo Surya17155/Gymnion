@@ -33,8 +33,8 @@ export const createRazorpayOrder = createServerFn({ method: "POST" })
     if (!plan) throw new Error("Plan not found");
 
     // 3. Initialize Razorpay (using test keys from env or placeholders for now)
-    const keyId = process.env.VITE_RAZORPAY_KEY_ID || "rzp_test_placeholder";
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    const keyId = process.env['VITE_RAZORPAY_KEY_ID'] || "rzp_test_placeholder";
+    const keySecret = process.env['RAZORPAY_KEY_SECRET'];
 
     if (!keySecret) {
       console.warn("RAZORPAY_KEY_SECRET missing, using simulation mode");
@@ -83,7 +83,7 @@ export const verifySubscriptionPayment = createServerFn({ method: "POST" })
   }).parse(data))
   .handler(async ({ data, context }) => {
     // 1. Verify Signature
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    const keySecret = process.env['RAZORPAY_KEY_SECRET'];
     
     if (keySecret) {
       const generated_signature = createHmac('sha256', keySecret)
@@ -123,9 +123,12 @@ export const verifySubscriptionPayment = createServerFn({ method: "POST" })
       .from('payments')
       .insert({
         gym_id: data.gymId,
-        amount: 0, // We should probably fetch the plan price here for the record
+        member_id: context.userId, // Using admin userId as surrogate member_id for platform payments
+        amount: plan.price,
         status: 'paid',
         payment_method: 'razorpay',
+        payment_month: new Date().toISOString().substring(0, 7),
+        source: 'subscription',
         razorpay_order_id: data.razorpayOrderId,
         razorpay_payment_id: data.razorpayPaymentId,
         razorpay_signature: data.razorpaySignature
