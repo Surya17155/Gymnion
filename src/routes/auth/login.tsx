@@ -199,7 +199,9 @@ function AuthPage() {
               firstName: formData.firstName,
               lastName: formData.lastName,
               email: formData.email,
-              phone: formData.phone
+              phone: formData.phone,
+              dob: formData.dob,
+              address: formData.address
             }
           });
         } catch (signupErr) {
