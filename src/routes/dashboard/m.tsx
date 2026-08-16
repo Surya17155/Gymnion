@@ -9,6 +9,19 @@ import { clearRoleCache } from '@/lib/role';
 import { format } from 'date-fns';
 
 
+export const Route = createFileRoute('/dashboard/m')({
+  beforeLoad: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw redirect({
+        to: '/auth/login',
+        search: { redirect: '/dashboard/m' }
+      });
+    }
+  },
+  component: MemberDashboardLayout,
+});
+
 function MemberDashboardLayout() {
   return <Outlet />;
 }
@@ -330,15 +343,3 @@ export function MemberDashboard() {
   );
 }
 
-export const Route = createFileRoute('/dashboard/m')({
-  beforeLoad: async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      throw redirect({
-        to: '/auth/login',
-        search: { redirect: window.location.pathname }
-      });
-    }
-  },
-  component: MemberDashboardLayout,
-});
