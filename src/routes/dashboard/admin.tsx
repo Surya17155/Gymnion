@@ -452,7 +452,7 @@ export function AdminDashboard() {
                 </div>
               </div>
               <Link 
-                to="/dashboard/admin/plans"
+                to="/dashboard/admin/settings"
                 className="w-full bg-[#FF5964] text-white h-10 rounded-xl font-bold text-xs flex items-center justify-center mt-1"
               >
                 Renew Now
