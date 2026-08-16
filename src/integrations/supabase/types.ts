@@ -158,6 +158,7 @@ export type Database = {
           features: Json | null
           id: string
           is_active: boolean | null
+          member_limit: number | null
           name: string
           price: number
           updated_at: string | null
@@ -167,6 +168,7 @@ export type Database = {
           features?: Json | null
           id?: string
           is_active?: boolean | null
+          member_limit?: number | null
           name: string
           price: number
           updated_at?: string | null
@@ -176,6 +178,7 @@ export type Database = {
           features?: Json | null
           id?: string
           is_active?: boolean | null
+          member_limit?: number | null
           name?: string
           price?: number
           updated_at?: string | null

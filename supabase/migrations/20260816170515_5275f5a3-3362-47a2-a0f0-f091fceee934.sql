@@ -1,0 +1,1 @@
+ALTER TABLE public.global_plans ADD COLUMN IF NOT EXISTS member_limit INTEGER;
