@@ -4,6 +4,7 @@ import { useServerFn } from '@tanstack/react-start';
 import { getPlatformStatsDetailed } from '@/lib/super-admin.functions';
 import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { clearRoleCache } from '@/lib/role';
 
 export const Route = createFileRoute('/dashboard/super-admin')({
   beforeLoad: async () => {
@@ -103,7 +104,9 @@ export function SuperAdminDashboard() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate({ to: '/auth/login', search: { redirect: "" } });
+    clearRoleCache();
+    window.localStorage.removeItem('tanstack-query-cache');
+    window.location.replace('/');
   };
 
   const statsFn = useServerFn(getPlatformStatsDetailed);
@@ -128,13 +131,9 @@ export function SuperAdminDashboard() {
 
       if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('403')) {
         supabase.auth.signOut().then(() => {
-          navigate({ 
-            to: '/auth/login', 
-            search: { 
-              redirect: window.location.pathname,
-              error: encodeURIComponent(errorReason)
-            } 
-          });
+          clearRoleCache();
+          window.localStorage.removeItem('tanstack-query-cache');
+          window.location.replace('/');
         });
       }
     }
