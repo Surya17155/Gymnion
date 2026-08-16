@@ -56,46 +56,64 @@ function SuperAdminPayments() {
         </section>
 
         <section className="grid grid-cols-2 gap-3">
-          <div className="bg-[#121411] border border-white/5 rounded-xl p-3 flex flex-col justify-between min-h-[110px] relative overflow-hidden group">
-            <div className="absolute -right-10 -top-10 w-24 h-24 bg-[#B7FF1E]/5 rounded-full blur-2xl group-hover:bg-[#B7FF1E]/10 transition-colors"></div>
+          {/* Main Revenue Card - Spans 2 columns */}
+          <div className="col-span-2 bg-gradient-to-br from-[#1A1D18] to-[#121411] border border-[#B7FF1E]/10 rounded-2xl p-4 flex flex-col justify-between min-h-[140px] relative overflow-hidden group shadow-lg shadow-black/40">
+            <div className="absolute -right-6 -top-6 w-32 h-32 bg-[#B7FF1E]/10 rounded-full blur-3xl group-hover:bg-[#B7FF1E]/20 transition-all duration-500"></div>
             <div className="flex justify-between items-start w-full relative z-10">
-              <span className="text-[13px] text-[#858A7D]">Total Collected</span>
-              <div className="flex items-center gap-1 bg-[#B7FF1E]/10 px-2 py-0.5 rounded-full border border-[#B7FF1E]/20">
-                <span className="material-symbols-outlined text-[12px] text-[#B7FF1E]">trending_up</span>
-                <span className="text-[10px] font-semibold text-[#B7FF1E]">+{stats?.growth || 0}%</span>
+              <div className="flex flex-col gap-0.5">
+                <span className="text-[14px] font-medium text-[#858A7D]">Platform Revenue</span>
+                <span className="text-[11px] text-[#858A7D]/60 italic font-mono uppercase tracking-wider">Total Gross Revenue</span>
+              </div>
+              <div className="flex items-center gap-1.5 bg-[#B7FF1E]/15 px-3 py-1 rounded-full border border-[#B7FF1E]/20 backdrop-blur-sm">
+                <span className="material-symbols-outlined text-[14px] text-[#B7FF1E] font-bold">trending_up</span>
+                <span className="text-[11px] font-bold text-[#B7FF1E]">+{stats?.growth || 0}%</span>
               </div>
             </div>
-            <div className="mt-2 relative z-10">
-              <span className="text-[32px] font-bold text-white leading-none">₹{stats?.totalCollected?.toLocaleString() || '0'}</span>
+            <div className="mt-4 relative z-10 flex items-baseline gap-1">
+              <span className="text-[42px] font-black text-white leading-none tracking-tight">₹{stats?.totalCollected?.toLocaleString() || '0'}</span>
             </div>
           </div>
 
-          <div className="bg-[#121411] border border-white/5 rounded-xl p-3 flex flex-col justify-center min-h-[110px]">
-            <div className="flex justify-between items-start mb-1">
-              <span className="text-[11px] text-[#858A7D]">Free Trial Gyms</span>
-              <span className="material-symbols-outlined text-[#B7FF1E] text-base">card_giftcard</span>
+          {/* Metric Cards - 2 per row */}
+          <div className="bg-[#1A1D18] border border-white/5 rounded-2xl p-3 flex flex-col justify-between min-h-[95px] shadow-md shadow-black/20">
+            <div className="flex justify-between items-start">
+              <span className="text-[12px] font-medium text-[#858A7D]">Free Trial</span>
+              <div className="w-7 h-7 bg-[#B7FF1E]/10 rounded-lg flex items-center justify-center border border-[#B7FF1E]/10">
+                <span className="material-symbols-outlined text-[#B7FF1E] text-[18px]">card_giftcard</span>
+              </div>
             </div>
-            <span className="text-[32px] font-bold text-white leading-none">{stats?.freeTierCount || 0}</span>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-[26px] font-bold text-white tracking-tight">{stats?.freeTierCount || 0}</span>
+              <span className="text-[10px] text-[#858A7D] font-medium uppercase tracking-tighter">Gyms</span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-[#121411] border border-white/5 rounded-xl p-3 flex flex-col justify-center min-h-[80px]">
-              <div className="flex justify-between items-start mb-1">
-                <span className="text-[11px] text-[#858A7D]">Paid Gyms</span>
-                <span className="material-symbols-outlined text-[#858A7D] text-base">check_circle</span>
-              </div>
-              <span className="text-[20px] font-bold text-white">{stats?.paidCount || 0}</span>
-            </div>
-            <div className="bg-[#121411] border border-[#FF5964]/30 rounded-xl p-3 flex flex-col justify-center relative overflow-hidden min-h-[80px]">
-              <div className="absolute inset-0 bg-[#FF5964]/5"></div>
-              <div className="relative z-10">
-                <div className="flex justify-between items-start mb-1">
-                  <span className="text-[11px] text-[#858A7D]">Overdue</span>
-                  <span className="material-symbols-outlined text-[#FF5964] text-base">warning</span>
-                </div>
-                <span className="text-[20px] font-bold text-[#FF5964]">{stats?.overdueCount || 0}</span>
+          <div className="bg-[#1A1D18] border border-white/5 rounded-2xl p-3 flex flex-col justify-between min-h-[95px] shadow-md shadow-black/20">
+            <div className="flex justify-between items-start">
+              <span className="text-[12px] font-medium text-[#858A7D]">Active Paid</span>
+              <div className="w-7 h-7 bg-white/5 rounded-lg flex items-center justify-center border border-white/5">
+                <span className="material-symbols-outlined text-[#B7FF1E] text-[18px]">check_circle</span>
               </div>
             </div>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-[26px] font-bold text-white tracking-tight">{stats?.paidCount || 0}</span>
+              <span className="text-[10px] text-[#858A7D] font-medium uppercase tracking-tighter">Gyms</span>
+            </div>
+          </div>
+
+          {/* Overdue card - Spans full width if needed, but keeping grid consistency */}
+          <div className="col-span-2 bg-[#1A1D18] border border-[#FF5964]/20 rounded-2xl p-4 flex items-center justify-between min-h-[70px] relative overflow-hidden shadow-md shadow-black/20">
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#FF5964]"></div>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-[#FF5964]/10 rounded-xl flex items-center justify-center border border-[#FF5964]/20">
+                <span className="material-symbols-outlined text-[#FF5964] text-[22px]">warning</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[13px] font-semibold text-white">Pending Payments</span>
+                <span className="text-[11px] text-[#858A7D]">Action required for overdue gyms</span>
+              </div>
+            </div>
+            <span className="text-[28px] font-black text-[#FF5964] tracking-tight">{stats?.overdueCount || 0}</span>
           </div>
         </section>
 
