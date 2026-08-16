@@ -368,7 +368,7 @@ function LandingPage() {
           </svg>
         </div>
 
-        <main className="relative z-10 px-6 max-w-md lg:max-w-7xl mx-auto lg:translate-x-0 -translate-x-4">
+        <main className="relative z-10 px-6 max-w-md lg:max-w-7xl mx-auto lg:translate-x-0 -translate-x-[0.32rem]">
           {/* Header Section */}
           <header className="mb-12 lg:mb-20 lg:text-center">
             <p className="text-[#c3c8be] text-xs tracking-wider uppercase mb-3 font-medium">How it works</p>
