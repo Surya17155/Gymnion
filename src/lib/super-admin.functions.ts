@@ -323,6 +323,7 @@ export const updateGymAdminDetails = createServerFn({ method: "POST" })
     ownerName: z.string().optional(),
     ownerEmail: z.string().optional(),
     ownerPhone: z.string().optional(),
+    ownerDob: z.string().optional(),
   }).parse(data))
   .handler(async ({ data, context }) => {
     // Check if user is super_admin
@@ -341,6 +342,7 @@ export const updateGymAdminDetails = createServerFn({ method: "POST" })
     if (data.ownerName) updateData.owner_name = data.ownerName;
     if (data.ownerEmail) updateData.owner_email = data.ownerEmail;
     if (data.ownerPhone) updateData.owner_phone = data.ownerPhone;
+    if (data.ownerDob) updateData.owner_dob = data.ownerDob;
 
     const { error } = await supabaseAdmin
       .from('gyms')

@@ -5,7 +5,7 @@ import { getAllGymsServer, updateGymStatus, extendSubscription, updateGymDetails
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useState, useRef } from 'react';
-import { format } from 'date-fns';
+import { format, differenceInYears } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/super-admin/gyms/$gymId')({
   component: GymDetailScreen,
@@ -42,7 +42,8 @@ function GymDetailScreen() {
     ownerLastName: '',
     ownerName: '',
     ownerEmail: '',
-    ownerPhone: ''
+    ownerPhone: '',
+    ownerDob: ''
   });
 
   // Initialize edit data when gym is loaded
@@ -58,7 +59,8 @@ function GymDetailScreen() {
         ownerLastName: (gym as any).owner_last_name || '',
         ownerName: gym.owner_name || '',
         ownerEmail: gym.owner_email || '',
-        ownerPhone: gym.owner_phone || ''
+        ownerPhone: (gym as any).owner_phone || '',
+        ownerDob: (gym as any).owner_dob || ''
       });
     }
   });
@@ -375,9 +377,18 @@ function GymDetailScreen() {
                     <input 
                       className="w-full h-10 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-white outline-none focus:border-[#B7FF1E]"
                       value={editAdminData.ownerPhone}
-                      onChange={e => setEditAdminData(prev => ({ ...prev, ownerPhone: e.target.value }))}
+                    onChange={e => setEditAdminData(prev => ({ ...prev, ownerPhone: e.target.value }))}
+                  />
+                  <div className="space-y-1">
+                    <p className="text-[10px] text-[#858A7D] font-bold">DATE OF BIRTH</p>
+                    <input 
+                      type="date"
+                      className="w-full h-10 bg-[#1e201d] border border-white/10 rounded-lg px-3 text-white outline-none focus:border-[#B7FF1E]"
+                      value={editAdminData.ownerDob}
+                      onChange={e => setEditAdminData(prev => ({ ...prev, ownerDob: e.target.value }))}
                     />
                   </div>
+                </div>
                 </div>
               ) : (
                 <>
@@ -385,6 +396,16 @@ function GymDetailScreen() {
                   <DetailRow icon="person" label="Last Name" value={(gym as any).owner_last_name} />
                   <DetailRow icon="mail" label="Email" value={gym.owner_email} />
                   <DetailRow icon="call" label="Phone" value={gym.owner_phone} />
+                  <DetailRow 
+                    icon="cake" 
+                    label="Date of Birth" 
+                    value={(gym as any).owner_dob ? format(new Date((gym as any).owner_dob), 'dd MMM yyyy') : 'N/A'} 
+                  />
+                  <DetailRow 
+                    icon="person_celebrate" 
+                    label="Age" 
+                    value={(gym as any).owner_dob ? `${differenceInYears(new Date(), new Date((gym as any).owner_dob))} Years` : 'N/A'} 
+                  />
                 </>
               )}
             </div>
