@@ -169,7 +169,7 @@ export const getPlatformRevenue = createServerFn({ method: "GET" })
 
     const { data: gyms } = await supabaseAdmin
       .from('gyms')
-      .select('subscription_plan_id, settings, subscription_ends_at');
+      .select('subscription_plan_id, settings, subscription_ends_at, plan_tier');
     
     const { data: plans } = await supabaseAdmin.from('global_plans').select('id, price');
     const planPrices = Object.fromEntries(plans?.map(p => [p.id, p.price]) || []);
@@ -177,9 +177,14 @@ export const getPlatformRevenue = createServerFn({ method: "GET" })
     let totalCollected = 0;
     let paidCount = 0;
     let overdueCount = 0;
+    let freeTierCount = 0;
     const now = new Date();
 
     gyms?.forEach(g => {
+        if (g.plan_tier === 'free') {
+          freeTierCount++;
+        }
+
         const manualPrice = (g.settings as any)?.manual_pricing;
         let monthlyPaise = 0;
         if (manualPrice) {
@@ -189,14 +194,12 @@ export const getPlatformRevenue = createServerFn({ method: "GET" })
         }
         
         const isOverdue = g.subscription_ends_at ? new Date(g.subscription_ends_at) < now : true;
-        // Strict check: only count as paid if explicitly marked as 'paid' in settings AND NOT overdue
-        // For now, no real payments exist, so this will naturally show 0 revenue.
         const isPaid = (g.settings as any)?.payment_status === 'paid' && !isOverdue;
         
         if (isPaid) {
           totalCollected += monthlyPaise;
           paidCount++;
-        } else {
+        } else if (g.plan_tier !== 'free') {
           overdueCount++;
         }
     });
@@ -205,6 +208,7 @@ export const getPlatformRevenue = createServerFn({ method: "GET" })
       totalCollected: Math.round(totalCollected / 100),
       paidCount,
       overdueCount,
+      freeTierCount,
       growth: 0
     };
   });
