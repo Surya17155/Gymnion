@@ -597,7 +597,7 @@ export function AdminDashboard() {
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
           preload="intent"
-          disabled={isExpired}
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -613,7 +613,7 @@ export function AdminDashboard() {
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
           preload="intent"
-          disabled={isExpired}
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -629,7 +629,7 @@ export function AdminDashboard() {
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
           preload="intent"
-          disabled={isExpired}
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -645,7 +645,7 @@ export function AdminDashboard() {
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
           preload="intent"
-          disabled={isExpired}
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>

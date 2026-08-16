@@ -373,7 +373,7 @@ function MembersDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-          disabled={isExpired}
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -387,7 +387,7 @@ function MembersDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-          disabled={isExpired}
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -401,7 +401,7 @@ function MembersDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-          disabled={isExpired}
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -415,7 +415,7 @@ function MembersDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-          disabled={isExpired}
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
