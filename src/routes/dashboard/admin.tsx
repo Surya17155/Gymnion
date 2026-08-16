@@ -10,30 +10,13 @@ import { clearRoleCache } from '@/lib/role';
 import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin')({
-  beforeLoad: async ({ context }) => {
+  beforeLoad: async () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       throw redirect({
         to: '/auth/login',
         search: { redirect: '/dashboard/admin' }
       });
-    }
-
-    // Check subscription status
-    const { data: gym } = await supabase
-      .from('gyms')
-      .select('subscription_ends_at, plan_tier, settings')
-      .single();
-
-    if (gym) {
-      const now = new Date();
-      const subscriptionEnd = gym.subscription_ends_at ? new Date(gym.subscription_ends_at) : null;
-      
-      // If subscription has expired and not on free tier (or free trial expired)
-      if (subscriptionEnd && subscriptionEnd < now) {
-        // Redirect to a landing/payment page if needed, but for now we just show expired status in UI
-        console.warn("Subscription expired on:", subscriptionEnd);
-      }
     }
   },
   component: AdminLayout,
