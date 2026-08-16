@@ -29,7 +29,8 @@ function SuperAdminPlans() {
     payment_management: false,
     attendance_management: false,
     fee_reminders: false,
-    member_limit: ''
+    member_limit: '',
+    plan_tier: 'free' as 'free' | 'paid'
   });
 
   const getPlansFn = useServerFn(getSubscriptionPlans);
@@ -72,6 +73,7 @@ function SuperAdminPlans() {
         data: {
           gymId: selectedGymForOverride.id,
           manualPricing: parseFloat(customMonthlyPrice),
+          plan_tier: overrideForm.plan_tier,
           features: {
             payment_management: overrideForm.payment_management,
             attendance_management: overrideForm.attendance_management,
@@ -377,7 +379,8 @@ function SuperAdminPlans() {
                           payment_management: !!features.payment_management,
                           attendance_management: !!features.attendance_management,
                           fee_reminders: !!features.fee_reminders,
-                          member_limit: features.member_limit?.toString() || ''
+                          member_limit: features.member_limit?.toString() || '',
+                          plan_tier: gym.plan_tier === 'free' ? 'free' : 'paid'
                         });
                           setIsAddingOverride(true);
                         }}
@@ -535,6 +538,24 @@ function SuperAdminPlans() {
                     className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-2xl px-4 text-white font-medium outline-none focus:border-[#c9f232] transition-colors"
                     placeholder="Unlimited"
                   />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-[#858A7D] uppercase tracking-wider">Plan Type</label>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => setOverrideForm(prev => ({ ...prev, plan_tier: 'free' }))}
+                      className={`flex-1 py-3 rounded-xl text-[12px] font-bold transition-all border ${overrideForm.plan_tier === 'free' ? 'bg-[#c9f232] text-black border-[#c9f232]' : 'bg-[#1e201d] text-[#858A7D] border-white/5 hover:border-white/10'}`}
+                    >
+                      Free Trial
+                    </button>
+                    <button 
+                      onClick={() => setOverrideForm(prev => ({ ...prev, plan_tier: 'paid' }))}
+                      className={`flex-1 py-3 rounded-xl text-[12px] font-bold transition-all border ${overrideForm.plan_tier === 'paid' ? 'bg-[#c9f232] text-black border-[#c9f232]' : 'bg-[#1e201d] text-[#858A7D] border-white/5 hover:border-white/10'}`}
+                    >
+                      Paid
+                    </button>
+                  </div>
                 </div>
 
               <div className="space-y-3">

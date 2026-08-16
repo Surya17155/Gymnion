@@ -119,6 +119,24 @@ function GymDetailScreen() {
       setIsUpdating(false);
     }
   };
+  
+  const handleUpdateGymTier = async (tier: 'free' | 'paid') => {
+    setIsUpdating(true);
+    try {
+      const { error } = await supabase
+        .from('gyms')
+        .update({ plan_tier: tier })
+        .eq('id', gymId);
+      
+      if (error) throw error;
+      toast.success(`Gym plan tier updated to ${tier}`);
+      queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update plan tier");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   const handleUpdateAdmin = async () => {
     setIsUpdating(true);
@@ -329,6 +347,31 @@ function GymDetailScreen() {
                 label="Subscription Ends" 
                 value={(hasPlan || (gym.settings as any)?.manual_pricing || gym.plan_tier === 'free') && gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), 'PPP') : 'N/A'} 
               />
+              <div className="space-y-1">
+                <p className="text-[10px] text-[#858A7D] font-bold">PLAN TIER</p>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => {
+                      if (gym.plan_tier !== 'free') {
+                        handleUpdateGymTier('free');
+                      }
+                    }}
+                    className={`flex-1 h-10 rounded-lg text-[12px] font-bold transition-all border ${gym.plan_tier === 'free' ? 'bg-[#B7FF1E] text-black border-[#B7FF1E]' : 'bg-[#1e201d] text-[#858A7D] border-white/5 hover:border-white/10'}`}
+                  >
+                    Free Trial
+                  </button>
+                  <button 
+                    onClick={() => {
+                      if (gym.plan_tier !== 'paid') {
+                        handleUpdateGymTier('paid');
+                      }
+                    }}
+                    className={`flex-1 h-10 rounded-lg text-[12px] font-bold transition-all border ${gym.plan_tier === 'paid' ? 'bg-[#B7FF1E] text-black border-[#B7FF1E]' : 'bg-[#1e201d] text-[#858A7D] border-white/5 hover:border-white/10'}`}
+                  >
+                    Paid
+                  </button>
+                </div>
+              </div>
               {gym.plan_tier === 'free' && (
                 <DetailRow 
                   icon="workspace_premium" 
