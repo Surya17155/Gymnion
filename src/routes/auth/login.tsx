@@ -265,16 +265,12 @@ function AuthPage() {
                 <input name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter your phone number" required type="tel" />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-xs text-[#C0C2B8] px-1 font-normal">Gym Address</label>
-                <input name="address" value={formData.address} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter gym address" required type="text" />
-              </div>
-              <div className="flex flex-col gap-2">
                 <label className="text-xs text-[#C0C2B8] px-1 font-normal">Date of Birth (DD/MM/YYYY)</label>
                 <input name="dob" value={formData.dob} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="DD/MM/YYYY" required type="text" />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-xs text-[#C0C2B8] px-1 font-normal">Phone Number (Alternative)</label>
-                <input name="phoneAlt" className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter alternative phone" type="tel" />
+                <label className="text-xs text-[#C0C2B8] px-1 font-normal">Gym Address</label>
+                <input name="address" value={formData.address} onChange={handleChange} className="w-full bg-[#1a1c19] text-[#e3e3dd] text-sm border border-white/10 rounded-xl px-4 py-3 h-[48px] focus:outline-none focus:border-[#B7FF1E] transition-all" placeholder="Enter gym address" required type="text" />
               </div>
               <div className="flex flex-col gap-2">
                 <label className="text-xs text-[#C0C2B8] px-1 font-normal">Gym Code</label>
@@ -282,6 +278,7 @@ function AuthPage() {
                 {gymCodeError && <span className="text-[11px] text-[#FF5964] px-1">{gymCodeError}</span>}
                 {gymName && !gymCodeError && <span className="text-[11px] text-[#B7FF1E] px-1">{gymName}</span>}
               </div>
+
             </>
           )}
           {authMode === 'signin' && (
