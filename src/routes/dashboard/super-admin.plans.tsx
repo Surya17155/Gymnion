@@ -223,7 +223,7 @@ function SuperAdminPlans() {
             ) : globalPlans?.map((plan: any) => (
               <div 
                 key={plan.id}
-                className={`bg-[#121411] border border-white/5 rounded-xl p-4 relative overflow-hidden group ${
+                className={`bg-[#121411] border border-white/5 rounded-xl p-4 relative overflow-hidden group shadow-lg shadow-black/40 before:absolute before:inset-0 before:border before:border-[#B7FF1E]/30 before:rounded-xl before:shadow-[0_0_15px_rgba(183,255,30,0.15)] ${
                   plan.name.toLowerCase() === 'unlimited' ? 'bg-[#c9f232]/10 border-[#c9f232]/30' : ''
                 }`}
               >
