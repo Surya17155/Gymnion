@@ -556,6 +556,7 @@ function SuperAdminPlans() {
                       Paid
                     </button>
                   </div>
+                </div>
 
               <div className="space-y-3">
                 <label className="text-[11px] font-bold text-[#858A7D] uppercase tracking-wider">Features Access</label>

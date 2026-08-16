@@ -358,6 +358,7 @@ export const setGymManualPricing = createServerFn({ method: "POST" })
   .validator((data: unknown) => z.object({
     gymId: z.string(),
     manualPricing: z.number().nullable(),
+    plan_tier: z.enum(['free', 'paid']).optional(),
     features: z.object({
       payment_management: z.boolean(),
       attendance_management: z.boolean(),
@@ -400,9 +401,18 @@ export const setGymManualPricing = createServerFn({ method: "POST" })
       };
     }
 
+    const updateData: any = { 
+      settings: currentSettings,
+      updated_at: new Date().toISOString()
+    };
+
+    if (data.plan_tier) {
+      updateData.plan_tier = data.plan_tier;
+    }
+
     const { error } = await supabaseAdmin
       .from('gyms')
-      .update({ settings: currentSettings })
+      .update(updateData)
       .eq('id', data.gymId);
 
     if (error) throw error;
