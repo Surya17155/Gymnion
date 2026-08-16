@@ -28,7 +28,9 @@ export const completeSignup = createServerFn({ method: "POST" })
     firstName: z.string(),
     lastName: z.string(),
     email: z.string(),
-    phone: z.string().optional()
+    phone: z.string().optional(),
+    dob: z.string().optional(),
+    address: z.string().optional(),
   }).parse(data))
   .handler(async ({ data }) => {
     const { error } = await supabaseAdmin
@@ -41,6 +43,8 @@ export const completeSignup = createServerFn({ method: "POST" })
         full_name: `${data.firstName} ${data.lastName}`.trim(),
         email: data.email,
         phone: data.phone || '',
+        dob: data.dob,
+        address: data.address,
         status: 'active'
       }, { onConflict: 'user_id' });
     
