@@ -126,7 +126,7 @@ function MembersDashboard() {
       </div>
 
       {/* Members List */}
-      <div className="px-6 space-y-3">
+      <div className="px-6 md:px-0 space-y-3">
         {isLoading ? (
           <div className="text-center py-12 text-[#858A7D]">Loading members...</div>
         ) : (
