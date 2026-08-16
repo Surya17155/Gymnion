@@ -665,11 +665,15 @@ function SuperAdminPlans() {
                       key={feat.name}
                       onClick={() => {
                         const newFeatures = [...(selectedPlan.features || [])];
-                        const idx = newFeatures.findIndex((f: any) => f.name === feat.name);
+                        const idx = newFeatures.findIndex((f: any) => (typeof f === 'string' ? f : f.name) === feat.name);
                         if (idx >= 0) {
-                          newFeatures[idx] = { ...newFeatures[idx], enabled: !isEnabled };
+                          const currentFeat = newFeatures[idx];
+                          newFeatures[idx] = { 
+                            name: typeof currentFeat === 'string' ? currentFeat : currentFeat.name, 
+                            enabled: !isEnabled 
+                          };
                         } else {
-                          newFeatures.push({ name: feat.name, label: feat.label, enabled: true });
+                          newFeatures.push({ name: feat.name, enabled: true });
                         }
                         setSelectedPlan({ ...selectedPlan, features: newFeatures });
                       }}
