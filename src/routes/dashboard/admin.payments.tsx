@@ -50,7 +50,7 @@ function PaymentsDashboard() {
 
   const { data: subStatus } = useQuery({
     queryKey: ['gym-subscription-status', gymId],
-    queryFn: () => checkSubscriptionFn({ data: gymId! }),
+    queryFn: () => checkSubscriptionFn({ data: undefined }),
     enabled: !!gymId,
   });
 
