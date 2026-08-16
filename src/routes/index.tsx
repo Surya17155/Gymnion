@@ -710,19 +710,19 @@ function LandingPage() {
 
       {/* Pricing */}
       <section id="pricing" className="py-24 bg-[#121411] text-[#e3e3dd] border-t border-white/5">
-        <div className="max-w-[480px] mx-auto px-6">
-          <header className="flex flex-col gap-2 mb-12">
+        <div className="max-w-[480px] lg:max-w-7xl mx-auto px-6">
+          <header className="flex flex-col gap-2 mb-12 lg:mb-20 lg:text-center">
             <span className="text-[11px] font-semibold text-[#858A7D] uppercase tracking-[0.2em]">Pricing</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+            <h2 className="text-3xl md:text-6xl font-bold text-white leading-tight">
               Simple plans.<br/>
               Built for your <span className="text-[#B7FF1E]">gym.</span>
             </h2>
-            <p className="text-sm text-[#858A7D] mt-2 leading-relaxed">
+            <p className="text-sm lg:text-xl text-[#858A7D] mt-2 leading-relaxed lg:max-w-2xl lg:mx-auto">
               Choose the plan that fits your gym today, then grow when you are ready.
             </p>
           </header>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col lg:grid lg:grid-cols-2 lg:max-w-5xl lg:mx-auto gap-4 lg:gap-8">
             {/* Basic Card */}
             <div className="bg-[#1e201d] rounded-2xl p-6 border border-white/5 relative overflow-hidden transition-all duration-300 hover:border-[#B7FF1E]/30">
               <div className="flex flex-col gap-4">
