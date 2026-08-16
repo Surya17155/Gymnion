@@ -389,7 +389,7 @@ function LandingPage() {
             {/* Step 1 */}
             <section className="relative pl-14 lg:pl-0 lg:text-right lg:pr-20 mb-16 lg:mb-32">
               {/* Number Badge */}
-              <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 top-1 lg:top-8 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
+              <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 top-1 lg:top-[-20px] w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
                 <span className="text-[#d5ff40] font-bold text-lg">01</span>
               </div>
               <div className="mb-6 lg:mt-8">
