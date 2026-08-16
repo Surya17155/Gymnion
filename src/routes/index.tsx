@@ -97,24 +97,21 @@ function LandingPage() {
         </motion.div>
 
         {/* Content Layer */}
-        <div className="relative z-10 flex flex-col flex-1 px-6 max-w-7xl mx-auto w-full pt-8 md:pt-16">
-          <div className="max-w-[800px]">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center flex-1 px-6 max-w-7xl mx-auto w-full pt-8 md:pt-16">
+          <div className="max-w-[800px] lg:w-1/2">
             <motion.div
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              <h1 className="text-[clamp(2.8rem,10vw,4.5rem)] font-bold leading-[1.05] mb-4 tracking-tighter">
+              <h1 className="text-[clamp(2.8rem,10vw,4.5rem)] font-bold leading-[1.05] mb-4 tracking-tighter text-center lg:text-left">
                 Run your gym <br />
                 with <span className="text-[#C8FF38] inline-block"><TextReveal word="clarity." /></span>
               </h1>
             </motion.div>
-
-            <motion.p 
-              initial={{ y: 24, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
+...
               transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-              className="text-base md:text-lg text-[#AAB2AA] mb-4 max-w-[320px] leading-snug"
+              className="text-base md:text-lg text-[#AAB2AA] mb-4 max-w-[320px] lg:max-w-[450px] leading-snug mx-auto lg:mx-0 text-center lg:text-left"
             >
               Track attendance, payments, fees, and revenue <br className="hidden sm:block" />
               in one clear dashboard.
