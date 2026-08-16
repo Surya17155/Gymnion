@@ -357,6 +357,13 @@ export function AdminDashboard() {
                         >
                           how_to_reg
                         </span>
+                        <span 
+                          className="material-symbols-outlined text-[18px]" 
+                          style={{ color: manualFeatures.fee_reminders ? '#B7FF1E' : '#FF5964' }}
+                          title="Reminders"
+                        >
+                          notifications_active
+                        </span>
                       </>
                     );
                   }
