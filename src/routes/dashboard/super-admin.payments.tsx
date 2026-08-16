@@ -151,11 +151,20 @@ function SuperAdminPayments() {
           </div>
         </section>
 
-        <section className="flex flex-col gap-2">
+        <section className="flex flex-col gap-3 mt-2">
           {isLoading ? (
-            <div className="py-10 text-center text-[#858A7D]">Loading gyms...</div>
+            <div className="py-12 flex flex-col items-center gap-3">
+              <div className="w-8 h-8 border-2 border-[#B7FF1E]/20 border-t-[#B7FF1E] rounded-full animate-spin"></div>
+              <span className="text-[14px] text-[#858A7D] animate-pulse">Scanning gyms...</span>
+            </div>
           ) : filteredGyms.length === 0 ? (
-            <div className="py-10 text-center text-[#858A7D]">No gyms found matching criteria.</div>
+            <div className="py-12 text-center flex flex-col items-center gap-4 bg-[#1A1D18] rounded-2xl border border-dashed border-white/10">
+              <span className="material-symbols-outlined text-[48px] text-[#858A7D]/30">search_off</span>
+              <div className="flex flex-col gap-1">
+                <span className="text-[16px] font-semibold text-white">No gyms found</span>
+                <span className="text-[13px] text-[#858A7D]">Try adjusting your search or filters</span>
+              </div>
+            </div>
           ) : (
             filteredGyms.map((gym) => {
               const isOverdue = gym.subscription_ends_at ? new Date(gym.subscription_ends_at) < now : true;
@@ -165,26 +174,29 @@ function SuperAdminPayments() {
               const planName = manualPrice ? `Manual Pricing: ₹${manualPrice}` : ((gym as any).global_plans?.name || 'Standard Plan');
               
               return (
-                <div key={gym.id} className={`bg-[#121411] border border-white/5 rounded-xl p-4 flex items-center gap-4 hover:border-white/20 transition-colors cursor-pointer group ${!isPaid ? 'border-l-2 border-l-[#FF5964]' : ''}`}>
-                  <div className="w-12 h-12 rounded-lg bg-[#292A28] flex items-center justify-center shrink-0 border border-white/5 group-hover:border-[#B7FF1E]/30 transition-colors">
-                    <span className="material-symbols-outlined text-white">fitness_center</span>
+                <div key={gym.id} className={`bg-[#1A1D18] border border-white/5 rounded-2xl p-4 flex items-center gap-4 hover:border-[#B7FF1E]/30 active:scale-[0.98] transition-all duration-200 cursor-pointer group shadow-sm shadow-black/20 ${!isPaid && gym.plan_tier !== 'free' ? 'border-l-4 border-l-[#FF5964]' : 'border-l-4 border-l-transparent'}`}>
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#292A28] to-[#1e201d] flex items-center justify-center shrink-0 border border-white/5 group-hover:border-[#B7FF1E]/30 transition-colors shadow-inner">
+                    <span className="material-symbols-outlined text-white text-[28px]">fitness_center</span>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-1">
-                      <h3 className="text-[18px] font-semibold text-white truncate pr-2">{gym.name}</h3>
-                      <span className={`text-[11px] font-semibold px-2 py-0.5 rounded border shrink-0 ${gym.plan_tier === 'free' ? 'text-[#B7FF1E] bg-[#B7FF1E]/10 border-[#B7FF1E]/20' : !isPaid ? 'text-[#FF5964] bg-[#FF5964]/10 border-[#FF5964]/20' : 'text-[#B7FF1E] bg-[#B7FF1E]/10 border-[#B7FF1E]/20'}`}>
-                        {gym.plan_tier === 'free' ? 'FREE TRIAL' : (isPaid ? 'PAID' : 'PENDING')}
+                  <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-[16px] font-bold text-white truncate pr-2 tracking-tight">{gym.name}</h3>
+                      <span className={`text-[10px] font-black px-2 py-0.5 rounded-lg border shrink-0 tracking-tighter uppercase ${gym.plan_tier === 'free' ? 'text-[#B7FF1E] bg-[#B7FF1E]/10 border-[#B7FF1E]/20' : !isPaid ? 'text-[#FF5964] bg-[#FF5964]/10 border-[#FF5964]/20' : 'text-[#B7FF1E] bg-[#B7FF1E]/10 border-[#B7FF1E]/20'}`}>
+                        {gym.plan_tier === 'free' ? 'Free' : (isPaid ? 'Paid' : 'Due')}
                       </span>
                     </div>
-                    <p className="text-[12px] text-[#C0C2B8] truncate">{planName}</p>
-                    <p className={`text-[11px] font-semibold mt-1 ${!isPaid ? 'text-[#FF5964]' : 'text-[#858A7D]'}`}>
-                      {!isPaid 
-                        ? `Due: ${gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), "MMM dd, yyyy") : 'Immediate'}` 
-                        : `Valid Until: ${gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), "MMM dd, yyyy") : 'N/A'}`
-                      }
-                    </p>
+                    <p className="text-[12px] font-medium text-[#858A7D] truncate italic">{planName}</p>
+                    <div className="flex items-center gap-1.5 mt-1">
+                      <span className={`material-symbols-outlined text-[14px] ${!isPaid && gym.plan_tier !== 'free' ? 'text-[#FF5964]' : 'text-[#B7FF1E]'}`}>event</span>
+                      <p className={`text-[11px] font-bold ${!isPaid && gym.plan_tier !== 'free' ? 'text-[#FF5964]' : 'text-[#858A7D]'}`}>
+                        {!isPaid && gym.plan_tier !== 'free'
+                          ? `Due: ${gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), "MMM dd, yyyy") : 'Now'}` 
+                          : `Expires: ${gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), "MMM dd, yyyy") : 'Lifetime'}`
+                        }
+                      </p>
+                    </div>
                   </div>
-                  <span className="material-symbols-outlined text-[#858A7D] group-hover:text-[#B7FF1E] transition-colors">chevron_right</span>
+                  <span className="material-symbols-outlined text-[#858A7D]/40 group-hover:text-[#B7FF1E] transition-all transform group-hover:translate-x-1">chevron_right</span>
                 </div>
               );
             })
