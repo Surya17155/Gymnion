@@ -49,18 +49,33 @@ function GymDetailScreen() {
   // Initialize edit data when gym is loaded
   useState(() => {
     if (gym) {
+      // Logic to fetch DOB from members if not in owner_dob
+      let derivedDob = (gym as any).owner_dob || '';
+      let derivedFirstName = (gym as any).owner_first_name || '';
+      let derivedLastName = (gym as any).owner_last_name || '';
+
+      if (!derivedDob && gym.members && gym.members.length > 0) {
+        // Look for a member with matching email or just the first member if it's a small gym
+        const ownerMember = gym.members.find((m: any) => m.email === gym.owner_email) || gym.members[0];
+        if (ownerMember) {
+          derivedDob = ownerMember.dob || '';
+          if (!derivedFirstName) derivedFirstName = ownerMember.first_name || '';
+          if (!derivedLastName) derivedLastName = ownerMember.last_name || '';
+        }
+      }
+
       setEditGymData({
         name: gym.name || '',
         address: (gym as any).address || '',
         gymCode: gym.gym_code || ''
       });
       setEditAdminData({
-        ownerFirstName: (gym as any).owner_first_name || '',
-        ownerLastName: (gym as any).owner_last_name || '',
-        ownerName: gym.owner_name || '',
+        ownerFirstName: derivedFirstName,
+        ownerLastName: derivedLastName,
+        ownerName: gym.owner_name || `${derivedFirstName} ${derivedLastName}`.trim(),
         ownerEmail: gym.owner_email || '',
         ownerPhone: (gym as any).owner_phone || '',
-        ownerDob: (gym as any).owner_dob || ''
+        ownerDob: derivedDob
       });
     }
   });
@@ -312,8 +327,15 @@ function GymDetailScreen() {
               <DetailRow 
                 icon="calendar_today" 
                 label="Subscription Ends" 
-                value={(hasPlan || (gym.settings as any)?.manual_pricing) && gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), 'PPP') : 'N/A'} 
+                value={(hasPlan || (gym.settings as any)?.manual_pricing || gym.plan_tier === 'free') && gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), 'PPP') : 'N/A'} 
               />
+              {gym.plan_tier === 'free' && (
+                <DetailRow 
+                  icon="workspace_premium" 
+                  label="Plan Status" 
+                  value="Free Trial"
+                />
+              )}
             </div>
           </div>
 
@@ -393,20 +415,35 @@ function GymDetailScreen() {
                 </div>
               ) : (
                 <>
-                  <DetailRow icon="person" label="First Name" value={(gym as any).owner_first_name} />
-                  <DetailRow icon="person" label="Last Name" value={(gym as any).owner_last_name} />
+                  <DetailRow 
+                    icon="person" 
+                    label="First Name" 
+                    value={(gym as any).owner_first_name || (gym.members?.find((m: any) => m.email === gym.owner_email)?.first_name) || gym.members?.[0]?.first_name} 
+                  />
+                  <DetailRow 
+                    icon="person" 
+                    label="Last Name" 
+                    value={(gym as any).owner_last_name || (gym.members?.find((m: any) => m.email === gym.owner_email)?.last_name) || gym.members?.[0]?.last_name} 
+                  />
                   <DetailRow icon="mail" label="Email" value={gym.owner_email} />
                   <DetailRow icon="call" label="Phone" value={gym.owner_phone} />
-                  <DetailRow 
-                    icon="cake" 
-                    label="Date of Birth" 
-                    value={(gym as any).owner_dob ? format(new Date((gym as any).owner_dob), 'dd MMM yyyy') : 'N/A'} 
-                  />
-                  <DetailRow 
-                    icon="person_celebrate" 
-                    label="Age" 
-                    value={(gym as any).owner_dob ? `${differenceInYears(new Date(), new Date((gym as any).owner_dob))} Years` : 'N/A'} 
-                  />
+                  {(() => {
+                    const derivedDob = (gym as any).owner_dob || (gym.members?.find((m: any) => m.email === gym.owner_email)?.dob) || gym.members?.[0]?.dob;
+                    return (
+                      <>
+                        <DetailRow 
+                          icon="cake" 
+                          label="Date of Birth" 
+                          value={derivedDob ? format(new Date(derivedDob), 'dd MMM yyyy') : 'N/A'} 
+                        />
+                        <DetailRow 
+                          icon="person_celebrate" 
+                          label="Age" 
+                          value={derivedDob ? `${differenceInYears(new Date(), new Date(derivedDob))} Years` : 'N/A'} 
+                        />
+                      </>
+                    );
+                  })()}
                 </>
               )}
             </div>
