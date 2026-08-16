@@ -170,12 +170,12 @@ function LandingPage() {
           </motion.div>
 
           {/* Bottom CTA */}
-          <div className="relative z-10 w-full px-6 max-w-7xl mx-auto pb-12 md:pb-20 mt-auto">
+          <div className="relative z-10 w-full px-6 max-w-7xl mx-auto pb-12 md:pb-20 mt-auto lg:px-0">
             <motion.div 
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-              className="flex justify-center md:justify-start"
+              className="flex justify-center lg:justify-start"
             >
               <Link 
                 to="/auth/login" 
