@@ -60,7 +60,73 @@ export const getPlatformStats = createServerFn({ method: "GET" })
       totalMembers: memberCount || 0,
       mrr: Math.round(mrr / 100), // convert to rupees
       newGymsThisMonth: newGymsThisMonth || 0,
-      overdueSubscriptions: overdueCount || 0
+      overdueSubscriptions: overdueCount || 0,
+      freeTierCount: 0 // Will be updated by getPlatformStats
+    };
+  });
+
+export const getPlatformStatsDetailed = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    // Check if user is super_admin
+    const { data: roleData } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', context.userId)
+      .eq('role', 'super_admin')
+      .single();
+
+    if (!roleData) throw new Error("Unauthorized");
+
+    const { count: gymCount } = await supabaseAdmin
+      .from('gyms')
+      .select('*', { count: 'exact', head: true });
+
+    const { count: memberCount } = await supabaseAdmin
+      .from('members')
+      .select('*', { count: 'exact', head: true });
+
+    const { data: gyms } = await supabaseAdmin
+      .from('gyms')
+      .select('subscription_plan_id, settings, plan_tier');
+    
+    const { data: plans } = await supabaseAdmin.from('global_plans').select('id, price');
+    const planPrices = Object.fromEntries(plans?.map(p => [p.id, p.price]) || []);
+
+    let mrr = 0;
+    let freeTierCount = 0;
+    gyms?.forEach(g => {
+        if (g.plan_tier === 'free') {
+          freeTierCount++;
+        }
+        const manualPrice = (g.settings as any)?.manual_pricing;
+        if (manualPrice) {
+            mrr += manualPrice * 100;
+        } else if (g.subscription_plan_id && planPrices[g.subscription_plan_id]) {
+            mrr += planPrices[g.subscription_plan_id] as number;
+        }
+    });
+
+    const now = new Date();
+    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+    
+    const { count: newGymsThisMonth } = await supabaseAdmin
+      .from('gyms')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', firstOfMonth);
+
+    const { count: overdueCount } = await supabaseAdmin
+      .from('gyms')
+      .select('*', { count: 'exact', head: true })
+      .lt('subscription_ends_at', now.toISOString());
+
+    return {
+      totalGyms: gymCount || 0,
+      totalMembers: memberCount || 0,
+      mrr: Math.round(mrr / 100),
+      newGymsThisMonth: newGymsThisMonth || 0,
+      overdueSubscriptions: overdueCount || 0,
+      freeTierCount
     };
   });
 
