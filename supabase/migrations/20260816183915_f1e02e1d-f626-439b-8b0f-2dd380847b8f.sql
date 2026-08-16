@@ -1,0 +1,2 @@
+ALTER TABLE public.gyms 
+ADD COLUMN IF NOT EXISTS owner_dob DATE;
