@@ -9,6 +9,8 @@ import logoAsset from "@/assets/gymnion-logo-new.png.asset.json";
 import heroBgAsset from "@/assets/landing-bg-new.png.asset.json";
 import { TextReveal } from "@/components/ui/text-reveal-animation";
 import featuresBgAsset from "@/assets/features-bg.png.asset.json";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -905,39 +907,7 @@ function LandingPage() {
                 transition={{ delay: 0.3 }}
                 className="bg-black/40 backdrop-blur-sm border border-white/5 p-8 rounded-3xl"
               >
-                <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Name</label>
-                      <input type="text" placeholder="Your Name" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Email</label>
-                      <input type="email" placeholder="work@gym.com" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
-                    </div>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Phone No.</label>
-                      <input type="tel" placeholder="+91 00000 00000" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Gym Name</label>
-                      <input type="text" placeholder="The Iron Hub" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Gym Address</label>
-                    <input type="text" placeholder="Enter gym full address" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Message</label>
-                    <textarea placeholder="Tell us about your needs..." rows={3} className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all resize-none"></textarea>
-                  </div>
-                  <button className="w-full py-4 rounded-xl bg-[#B7FF1E] text-[#293500] font-bold hover:bg-[#83A51B] transition-all active:scale-[0.98] shadow-[0_10px_20px_rgba(183,255,30,0.15)] mt-2">
-                    Send message
-                  </button>
-                </form>
+                <ContactForm />
               </motion.div>
             </div>
           </motion.div>
