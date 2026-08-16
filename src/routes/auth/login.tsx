@@ -53,8 +53,10 @@ function AuthPage() {
           window.location.replace(home);
         } else {
           console.log("Session expired or near expiry, staying on login");
-          await supabase.auth.signOut();
-          clearRoleCache();
+          Promise.all([
+            supabase.auth.signOut(),
+            clearRoleCache()
+          ]);
         }
       }
     };

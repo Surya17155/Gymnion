@@ -56,8 +56,10 @@ export function MemberDashboard() {
 
       // If it's a critical auth or data error, redirect
       if (isCritical) {
-        supabase.auth.signOut().then(() => {
-          clearRoleCache();
+        Promise.all([
+          supabase.auth.signOut(),
+          clearRoleCache()
+        ]).finally(() => {
           window.localStorage.removeItem('tanstack-query-cache');
           window.location.replace('/');
         });
