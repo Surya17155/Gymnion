@@ -69,7 +69,7 @@ function LandingPage() {
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#AAB2AA]">
             <a href="#features" className="hover:text-[#C8FF38]">Features</a>
             <a href="#pricing" className="hover:text-[#C8FF38]">Pricing</a>
-            <a href="#about" className="hover:text-[#C8FF38]">About</a>
+            <a href="#how-it-works" className="hover:text-[#C8FF38]">How It Works</a>
             <a href="#contact" className="hover:text-[#C8FF38]">Contact</a>
             <Link to="/auth/login" className="bg-[#C8FF38] text-[#101311] px-5 py-2 rounded-full font-bold hover:bg-[#B6F028] text-xs uppercase tracking-wider">
               Get Started
@@ -97,14 +97,14 @@ function LandingPage() {
         </motion.div>
 
         {/* Content Layer */}
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center flex-1 px-6 max-w-7xl mx-auto w-full pt-8 md:pt-16">
-          <div className="max-w-[800px] lg:w-1/2">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center flex-1 px-6 max-w-7xl mx-auto w-full pt-8 md:pt-16 pb-12 lg:pb-32">
+          <div className="max-w-[800px] lg:w-3/5 lg:pr-12">
             <motion.div
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              <h1 className="text-[clamp(2.8rem,10vw,4.5rem)] font-bold leading-[1.05] mb-4 tracking-tighter text-center lg:text-left">
+              <h1 className="text-[clamp(2.8rem,10vw,4.5rem)] lg:text-[5rem] font-bold leading-[1.05] mb-6 tracking-tighter text-center lg:text-left">
                 Run your gym <br />
                 with <span className="text-[#C8FF38] inline-block"><TextReveal word="clarity." /></span>
               </h1>
@@ -113,11 +113,26 @@ function LandingPage() {
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-              className="text-base md:text-lg text-[#AAB2AA] mb-4 max-w-[320px] lg:max-w-[450px] leading-snug mx-auto lg:mx-0 text-center lg:text-left"
+              className="text-base md:text-xl text-[#AAB2AA] mb-10 max-w-[320px] lg:max-w-[550px] leading-relaxed mx-auto lg:mx-0 text-center lg:text-left"
             >
               Track attendance, payments, fees, and revenue <br className="hidden sm:block" />
               in one clear dashboard.
             </motion.p>
+            
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+              className="flex justify-center lg:justify-start"
+            >
+              <Link 
+                to="/auth/login"
+                className="group relative inline-flex items-center justify-center px-10 py-5 bg-[#C8FF38] text-[#101311] rounded-full font-bold text-base uppercase tracking-widest overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(200,255,56,0.2)]"
+              >
+                <span className="relative z-10">Start Your Free Trial</span>
+                <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+              </Link>
+            </motion.div>
           </div>
 
           {/* Central Revenue Card */}
@@ -125,15 +140,15 @@ function LandingPage() {
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 flex-1 flex items-center justify-center px-6"
+            className="relative z-10 flex-1 flex items-center justify-center px-6 lg:w-2/5"
           >
-            <div className="w-full max-w-[340px] p-5 rounded-[24px] border-2 border-[#D5FF40]/40 bg-transparent backdrop-blur-[2px]">
-              <div className="flex justify-between items-start mb-5">
+            <div className="w-full max-w-[340px] lg:max-w-[420px] p-6 lg:p-8 rounded-[32px] border-2 border-[#D5FF40]/40 bg-black/10 backdrop-blur-md shadow-[0_0_50px_rgba(213,255,64,0.15)]">
+              <div className="flex justify-between items-start mb-8">
                 <div className="flex flex-col">
-                  <span className="text-[#A0A0A0] text-[13px] font-medium mb-1 tracking-wide uppercase">This month</span>
-                  <h2 className="text-4xl font-bold tracking-tight text-[#F8FAF7]">₹1,84,500</h2>
+                  <span className="text-[#A0A0A0] text-[13px] lg:text-sm font-medium mb-1 tracking-wide uppercase">This month</span>
+                  <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-[#F8FAF7]">₹1,84,500</h2>
                 </div>
-                <svg className="w-16 h-16 flex-shrink-0 transform -rotate-90" viewBox="0 0 100 100">
+                <svg className="w-16 h-16 lg:w-20 lg:h-20 flex-shrink-0 transform -rotate-90" viewBox="0 0 100 100">
                   <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.1)" strokeWidth="14" fill="transparent"></circle>
                   <circle 
                     cx="50" 
@@ -149,42 +164,25 @@ function LandingPage() {
                   ></circle>
                 </svg>
               </div>
-              <div className="h-[1px] bg-white/10 w-full mb-5" />
-              <div className="flex justify-between items-end h-[70px]">
-                <div className="flex items-end space-x-2.5 h-full pb-1">
-                  <div className="w-5 h-[30%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm opacity-80"></div>
-                  <div className="w-5 h-[60%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm opacity-90"></div>
-                  <div className="w-5 h-[90%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm shadow-[0_0_15px_rgba(213,255,64,0.3)]"></div>
+              <div className="h-[1px] bg-white/10 w-full mb-8" />
+              <div className="flex justify-between items-end h-[80px] lg:h-[100px]">
+                <div className="flex items-end space-x-3 h-full pb-1">
+                  <div className="w-6 h-[30%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm opacity-80"></div>
+                  <div className="w-6 h-[60%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm opacity-90"></div>
+                  <div className="w-6 h-[90%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm shadow-[0_0_15px_rgba(213,255,64,0.3)]"></div>
                 </div>
                 <div className="flex flex-col items-end justify-end pb-1 w-[48%]">
-                  <div className="text-sm font-medium mb-2.5">
+                  <div className="text-sm lg:text-base font-medium mb-3">
                     <span className="text-[#D5FF40] font-bold">86%</span>
                     <span className="text-[#A0A0A0] ml-1.5">fees collected</span>
                   </div>
-                  <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                  <div className="w-full h-3 lg:h-4 bg-white/10 rounded-full overflow-hidden">
                     <div className="h-full bg-[#D5FF40] rounded-full shadow-[0_0_10px_rgba(213,255,64,0.4)]" style={{ width: '86%' }}></div>
                   </div>
                 </div>
               </div>
             </div>
           </motion.div>
-
-          {/* Bottom CTA */}
-          <div className="relative z-10 w-full px-6 max-w-7xl mx-auto pb-12 md:pb-20 mt-auto lg:px-0">
-            <motion.div 
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-              className="flex justify-center lg:justify-start"
-            >
-              <Link 
-                to="/auth/login" 
-                className="inline-flex items-center gap-2 bg-[#C8FF38] text-[#101311] px-6 h-[46px] rounded-xl font-bold text-base hover:bg-[#B6F028] transition-all active:scale-[0.98] shadow-[0_8px_20px_rgba(200,255,56,0.2)]"
-              >
-                Get started <ArrowRight size={18} />
-              </Link>
-            </motion.div>
-          </div>
         </div>
       </section>
 
@@ -382,17 +380,17 @@ function LandingPage() {
           </header>
 
           {/* Timeline Section */}
-          <div className="relative lg:grid lg:grid-cols-2 lg:gap-x-24 lg:gap-y-0 lg:pt-32">
+          <div className="relative lg:grid lg:grid-cols-2 lg:gap-x-24 lg:gap-y-32">
             {/* Continuous vertical line */}
-            <div className="absolute left-[1.25rem] lg:left-1/2 lg:-translate-x-1/2 top-8 lg:top-0 bottom-[-9rem] w-[2px] bg-[#B7FF1E] shadow-[0_0_10px_#B7FF1E] z-0"></div>
+            <div className="absolute left-[1.25rem] lg:left-1/2 lg:-translate-x-1/2 top-8 lg:top-8 bottom-[-9rem] w-[2px] bg-[#B7FF1E] shadow-[0_0_10px_#B7FF1E] z-0"></div>
 
             {/* Step 1 */}
-            <section className="relative pl-14 lg:pl-0 lg:text-right lg:pr-20 mb-16 lg:mb-32">
+            <section id="how-it-works" className="relative pl-14 lg:pl-0 lg:text-right lg:pr-20 mb-16 lg:mb-32">
               {/* Number Badge */}
-              <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 top-1 lg:top-[-20px] w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
+              <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 top-1 lg:top-8 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
                 <span className="text-[#d5ff40] font-bold text-lg">01</span>
               </div>
-              <div className="mb-6 lg:mb-12">
+              <div className="mb-6 lg:mt-8">
                 {/* Person Add Icon */}
                 <div className="text-[#B7FF1E] mb-4 lg:flex lg:justify-end">
                   <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
@@ -440,10 +438,10 @@ function LandingPage() {
             {/* Step 2 */}
             <section className="relative pl-14 lg:pl-20 mb-16 lg:mb-32">
               {/* Number Badge */}
-              <div className="absolute left-0 lg:left-0 lg:-translate-x-1/2 top-1 lg:top-[-20px] w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
+              <div className="absolute left-0 lg:left-0 lg:-translate-x-1/2 top-1 lg:top-8 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
                 <span className="text-[#d5ff40] font-bold text-lg">02</span>
               </div>
-              <div className="mb-6 lg:mb-12">
+              <div className="mb-6 lg:mt-8">
                 {/* Calendar Icon */}
                 <div className="text-[#B7FF1E] mb-4">
                   <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
