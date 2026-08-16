@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useServerFn } from '@tanstack/react-start';
 import { getAdminStats, getRecentActivity, getGymDetails } from '@/lib/auth.functions';
+import { checkGymSubscription } from '@/lib/subscription.functions';
 import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin')({
@@ -15,6 +16,23 @@ export const Route = createFileRoute('/dashboard/admin')({
         to: '/auth/login',
         search: { redirect: '/dashboard/admin' }
       });
+    }
+
+    // Check subscription status
+    const { data: gym } = await supabase
+      .from('gyms')
+      .select('subscription_ends_at, plan_tier, settings')
+      .single();
+
+    if (gym) {
+      const now = new Date();
+      const subscriptionEnd = gym.subscription_ends_at ? new Date(gym.subscription_ends_at) : null;
+      
+      // If subscription has expired and not on free tier (or free trial expired)
+      if (subscriptionEnd && subscriptionEnd < now) {
+        // Redirect to a landing/payment page if needed, but for now we just show expired status in UI
+        console.warn("Subscription expired on:", subscriptionEnd);
+      }
     }
   },
   component: AdminLayout,
@@ -32,6 +50,15 @@ export function AdminDashboard() {
   const [showQRModal, setShowQRModal] = useState(false);
   const [qrUrl, setQrUrl] = useState<string>('');
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const checkSubscriptionFn = useServerFn(checkGymSubscription);
+  const { data: subStatus } = useQuery({
+    queryKey: ['gym-subscription-status'],
+    queryFn: () => checkSubscriptionFn(),
+    staleTime: 60000,
+  });
+
+  const isExpired = subStatus?.isExpired;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -324,15 +351,24 @@ export function AdminDashboard() {
           </section>
 
           {/* Subscription/Manual Features Banner - Current Plan */}
-          {(currentPlan || (gymData?.settings as any)?.manual_pricing) && (
+          {(currentPlan || (gymData?.settings as any)?.manual_pricing || gymData?.plan_tier === 'free') && (
             <section className="bg-[#B7FF1E]/10 border border-[#B7FF1E]/20 rounded-xl p-4 flex items-center justify-between">
               <div>
                 <p className="text-[10px] text-[#858A7D] uppercase font-bold">Current Plan</p>
-                <p className="text-white font-bold">
-                  {currentPlan?.name || 'Manual Pricing'}
-                </p>
-                {(gymData?.settings as any)?.manual_pricing && (
-                  <p className="text-[12px] text-[#B7FF1E] font-medium mt-0.5">₹{(gymData?.settings as any).manual_pricing}/mo</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-white font-bold">
+                    {gymData?.plan_tier === 'free' ? 'Free Trial' : (currentPlan?.name || 'Manual Pricing')}
+                  </p>
+                  {gymData?.plan_tier === 'free' && (
+                    <span className="text-[10px] bg-[#B7FF1E] text-black px-2 py-0.5 rounded-full font-black uppercase tracking-tighter shadow-[0_0_10px_rgba(183,255,30,0.3)]">Free</span>
+                  )}
+                </div>
+                {gymData?.subscription_ends_at && (
+                  <p className="text-[11px] text-[#B7FF1E] font-medium mt-1 flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[14px]">event</span>
+                    {gymData.plan_tier === 'free' ? 'Trial ends: ' : 'Expires: '}
+                    {format(new Date(gymData.subscription_ends_at), 'MMM dd, yyyy')}
+                  </p>
                 )}
               </div>
               <div className="flex gap-2">
@@ -368,13 +404,21 @@ export function AdminDashboard() {
                     );
                   }
                   
-                  return Array.isArray(currentPlan?.features) && (currentPlan.features as any[]).slice(0, 3).map((f: any, i: number) => {
+                  // For Free Trial, show common features as enabled or based on plan if selected
+                  const featuresToShow = currentPlan?.features || [
+                    { name: 'Payment Management', enabled: true },
+                    { name: 'Attendance Management', enabled: true },
+                    { name: 'Fee Reminders', enabled: true }
+                  ];
+
+                  return Array.isArray(featuresToShow) && (featuresToShow as any[]).slice(0, 3).map((f: any, i: number) => {
                     const isEnabled = typeof f === 'string' ? true : f.enabled;
                     const featureName = typeof f === 'string' ? f.toLowerCase() : (f.name || '').toLowerCase();
                     
                     let icon = 'check_circle';
                     if (featureName.includes('payment')) icon = 'payments';
                     else if (featureName.includes('attendance')) icon = 'how_to_reg';
+                    else if (featureName.includes('reminder')) icon = 'notifications_active';
 
                     return (
                       <span 
@@ -391,6 +435,26 @@ export function AdminDashboard() {
                   });
                 })()}
               </div>
+            </section>
+          )}
+
+          {/* Subscription Expired Warning */}
+          {gymData?.subscription_ends_at && new Date(gymData.subscription_ends_at) < new Date() && (
+            <section className="bg-[#FF5964]/10 border border-[#FF5964]/30 rounded-xl p-4 flex flex-col gap-2 relative overflow-hidden">
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#FF5964]"></div>
+              <div className="flex items-center gap-3">
+                <span className="material-symbols-outlined text-[#FF5964]">warning</span>
+                <div>
+                  <h3 className="text-white font-bold text-sm">Subscription Expired</h3>
+                  <p className="text-[11px] text-[#858A7D]">Please renew your plan to continue using all features.</p>
+                </div>
+              </div>
+              <Link 
+                to="/dashboard/admin/plans"
+                className="w-full bg-[#FF5964] text-white h-10 rounded-xl font-bold text-xs flex items-center justify-center mt-1"
+              >
+                Renew Now
+              </Link>
             </section>
           )}
 
@@ -453,7 +517,7 @@ export function AdminDashboard() {
           {/* Quick Actions removed from dashboard as requested, keeping other sections */}
 
           {/* Recent Activity */}
-          <section>
+          <section className={isExpired ? 'opacity-50 grayscale' : ''}>
             <div className="flex justify-between items-center mb-[12px]">
               <h3 className="text-[18px] font-semibold text-white">Recent Activity</h3>
               <span className="text-[11px] font-semibold text-[#B7FF1E] cursor-pointer">View All</span>
@@ -525,7 +589,7 @@ export function AdminDashboard() {
         )}
       </div>
 
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-md max-w-[480px] transition-transform duration-300 nav-bar-transition">
+      <nav className={`bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-md max-w-[480px] transition-transform duration-300 nav-bar-transition ${isExpired ? 'opacity-50 grayscale' : ''}`}>
         <Link 
           to="/dashboard/admin"
           activeOptions={{ exact: true }}
@@ -533,6 +597,7 @@ export function AdminDashboard() {
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
           preload="intent"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -548,6 +613,7 @@ export function AdminDashboard() {
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
           preload="intent"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -563,6 +629,7 @@ export function AdminDashboard() {
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
           preload="intent"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -578,6 +645,7 @@ export function AdminDashboard() {
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
           preload="intent"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -601,7 +669,6 @@ export function AdminDashboard() {
             </>
           )}
         </Link>
-
       </nav>
     </div>
   );

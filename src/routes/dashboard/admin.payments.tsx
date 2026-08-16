@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { getPaymentsDashboard, recordManualPayment, getCurrentGymId, getMembers } from '@/lib/auth.functions';
+import { checkGymSubscription } from '@/lib/subscription.functions';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 
@@ -40,11 +41,20 @@ function PaymentsDashboard() {
   const recordPaymentFn = useServerFn(recordManualPayment);
   const getGymIdFn = useServerFn(getCurrentGymId);
   const getMembersFn = useServerFn(getMembers);
+  const checkSubscriptionFn = useServerFn(checkGymSubscription);
 
   const { data: gymId } = useQuery({
     queryKey: ['current-gym-id'],
-    queryFn: () => getGymIdFn(),
+    queryFn: () => getGymIdFn({ data: undefined }),
   });
+
+  const { data: subStatus } = useQuery({
+    queryKey: ['gym-subscription-status', gymId],
+    queryFn: () => checkSubscriptionFn({ data: undefined }),
+    enabled: !!gymId,
+  });
+
+  const isExpired = subStatus?.isExpired;
 
   const { data: payments = [], isLoading } = useQuery({
     queryKey: ['admin-payments', gymId, filter],
@@ -79,7 +89,7 @@ function PaymentsDashboard() {
   };
 
   return (
-    <div className={`min-h-screen bg-[#0D0F0C] text-[#e3e3dd] font-['Poppins'] pb-32 ${isRecording ? 'tab-bar-hidden' : ''}`}>
+    <div className={`min-h-screen bg-[#0D0F0C] text-[#e3e3dd] font-['Poppins'] pb-32 ${isRecording ? 'tab-bar-hidden' : ''} ${isExpired ? 'opacity-50 grayscale pointer-events-none' : ''}`}>
       {/* Top Glow Effect */}
       <div 
         className="fixed top-0 left-0 right-0 h-[300px] z-0 pointer-events-none"
@@ -281,13 +291,14 @@ function PaymentsDashboard() {
       )}
 
       {/* Bottom Navigation */}
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-[10] flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] transition-transform duration-300 nav-bar-transition">
+      <nav className={`bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-[10] flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] transition-transform duration-300 nav-bar-transition ${isExpired ? 'opacity-50 grayscale' : ''}`}>
         <Link 
           to="/dashboard/admin" 
           activeOptions={{ exact: true }}
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -301,6 +312,7 @@ function PaymentsDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -314,6 +326,7 @@ function PaymentsDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -327,10 +340,11 @@ function PaymentsDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>how_to_reg</span>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>event_available</span>
               <span className="text-[11px] font-semibold leading-[14px]">Attendance</span>
             </>
           )}

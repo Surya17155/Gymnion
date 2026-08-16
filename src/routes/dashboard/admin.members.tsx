@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { getMembers, getCurrentGymId, createMember, deleteMember, getFeePlans } from '@/lib/auth.functions';
+import { checkGymSubscription } from '@/lib/subscription.functions';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 
@@ -39,6 +40,15 @@ function MembersDashboard() {
   const createMemberFn = useServerFn(createMember);
   const deleteMemberFn = useServerFn(deleteMember);
   const getPlansFn = useServerFn(getFeePlans);
+  const checkSubscriptionFn = useServerFn(checkGymSubscription);
+
+  const { data: subStatus } = useQuery({
+    queryKey: ['gym-subscription-status'],
+    queryFn: () => checkSubscriptionFn(),
+    staleTime: 60000,
+  });
+
+  const isExpired = subStatus?.isExpired;
 
   const { data: gymId } = useQuery({
     queryKey: ['current-gym-id'],
@@ -113,7 +123,7 @@ function MembersDashboard() {
         </div>
 
         {/* Search and Filter Bar */}
-        <div className="flex gap-2 mb-6">
+        <div className={`flex gap-2 mb-6 ${isExpired ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
           <div className="flex-1 relative">
             <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#858A7D] text-[20px]">search</span>
             <input 
@@ -126,7 +136,7 @@ function MembersDashboard() {
       </div>
 
       {/* Members List */}
-      <div className="px-6 md:px-0 space-y-3">
+      <div className={`px-6 md:px-0 space-y-3 ${isExpired ? 'opacity-50 grayscale' : ''}`}>
         {isLoading ? (
           <div className="text-center py-12 text-[#858A7D]">Loading members...</div>
         ) : (
@@ -356,13 +366,14 @@ function MembersDashboard() {
 
 
       {/* Bottom Navigation */}
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-[10] flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] transition-transform duration-300 nav-bar-transition">
+      <nav className={`bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-[10] flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] transition-transform duration-300 nav-bar-transition ${isExpired ? 'opacity-50 grayscale' : ''}`}>
         <Link 
           to="/dashboard/admin" 
           activeOptions={{ exact: true }}
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -376,6 +387,7 @@ function MembersDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -389,6 +401,7 @@ function MembersDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -402,6 +415,7 @@ function MembersDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>

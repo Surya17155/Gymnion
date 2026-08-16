@@ -3,8 +3,9 @@ import { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useServerFn } from '@tanstack/react-start';
-import { getGymDetails } from '@/lib/auth.functions';
+import { getGymDetails, getCurrentGymId } from '@/lib/auth.functions';
 import { regenerateGymQR } from '@/lib/gyms.functions';
+import { checkGymSubscription } from '@/lib/subscription.functions';
 import { toast } from 'sonner';
 import QRCode from 'qrcode';
 
@@ -36,10 +37,25 @@ function QRManagement() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const getGymDetailsFn = useServerFn(getGymDetails);
+  const getGymIdFn = useServerFn(getCurrentGymId);
   const regenerateQR = useServerFn(regenerateGymQR);
+  const checkSubscriptionFn = useServerFn(checkGymSubscription);
   
   const [qrUrl, setQrUrl] = useState<string>('');
   const [isRegenerating, setIsRegenerating] = useState(false);
+
+  const { data: gymId } = useQuery({
+    queryKey: ['current-gym-id'],
+    queryFn: () => getGymIdFn({ data: undefined }),
+  });
+
+  const { data: subStatus } = useQuery({
+    queryKey: ['gym-subscription-status', gymId],
+    queryFn: () => checkSubscriptionFn({ data: undefined }),
+    enabled: !!gymId,
+  });
+
+  const isExpired = subStatus?.isExpired;
 
   const { data: gym, isPending: isGymPending, error: gymError } = useQuery({
     queryKey: ['admin-gym-details'],
@@ -147,7 +163,7 @@ function QRManagement() {
   }
 
   return (
-    <div className={`bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins'] ${isRegenerating ? 'tab-bar-hidden' : ''}`}>
+    <div className={`bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins'] ${isRegenerating ? 'tab-bar-hidden' : ''} ${isExpired ? 'opacity-50 grayscale pointer-events-none' : ''}`}>
       <div 
         className="fixed top-0 left-0 right-0 h-[150px] z-0 pointer-events-none"
         style={{
@@ -231,12 +247,77 @@ function QRManagement() {
         </main>
       </div>
 
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-md max-w-[480px] transition-transform duration-300 nav-bar-transition">
-        <Link to="/dashboard/admin" className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl text-[#C0C2B8]"><span className="material-symbols-outlined mb-1">dashboard</span><span className="text-[11px] font-semibold">Dashboard</span></Link>
-        <Link to="/dashboard/admin/members" className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl text-[#C0C2B8]"><span className="material-symbols-outlined mb-1">group</span><span className="text-[11px] font-semibold">Members</span></Link>
-        <Link to="/dashboard/admin/payments" className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl text-[#C0C2B8]"><span className="material-symbols-outlined mb-1">receipt_long</span><span className="text-[11px] font-semibold">Payments</span></Link>
-        <Link to="/dashboard/admin/attendance" className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl text-[#C0C2B8]"><span className="material-symbols-outlined mb-1">event_available</span><span className="text-[11px] font-semibold">Attendance</span></Link>
-        <Link to="/dashboard/admin/settings" className="flex flex-col items-center justify-center w-[96px] h-[64px] rounded-xl text-[#C0C2B8] transition-all"><span className="material-symbols-outlined mb-1">settings</span><span className="text-[11px] font-semibold">Settings</span></Link>
+      <nav className={`bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-md max-w-[480px] transition-transform duration-300 nav-bar-transition ${isExpired ? 'opacity-50 grayscale' : ''}`}>
+        <Link 
+          to="/dashboard/admin" 
+          activeOptions={{ exact: true }}
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>dashboard</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Dashboard</span>
+            </>
+          )}
+        </Link>
+        <Link 
+          to="/dashboard/admin/members" 
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>group</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Members</span>
+            </>
+          )}
+        </Link>
+        <Link 
+          to="/dashboard/admin/payments"
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>receipt_long</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Payments</span>
+            </>
+          )}
+        </Link>
+        <Link 
+          to="/dashboard/admin/attendance"
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>event_available</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Attendance</span>
+            </>
+          )}
+        </Link>
+        <Link 
+          to="/dashboard/admin/settings"
+          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
+          inactiveProps={{ className: 'text-[#C0C2B8]' }}
+          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+        >
+          {({ isActive }) => (
+            <>
+              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>settings</span>
+              <span className="text-[11px] font-semibold leading-[14px]">Settings</span>
+            </>
+          )}
+        </Link>
       </nav>
     </div>
   );
