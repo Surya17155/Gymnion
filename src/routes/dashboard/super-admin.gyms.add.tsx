@@ -138,8 +138,9 @@ function AddGymScreen() {
                     onChange={e => setNewGym(prev => ({ ...prev, planId: e.target.value }))}
                   >
                     <option value="">Select Plan</option>
+                    <option value="free">Free Trial (1 Month)</option>
                     {plans?.map((plan: any) => (
-                      <option key={plan.id} value={plan.id}>{plan.name}</option>
+                      <option key={plan.id} value={plan.id}>{plan.name} - ₹{(plan.price / 100).toLocaleString()}</option>
                     ))}
                   </select>
                 </div>
