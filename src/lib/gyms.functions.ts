@@ -35,7 +35,10 @@ export const createGymWithAdmin = createServerFn({ method: "POST" })
     if (authError) throw new Error(`Auth Error: ${authError.message}`);
     const userId = authUser.user.id;
 
-    // 2. Create the Gym
+    // 2. Create the Gym with 1-month free trial settings
+    const trialEndsAt = new Date();
+    trialEndsAt.setMonth(trialEndsAt.getMonth() + 1);
+
     const { data: gym, error: gymError } = await supabaseAdmin
       .from('gyms')
       .insert({
@@ -45,6 +48,9 @@ export const createGymWithAdmin = createServerFn({ method: "POST" })
         owner_email: data.ownerEmail,
         phone: data.gymPhone,
         gym_code: data.gymCode,
+        subscription_ends_at: trialEndsAt.toISOString(),
+        trial_used: true,
+        plan_tier: 'free',
         settings: {
           plan_id: data.planId,
           status: 'approved'
