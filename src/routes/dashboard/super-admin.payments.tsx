@@ -117,42 +117,37 @@ function SuperAdminPayments() {
           </div>
         </section>
 
-        <section className="flex flex-col gap-3">
-          <div className="relative w-full">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#858A7D]">search</span>
+        <section className="flex flex-col gap-3.5">
+          <div className="relative w-full group">
+            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#858A7D] group-focus-within:text-[#B7FF1E] transition-colors">search</span>
             <input 
-              className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl pl-10 pr-4 text-white placeholder:text-[#858A7D] focus:border-[#B7FF1E] focus:ring-1 focus:ring-[#B7FF1E] outline-none transition-all" 
-              placeholder="Search gyms..." 
+              className="w-full h-[52px] bg-[#1A1D18] border border-white/5 rounded-2xl pl-12 pr-4 text-[15px] text-white placeholder:text-[#858A7D]/50 focus:border-[#B7FF1E]/30 focus:ring-4 focus:ring-[#B7FF1E]/5 outline-none transition-all shadow-inner shadow-black/20" 
+              placeholder="Search gyms by name..." 
               type="text" 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <div className="flex p-1 bg-[#292A28] rounded-lg overflow-x-auto scrollbar-hide">
-            <button 
-              onClick={() => setFilter('all')}
-              className={`flex-1 min-w-[80px] py-2 px-4 rounded-md text-[11px] font-semibold transition-all ${filter === 'all' ? 'bg-[#B7FF1E] text-black shadow-[0_2px_8px_rgba(183,255,30,0.2)]' : 'text-[#C0C2B8] hover:text-white'}`}
-            >
-              All
-            </button>
-            <button 
-              onClick={() => setFilter('paid')}
-              className={`flex-1 min-w-[80px] py-2 px-4 rounded-md text-[11px] font-semibold transition-all ${filter === 'paid' ? 'bg-[#B7FF1E] text-black shadow-[0_2px_8px_rgba(183,255,30,0.2)]' : 'text-[#C0C2B8] hover:text-white'}`}
-            >
-              Paid
-            </button>
+
+          <div className="flex gap-2 p-1.5 bg-[#1A1D18] rounded-2xl overflow-x-auto scrollbar-hide border border-white/5 shadow-inner shadow-black/20">
+            {[
+              { id: 'all', label: 'All' },
+              { id: 'paid', label: 'Paid' },
+              { id: 'overdue', label: 'Pending' },
+              { id: 'free', label: 'Free Trial' }
+            ].map((tab) => (
               <button 
-                onClick={() => setFilter('overdue')}
-                className={`flex-1 min-w-[100px] py-2 px-4 rounded-md text-[11px] font-semibold transition-all ${filter === 'overdue' ? 'bg-[#B7FF1E] text-black shadow-[0_2px_8px_rgba(183,255,30,0.2)]' : 'text-[#C0C2B8] hover:text-white'}`}
+                key={tab.id}
+                onClick={() => setFilter(tab.id as any)}
+                className={`flex-none min-w-[70px] py-2.5 px-4 rounded-xl text-[12px] font-bold transition-all duration-300 transform active:scale-95 ${
+                  filter === tab.id 
+                    ? 'bg-[#B7FF1E] text-black shadow-lg shadow-[#B7FF1E]/20 translate-y-[-1px]' 
+                    : 'text-[#858A7D] hover:text-white hover:bg-white/5'
+                }`}
               >
-                Pending/Overdue
+                {tab.label}
               </button>
-              <button 
-                onClick={() => setFilter('free')}
-                className={`flex-1 min-w-[80px] py-2 px-4 rounded-md text-[11px] font-semibold transition-all ${filter === 'free' ? 'bg-[#B7FF1E] text-black shadow-[0_2px_8px_rgba(183,255,30,0.2)]' : 'text-[#C0C2B8] hover:text-white'}`}
-              >
-                Free Trial
-              </button>
+            ))}
           </div>
         </section>
 
