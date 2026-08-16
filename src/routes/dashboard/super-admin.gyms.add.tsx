@@ -27,8 +27,10 @@ function AddGymScreen() {
     address: '',
     ownerName: '',
     ownerEmail: '',
-    ownerPassword: '',
     ownerPhone: '',
+    ownerPassword: '',
+    gymPhone: '',
+    gymAddress: '',
     gymCode: '',
     planId: ''
   });
@@ -96,13 +98,13 @@ function AddGymScreen() {
               </div>
 
               <div className="space-y-1.5">
-                <p className="text-[11px] text-[#858A7D] ml-1">Address</p>
+                <p className="text-[11px] text-[#858A7D] ml-1">Gym Address</p>
                 <input 
                   required
                   placeholder="e.g. Sector 17, Chandigarh"
                   className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#e3e3dd] focus:border-[#B7FF1E] outline-none transition-colors"
-                  value={newGym.address}
-                  onChange={e => setNewGym(prev => ({ ...prev, address: e.target.value }))}
+                  value={newGym.gymAddress}
+                  onChange={e => setNewGym(prev => ({ ...prev, gymAddress: e.target.value }))}
                 />
               </div>
 
@@ -173,6 +175,18 @@ function AddGymScreen() {
                 />
               </div>
 
+              <div className="space-y-1.5">
+                <p className="text-[11px] text-[#858A7D] ml-1">Gym Phone Number</p>
+                <input 
+                  required
+                  type="tel"
+                  placeholder="e.g. 9876543210"
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#e3e3dd] focus:border-[#B7FF1E] outline-none transition-colors"
+                  value={newGym.gymPhone}
+                  onChange={e => setNewGym(prev => ({ ...prev, gymPhone: e.target.value }))}
+                />
+              </div>
+
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <p className="text-[11px] text-[#858A7D] ml-1">Admin Phone</p>
@@ -185,7 +199,6 @@ function AddGymScreen() {
                     onChange={e => setNewGym(prev => ({ ...prev, ownerPhone: e.target.value }))}
                   />
                 </div>
-
                 <div className="space-y-1.5">
                   <p className="text-[11px] text-[#858A7D] ml-1">Admin Password</p>
                   <input 
