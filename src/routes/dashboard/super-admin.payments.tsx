@@ -180,7 +180,7 @@ function SuperAdminPayments() {
               const planName = gym.plan_tier === 'free' ? '' : (manualPrice ? `Manual Pricing: ₹${manualPrice}` : ((gym as any).global_plans?.name || 'Standard Plan'));
               
               return (
-                <div key={gym.id} className={`bg-[#1A1D18] border border-white/5 rounded-2xl p-4 flex items-center gap-4 hover:border-[#B7FF1E]/30 active:scale-[0.98] transition-all duration-200 cursor-pointer group shadow-sm shadow-black/20 ${!isPaid && gym.plan_tier !== 'free' ? 'border-l-4 border-l-[#FF5964]' : 'border-l-4 border-l-transparent'}`}>
+                <div key={gym.id} className={`bg-[#1A1D18] border border-white/5 rounded-2xl p-4 flex items-center gap-4 hover:border-[#B7FF1E]/40 active:scale-[0.98] transition-all duration-300 cursor-pointer group shadow-sm shadow-black/20 relative overflow-hidden ${gym.plan_tier === 'free' ? 'before:absolute before:inset-0 before:border-2 before:border-[#B7FF1E]/30 before:rounded-2xl before:shadow-[0_0_15px_rgba(183,255,30,0.2)]' : !isPaid ? 'border-l-4 border-l-[#FF5964]' : 'border-l-4 border-l-transparent'}`}>
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#292A28] to-[#1e201d] flex items-center justify-center shrink-0 border border-white/5 group-hover:border-[#B7FF1E]/30 transition-colors shadow-inner">
                     <span className="material-symbols-outlined text-white text-[28px]">fitness_center</span>
                   </div>
