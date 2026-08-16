@@ -670,68 +670,6 @@ export function AdminDashboard() {
           )}
         </Link>
       </nav>
-        
-        <Link 
-          to="/dashboard/admin/members"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-          preload="intent"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>group</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Members</span>
-            </>
-          )}
-        </Link>
-        
-        <Link 
-          to="/dashboard/admin/payments"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-          preload="intent"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>receipt_long</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Payments</span>
-            </>
-          )}
-        </Link>
-        
-        <Link 
-          to="/dashboard/admin/attendance"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-          preload="intent"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>event_available</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Attendance</span>
-            </>
-          )}
-        </Link>
-        
-        <Link 
-          to="/dashboard/admin/settings"
-          activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
-          inactiveProps={{ className: 'text-[#C0C2B8]' }}
-          className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
-          preload="intent"
-        >
-          {({ isActive }) => (
-            <>
-              <span className="material-symbols-outlined mb-1" style={{ fontVariationSettings: isActive ? '"FILL" 1' : '"FILL" 0' }}>settings</span>
-              <span className="text-[11px] font-semibold leading-[14px]">Settings</span>
-            </>
-          )}
-        </Link>
-
-      </nav>
     </div>
   );
 }
