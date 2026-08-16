@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useLocation, useNavigate, redirect } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
-import { getPlatformStats } from '@/lib/super-admin.functions';
+import { getPlatformStatsDetailed } from '@/lib/super-admin.functions';
 import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -106,7 +106,7 @@ export function SuperAdminDashboard() {
     navigate({ to: '/auth/login', search: { redirect: "" } });
   };
 
-  const statsFn = useServerFn(getPlatformStats);
+  const statsFn = useServerFn(getPlatformStatsDetailed);
   const { data: stats, isLoading, error: profileError } = useQuery({
     queryKey: ['platform-stats'],
     queryFn: () => statsFn(),
