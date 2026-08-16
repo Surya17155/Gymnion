@@ -120,10 +120,14 @@ function SuperAdminPlans() {
       const planData = {
         name: selectedPlan.name,
         price: Math.round(parseFloat(selectedPlan.price.toString()) * 100),
-        features: selectedPlan.features as any,
+        features: (selectedPlan.features || []).map((f: any) => {
+          if (typeof f === 'string') {
+            return { name: f, enabled: true };
+          }
+          return { name: f.name, enabled: !!f.enabled };
+        }),
         member_limit: selectedPlan.member_limit ? parseInt(selectedPlan.member_limit.toString()) : null,
-        is_active: selectedPlan.is_active !== false,
-        updated_at: new Date().toISOString()
+        is_active: selectedPlan.is_active !== false
       };
 
       console.log('Prepared planData', planData);
