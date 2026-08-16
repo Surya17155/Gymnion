@@ -179,7 +179,7 @@ export const getMembers = createServerFn({ method: 'GET' })
   .handler(async ({ data }) => {
     let query = supabaseAdmin
       .from('members')
-      .select('*, fee_plans(name, amount), payments(status, payment_month, amount, created_at)');
+      .select('*, fee_plans(name, amount), payments(status, payment_month, amount, created_at), subscription_ends_at');
     
     if (data.gymId) {
       query = query.eq('gym_id', data.gymId);
@@ -499,7 +499,8 @@ export const createMember = createServerFn({ method: 'POST' })
       last_name: data.last_name || (data.full_name.includes(' ') ? data.full_name.split(' ').slice(1).join(' ') : ''),
       email: data.email,
       status: data.status,
-      phone: data.phone || ''
+      phone: data.phone || '',
+      subscription_ends_at: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString()
     };
     if (data.fee_plan_id) insertData.fee_plan_id = data.fee_plan_id;
 

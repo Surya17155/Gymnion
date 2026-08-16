@@ -367,6 +367,7 @@ export type Database = {
           phone: string
           photo_url: string | null
           status: string
+          subscription_ends_at: string | null
           updated_at: string | null
           user_id: string | null
         }
@@ -387,6 +388,7 @@ export type Database = {
           phone: string
           photo_url?: string | null
           status?: string
+          subscription_ends_at?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -407,6 +409,7 @@ export type Database = {
           phone?: string
           photo_url?: string | null
           status?: string
+          subscription_ends_at?: string | null
           updated_at?: string | null
           user_id?: string | null
         }

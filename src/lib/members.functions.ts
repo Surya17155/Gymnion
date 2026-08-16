@@ -45,7 +45,8 @@ export const completeSignup = createServerFn({ method: "POST" })
         phone: data.phone || '',
         dob: data.dob || null,
         address: data.address || null,
-        status: 'active'
+        status: 'active',
+        subscription_ends_at: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString()
       } as any, { onConflict: 'user_id' });
     
     if (error) throw error;
