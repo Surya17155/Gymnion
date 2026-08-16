@@ -574,9 +574,9 @@ function LandingPage() {
 
             
             {/* BEGIN: Card 03 (Track every payment) */}
-            <div className="relative mb-16">
+            <div className="relative mb-16 lg:mb-0 lg:text-right lg:pr-20">
               {/* Step Number */}
-              <div className="absolute left-[-78px] top-[-8px] w-10 h-10 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-base z-20 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
+              <div className="absolute left-[-78px] lg:left-full lg:ml-[-20px] lg:-translate-x-1/2 top-[-8px] w-10 h-10 rounded-full bg-[#0F1115] border-2 border-[#B7FF1E] flex items-center justify-center text-[#B7FF1E] font-bold text-base z-20 shadow-[0_0_15px_rgba(183,255,30,0.6),inset_0_0_10px_rgba(183,255,30,0.2)]">
                 03
               </div>
 
