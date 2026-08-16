@@ -50,9 +50,15 @@ function SuperAdminPayments() {
         }
       `}</style>
       
-      <main className="max-w-[480px] mx-auto pt-6 px-5 flex flex-col gap-5">
-        <section>
-          <h1 className="text-[24px] font-bold text-white leading-tight">Platform Revenue</h1>
+      <main className="max-w-[480px] mx-auto pt-8 px-5 flex flex-col gap-6">
+        <section className="flex items-end justify-between">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-[28px] font-black text-white leading-tight tracking-tight">Payments</h1>
+            <p className="text-[13px] text-[#858A7D] font-medium tracking-wide">Platform revenue overview</p>
+          </div>
+          <div className="w-10 h-10 bg-[#B7FF1E]/10 rounded-xl flex items-center justify-center border border-[#B7FF1E]/20 shadow-lg shadow-[#B7FF1E]/5">
+            <span className="material-symbols-outlined text-[#B7FF1E]">account_balance_wallet</span>
+          </div>
         </section>
 
         <section className="grid grid-cols-2 gap-3">
