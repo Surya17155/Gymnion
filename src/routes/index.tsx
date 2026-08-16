@@ -140,15 +140,15 @@ function LandingPage() {
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 flex-1 flex items-center justify-center px-6"
+            className="relative z-10 flex-1 flex items-center justify-center px-6 lg:w-2/5"
           >
-            <div className="w-full max-w-[340px] p-5 rounded-[24px] border-2 border-[#D5FF40]/40 bg-transparent backdrop-blur-[2px]">
-              <div className="flex justify-between items-start mb-5">
+            <div className="w-full max-w-[340px] lg:max-w-[420px] p-6 lg:p-8 rounded-[32px] border-2 border-[#D5FF40]/40 bg-black/10 backdrop-blur-md shadow-[0_0_50px_rgba(213,255,64,0.15)]">
+              <div className="flex justify-between items-start mb-8">
                 <div className="flex flex-col">
-                  <span className="text-[#A0A0A0] text-[13px] font-medium mb-1 tracking-wide uppercase">This month</span>
-                  <h2 className="text-4xl font-bold tracking-tight text-[#F8FAF7]">₹1,84,500</h2>
+                  <span className="text-[#A0A0A0] text-[13px] lg:text-sm font-medium mb-1 tracking-wide uppercase">This month</span>
+                  <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-[#F8FAF7]">₹1,84,500</h2>
                 </div>
-                <svg className="w-16 h-16 flex-shrink-0 transform -rotate-90" viewBox="0 0 100 100">
+                <svg className="w-16 h-16 lg:w-20 lg:h-20 flex-shrink-0 transform -rotate-90" viewBox="0 0 100 100">
                   <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.1)" strokeWidth="14" fill="transparent"></circle>
                   <circle 
                     cx="50" 
@@ -164,25 +164,26 @@ function LandingPage() {
                   ></circle>
                 </svg>
               </div>
-              <div className="h-[1px] bg-white/10 w-full mb-5" />
-              <div className="flex justify-between items-end h-[70px]">
-                <div className="flex items-end space-x-2.5 h-full pb-1">
-                  <div className="w-5 h-[30%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm opacity-80"></div>
-                  <div className="w-5 h-[60%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm opacity-90"></div>
-                  <div className="w-5 h-[90%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm shadow-[0_0_15px_rgba(213,255,64,0.3)]"></div>
+              <div className="h-[1px] bg-white/10 w-full mb-8" />
+              <div className="flex justify-between items-end h-[80px] lg:h-[100px]">
+                <div className="flex items-end space-x-3 h-full pb-1">
+                  <div className="w-6 h-[30%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm opacity-80"></div>
+                  <div className="w-6 h-[60%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm opacity-90"></div>
+                  <div className="w-6 h-[90%] bg-gradient-to-t from-[#D5FF40]/20 to-[#D5FF40] rounded-sm shadow-[0_0_15px_rgba(213,255,64,0.3)]"></div>
                 </div>
                 <div className="flex flex-col items-end justify-end pb-1 w-[48%]">
-                  <div className="text-sm font-medium mb-2.5">
+                  <div className="text-sm lg:text-base font-medium mb-3">
                     <span className="text-[#D5FF40] font-bold">86%</span>
                     <span className="text-[#A0A0A0] ml-1.5">fees collected</span>
                   </div>
-                  <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                  <div className="w-full h-3 lg:h-4 bg-white/10 rounded-full overflow-hidden">
                     <div className="h-full bg-[#D5FF40] rounded-full shadow-[0_0_10px_rgba(213,255,64,0.4)]" style={{ width: '86%' }}></div>
                   </div>
                 </div>
               </div>
             </div>
           </motion.div>
+        </div>
 
           {/* Bottom CTA */}
           <div className="relative z-10 w-full px-6 max-w-7xl mx-auto pb-12 md:pb-20 mt-auto lg:px-0">
