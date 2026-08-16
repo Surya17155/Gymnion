@@ -43,10 +43,10 @@ export const completeSignup = createServerFn({ method: "POST" })
         full_name: `${data.firstName} ${data.lastName}`.trim(),
         email: data.email,
         phone: data.phone || '',
-        dob: data.dob,
-        address: data.address,
+        dob: data.dob || null,
+        address: data.address || null,
         status: 'active'
-      }, { onConflict: 'user_id' });
+      } as any, { onConflict: 'user_id' });
     
     if (error) throw error;
     return { success: true };
