@@ -137,7 +137,9 @@ export function AdminDashboard() {
     if (hasAuthError) {
       console.warn("Auth error detected in stats/activity queries, signing out...");
       supabase.auth.signOut().then(() => {
-        navigate({ to: '/auth/login', search: { redirect: window.location.pathname } });
+        clearRoleCache();
+        window.localStorage.removeItem('tanstack-query-cache');
+        window.location.replace('/');
       });
     }
   }, [hasAuthError, navigate]);
