@@ -51,8 +51,8 @@ export const createGymWithAdmin = createServerFn({ method: "POST" })
         subscription_ends_at: trialEndsAt.toISOString(),
         trial_used: true,
         plan_tier: 'free',
+        subscription_plan_id: data.planId === 'free' ? null : data.planId,
         settings: {
-          plan_id: data.planId,
           status: 'approved'
         }
       } as any)
