@@ -276,6 +276,7 @@ export type Database = {
           gym_code: string | null
           id: string
           name: string
+          owner_dob: string | null
           owner_email: string
           owner_first_name: string | null
           owner_last_name: string | null
@@ -299,6 +300,7 @@ export type Database = {
           gym_code?: string | null
           id?: string
           name: string
+          owner_dob?: string | null
           owner_email: string
           owner_first_name?: string | null
           owner_last_name?: string | null
@@ -322,6 +324,7 @@ export type Database = {
           gym_code?: string | null
           id?: string
           name?: string
+          owner_dob?: string | null
           owner_email?: string
           owner_first_name?: string | null
           owner_last_name?: string | null
