@@ -5,7 +5,22 @@ import { useMyProfile } from "@/hooks/useMyProfile";
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { getMyPayments, getMyAttendance } from '@/lib/auth.functions';
+import { clearRoleCache } from '@/lib/role';
 import { format } from 'date-fns';
+
+
+export const Route = createFileRoute('/dashboard/m')({
+  beforeLoad: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw redirect({
+        to: '/auth/login',
+        search: { redirect: '/dashboard/m' }
+      });
+    }
+  },
+  component: MemberDashboardLayout,
+});
 
 function MemberDashboardLayout() {
   return <Outlet />;
@@ -42,20 +57,9 @@ export function MemberDashboard() {
       // If it's a critical auth or data error, redirect
       if (isCritical) {
         supabase.auth.signOut().then(() => {
-          if (typeof sessionStorage !== 'undefined') {
-            Object.keys(sessionStorage).forEach(key => {
-              if (key.startsWith('gymsync_role')) sessionStorage.removeItem(key);
-            });
-          }
+          clearRoleCache();
           window.localStorage.removeItem('tanstack-query-cache');
-          
-          navigate({ 
-            to: '/auth/login', 
-            search: { 
-              redirect: window.location.pathname,
-              error: errorReason ? encodeURIComponent(errorReason) : ""
-            } 
-          });
+          window.location.replace('/');
         });
       }
     }
@@ -148,7 +152,9 @@ export function MemberDashboard() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate({ to: '/auth/login', search: { redirect: "" } });
+    clearRoleCache();
+    window.localStorage.removeItem('tanstack-query-cache');
+    window.location.replace('/');
   };
 
   if (isProfileLoading && !profile) {
@@ -337,15 +343,3 @@ export function MemberDashboard() {
   );
 }
 
-export const Route = createFileRoute('/dashboard/m')({
-  beforeLoad: async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      throw redirect({
-        to: '/auth/login',
-        search: { redirect: window.location.pathname }
-      });
-    }
-  },
-  component: MemberDashboardLayout,
-});

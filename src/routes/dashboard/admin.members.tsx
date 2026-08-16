@@ -58,9 +58,10 @@ function MembersDashboard() {
   const { data: members = [], isLoading } = useQuery({
     queryKey: ['members', gymId],
     queryFn: () => getMembersFn({ data: { gymId: gymId! } }),
-    enabled: !!gymId,
+    enabled: !!gymId && !isExpired,
     staleTime: 60000,
     gcTime: Infinity,
+    retry: false,
   });
 
   const { data: plans = [] } = useQuery({
@@ -366,7 +367,7 @@ function MembersDashboard() {
 
 
       {/* Bottom Navigation */}
-      <nav className={`bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-[10] flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] transition-transform duration-300 nav-bar-transition ${isExpired ? 'opacity-50 grayscale' : ''}`}>
+      <nav className={`bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-[10] flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] transition-transform duration-300 nav-bar-transition`}>
         <Link 
           to="/dashboard/admin" 
           activeOptions={{ exact: true }}

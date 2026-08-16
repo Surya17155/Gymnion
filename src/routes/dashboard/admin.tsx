@@ -6,33 +6,17 @@ import { supabase } from '@/integrations/supabase/client';
 import { useServerFn } from '@tanstack/react-start';
 import { getAdminStats, getRecentActivity, getGymDetails } from '@/lib/auth.functions';
 import { checkGymSubscription } from '@/lib/subscription.functions';
+import { clearRoleCache } from '@/lib/role';
 import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin')({
-  beforeLoad: async ({ context }) => {
+  beforeLoad: async () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       throw redirect({
         to: '/auth/login',
         search: { redirect: '/dashboard/admin' }
       });
-    }
-
-    // Check subscription status
-    const { data: gym } = await supabase
-      .from('gyms')
-      .select('subscription_ends_at, plan_tier, settings')
-      .single();
-
-    if (gym) {
-      const now = new Date();
-      const subscriptionEnd = gym.subscription_ends_at ? new Date(gym.subscription_ends_at) : null;
-      
-      // If subscription has expired and not on free tier (or free trial expired)
-      if (subscriptionEnd && subscriptionEnd < now) {
-        // Redirect to a landing/payment page if needed, but for now we just show expired status in UI
-        console.warn("Subscription expired on:", subscriptionEnd);
-      }
     }
   },
   component: AdminLayout,
@@ -72,7 +56,9 @@ export function AdminDashboard() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate({ to: '/auth/login', search: { redirect: "" } });
+    clearRoleCache();
+    window.localStorage.removeItem('tanstack-query-cache');
+    window.location.replace('/');
   };
 
   const getStatsFn = useServerFn(getAdminStats);
@@ -84,7 +70,7 @@ export function AdminDashboard() {
     queryFn: () => getGymDetailsFn({ data: undefined }),
     staleTime: 30000,
     gcTime: Infinity,
-    retry: 1,
+    retry: false,
   });
 
   useEffect(() => {
@@ -92,43 +78,40 @@ export function AdminDashboard() {
       console.error("Profile fetch error in admin dashboard:", profileError);
       const errorStr = String(profileError);
       
-      let errorReason = "";
+      let isCritical = false;
       if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('expired')) {
-        errorReason = ""; // No message for expired session as per user request
+        isCritical = true;
       } else if (errorStr.includes('403') || errorStr.includes('Forbidden')) {
-        errorReason = "You do not have permission to access this area.";
+        isCritical = true;
       }
 
-      if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('403')) {
+      if (isCritical) {
         supabase.auth.signOut().then(() => {
-          navigate({ 
-            to: '/auth/login', 
-            search: { 
-              redirect: window.location.pathname,
-              error: errorReason ? encodeURIComponent(errorReason) : ""
-            } 
-          });
+          clearRoleCache();
+          window.localStorage.removeItem('tanstack-query-cache');
+          window.location.replace('/');
         });
       }
     }
-  }, [profileError, navigate]);
+  }, [profileError]);
+
 
   const { data: stats, isLoading: isStatsLoading, error: statsError } = useQuery({
     queryKey: ['admin-stats', gymData?.id],
     queryFn: () => getStatsFn({ data: { gymId: gymData!.id } }),
-    enabled: !!gymData?.id,
-    staleTime: 0, // Force fresh fetch for real-time accuracy
+    enabled: !!gymData?.id && !isExpired,
+    staleTime: 0,
     refetchOnWindowFocus: true,
-    retry: 1,
+    retry: false,
   });
 
   const { data: recentActivity, isLoading: isActivityLoading, error: activityError } = useQuery({
     queryKey: ['admin-activity', gymData?.id],
     queryFn: () => getActivityFn({ data: { gymId: gymData!.id } }),
-    enabled: !!gymData?.id,
-    staleTime: 0, // Force fresh fetch
+    enabled: !!gymData?.id && !isExpired,
+    staleTime: 0,
     refetchOnWindowFocus: true,
-    retry: 1,
+    retry: false,
   });
 
   const isActuallyLoading = isGymLoading || (gymData?.id && (isStatsLoading || isActivityLoading));
@@ -139,7 +122,9 @@ export function AdminDashboard() {
     if (hasAuthError) {
       console.warn("Auth error detected in stats/activity queries, signing out...");
       supabase.auth.signOut().then(() => {
-        navigate({ to: '/auth/login', search: { redirect: window.location.pathname } });
+        clearRoleCache();
+        window.localStorage.removeItem('tanstack-query-cache');
+        window.location.replace('/');
       });
     }
   }, [hasAuthError, navigate]);
@@ -450,7 +435,7 @@ export function AdminDashboard() {
                 </div>
               </div>
               <Link 
-                to="/dashboard/admin/plans"
+                to="/dashboard/admin/settings"
                 className="w-full bg-[#FF5964] text-white h-10 rounded-xl font-bold text-xs flex items-center justify-center mt-1"
               >
                 Renew Now
@@ -589,7 +574,7 @@ export function AdminDashboard() {
         )}
       </div>
 
-      <nav className={`bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-md max-w-[480px] transition-transform duration-300 nav-bar-transition ${isExpired ? 'opacity-50 grayscale' : ''}`}>
+      <nav className={`bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-md max-w-[480px] transition-transform duration-300 nav-bar-transition`}>
         <Link 
           to="/dashboard/admin"
           activeOptions={{ exact: true }}
