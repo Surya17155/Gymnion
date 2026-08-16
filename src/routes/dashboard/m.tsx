@@ -8,6 +8,19 @@ import { getMyPayments, getMyAttendance } from '@/lib/auth.functions';
 import { clearRoleCache } from '@/lib/role';
 import { format } from 'date-fns';
 
+export const Route = createFileRoute('/dashboard/m')({
+  beforeLoad: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw redirect({
+        to: '/auth/login',
+        search: { redirect: '/dashboard/m' }
+      });
+    }
+  },
+  component: MemberDashboardLayout,
+});
+
 function MemberDashboardLayout() {
   return <Outlet />;
 }
