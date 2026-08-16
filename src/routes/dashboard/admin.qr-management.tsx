@@ -156,10 +156,10 @@ function QRManagement() {
       />
 
       <div className="max-w-[480px] mx-auto min-h-screen pb-24 relative z-10 flex flex-col">
-        <header className="flex items-center px-[20px] h-[64px] w-full sticky top-0 z-40 bg-transparent">
+        <header className="flex items-center h-[64px] w-full sticky top-0 z-40 bg-transparent px-[20px] md:px-0">
           <Link 
             to="/dashboard/admin/settings" 
-            className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center border border-white/5 absolute left-[20px]"
+            className="w-10 h-10 rounded-full bg-[#1e201d] flex items-center justify-center border border-white/5"
           >
             <span className="material-symbols-outlined text-white text-[20px]">arrow_back</span>
           </Link>
@@ -169,7 +169,7 @@ function QRManagement() {
           </div>
         </header>
 
-        <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-4">
+        <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-4 md:px-0">
           <div>
             <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white mb-1">{"\n"}</h1>
           </div>

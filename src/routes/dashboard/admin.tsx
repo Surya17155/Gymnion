@@ -525,7 +525,7 @@ export function AdminDashboard() {
         )}
       </div>
 
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-md max-w-[480px] left-1/2 -translate-x-1/2 transition-transform duration-300 nav-bar-transition">
+      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-md max-w-[480px] transition-transform duration-300 nav-bar-transition">
         <Link 
           to="/dashboard/admin"
           activeOptions={{ exact: true }}
