@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { getAttendanceDashboard, getCurrentGymId } from '@/lib/auth.functions';
 import { getGymAttendanceData } from '@/lib/attendance.functions';
+import { checkGymSubscription } from '@/lib/subscription.functions';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -31,17 +32,26 @@ function AttendanceDashboard() {
   const getAttendanceFn = useServerFn(getAttendanceDashboard);
   const getGymIdFn = useServerFn(getCurrentGymId);
   const getGymAttendanceDataFn = useServerFn(getGymAttendanceData);
+  const checkSubscriptionFn = useServerFn(checkGymSubscription);
   const queryClient = useQueryClient();
 
   const { data: gymId } = useQuery({
     queryKey: ['current-gym-id'],
-    queryFn: () => getGymIdFn(),
+    queryFn: () => getGymIdFn({ data: undefined }),
   });
+
+  const { data: subStatus } = useQuery({
+    queryKey: ['gym-subscription-status', gymId],
+    queryFn: () => checkSubscriptionFn({ data: undefined }),
+    enabled: !!gymId,
+  });
+
+  const isExpired = subStatus?.isExpired;
 
   const { data: attendanceData, isLoading } = useQuery({
     queryKey: ['admin-attendance', gymId],
     queryFn: () => getAttendanceFn({ data: { gymId: gymId! } }),
-    enabled: !!gymId,
+    enabled: !!gymId && !isExpired,
     staleTime: 60000,
     gcTime: Infinity,
   });
@@ -127,7 +137,7 @@ function AttendanceDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0F0C] text-[#e3e3dd] font-['Poppins'] pb-32">
+    <div className={`min-h-screen bg-[#0D0F0C] text-[#e3e3dd] font-['Poppins'] pb-32 ${isExpired ? 'opacity-50 grayscale pointer-events-none' : ''}`}>
       {/* Top Glow Effect */}
       <div 
         className="fixed top-0 left-0 right-0 h-[300px] z-0 pointer-events-none"
@@ -232,13 +242,14 @@ function AttendanceDashboard() {
       </div>
 
       {/* Bottom Navigation */}
-      <nav className="bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-[10] flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] transition-transform duration-300 nav-bar-transition">
+      <nav className={`bg-[#1e201d] border-t border-white/5 shadow-lg bottom-0 fixed left-1/2 -translate-x-1/2 w-full z-[10] flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl max-w-[480px] transition-transform duration-300 nav-bar-transition ${isExpired ? 'opacity-50 grayscale' : ''}`}>
         <Link 
           to="/dashboard/admin" 
           activeOptions={{ exact: true }}
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -252,6 +263,7 @@ function AttendanceDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -265,6 +277,7 @@ function AttendanceDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
@@ -278,6 +291,7 @@ function AttendanceDashboard() {
           activeProps={{ className: 'text-[#B7FF1E] bg-[#25340D]/20 scale-90' }}
           inactiveProps={{ className: 'text-[#C0C2B8]' }}
           className="flex flex-col items-center justify-center w-[72px] h-[64px] rounded-xl transition-all duration-200"
+          disabled={!!isExpired}
         >
           {({ isActive }) => (
             <>
