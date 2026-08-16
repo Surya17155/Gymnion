@@ -155,32 +155,8 @@ function MembersDashboard() {
             const status = hasPaid ? 'paid' : 'pending';
 
             // Calculate next due date
-            let nextDue = 'N/A';
-            if (member.join_date) {
-              const billingDay = member.billing_day || new Date(member.join_date).getDate();
-              const latestPayment = member.payments
-                ?.filter((p: any) => p.status === 'paid' || p.status === 'paid_verified')
-                .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
-              
-              const baseDate = latestPayment ? new Date(latestPayment.created_at) : new Date(member.join_date);
-              
-              // Next due is the billingDay of the month following the baseDate
-              let dueYear = baseDate.getFullYear();
-              let dueMonth = baseDate.getMonth();
-              
-              // If the current day is already past the billing day of this month, or we just made a payment
-              dueMonth += 1;
-              
-              if (dueMonth > 11) {
-                dueMonth = 0;
-                dueYear++;
-              }
-              
-              const dueDate = new Date(dueYear, dueMonth, billingDay);
-              nextDue = format(dueDate, 'dd MMM yyyy');
+            const nextDue = member.subscription_ends_at ? format(new Date(member.subscription_ends_at), 'dd MMM yyyy') : 'N/A';
 
-              nextDue = format(dueDate, 'dd MMM yyyy');
-            }
 
             return (
               <div 
@@ -272,25 +248,7 @@ function MembersDashboard() {
                 </div>
                 <div className="bg-[#121411] p-4 rounded-2xl border border-white/5 flex flex-col justify-center min-h-[72px]">
                   <p className="text-[10px] text-[#858A7D] font-bold uppercase tracking-wider mb-1">Next Due</p>
-                  <p className="text-[14px] text-white font-bold">{(() => {
-                    if (!selectedMember.join_date) return 'N/A';
-                    const billingDay = selectedMember.billing_day || new Date(selectedMember.join_date).getDate();
-                    const latestPayment = selectedMember.payments
-                      ?.filter((p: any) => p.status === 'paid' || p.status === 'paid_verified')
-                      .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
-                    
-                    const baseDate = latestPayment ? new Date(latestPayment.created_at) : new Date(selectedMember.join_date);
-                    let dueYear = baseDate.getFullYear();
-                    let dueMonth = baseDate.getMonth() + 1;
-                    
-                    if (dueMonth > 11) {
-                      dueMonth = 0;
-                      dueYear++;
-                    }
-                    
-                    const dueDate = new Date(dueYear, dueMonth, billingDay);
-                    return format(dueDate, 'dd MMM yyyy');
-                  })()}</p>
+                  <p className="text-[14px] text-white font-bold">{selectedMember.subscription_ends_at ? format(new Date(selectedMember.subscription_ends_at), 'dd MMM yyyy') : 'N/A'}</p>
                 </div>
               </div>
 
