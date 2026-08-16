@@ -199,18 +199,18 @@ function LandingPage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6">
-          <div className="flex flex-col lg:flex-row gap-16 lg:items-center">
-            <div className="lg:w-1/2">
+          <div className="flex flex-col gap-16">
+            <div className="text-center mx-auto lg:max-w-3xl">
               <p className="text-[#9a9a9a] font-semibold text-[11px] uppercase tracking-widest mb-2">BUILT FOR DAILY OPERATIONS</p>
               <h2 className="text-white text-4xl md:text-6xl font-bold tracking-tighter leading-tight mb-6">
                 Two essentials<br />One <span className="text-[#d5ff40] whitespace-nowrap">clear system</span>.
               </h2>
-              <p className="text-[#9a9a9a] text-lg md:text-xl leading-relaxed max-w-[480px]">
+              <p className="text-[#9a9a9a] text-lg md:text-xl leading-relaxed mx-auto max-w-[480px]">
                 Gymnion keeps attendance and member payments visible, accurate, and easy to act on.
               </p>
             </div>
             
-            <div className="lg:w-1/2 flex flex-col md:flex-row gap-8 items-start">
+            <div className="flex flex-col lg:flex-row gap-8 items-start lg:justify-center">
               {/* Attendance Card */}
               <motion.div 
                 initial={{ opacity: 0, y: 40 }}
@@ -385,25 +385,25 @@ function LandingPage() {
             <div className="absolute left-[1.25rem] lg:left-1/2 lg:-translate-x-1/2 top-8 lg:top-8 bottom-[-9rem] w-[2px] bg-[#B7FF1E] shadow-[0_0_10px_#B7FF1E] z-0"></div>
 
             {/* Step 1 */}
-            <section id="how-it-works" className="relative pl-14 lg:pl-0 lg:text-left lg:pr-20 mb-16 lg:mb-32">
+            <section id="how-it-works" className="relative pl-14 lg:pl-0 lg:text-right lg:pr-20 mb-16 lg:mb-32">
               {/* Number Badge */}
-              <div className="absolute left-0 lg:left-[calc(50%+1.25rem)] lg:-translate-x-1/2 top-1 lg:top-8 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
+              <div className="absolute left-0 lg:left-full lg:-translate-x-1/2 top-1 lg:top-8 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
                 <span className="text-[#d5ff40] font-bold text-lg">01</span>
               </div>
-              <div className="mb-6 lg:mt-8 lg:ml-28">
+              <div className="mb-6 lg:mt-8">
                 {/* Person Add Icon */}
-                <div className="text-[#B7FF1E] mb-4 lg:flex lg:justify-start">
+                <div className="text-[#B7FF1E] mb-4 lg:flex lg:justify-end">
                   <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                     <path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                   </svg>
                 </div>
                 <h2 className="text-xl font-semibold text-white mb-2 lg:text-3xl">Add your members</h2>
-                <p className="text-[#c3c8be] text-sm lg:text-base leading-relaxed pr-2 lg:pr-0 lg:max-w-sm">
+                <p className="text-[#c3c8be] text-sm lg:text-base leading-relaxed pr-2 lg:pr-0 lg:max-w-sm lg:ml-auto">
                   Create clear member profiles with the details your gym needs.
                 </p>
               </div>
               {/* UI Mockup Card 1 */}
-              <div className="bg-[#1e201d] rounded-2xl border border-[#B7FF1E] p-4 shadow-[0_0_15px_rgba(183,255,30,0.3)] lg:ml-28">
+              <div className="bg-[#1e201d] rounded-2xl border border-[#B7FF1E] p-4 shadow-[0_0_15px_rgba(183,255,30,0.3)]">
                 <div className="space-y-4">
                   {/* Member Items */}
                   {[
