@@ -380,9 +380,9 @@ function LandingPage() {
           </header>
 
           {/* Timeline Section */}
-          <div className="relative lg:grid lg:grid-cols-2 lg:gap-x-24 lg:gap-y-0 lg:pt-32">
+          <div className="relative lg:grid lg:grid-cols-2 lg:gap-x-24 lg:gap-y-32">
             {/* Continuous vertical line */}
-            <div className="absolute left-[1.25rem] lg:left-1/2 lg:-translate-x-1/2 top-8 lg:top-0 bottom-[-9rem] w-[2px] bg-[#B7FF1E] shadow-[0_0_10px_#B7FF1E] z-0"></div>
+            <div className="absolute left-[1.25rem] lg:left-1/2 lg:-translate-x-1/2 top-8 lg:top-8 bottom-[-9rem] w-[2px] bg-[#B7FF1E] shadow-[0_0_10px_#B7FF1E] z-0"></div>
 
             {/* Step 1 */}
             <section id="how-it-works" className="relative pl-14 lg:pl-0 lg:text-right lg:pr-20 mb-16 lg:mb-32">
