@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useLocation, useNavigate, redirect } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
-import { getPlatformStats } from '@/lib/super-admin.functions';
+import { getPlatformStatsDetailed } from '@/lib/super-admin.functions';
 import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -106,7 +106,7 @@ export function SuperAdminDashboard() {
     navigate({ to: '/auth/login', search: { redirect: "" } });
   };
 
-  const statsFn = useServerFn(getPlatformStats);
+  const statsFn = useServerFn(getPlatformStatsDetailed);
   const { data: stats, isLoading, error: profileError } = useQuery({
     queryKey: ['platform-stats'],
     queryFn: () => statsFn(),
@@ -200,7 +200,7 @@ export function SuperAdminDashboard() {
         <div className="flex flex-col gap-6 md:p-8 md:max-w-6xl md:mx-auto w-full pb-20">
           <section className="flex flex-col gap-3">
             <h2 className="text-sm font-semibold text-[#e3e3dd]">Platform Growth</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               <div className="bg-[#151714]/80 backdrop-blur-md border border-white/5 rounded-xl p-4 flex flex-col justify-between min-h-[120px]">
                 <p className="text-[11px] font-semibold text-[#858A7D]">Total Active Gyms</p>
                 <div>
@@ -218,9 +218,15 @@ export function SuperAdminDashboard() {
                 </div>
               </div>
               <div className="bg-[#151714]/80 backdrop-blur-md border border-white/5 rounded-xl p-4 flex flex-col justify-between min-h-[120px]">
-                <p className="text-[11px] font-semibold text-[#858A7D]">Monthly Rec. Rev</p>
+                <p className="text-[11px] font-semibold text-[#858A7D]">Monthly Rec. Rev (Paid)</p>
                 <div>
                   <p className="text-[28px] md:text-[32px] font-bold text-white">₹{stats?.mrr}</p>
+                </div>
+              </div>
+              <div className="bg-[#151714]/80 backdrop-blur-md border border-[#B7FF1E]/30 rounded-xl p-4 flex flex-col justify-between min-h-[120px]">
+                <p className="text-[11px] font-semibold text-[#B7FF1E]">Free Trial</p>
+                <div>
+                  <p className="text-[28px] md:text-[32px] font-bold text-white">{stats?.freeTierCount || 0}</p>
                 </div>
               </div>
               <div className="bg-[#151714]/80 backdrop-blur-md border border-[#FF5964]/30 rounded-xl p-4 flex flex-col justify-between min-h-[120px]">

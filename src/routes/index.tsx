@@ -736,7 +736,48 @@ function LandingPage() {
             </p>
           </header>
 
-          <div className="flex flex-col lg:grid lg:grid-cols-2 lg:max-w-5xl lg:mx-auto gap-4 lg:gap-8">
+          <div className="flex flex-col lg:grid lg:grid-cols-3 lg:max-w-6xl lg:mx-auto gap-4 lg:gap-8">
+            {/* Free Card */}
+            <div className="bg-[#1e201d] border border-[#B7FF1E]/30 rounded-2xl p-6 relative overflow-hidden transition-all duration-300 hover:border-[#B7FF1E]/50 group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#B7FF1E]/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
+              <div className="flex flex-col gap-4">
+                <div className="bg-[#B7FF1E]/10 text-[#B7FF1E] text-[10px] font-black px-3 py-1 rounded-full w-max mb-2 tracking-wider">
+                  LIMITED TIME
+                </div>
+                <h3 className="text-xl font-bold text-white">Free Trial</h3>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-[#B7FF1E]">₹0</span>
+                  <span className="text-xs text-[#858A7D]">/ 1st month</span>
+                </div>
+                <p className="text-xs text-[#858A7D] border-b border-white/5 pb-4">
+                  Perfect for new admins to explore all features.
+                </p>
+                <ul className="flex flex-col gap-3 pt-2">
+                  <li className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span className="text-sm text-white">Everything in Basic</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span className="text-sm text-white">Everything in Standard</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span className="text-sm text-white">First-time admins only</span>
+                  </li>
+                </ul>
+                <Link to="/auth/login" className="w-full h-12 rounded-full border border-[#B7FF1E] text-[#B7FF1E] text-xs font-bold mt-4 transition-all hover:bg-[#B7FF1E]/10 flex items-center justify-center active:scale-[0.98]">
+                  Start Free Trial
+                </Link>
+              </div>
+            </div>
+
             {/* Basic Card */}
             <div className="bg-[#1e201d] rounded-2xl p-6 border border-white/5 relative overflow-hidden transition-all duration-300 hover:border-[#B7FF1E]/30">
               <div className="flex flex-col gap-4">
