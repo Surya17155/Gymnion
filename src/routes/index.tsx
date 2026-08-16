@@ -123,7 +123,7 @@ function LandingPage() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-              className="flex justify-center lg:justify-start"
+              className="hidden lg:flex justify-start"
             >
               <Link 
                 to="/auth/login"
@@ -140,9 +140,9 @@ function LandingPage() {
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 flex-1 flex items-center justify-center px-6 lg:w-2/5"
+            className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 lg:w-2/5 lg:order-2 mt-8 lg:mt-0"
           >
-            <div className="w-full max-w-[340px] lg:max-w-[420px] p-6 lg:p-8 rounded-[32px] border-2 border-[#D5FF40]/40 bg-black/10 backdrop-blur-md shadow-[0_0_50px_rgba(213,255,64,0.15)]">
+            <div className="w-full max-w-[340px] lg:max-w-[420px] p-6 lg:p-8 rounded-[32px] border-2 border-[#D5FF40]/40 bg-black/10 backdrop-blur-md shadow-[0_0_50px_rgba(213,255,64,0.15)] mb-8 lg:mb-0">
               <div className="flex justify-between items-start mb-8">
                 <div className="flex flex-col">
                   <span className="text-[#A0A0A0] text-[13px] lg:text-sm font-medium mb-1 tracking-wide uppercase">This month</span>
@@ -182,6 +182,21 @@ function LandingPage() {
                 </div>
               </div>
             </div>
+
+            {/* Mobile Only CTA */}
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+              className="lg:hidden w-full flex justify-center"
+            >
+              <Link 
+                to="/auth/login"
+                className="w-[200px] py-4 bg-[#C8FF38] text-[#101311] rounded-xl font-bold text-base uppercase tracking-widest text-center shadow-[0_0_20px_rgba(200,255,56,0.2)]"
+              >
+                Get Started
+              </Link>
+            </motion.div>
           </motion.div>
         </div>
       </section>
