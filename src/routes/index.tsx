@@ -390,7 +390,7 @@ function LandingPage() {
               <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 top-1 lg:top-8 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
                 <span className="text-[#d5ff40] font-bold text-lg">01</span>
               </div>
-              <div className="mb-6 lg:mb-12">
+              <div className="mb-6 lg:mt-8">
                 {/* Person Add Icon */}
                 <div className="text-[#B7FF1E] mb-4 lg:flex lg:justify-end">
                   <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
