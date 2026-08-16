@@ -151,7 +151,7 @@ export const getAllGymsServer = createServerFn({ method: "GET" })
 
    let query = supabaseAdmin
      .from('gyms')
-     .select('*, global_plans(name), members(id, subscription_ends_at)', { count: 'exact' });
+     .select('*, global_plans(name), members(id, subscription_ends_at, dob, email, first_name, last_name)', { count: 'exact' });
 
    if (data.search) {
      query = query.or(`name.ilike.%${data.search}%,gym_code.ilike.%${data.search}%`);
