@@ -117,15 +117,15 @@ function AdminAccount() {
         }}
       />
 
-      <div className="max-w-[480px] mx-auto relative z-10 flex flex-col min-h-screen pb-24">
-        <header className="flex items-center px-[20px] h-[64px] sticky top-0 bg-transparent z-40">
+      <div className="max-w-[480px] mx-auto relative z-10 flex flex-col min-h-screen pb-24 px-[20px] md:px-0">
+        <header className="flex items-center h-[64px] sticky top-0 bg-transparent z-40">
           <Link to="/dashboard/admin/settings" className="w-10 h-10 rounded-full flex items-center justify-center bg-[#1e201d] border border-white/5 mr-4 text-[#C0C2B8]">
             <span className="material-symbols-outlined">arrow_back</span>
           </Link>
           <h1 className="text-xl font-bold text-white">Account Settings</h1>
         </header>
 
-        <main className="px-[20px] py-6 flex flex-col gap-8">
+        <main className="py-6 flex flex-col gap-8">
           {message.text && (
             <div className={`p-4 rounded-2xl text-xs border animate-in fade-in slide-in-from-top-2 ${
               message.type === 'success' ? 'bg-[#B7FF1E]/10 border-[#B7FF1E]/20 text-[#B7FF1E]' : 'bg-[#FF5964]/10 border-[#FF5964]/20 text-[#FF5964]'

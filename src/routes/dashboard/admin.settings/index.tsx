@@ -61,7 +61,7 @@ function AdminSettings() {
       />
 
       <div className="max-w-[480px] mx-auto min-h-screen pb-24 relative z-10 flex flex-col">
-        <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-8">
+        <main className="flex-1 px-[20px] md:px-0 flex flex-col gap-[24px] py-8">
           <section className="flex flex-col gap-1">
             <h1 className="text-[28px] font-bold leading-[32px] tracking-[-0.03em] text-white">Settings</h1>
             <p className="text-[14px] leading-[20px] text-[#858A7D]">Manage your gym's operations.</p>

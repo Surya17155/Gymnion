@@ -359,6 +359,8 @@ export const setGymManualPricing = createServerFn({ method: "POST" })
     features: z.object({
       payment_management: z.boolean(),
       attendance_management: z.boolean(),
+      fee_reminders: z.boolean(),
+      member_limit: z.number().nullable().optional(),
     }).optional()
   }).parse(data))
   .handler(async ({ data, context }) => {

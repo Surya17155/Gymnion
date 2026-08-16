@@ -104,7 +104,7 @@ function MembersDashboard() {
       />
 
       {/* Header */}
-      <div className="p-6 pb-2 sticky top-0 z-40 bg-transparent">
+      <div className="p-6 md:px-0 pb-2 sticky top-0 z-40 bg-transparent">
         <div className="flex justify-between items-start mb-6">
           <div>
             <h1 className="text-[32px] font-bold leading-[32px] tracking-[-0.04em] text-white mb-2">Members</h1>
@@ -126,7 +126,7 @@ function MembersDashboard() {
       </div>
 
       {/* Members List */}
-      <div className="px-6 space-y-3">
+      <div className="px-6 md:px-0 space-y-3">
         {isLoading ? (
           <div className="text-center py-12 text-[#858A7D]">Loading members...</div>
         ) : (
