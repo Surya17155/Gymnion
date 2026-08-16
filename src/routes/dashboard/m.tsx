@@ -5,6 +5,7 @@ import { useMyProfile } from "@/hooks/useMyProfile";
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { getMyPayments, getMyAttendance } from '@/lib/auth.functions';
+import { clearRoleCache } from '@/lib/role';
 import { format } from 'date-fns';
 
 function MemberDashboardLayout() {
@@ -141,7 +142,9 @@ export function MemberDashboard() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate({ to: '/auth/login', search: { redirect: "" } });
+    clearRoleCache();
+    window.localStorage.removeItem('tanstack-query-cache');
+    window.location.replace('/');
   };
 
   if (isProfileLoading && !profile) {
