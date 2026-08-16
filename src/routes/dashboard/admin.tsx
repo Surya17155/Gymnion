@@ -109,19 +109,6 @@ export function AdminDashboard() {
     }
   }, [profileError]);
 
-      if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('403')) {
-        supabase.auth.signOut().then(() => {
-          navigate({ 
-            to: '/auth/login', 
-            search: { 
-              redirect: window.location.pathname,
-              error: errorReason ? encodeURIComponent(errorReason) : ""
-            } 
-          });
-        });
-      }
-    }
-  }, [profileError, navigate]);
 
   const { data: stats, isLoading: isStatsLoading, error: statsError } = useQuery({
     queryKey: ['admin-stats', gymData?.id],
