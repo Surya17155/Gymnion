@@ -916,19 +916,9 @@ function LandingPage() {
                       <input type="email" placeholder="work@gym.com" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
                     </div>
                   </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Phone Number</label>
-                      <input type="tel" placeholder="+91 00000 00000" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Gym Name</label>
-                      <input type="text" placeholder="The Iron Hub" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
-                    </div>
-                  </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Gym Address</label>
-                    <input type="text" placeholder="123 Street, City, State" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
+                    <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Gym Name</label>
+                    <input type="text" placeholder="The Iron Hub" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Message</label>
