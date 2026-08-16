@@ -270,18 +270,32 @@ function SuperAdminPlans() {
                       <li key={feat.name} className={`flex items-center gap-3 text-sm group cursor-pointer ${
                         plan.name.toLowerCase() === 'unlimited' ? 'text-[#e3e3dd]' : 'text-[#C0C2B8]'
                       }`}
-                      onClick={() => {
-                        const newFeatures = [...(plan.features || [])];
+                      onClick={async () => {
+                        const currentFeatures = Array.isArray(plan.features) ? plan.features : [];
+                        const newFeatures = currentFeatures.map((f: any) => {
+                          if (typeof f === 'string') return { name: f, enabled: true };
+                          return f;
+                        });
+                        
                         const idx = newFeatures.findIndex((f: any) => f.name === feat.name);
                         if (idx >= 0) {
                           newFeatures[idx] = { ...newFeatures[idx], enabled: !isEnabled };
                         } else {
-                          newFeatures.push({ name: feat.name, label: feat.label, enabled: true });
+                          newFeatures.push({ name: feat.name, enabled: true });
                         }
                         
-                        supabase.from('global_plans').update({ features: newFeatures as any }).eq('id', plan.id).then(() => {
+                        try {
+                          await updatePlanFn({
+                            data: {
+                              id: plan.id,
+                              features: newFeatures
+                            }
+                          });
                           queryClient.invalidateQueries({ queryKey: ['global-plans'] });
-                        });
+                          toast.success("Feature updated");
+                        } catch (err: any) {
+                          toast.error(err.message || "Failed to update feature");
+                        }
                       }}
                       >
                         <span className="material-symbols-outlined text-sm" style={{ 
