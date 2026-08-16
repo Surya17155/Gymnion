@@ -98,7 +98,7 @@ function LandingPage() {
 
         {/* Content Layer */}
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center flex-1 px-6 max-w-7xl mx-auto w-full pt-8 md:pt-16 pb-12 lg:pb-32">
-          <div className="max-w-[800px] lg:w-3/5 lg:pr-12">
+          <div className="max-w-[800px] lg:w-3/5 lg:pr-12 lg:order-1">
             <motion.div
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
