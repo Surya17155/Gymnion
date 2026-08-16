@@ -5,6 +5,8 @@ import { getRoleForUser, clearRoleCache, homeForRole } from "@/lib/role";
 import { completeSignup } from "@/lib/members.functions";
 import { getGymByCode } from "@/lib/auth.functions";
 import { toast } from "sonner";
+import logoAsset from "@/assets/gymnion-logo-new.png.asset.json";
+
 
 
 export const Route = createFileRoute('/auth/login')({
@@ -227,12 +229,11 @@ function AuthPage() {
       <main className="w-full max-w-[390px] relative z-10 flex flex-col min-h-full">
         <header className="flex flex-col items-center justify-center mb-8 mt-12 relative z-10">
           <div className="w-20 h-20 mb-4 relative flex items-center justify-center">
-            <div className="w-16 h-16 rounded-2xl bg-[#333532] border border-white/10 flex items-center justify-center shadow-[0_0_20px_rgba(183,255,30,0.1)]">
-              <span className="material-symbols-outlined text-[#B7FF1E] text-4xl" style={{ fontVariationSettings: '"FILL" 1' }}>fitness_center</span>
-            </div>
+            <img src={logoAsset.url} alt="Gymnion Logo" className="h-16 w-auto drop-shadow-[0_0_10px_rgba(183,255,30,0.2)]" />
           </div>
-          <h1 className="text-3xl font-bold text-center">Gym<span className="text-[#B7FF1E]">Sync</span></h1>
+          <h1 className="text-3xl font-bold text-center">Gymnion</h1>
         </header>
+
 
         <div className="bg-[#333532] p-1 rounded-full flex relative w-full mb-6 border border-white/5 shadow-inner z-10">
           <div className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-[#B7FF1E] rounded-full transition-all duration-300 ease-in-out ${authMode === 'signin' ? 'left-1' : 'left-[calc(50%+1px)]'}`}></div>
