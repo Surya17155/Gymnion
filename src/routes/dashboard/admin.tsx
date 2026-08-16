@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useServerFn } from '@tanstack/react-start';
 import { getAdminStats, getRecentActivity, getGymDetails } from '@/lib/auth.functions';
+import { checkGymSubscription } from '@/lib/subscription.functions';
 import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin')({
@@ -49,6 +50,15 @@ export function AdminDashboard() {
   const [showQRModal, setShowQRModal] = useState(false);
   const [qrUrl, setQrUrl] = useState<string>('');
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const checkSubscriptionFn = useServerFn(checkGymSubscription);
+  const { data: subStatus } = useQuery({
+    queryKey: ['gym-subscription-status'],
+    queryFn: () => checkSubscriptionFn(),
+    staleTime: 60000,
+  });
+
+  const isExpired = subStatus?.isExpired;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -507,7 +517,7 @@ export function AdminDashboard() {
           {/* Quick Actions removed from dashboard as requested, keeping other sections */}
 
           {/* Recent Activity */}
-          <section>
+          <section className={isExpired ? 'opacity-50 grayscale' : ''}>
             <div className="flex justify-between items-center mb-[12px]">
               <h3 className="text-[18px] font-semibold text-white">Recent Activity</h3>
               <span className="text-[11px] font-semibold text-[#B7FF1E] cursor-pointer">View All</span>
