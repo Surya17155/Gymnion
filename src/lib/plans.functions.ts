@@ -33,6 +33,7 @@ export const createSubscriptionPlan = createServerFn({ method: "POST" })
       name: z.string(),
       enabled: z.boolean()
     })),
+    member_limit: z.number().optional(),
     is_active: z.boolean().default(true)
   }).parse(data))
   .handler(async ({ data, context }) => {
@@ -47,7 +48,7 @@ export const createSubscriptionPlan = createServerFn({ method: "POST" })
 
     const { data: plan, error } = await supabaseAdmin
       .from('global_plans')
-      .insert([data])
+      .insert([data as any])
       .select()
       .single();
 
@@ -65,6 +66,7 @@ export const updateSubscriptionPlan = createServerFn({ method: "POST" })
       name: z.string(),
       enabled: z.boolean()
     })).optional(),
+    member_limit: z.number().optional(),
     is_active: z.boolean().optional()
   }).parse(data))
   .handler(async ({ data, context }) => {

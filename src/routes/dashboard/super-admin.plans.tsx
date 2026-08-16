@@ -27,7 +27,9 @@ function SuperAdminPlans() {
   const [manualFeatures, setManualFeatures] = useState<any[]>(['']);
   const [overrideForm, setOverrideForm] = useState({
     payment_management: false,
-    attendance_management: false
+    attendance_management: false,
+    fee_reminders: false,
+    member_limit: ''
   });
 
   const getPlansFn = useServerFn(getSubscriptionPlans);
@@ -72,7 +74,9 @@ function SuperAdminPlans() {
           manualPricing: parseFloat(customMonthlyPrice),
           features: {
             payment_management: overrideForm.payment_management,
-            attendance_management: overrideForm.attendance_management
+            attendance_management: overrideForm.attendance_management,
+            fee_reminders: overrideForm.fee_reminders,
+            member_limit: overrideForm.member_limit ? parseInt(overrideForm.member_limit.toString()) : null
           }
         }
       });
@@ -123,6 +127,7 @@ function SuperAdminPlans() {
         name: selectedPlan.name,
         price: Math.round(parseFloat(selectedPlan.price.toString()) * 100),
         features: cleanedFeatures as any,
+        member_limit: selectedPlan.member_limit ? parseInt(selectedPlan.member_limit.toString()) : null,
         is_active: selectedPlan.is_active !== false,
         updated_at: new Date().toISOString()
       };
@@ -191,7 +196,7 @@ function SuperAdminPlans() {
             <button 
               data-testid="add-new-plan-btn"
               onClick={() => {
-                setSelectedPlan({ id: `new-${Date.now()}`, name: '', price: '' });
+                setSelectedPlan({ id: `new-${Date.now()}`, name: '', price: '', member_limit: '' });
                 setManualFeatures(['']);
                 setIsEditingPlan(true);
               }}
@@ -280,7 +285,7 @@ function SuperAdminPlans() {
                 </ul>
 
                 <button 
-                  onClick={() => handleEditPlan({ ...plan, price: (plan.price / 100).toString() })}
+                  onClick={() => handleEditPlan({ ...plan, price: (plan.price / 100).toString(), member_limit: plan.member_limit?.toString() || '' })}
                   className={`w-full h-12 text-xs font-bold rounded-full transition-colors flex items-center justify-center gap-2 relative z-10 ${
                     plan.name.toLowerCase() === 'unlimited'
                       ? 'bg-[#c9f232] text-[#576c00] hover:bg-[#aed502] shadow-[0_4px_20px_rgba(201,242,50,0.2)]'
@@ -329,23 +334,54 @@ function SuperAdminPlans() {
                         <p className="text-xs text-[#C0C2B8]">Manual Pricing Enabled</p>
                       </div>
                     </div>
-                    <button 
-                      onClick={() => {
-                        setSelectedGymForOverride(gym);
-                        setCustomMonthlyPrice(currentPrice?.toString() || '');
-                        const settings = gym.settings as any;
-                        const features = settings?.features || {};
+                    <div className="flex items-center gap-2">
+                      <button 
+                        onClick={() => {
+                          setSelectedGymForOverride(gym);
+                          setCustomMonthlyPrice(currentPrice?.toString() || '');
+                          const settings = gym.settings as any;
+                          const features = settings?.features || {};
                         setOverrideForm({
                           payment_management: !!features.payment_management,
-                          attendance_management: !!features.attendance_management
+                          attendance_management: !!features.attendance_management,
+                          fee_reminders: !!features.fee_reminders,
+                          member_limit: features.member_limit?.toString() || ''
                         });
-                        setIsAddingOverride(true);
-                      }}
-                      className="text-[#B7FF1E] p-2 hover:bg-[#B7FF1E]/10 rounded-lg transition-colors"
-                      title="Edit Override"
-                    >
-                      <span className="material-symbols-outlined text-sm">edit</span>
-                    </button>
+                          setIsAddingOverride(true);
+                        }}
+                        className="text-[#c9f232] p-2 hover:bg-[#c9f232]/10 rounded-lg transition-colors"
+                        title="Edit Override"
+                      >
+                        <span className="material-symbols-outlined text-sm">edit</span>
+                      </button>
+                      <button 
+                        onClick={async () => {
+                          if (window.confirm(`Remove manual pricing for ${gym.name}?`)) {
+                            try {
+                              const newSettings = { ...(gym.settings as any) };
+                              delete newSettings.manual_pricing;
+                              delete newSettings.features;
+                              
+                              const { error } = await supabase
+                                .from('gyms')
+                                .update({ settings: newSettings })
+                                .eq('id', gym.id);
+
+                              if (error) throw error;
+                              toast.success(`Manual pricing removed for ${gym.name}`);
+                              queryClient.invalidateQueries({ queryKey: ['gyms-with-overrides'] });
+                              queryClient.invalidateQueries({ queryKey: ['super-admin-gyms'] });
+                            } catch (err: any) {
+                              toast.error(err.message || "Failed to remove manual pricing");
+                            }
+                          }
+                        }}
+                        className="text-[#FF5964] p-2 hover:bg-[#FF5964]/10 rounded-lg transition-colors"
+                        title="Remove Override"
+                      >
+                        <span className="material-symbols-outlined text-sm">delete</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -443,7 +479,31 @@ function SuperAdminPlans() {
                     placeholder="0.00"
                   />
                 </div>
-              </div>
+                </div>
+
+                <div 
+                  onClick={() => setOverrideForm(prev => ({ ...prev, fee_reminders: !prev.fee_reminders }))}
+                  className="flex items-center justify-between p-4 bg-[#1e201d] border border-white/5 rounded-2xl cursor-pointer hover:border-white/10 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className={`material-symbols-outlined ${overrideForm.fee_reminders ? 'text-[#c9f232]' : 'text-[#858A7D]'}`}>notifications_active</span>
+                    <span className="text-[14px] font-medium text-white">Fee Reminders</span>
+                  </div>
+                  <div className={`w-12 h-6 rounded-full p-1 transition-colors ${overrideForm.fee_reminders ? 'bg-[#c9f232]' : 'bg-[#333532]'}`}>
+                    <div className={`w-4 h-4 bg-white rounded-full transition-transform ${overrideForm.fee_reminders ? 'translate-x-6' : 'translate-x-0'}`} />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-[#858A7D] uppercase tracking-wider">Gym Member Limit</label>
+                  <input 
+                    type="number"
+                    value={overrideForm.member_limit}
+                    onChange={(e) => setOverrideForm(prev => ({ ...prev, member_limit: e.target.value }))}
+                    className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-2xl px-4 text-white font-medium outline-none focus:border-[#c9f232] transition-colors"
+                    placeholder="Unlimited"
+                  />
+                </div>
 
               <div className="space-y-3">
                 <label className="text-[11px] font-bold text-[#858A7D] uppercase tracking-wider">Features Access</label>
@@ -546,6 +606,17 @@ function SuperAdminPlans() {
               </div>
 
               <div>
+                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Member Limit (Optional)</label>
+                <input 
+                  type="number"
+                  placeholder="e.g. 100"
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#e3e3dd] font-bold focus:border-[#c9f232] outline-none"
+                  value={selectedPlan.member_limit || ''}
+                  onChange={e => setSelectedPlan({ ...selectedPlan, member_limit: e.target.value })}
+                />
+              </div>
+
+              <div>
                 <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Features (Click icon to toggle)</label>
                 <div className="space-y-2">
                   {manualFeatures.map((feature: any, idx: number) => {
@@ -628,6 +699,30 @@ function SuperAdminPlans() {
                   {isSubmitting && <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin"></span>}
                   Save Changes
                 </button>
+                {selectedPlan.id && !selectedPlan.id.toString().startsWith('new-') && (
+                  <button 
+                    type="button"
+                    onClick={async () => {
+                      if (window.confirm('Are you sure you want to delete this plan? This action cannot be undone.')) {
+                        setIsSubmitting(true);
+                        try {
+                          await deletePlanFn({ data: { id: selectedPlan.id } });
+                          toast.success("Plan deleted successfully");
+                          setIsEditingPlan(false);
+                          setSelectedPlan(null);
+                          queryClient.invalidateQueries({ queryKey: ['global-plans'] });
+                        } catch (err: any) {
+                          toast.error(err.message || "Failed to delete plan");
+                        } finally {
+                          setIsSubmitting(false);
+                        }
+                      }
+                    }}
+                    className="w-full mt-3 py-4 bg-[#FF5964]/10 text-[#FF5964] text-[15px] font-bold rounded-2xl hover:bg-[#FF5964]/20 transition-colors"
+                  >
+                    Delete Plan
+                  </button>
+                )}
               </div>
             </form>
           </div>

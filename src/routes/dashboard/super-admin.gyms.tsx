@@ -28,7 +28,9 @@ export function SuperAdminGyms() {
   const [pricingForm, setPricingForm] = useState({
     amount: '',
     payment_management: false,
-    attendance_management: false
+    attendance_management: false,
+    fee_reminders: false,
+    member_limit: ''
   });
 
   const getGymsFn = useServerFn(getAllGymsServer);
@@ -44,7 +46,9 @@ export function SuperAdminGyms() {
       setPricingForm({
         amount: settings.manual_pricing?.toString() || '',
         payment_management: !!features.payment_management,
-        attendance_management: !!features.attendance_management
+        attendance_management: !!features.attendance_management,
+        fee_reminders: !!features.fee_reminders,
+        member_limit: features.member_limit?.toString() || ''
       });
     }
   }, [selectedGymForPricing]);
@@ -59,7 +63,9 @@ export function SuperAdminGyms() {
           manualPricing: pricingForm.amount ? parseFloat(pricingForm.amount) : null,
           features: {
             payment_management: pricingForm.payment_management,
-            attendance_management: pricingForm.attendance_management
+            attendance_management: pricingForm.attendance_management,
+            fee_reminders: pricingForm.fee_reminders,
+            member_limit: pricingForm.member_limit ? parseInt(pricingForm.member_limit.toString()) : null
           }
         }
       });
@@ -297,7 +303,31 @@ export function SuperAdminGyms() {
                     <div className={`w-4 h-4 bg-white rounded-full transition-transform ${pricingForm.attendance_management ? 'translate-x-6' : 'translate-x-0'}`} />
                   </div>
                 </div>
-              </div>
+                </div>
+
+                <div 
+                  onClick={() => setPricingForm(prev => ({ ...prev, fee_reminders: !prev.fee_reminders }))}
+                  className="flex items-center justify-between p-4 bg-[#1e201d] border border-white/5 rounded-2xl cursor-pointer hover:border-white/10 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className={`material-symbols-outlined ${pricingForm.fee_reminders ? 'text-[#B7FF1E]' : 'text-[#858A7D]'}`}>notifications_active</span>
+                    <span className="text-[14px] font-medium text-white">Fee Reminders</span>
+                  </div>
+                  <div className={`w-12 h-6 rounded-full p-1 transition-colors ${pricingForm.fee_reminders ? 'bg-[#B7FF1E]' : 'bg-[#333532]'}`}>
+                    <div className={`w-4 h-4 bg-white rounded-full transition-transform ${pricingForm.fee_reminders ? 'translate-x-6' : 'translate-x-0'}`} />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-[#858A7D] uppercase tracking-wider">Member Limit</label>
+                  <input 
+                    type="number"
+                    value={pricingForm.member_limit}
+                    onChange={(e) => setPricingForm(prev => ({ ...prev, member_limit: e.target.value }))}
+                    className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-2xl px-4 text-white font-medium outline-none focus:border-[#B7FF1E] transition-colors"
+                    placeholder="Unlimited"
+                  />
+                </div>
 
               <div className="flex gap-3 pt-2">
                 <button 
