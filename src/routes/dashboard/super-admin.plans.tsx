@@ -24,7 +24,7 @@ function SuperAdminPlans() {
   const [selectedGymForOverride, setSelectedGymForOverride] = useState<any>(null);
   const [customMonthlyPrice, setCustomMonthlyPrice] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [manualFeatures, setManualFeatures] = useState<any[]>(['']);
+  
   const [overrideForm, setOverrideForm] = useState({
     payment_management: false,
     attendance_management: false,
@@ -254,23 +254,28 @@ function SuperAdminPlans() {
                 </div>
 
                 <ul className="space-y-2 mb-6 relative z-10">
-                  {plan.features?.map((feature: any, idx: number) => {
-                    const isEnabled = typeof feature === 'string' ? true : feature.enabled;
-                    const text = typeof feature === 'string' ? feature : feature.name;
+                  {[
+                    { name: 'attendance_management', label: 'Attendance Management' },
+                    { name: 'payment_management', label: 'Payment Management' },
+                    { name: 'fee_reminders', label: 'Fee Reminders' }
+                  ].map((feat) => {
+                    const featureObj = plan.features?.find((f: any) => f.name === feat.name);
+                    const isEnabled = featureObj ? featureObj.enabled : false;
                     
                     return (
-                      <li key={idx} className={`flex items-center gap-3 text-sm group cursor-pointer ${
+                      <li key={feat.name} className={`flex items-center gap-3 text-sm group cursor-pointer ${
                         plan.name.toLowerCase() === 'unlimited' ? 'text-[#e3e3dd]' : 'text-[#C0C2B8]'
                       }`}
                       onClick={() => {
-                        const updatedFeatures = [...plan.features];
-                        if (typeof updatedFeatures[idx] === 'string') {
-                           updatedFeatures[idx] = { name: updatedFeatures[idx], enabled: false };
+                        const newFeatures = [...(plan.features || [])];
+                        const idx = newFeatures.findIndex((f: any) => f.name === feat.name);
+                        if (idx >= 0) {
+                          newFeatures[idx] = { ...newFeatures[idx], enabled: !isEnabled };
                         } else {
-                           updatedFeatures[idx] = { ...updatedFeatures[idx], enabled: !isEnabled };
+                          newFeatures.push({ name: feat.name, label: feat.label, enabled: true });
                         }
                         
-                        supabase.from('global_plans').update({ features: updatedFeatures as any }).eq('id', plan.id).then(() => {
+                        supabase.from('global_plans').update({ features: newFeatures as any }).eq('id', plan.id).then(() => {
                           queryClient.invalidateQueries({ queryKey: ['global-plans'] });
                         });
                       }}
@@ -281,10 +286,16 @@ function SuperAdminPlans() {
                         }}>
                           {isEnabled ? 'check_circle' : 'cancel'}
                         </span>
-                        {text}
+                        {feat.label}
                       </li>
                     );
                   })}
+                  {plan.member_limit && (
+                    <li className={`flex items-center gap-3 text-sm ${plan.name.toLowerCase() === 'unlimited' ? 'text-[#e3e3dd]' : 'text-[#C0C2B8]'}`}>
+                      <span className="material-symbols-outlined text-sm text-[#c9f232]" style={{ fontVariationSettings: "'FILL' 1" }}>groups</span>
+                      Limit: {plan.member_limit} Members
+                    </li>
+                  )}
                 </ul>
 
                 <button 
