@@ -529,7 +529,7 @@ function LandingPage() {
       </section>
 
       {/* Continuation: Collect with Confidence Section */}
-      <section className="relative py-24 bg-[#000000] overflow-hidden border-t border-white/5">
+      <section className="relative py-24 lg:py-48 bg-[#000000] overflow-hidden border-t border-white/5">
         {/* Background Effects matching the provided code */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80">
@@ -548,23 +548,23 @@ function LandingPage() {
           </div>
         </div>
 
-        <main className="max-w-md mx-auto relative pt-12 pb-24 px-4 translate-x-8">
+        <main className="max-w-md lg:max-w-7xl mx-auto relative pt-12 pb-24 px-4 translate-x-8 lg:translate-x-0">
           {/* Timeline line connecting only points 03 and 04 */}
-          <div className="absolute left-[0.25rem] top-[290px] bottom-16 w-[2px] bg-[#B7FF1E] z-0 shadow-[0_0_10px_#B7FF1E]"></div>
+          <div className="absolute left-[0.25rem] lg:left-1/2 lg:-translate-x-1/2 top-[290px] lg:top-[380px] bottom-16 w-[2px] bg-[#B7FF1E] z-0 shadow-[0_0_10px_#B7FF1E]"></div>
 
           {/* BEGIN: Header Section */}
-          <header className="relative z-10 mb-12 flex flex-col items-center px-6 -translate-x-8">
+          <header className="relative z-10 mb-12 lg:mb-24 flex flex-col items-center px-6 -translate-x-8 lg:translate-x-0">
             {/* Pill Badge */}
             <div className="inline-flex items-center justify-center px-6 py-2 rounded-full border border-[#B7FF1E]/50 bg-[#0F1115]/80 backdrop-blur-sm mb-6 text-[10px] font-bold tracking-[0.2em] text-[#B7FF1E] uppercase shadow-[0_0_15px_rgba(183,255,30,0.2)]">
               Keep the day moving
             </div>
             {/* Headline */}
-            <h1 className="text-4xl font-bold leading-tight mb-4 tracking-tight text-white text-center">
+            <h1 className="text-4xl lg:text-6xl font-bold leading-tight mb-4 tracking-tight text-white text-center">
               Collect with <br />
               <span className="text-[#B7FF1E] drop-shadow-[0_0_15px_rgba(183,255,30,0.6)]">confidence.</span>
             </h1>
             {/* Subheadline */}
-            <p className="text-[#c3c8be] text-base font-medium leading-relaxed pr-0 text-center">
+            <p className="text-[#c3c8be] text-base lg:text-xl font-medium leading-relaxed pr-0 text-center lg:max-w-2xl">
               Follow every membership payment and understand how your gym is performing.
             </p>
           </header>
