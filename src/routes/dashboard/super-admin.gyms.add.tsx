@@ -175,6 +175,8 @@ function AddGymScreen() {
                 />
               </div>
 
+              </div>
+
               <div className="space-y-1.5">
                 <p className="text-[11px] text-[#858A7D] ml-1">Gym Phone Number</p>
                 <input 
@@ -185,6 +187,7 @@ function AddGymScreen() {
                   value={newGym.gymPhone}
                   onChange={e => setNewGym(prev => ({ ...prev, gymPhone: e.target.value }))}
                 />
+              </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
