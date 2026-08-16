@@ -195,10 +195,18 @@ export function SuperAdminGyms() {
                   preload="intent"
                   className="flex-1 flex items-center gap-3"
                 >
-                  <div className="w-12 h-12 rounded-lg bg-[#333532] flex-shrink-0 overflow-hidden border border-white/5 relative">
-                    <div className="w-full h-full bg-[#1e201d] flex items-center justify-center">
-                      <span className="material-symbols-outlined text-[#858A7D] text-[24px]">fitness_center</span>
-                    </div>
+                  <div className="w-12 h-12 rounded-lg bg-[#333532] flex-shrink-0 overflow-hidden border border-white/5 relative shadow-inner">
+                    {gym.owner_photo_url ? (
+                      <img 
+                        src={gym.owner_photo_url} 
+                        alt={gym.name} 
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-[#1e201d] flex items-center justify-center">
+                        <span className="material-symbols-outlined text-[#858A7D] text-[24px]">fitness_center</span>
+                      </div>
+                    )}
                   </div>
                   <div className="flex-1 flex flex-col justify-center">
                     <h3 className="text-[16px] font-semibold text-[#e3e3dd]">{gym.name}</h3>
