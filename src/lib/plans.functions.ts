@@ -48,7 +48,7 @@ export const createSubscriptionPlan = createServerFn({ method: "POST" })
 
     const { data: plan, error } = await supabaseAdmin
       .from('global_plans')
-      .insert([data])
+      .insert([data as any])
       .select()
       .single();
 

@@ -123,6 +123,7 @@ function SuperAdminPlans() {
         name: selectedPlan.name,
         price: Math.round(parseFloat(selectedPlan.price.toString()) * 100),
         features: cleanedFeatures as any,
+        member_limit: selectedPlan.member_limit ? parseInt(selectedPlan.member_limit.toString()) : null,
         is_active: selectedPlan.is_active !== false,
         updated_at: new Date().toISOString()
       };
@@ -191,7 +192,7 @@ function SuperAdminPlans() {
             <button 
               data-testid="add-new-plan-btn"
               onClick={() => {
-                setSelectedPlan({ id: `new-${Date.now()}`, name: '', price: '' });
+                setSelectedPlan({ id: `new-${Date.now()}`, name: '', price: '', member_limit: '' });
                 setManualFeatures(['']);
                 setIsEditingPlan(true);
               }}
@@ -280,7 +281,7 @@ function SuperAdminPlans() {
                 </ul>
 
                 <button 
-                  onClick={() => handleEditPlan({ ...plan, price: (plan.price / 100).toString() })}
+                  onClick={() => handleEditPlan({ ...plan, price: (plan.price / 100).toString(), member_limit: plan.member_limit?.toString() || '' })}
                   className={`w-full h-12 text-xs font-bold rounded-full transition-colors flex items-center justify-center gap-2 relative z-10 ${
                     plan.name.toLowerCase() === 'unlimited'
                       ? 'bg-[#c9f232] text-[#576c00] hover:bg-[#aed502] shadow-[0_4px_20px_rgba(201,242,50,0.2)]'
@@ -546,6 +547,17 @@ function SuperAdminPlans() {
               </div>
 
               <div>
+                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Member Limit (Optional)</label>
+                <input 
+                  type="number"
+                  placeholder="e.g. 100"
+                  className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-xl px-4 text-[#e3e3dd] font-bold focus:border-[#c9f232] outline-none"
+                  value={selectedPlan.member_limit || ''}
+                  onChange={e => setSelectedPlan({ ...selectedPlan, member_limit: e.target.value })}
+                />
+              </div>
+
+              <div>
                 <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Features (Click icon to toggle)</label>
                 <div className="space-y-2">
                   {manualFeatures.map((feature: any, idx: number) => {
@@ -628,6 +640,30 @@ function SuperAdminPlans() {
                   {isSubmitting && <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin"></span>}
                   Save Changes
                 </button>
+                {selectedPlan.id && !selectedPlan.id.toString().startsWith('new-') && (
+                  <button 
+                    type="button"
+                    onClick={async () => {
+                      if (window.confirm('Are you sure you want to delete this plan? This action cannot be undone.')) {
+                        setIsSubmitting(true);
+                        try {
+                          await deletePlanFn({ data: { id: selectedPlan.id } });
+                          toast.success("Plan deleted successfully");
+                          setIsEditingPlan(false);
+                          setSelectedPlan(null);
+                          queryClient.invalidateQueries({ queryKey: ['global-plans'] });
+                        } catch (err: any) {
+                          toast.error(err.message || "Failed to delete plan");
+                        } finally {
+                          setIsSubmitting(false);
+                        }
+                      }
+                    }}
+                    className="w-full mt-3 py-4 bg-[#FF5964]/10 text-[#FF5964] text-[15px] font-bold rounded-2xl hover:bg-[#FF5964]/20 transition-colors"
+                  >
+                    Delete Plan
+                  </button>
+                )}
               </div>
             </form>
           </div>
