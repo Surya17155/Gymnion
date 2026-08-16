@@ -11,7 +11,7 @@ export const Route = createFileRoute('/dashboard/super-admin/payments')({
 
 function SuperAdminPayments() {
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<'all' | 'paid' | 'overdue'>('all');
+  const [filter, setFilter] = useState<'all' | 'paid' | 'overdue' | 'free'>('all');
   
   const getRevenueFn = useServerFn(getPlatformRevenue);
   const getAllGymsFn = useServerFn(getAllGymsServer);
@@ -35,8 +35,9 @@ function SuperAdminPayments() {
       const isOverdue = gym.subscription_ends_at ? new Date(gym.subscription_ends_at) < now : true;
       const isPaid = (gym.settings as any)?.payment_status === 'paid' && !isOverdue;
       
-      if (filter === 'paid') return isPaid;
-      if (filter === 'overdue') return !isPaid;
+      if (filter === 'paid') return isPaid && gym.plan_tier !== 'free';
+      if (filter === 'overdue') return !isPaid && gym.plan_tier !== 'free';
+      if (filter === 'free') return gym.plan_tier === 'free';
       return true;
     });
   }, [gymsData, filter, now]);
@@ -54,7 +55,7 @@ function SuperAdminPayments() {
           <h1 className="text-[24px] font-bold text-white leading-tight">Platform Revenue</h1>
         </section>
 
-        <section className="grid grid-cols-1 gap-3">
+        <section className="grid grid-cols-2 gap-3">
           <div className="bg-[#121411] border border-white/5 rounded-xl p-3 flex flex-col justify-between min-h-[110px] relative overflow-hidden group">
             <div className="absolute -right-10 -top-10 w-24 h-24 bg-[#B7FF1E]/5 rounded-full blur-2xl group-hover:bg-[#B7FF1E]/10 transition-colors"></div>
             <div className="flex justify-between items-start w-full relative z-10">
@@ -67,6 +68,14 @@ function SuperAdminPayments() {
             <div className="mt-2 relative z-10">
               <span className="text-[32px] font-bold text-white leading-none">₹{stats?.totalCollected?.toLocaleString() || '0'}</span>
             </div>
+          </div>
+
+          <div className="bg-[#121411] border border-white/5 rounded-xl p-3 flex flex-col justify-center min-h-[110px]">
+            <div className="flex justify-between items-start mb-1">
+              <span className="text-[11px] text-[#858A7D]">Free Trial Gyms</span>
+              <span className="material-symbols-outlined text-[#B7FF1E] text-base">card_giftcard</span>
+            </div>
+            <span className="text-[32px] font-bold text-white leading-none">{stats?.freeTierCount || 0}</span>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -114,12 +123,18 @@ function SuperAdminPayments() {
             >
               Paid
             </button>
-            <button 
-              onClick={() => setFilter('overdue')}
-              className={`flex-1 min-w-[120px] py-2 px-4 rounded-md text-[11px] font-semibold transition-all ${filter === 'overdue' ? 'bg-[#B7FF1E] text-black shadow-[0_2px_8px_rgba(183,255,30,0.2)]' : 'text-[#C0C2B8] hover:text-white'}`}
-            >
-              Pending/Overdue
-            </button>
+              <button 
+                onClick={() => setFilter('overdue')}
+                className={`flex-1 min-w-[100px] py-2 px-4 rounded-md text-[11px] font-semibold transition-all ${filter === 'overdue' ? 'bg-[#B7FF1E] text-black shadow-[0_2px_8px_rgba(183,255,30,0.2)]' : 'text-[#C0C2B8] hover:text-white'}`}
+              >
+                Pending/Overdue
+              </button>
+              <button 
+                onClick={() => setFilter('free')}
+                className={`flex-1 min-w-[80px] py-2 px-4 rounded-md text-[11px] font-semibold transition-all ${filter === 'free' ? 'bg-[#B7FF1E] text-black shadow-[0_2px_8px_rgba(183,255,30,0.2)]' : 'text-[#C0C2B8] hover:text-white'}`}
+              >
+                Free Trial
+              </button>
           </div>
         </section>
 
@@ -144,8 +159,8 @@ function SuperAdminPayments() {
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-1">
                       <h3 className="text-[18px] font-semibold text-white truncate pr-2">{gym.name}</h3>
-                      <span className={`text-[11px] font-semibold px-2 py-0.5 rounded border shrink-0 ${!isPaid ? 'text-[#FF5964] bg-[#FF5964]/10 border-[#FF5964]/20' : 'text-[#B7FF1E] bg-[#B7FF1E]/10 border-[#B7FF1E]/20'}`}>
-                        {isPaid ? 'PAID' : 'PENDING'}
+                      <span className={`text-[11px] font-semibold px-2 py-0.5 rounded border shrink-0 ${gym.plan_tier === 'free' ? 'text-[#B7FF1E] bg-[#B7FF1E]/10 border-[#B7FF1E]/20' : !isPaid ? 'text-[#FF5964] bg-[#FF5964]/10 border-[#FF5964]/20' : 'text-[#B7FF1E] bg-[#B7FF1E]/10 border-[#B7FF1E]/20'}`}>
+                        {gym.plan_tier === 'free' ? 'FREE TRIAL' : (isPaid ? 'PAID' : 'PENDING')}
                       </span>
                     </div>
                     <p className="text-[12px] text-[#C0C2B8] truncate">{planName}</p>
