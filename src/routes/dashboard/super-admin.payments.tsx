@@ -191,7 +191,7 @@ function SuperAdminPayments() {
                         {gym.plan_tier === 'free' ? 'Free' : (isPaid ? 'Paid' : 'Due')}
                       </span>
                     </div>
-                    <p className="text-[12px] font-medium text-[#858A7D] truncate italic">{planName}</p>
+                    {planName && <p className="text-[12px] font-medium text-[#858A7D] truncate italic">{planName}</p>}
                     <div className="flex items-center gap-1.5 mt-1">
                       <span className={`material-symbols-outlined text-[14px] ${!isPaid && gym.plan_tier !== 'free' ? 'text-[#FF5964]' : 'text-[#B7FF1E]'}`}>event</span>
                       <p className={`text-[11px] font-bold ${!isPaid && gym.plan_tier !== 'free' ? 'text-[#FF5964]' : 'text-[#858A7D]'}`}>
