@@ -389,10 +389,10 @@ function LandingPage() {
             {/* Step 1 */}
             <section className="relative pl-14 lg:pl-0 lg:text-right lg:pr-20 mb-16 lg:mb-0">
               {/* Number Badge */}
-              <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 top-1 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
+              <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 top-1 lg:top-8 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
                 <span className="text-[#d5ff40] font-bold text-lg">01</span>
               </div>
-              <div className="mb-6">
+              <div className="mb-6 lg:mt-8">
                 {/* Person Add Icon */}
                 <div className="text-[#B7FF1E] mb-4 lg:flex lg:justify-end">
                   <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
@@ -404,47 +404,14 @@ function LandingPage() {
                   Create clear member profiles with the details your gym needs.
                 </p>
               </div>
-              {/* UI Mockup Card 1 */}
-              <div className="bg-[#1e201d] rounded-2xl border border-[#B7FF1E] p-4 shadow-[0_0_15px_rgba(183,255,30,0.3)]">
-                <div className="space-y-4">
-                  {/* Member Items */}
-                  {[
-                    { initials: "AT", w1: "w-16", w2: "w-10" },
-                    { initials: "RK", w1: "w-16", w2: "w-12" },
-                    { initials: "JM", w1: "w-14", w2: "w-8" }
-                  ].map((member, i) => (
-                    <div key={i} className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-[#121411] border border-white/10 flex items-center justify-center text-[#d5ff40] font-medium text-sm">
-                          {member.initials}
-                        </div>
-                        <div className="space-y-1.5">
-                          <div className={`h-2 ${member.w1} bg-white/20 rounded`}></div>
-                          <div className={`h-1.5 ${member.w2} bg-white/10 rounded`}></div>
-                        </div>
-                      </div>
-                      <div className="w-8 h-8 rounded-full bg-[#121411] border border-white/10 flex items-center justify-center">
-                        <div className="flex gap-0.5">
-                          <div className="w-1 h-1 bg-white/50 rounded-full"></div>
-                          <div className="w-1 h-1 bg-white/50 rounded-full"></div>
-                          <div className="w-1 h-1 bg-white/50 rounded-full"></div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  {/* Empty Input Area */}
-                  <div className="h-10 rounded-lg border border-[#d5ff40]/40 bg-[#121411]/50 mt-2"></div>
-                </div>
-              </div>
-            </section>
-
+...
             {/* Step 2 */}
             <section className="relative pl-14 lg:pl-20 mb-16 lg:mb-0">
               {/* Number Badge */}
-              <div className="absolute left-0 lg:left-0 lg:-translate-x-1/2 top-1 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
+              <div className="absolute left-0 lg:left-0 lg:-translate-x-1/2 top-1 lg:top-8 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
                 <span className="text-[#d5ff40] font-bold text-lg">02</span>
               </div>
-              <div className="mb-6">
+              <div className="mb-6 lg:mt-8">
                 {/* Calendar Icon */}
                 <div className="text-[#B7FF1E] mb-4">
                   <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
