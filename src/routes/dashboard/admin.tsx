@@ -116,19 +116,19 @@ export function AdminDashboard() {
   const { data: stats, isLoading: isStatsLoading, error: statsError } = useQuery({
     queryKey: ['admin-stats', gymData?.id],
     queryFn: () => getStatsFn({ data: { gymId: gymData!.id } }),
-    enabled: !!gymData?.id,
-    staleTime: 0, // Force fresh fetch for real-time accuracy
+    enabled: !!gymData?.id && !isExpired,
+    staleTime: 0,
     refetchOnWindowFocus: true,
-    retry: 1,
+    retry: false,
   });
 
   const { data: recentActivity, isLoading: isActivityLoading, error: activityError } = useQuery({
     queryKey: ['admin-activity', gymData?.id],
     queryFn: () => getActivityFn({ data: { gymId: gymData!.id } }),
-    enabled: !!gymData?.id,
-    staleTime: 0, // Force fresh fetch
+    enabled: !!gymData?.id && !isExpired,
+    staleTime: 0,
     refetchOnWindowFocus: true,
-    retry: 1,
+    retry: false,
   });
 
   const isActuallyLoading = isGymLoading || (gymData?.id && (isStatsLoading || isActivityLoading));
