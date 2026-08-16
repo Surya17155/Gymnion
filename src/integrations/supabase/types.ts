@@ -279,12 +279,15 @@ export type Database = {
           owner_name: string
           owner_phone: string
           owner_photo_url: string | null
+          phone: string | null
+          plan_tier: string | null
           razorpay_account_id: string | null
           settings: Json | null
           status: string
           subscription_ends_at: string | null
           subscription_plan_id: string | null
           subscription_started_at: string | null
+          trial_used: boolean | null
           updated_at: string | null
         }
         Insert: {
@@ -299,12 +302,15 @@ export type Database = {
           owner_name: string
           owner_phone: string
           owner_photo_url?: string | null
+          phone?: string | null
+          plan_tier?: string | null
           razorpay_account_id?: string | null
           settings?: Json | null
           status?: string
           subscription_ends_at?: string | null
           subscription_plan_id?: string | null
           subscription_started_at?: string | null
+          trial_used?: boolean | null
           updated_at?: string | null
         }
         Update: {
@@ -319,12 +325,15 @@ export type Database = {
           owner_name?: string
           owner_phone?: string
           owner_photo_url?: string | null
+          phone?: string | null
+          plan_tier?: string | null
           razorpay_account_id?: string | null
           settings?: Json | null
           status?: string
           subscription_ends_at?: string | null
           subscription_plan_id?: string | null
           subscription_started_at?: string | null
+          trial_used?: boolean | null
           updated_at?: string | null
         }
         Relationships: [
