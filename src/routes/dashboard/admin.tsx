@@ -241,7 +241,7 @@ export function AdminDashboard() {
       {/* Main Mobile Container */}
       <div className="max-w-[480px] mx-auto min-h-screen pb-24 relative z-10 flex flex-col">
         {/* TopAppBar */}
-        <header className="flex justify-between items-center px-[20px] h-[64px] w-full sticky top-0 z-40 bg-transparent">
+        <header className="flex justify-between items-center px-[20px] md:px-0 h-[64px] w-full sticky top-0 z-40 bg-transparent">
           <div className="flex items-center gap-3">
           </div>
           <div className="relative" ref={dropdownRef}>
@@ -299,7 +299,7 @@ export function AdminDashboard() {
           </div>
         </header>
 
-        <main className="flex-1 px-[20px] flex flex-col gap-[24px] py-2">
+        <main className="flex-1 px-[20px] md:px-0 flex flex-col gap-[24px] py-2">
           {/* Page Title */}
           <section className="-mt-4">
             <h2 className="text-[40px] font-bold leading-[44px] tracking-[-0.04em] text-white">Hi, {gymData?.owner_first_name || gymData?.owner_name?.split(' ')[0] || ''}</h2>
