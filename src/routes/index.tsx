@@ -126,7 +126,7 @@ function LandingPage() {
               className="flex justify-center lg:justify-start"
             >
               <Link 
-                to="/auth/signup"
+                to="/auth/login"
                 className="group relative inline-flex items-center justify-center px-10 py-5 bg-[#C8FF38] text-[#101311] rounded-full font-bold text-base uppercase tracking-widest overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(200,255,56,0.2)]"
               >
                 <span className="relative z-10">Start Your Free Trial</span>
@@ -183,24 +183,6 @@ function LandingPage() {
               </div>
             </div>
           </motion.div>
-        </div>
-
-          {/* Bottom CTA */}
-          <div className="relative z-10 w-full px-6 max-w-7xl mx-auto pb-12 md:pb-20 mt-auto lg:px-0">
-            <motion.div 
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-              className="flex justify-center lg:justify-start"
-            >
-              <Link 
-                to="/auth/login" 
-                className="inline-flex items-center gap-2 bg-[#C8FF38] text-[#101311] px-6 h-[46px] rounded-xl font-bold text-base hover:bg-[#B6F028] transition-all active:scale-[0.98] shadow-[0_8px_20px_rgba(200,255,56,0.2)]"
-              >
-                Get started <ArrowRight size={18} />
-              </Link>
-            </motion.div>
-          </div>
         </div>
       </section>
 
