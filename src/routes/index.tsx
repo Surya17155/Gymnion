@@ -385,25 +385,25 @@ function LandingPage() {
             <div className="absolute left-[1.25rem] lg:left-1/2 lg:-translate-x-1/2 top-8 lg:top-8 bottom-[-9rem] w-[2px] bg-[#B7FF1E] shadow-[0_0_10px_#B7FF1E] z-0"></div>
 
             {/* Step 1 */}
-            <section id="how-it-works" className="relative pl-14 lg:pl-0 lg:text-right lg:pr-20 mb-16 lg:mb-32">
+            <section id="how-it-works" className="relative pl-14 lg:pl-0 lg:text-left lg:pr-20 mb-16 lg:mb-32">
               {/* Number Badge */}
-              <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 top-1 lg:top-8 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
+              <div className="absolute left-0 lg:left-[calc(50%+1.25rem)] lg:-translate-x-1/2 top-1 lg:top-8 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
                 <span className="text-[#d5ff40] font-bold text-lg">01</span>
               </div>
-              <div className="mb-6 lg:mt-8">
+              <div className="mb-6 lg:mt-8 lg:ml-28">
                 {/* Person Add Icon */}
-                <div className="text-[#B7FF1E] mb-4 lg:flex lg:justify-end">
+                <div className="text-[#B7FF1E] mb-4 lg:flex lg:justify-start">
                   <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                     <path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                   </svg>
                 </div>
                 <h2 className="text-xl font-semibold text-white mb-2 lg:text-3xl">Add your members</h2>
-                <p className="text-[#c3c8be] text-sm lg:text-base leading-relaxed pr-2 lg:pr-0 lg:max-w-sm lg:ml-auto">
+                <p className="text-[#c3c8be] text-sm lg:text-base leading-relaxed pr-2 lg:pr-0 lg:max-w-sm">
                   Create clear member profiles with the details your gym needs.
                 </p>
               </div>
               {/* UI Mockup Card 1 */}
-              <div className="bg-[#1e201d] rounded-2xl border border-[#B7FF1E] p-4 shadow-[0_0_15px_rgba(183,255,30,0.3)]">
+              <div className="bg-[#1e201d] rounded-2xl border border-[#B7FF1E] p-4 shadow-[0_0_15px_rgba(183,255,30,0.3)] lg:ml-28">
                 <div className="space-y-4">
                   {/* Member Items */}
                   {[
