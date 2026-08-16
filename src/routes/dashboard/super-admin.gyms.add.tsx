@@ -175,8 +175,6 @@ function AddGymScreen() {
                 />
               </div>
 
-              </div>
-
               <div className="space-y-1.5">
                 <p className="text-[11px] text-[#858A7D] ml-1">Gym Phone Number</p>
                 <input 
