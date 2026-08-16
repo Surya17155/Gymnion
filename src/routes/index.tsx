@@ -69,7 +69,7 @@ function LandingPage() {
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#AAB2AA]">
             <a href="#features" className="hover:text-[#C8FF38]">Features</a>
             <a href="#pricing" className="hover:text-[#C8FF38]">Pricing</a>
-            <a href="#about" className="hover:text-[#C8FF38]">About</a>
+            <a href="#how-it-works" className="hover:text-[#C8FF38]">How It Works</a>
             <a href="#contact" className="hover:text-[#C8FF38]">Contact</a>
             <Link to="/auth/login" className="bg-[#C8FF38] text-[#101311] px-5 py-2 rounded-full font-bold hover:bg-[#B6F028] text-xs uppercase tracking-wider">
               Get Started
