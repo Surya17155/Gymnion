@@ -683,22 +683,24 @@ function SuperAdminPlans() {
                 </div>
               </div>
 
-              <div className="flex gap-3">
-                <button 
-                  type="button"
-                  onClick={() => setIsEditingPlan(false)}
-                  className="flex-1 py-4 bg-[#1e201d] text-[#858A7D] text-[15px] font-bold rounded-2xl"
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex-[2] py-4 bg-[#c9f232] text-black text-[15px] font-bold rounded-2xl shadow-[0_12px_24px_rgba(201,242,50,0.15)] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  {isSubmitting && <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin"></span>}
-                  Save Changes
-                </button>
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <button 
+                    type="button"
+                    onClick={() => setIsEditingPlan(false)}
+                    className="flex-1 py-3 bg-[#1e201d] text-[#858A7D] text-[14px] font-bold rounded-xl active:scale-95 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-[2] py-3 bg-[#c9f232] text-black text-[14px] font-bold rounded-xl shadow-[0_8px_16px_rgba(201,242,50,0.15)] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {isSubmitting && <span className="w-3 h-3 border-2 border-black/30 border-t-black rounded-full animate-spin"></span>}
+                    Save Changes
+                  </button>
+                </div>
                 {selectedPlan.id && !selectedPlan.id.toString().startsWith('new-') && (
                   <button 
                     type="button"
@@ -718,7 +720,7 @@ function SuperAdminPlans() {
                         }
                       }
                     }}
-                    className="w-full mt-3 py-4 bg-[#FF5964]/10 text-[#FF5964] text-[15px] font-bold rounded-2xl hover:bg-[#FF5964]/20 transition-colors"
+                    className="w-full py-3 bg-[#FF5964]/10 text-[#FF5964] text-[14px] font-bold rounded-xl hover:bg-[#FF5964]/20 active:scale-95 transition-all"
                   >
                     Delete Plan
                   </button>
