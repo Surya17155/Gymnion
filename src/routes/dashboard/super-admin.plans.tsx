@@ -656,8 +656,9 @@ function SuperAdminPlans() {
                   { name: 'payment_management', label: 'Payment Management', icon: 'payments' },
                   { name: 'fee_reminders', label: 'Fee Reminders', icon: 'notifications_active' }
                 ].map((feat) => {
-                  const featureObj = selectedPlan.features?.find((f: any) => f.name === feat.name) || { name: feat.name, enabled: false };
-                  const isEnabled = featureObj.enabled;
+                  const currentFeatures = Array.isArray(selectedPlan.features) ? selectedPlan.features : [];
+                  const featureObj = currentFeatures.find((f: any) => (typeof f === 'string' ? f : f.name) === feat.name) || { name: feat.name, enabled: false };
+                  const isEnabled = typeof featureObj === 'string' ? true : !!featureObj.enabled;
 
                   return (
                     <div 
