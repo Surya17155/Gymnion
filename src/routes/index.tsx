@@ -570,7 +570,7 @@ function LandingPage() {
           </header>
 
           {/* BEGIN: Main Content Area (Cards & Timeline) */}
-          <div className="relative pr-8 pl-12">
+          <div className="relative pr-8 pl-12 lg:grid lg:grid-cols-2 lg:gap-x-24 lg:gap-y-32 lg:pr-0 lg:pl-0">
 
             
             {/* BEGIN: Card 03 (Track every payment) */}
