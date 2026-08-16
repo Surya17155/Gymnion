@@ -214,6 +214,21 @@ export function SuperAdminGyms() {
                       <div className={`w-1.5 h-1.5 rounded-full ${gym.status === 'suspended' ? 'bg-[#FF5964]' : gym.status === 'pending' ? 'bg-yellow-500' : 'bg-[#B7FF1E]'}`}></div>
                       <span className="text-[11px] text-[#C0C2B8]">Code: {gym.gym_code || '---'} • {gym.global_plans?.name || (gym.settings?.manual_pricing ? 'Manual' : 'No Plan')}</span>
                     </div>
+                    {gym.members && gym.members.length > 0 && (
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <span className="material-symbols-outlined text-[12px] text-[#858A7D]">group</span>
+                        <span className="text-[10px] text-[#858A7D]">
+                          Latest Expiry: {(() => {
+                            const expiries = gym.members
+                              .map((m: any) => m.subscription_ends_at)
+                              .filter(Boolean)
+                              .map((d: string) => new Date(d).getTime());
+                            if (expiries.length === 0) return 'N/A';
+                            return new Date(Math.max(...expiries)).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+                          })()}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </Link>
                 
