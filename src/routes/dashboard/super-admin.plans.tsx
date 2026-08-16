@@ -96,8 +96,10 @@ function SuperAdminPlans() {
   };
 
   const handleEditPlan = (plan: any) => {
-    setSelectedPlan(plan);
-    setManualFeatures(plan.features || ['']);
+    setSelectedPlan({
+      ...plan,
+      features: plan.features || []
+    });
     setIsEditingPlan(true);
   };
 
@@ -105,7 +107,7 @@ function SuperAdminPlans() {
     if (e) e.preventDefault();
     if (!selectedPlan) return;
     
-    console.log('Starting handleUpdatePlan', { selectedPlan, manualFeatures });
+    console.log('Starting handleUpdatePlan', { selectedPlan });
     setIsSubmitting(true);
     
     try {
@@ -115,18 +117,10 @@ function SuperAdminPlans() {
         return;
       }
       
-      const cleanedFeatures = manualFeatures.filter((f: any) => {
-        const text = typeof f === 'string' ? f : f.name;
-        return text && text.trim() !== '';
-      }).map((f: any) => {
-        if (typeof f === 'string') return { name: f, enabled: true };
-        return { name: f.name, enabled: f.enabled !== false };
-      });
-
       const planData = {
         name: selectedPlan.name,
         price: Math.round(parseFloat(selectedPlan.price.toString()) * 100),
-        features: cleanedFeatures as any,
+        features: selectedPlan.features as any,
         member_limit: selectedPlan.member_limit ? parseInt(selectedPlan.member_limit.toString()) : null,
         is_active: selectedPlan.is_active !== false,
         updated_at: new Date().toISOString()
@@ -196,8 +190,17 @@ function SuperAdminPlans() {
             <button 
               data-testid="add-new-plan-btn"
               onClick={() => {
-                setSelectedPlan({ id: `new-${Date.now()}`, name: '', price: '', member_limit: '' });
-                setManualFeatures(['']);
+                setSelectedPlan({ 
+                  id: `new-${Date.now()}`, 
+                  name: '', 
+                  price: '', 
+                  member_limit: '',
+                  features: [
+                    { name: 'attendance_management', label: 'Attendance Management', enabled: false },
+                    { name: 'payment_management', label: 'Payment Management', enabled: false },
+                    { name: 'fee_reminders', label: 'Fee Reminders', enabled: false }
+                  ]
+                });
                 setIsEditingPlan(true);
               }}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-[#c9f232] rounded-full text-black text-[10px] font-bold uppercase tracking-wider hover:bg-[#aed502] transition-colors shadow-[0_4px_12px_rgba(201,242,50,0.2)]"
@@ -616,71 +619,42 @@ function SuperAdminPlans() {
                 />
               </div>
 
-              <div>
-                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Features (Click icon to toggle)</label>
-                <div className="space-y-2">
-                  {manualFeatures.map((feature: any, idx: number) => {
-                    const isEnabled = typeof feature === 'string' ? true : feature.enabled;
-                    const text = typeof feature === 'string' ? feature : feature.name;
-                    
-                    return (
-                      <div key={idx} className="flex items-center gap-3 bg-[#1e201d] border border-white/5 p-3 rounded-xl">
-                        <button 
-                          type="button"
-                          onClick={() => {
-                            const newFeatures = [...manualFeatures];
-                            if (typeof newFeatures[idx] === 'string') {
-                              newFeatures[idx] = { name: newFeatures[idx], enabled: false };
-                            } else {
-                              newFeatures[idx] = { ...newFeatures[idx], enabled: !isEnabled };
-                            }
-                            setManualFeatures(newFeatures);
-                          }}
-                          className="transition-transform active:scale-90"
-                        >
-                          <span className="material-symbols-outlined text-sm" style={{ 
-                            fontVariationSettings: "'FILL' 1",
-                            color: isEnabled ? '#c9f232' : '#FF5964'
-                          }}>
-                            {isEnabled ? 'check_circle' : 'cancel'}
-                          </span>
-                        </button>
-                        <input 
-                          type="text"
-                          className="text-sm text-[#e3e3dd] bg-transparent border-none outline-none flex-1"
-                          value={text}
-                          placeholder="Feature name..."
-                          onChange={e => {
-                            const newFeatures = [...manualFeatures];
-                            if (typeof newFeatures[idx] === 'string') {
-                              newFeatures[idx] = e.target.value;
-                            } else {
-                              newFeatures[idx] = { ...newFeatures[idx], name: e.target.value };
-                            }
-                            setManualFeatures(newFeatures);
-                          }}
-                        />
-                        <button 
-                          type="button"
-                          onClick={() => {
-                            const newFeatures = manualFeatures.filter((_, i) => i !== idx);
-                            setManualFeatures(newFeatures.length > 0 ? newFeatures : ['']);
-                          }}
-                          className="text-[#858A7D] hover:text-white"
-                        >
-                          <span className="material-symbols-outlined text-sm">close</span>
-                        </button>
+              <div className="space-y-3">
+                <label className="text-[10px] font-bold text-[#858A7D] uppercase tracking-widest block mb-2">Features Access</label>
+                
+                {[
+                  { name: 'attendance_management', label: 'Attendance Management', icon: 'qr_code_scanner' },
+                  { name: 'payment_management', label: 'Payment Management', icon: 'payments' },
+                  { name: 'fee_reminders', label: 'Fee Reminders', icon: 'notifications_active' }
+                ].map((feat) => {
+                  const featureObj = selectedPlan.features?.find((f: any) => f.name === feat.name) || { name: feat.name, enabled: false };
+                  const isEnabled = featureObj.enabled;
+
+                  return (
+                    <div 
+                      key={feat.name}
+                      onClick={() => {
+                        const newFeatures = [...(selectedPlan.features || [])];
+                        const idx = newFeatures.findIndex((f: any) => f.name === feat.name);
+                        if (idx >= 0) {
+                          newFeatures[idx] = { ...newFeatures[idx], enabled: !isEnabled };
+                        } else {
+                          newFeatures.push({ name: feat.name, label: feat.label, enabled: true });
+                        }
+                        setSelectedPlan({ ...selectedPlan, features: newFeatures });
+                      }}
+                      className="flex items-center justify-between p-4 bg-[#1e201d] border border-white/5 rounded-2xl cursor-pointer hover:border-white/10 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className={`material-symbols-outlined ${isEnabled ? 'text-[#c9f232]' : 'text-[#858A7D]'}`}>{feat.icon}</span>
+                        <span className="text-[14px] font-medium text-white">{feat.label}</span>
                       </div>
-                    );
-                  })}
-                  <button 
-                    type="button"
-                    onClick={() => setManualFeatures([...manualFeatures, ''])}
-                    className="w-full py-2 border border-dashed border-white/10 rounded-xl text-[10px] font-bold text-[#858A7D] uppercase tracking-wider hover:border-[#c9f232]/30 transition-colors"
-                  >
-                    + Add Feature
-                  </button>
-                </div>
+                      <div className={`w-12 h-6 rounded-full p-1 transition-colors ${isEnabled ? 'bg-[#c9f232]' : 'bg-[#333532]'}`}>
+                        <div className={`w-4 h-4 bg-white rounded-full transition-transform ${isEnabled ? 'translate-x-6' : 'translate-x-0'}`} />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="space-y-3">
