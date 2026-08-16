@@ -327,8 +327,15 @@ function GymDetailScreen() {
               <DetailRow 
                 icon="calendar_today" 
                 label="Subscription Ends" 
-                value={(hasPlan || (gym.settings as any)?.manual_pricing) && gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), 'PPP') : 'N/A'} 
+                value={(hasPlan || (gym.settings as any)?.manual_pricing || gym.plan_tier === 'free') && gym.subscription_ends_at ? format(new Date(gym.subscription_ends_at), 'PPP') : 'N/A'} 
               />
+              {gym.plan_tier === 'free' && (
+                <DetailRow 
+                  icon="workspace_premium" 
+                  label="Plan Status" 
+                  value="Free Trial"
+                />
+              )}
             </div>
           </div>
 
