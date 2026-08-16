@@ -27,7 +27,9 @@ function SuperAdminPlans() {
   const [manualFeatures, setManualFeatures] = useState<any[]>(['']);
   const [overrideForm, setOverrideForm] = useState({
     payment_management: false,
-    attendance_management: false
+    attendance_management: false,
+    fee_reminders: false,
+    member_limit: ''
   });
 
   const getPlansFn = useServerFn(getSubscriptionPlans);
@@ -72,7 +74,9 @@ function SuperAdminPlans() {
           manualPricing: parseFloat(customMonthlyPrice),
           features: {
             payment_management: overrideForm.payment_management,
-            attendance_management: overrideForm.attendance_management
+            attendance_management: overrideForm.attendance_management,
+            fee_reminders: overrideForm.fee_reminders,
+            member_limit: overrideForm.member_limit ? parseInt(overrideForm.member_limit.toString()) : null
           }
         }
       });
@@ -337,10 +341,12 @@ function SuperAdminPlans() {
                           setCustomMonthlyPrice(currentPrice?.toString() || '');
                           const settings = gym.settings as any;
                           const features = settings?.features || {};
-                          setOverrideForm({
-                            payment_management: !!features.payment_management,
-                            attendance_management: !!features.attendance_management
-                          });
+                        setOverrideForm({
+                          payment_management: !!features.payment_management,
+                          attendance_management: !!features.attendance_management,
+                          fee_reminders: !!features.fee_reminders,
+                          member_limit: features.member_limit?.toString() || ''
+                        });
                           setIsAddingOverride(true);
                         }}
                         className="text-[#c9f232] p-2 hover:bg-[#c9f232]/10 rounded-lg transition-colors"
@@ -473,7 +479,31 @@ function SuperAdminPlans() {
                     placeholder="0.00"
                   />
                 </div>
-              </div>
+                </div>
+
+                <div 
+                  onClick={() => setOverrideForm(prev => ({ ...prev, fee_reminders: !prev.fee_reminders }))}
+                  className="flex items-center justify-between p-4 bg-[#1e201d] border border-white/5 rounded-2xl cursor-pointer hover:border-white/10 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className={`material-symbols-outlined ${overrideForm.fee_reminders ? 'text-[#c9f232]' : 'text-[#858A7D]'}`}>notifications_active</span>
+                    <span className="text-[14px] font-medium text-white">Fee Reminders</span>
+                  </div>
+                  <div className={`w-12 h-6 rounded-full p-1 transition-colors ${overrideForm.fee_reminders ? 'bg-[#c9f232]' : 'bg-[#333532]'}`}>
+                    <div className={`w-4 h-4 bg-white rounded-full transition-transform ${overrideForm.fee_reminders ? 'translate-x-6' : 'translate-x-0'}`} />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-[#858A7D] uppercase tracking-wider">Gym Member Limit</label>
+                  <input 
+                    type="number"
+                    value={overrideForm.member_limit}
+                    onChange={(e) => setOverrideForm(prev => ({ ...prev, member_limit: e.target.value }))}
+                    className="w-full h-12 bg-[#1e201d] border border-white/10 rounded-2xl px-4 text-white font-medium outline-none focus:border-[#c9f232] transition-colors"
+                    placeholder="Unlimited"
+                  />
+                </div>
 
               <div className="space-y-3">
                 <label className="text-[11px] font-bold text-[#858A7D] uppercase tracking-wider">Features Access</label>
