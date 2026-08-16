@@ -86,8 +86,11 @@ export function AdminDashboard() {
       }
 
       if (isCritical) {
-        supabase.auth.signOut().then(() => {
-          clearRoleCache();
+        // Clear all auth data to break the loop
+        Promise.all([
+          supabase.auth.signOut(),
+          clearRoleCache()
+        ]).finally(() => {
           window.localStorage.removeItem('tanstack-query-cache');
           window.location.replace('/');
         });

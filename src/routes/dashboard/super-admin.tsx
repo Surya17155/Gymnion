@@ -130,8 +130,10 @@ export function SuperAdminDashboard() {
       }
 
       if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('403')) {
-        supabase.auth.signOut().then(() => {
-          clearRoleCache();
+        Promise.all([
+          supabase.auth.signOut(),
+          clearRoleCache()
+        ]).finally(() => {
           window.localStorage.removeItem('tanstack-query-cache');
           window.location.replace('/');
         });
