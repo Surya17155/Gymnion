@@ -6,13 +6,15 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const createGymWithAdminSchema = z.object({
   name: z.string(),
-  address: z.string(),
+  address: z.string().optional(), // backward compatibility
   ownerName: z.string(),
   ownerEmail: z.string(),
   ownerPassword: z.string(),
   ownerPhone: z.string(),
   gymCode: z.string(),
   planId: z.string(),
+  gymPhone: z.string().optional(),
+  gymAddress: z.string().optional(),
 });
 
 export const createGymWithAdmin = createServerFn({ method: "POST" })
@@ -38,9 +40,10 @@ export const createGymWithAdmin = createServerFn({ method: "POST" })
       .from('gyms')
       .insert({
         name: data.name,
-        address: data.address,
+        address: data.gymAddress || data.address,
         owner_name: data.ownerName,
         owner_email: data.ownerEmail,
+        phone: data.gymPhone,
         gym_code: data.gymCode,
         settings: {
           plan_id: data.planId,
