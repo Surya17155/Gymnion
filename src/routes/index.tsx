@@ -97,14 +97,14 @@ function LandingPage() {
         </motion.div>
 
         {/* Content Layer */}
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center flex-1 px-6 max-w-7xl mx-auto w-full pt-8 md:pt-16">
-          <div className="max-w-[800px] lg:w-1/2">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center flex-1 px-6 max-w-7xl mx-auto w-full pt-8 md:pt-16 pb-12 lg:pb-32">
+          <div className="max-w-[800px] lg:w-3/5 lg:pr-12">
             <motion.div
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              <h1 className="text-[clamp(2.8rem,10vw,4.5rem)] font-bold leading-[1.05] mb-4 tracking-tighter text-center lg:text-left">
+              <h1 className="text-[clamp(2.8rem,10vw,4.5rem)] lg:text-[5rem] font-bold leading-[1.05] mb-6 tracking-tighter text-center lg:text-left">
                 Run your gym <br />
                 with <span className="text-[#C8FF38] inline-block"><TextReveal word="clarity." /></span>
               </h1>
@@ -113,11 +113,26 @@ function LandingPage() {
               initial={{ y: 24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-              className="text-base md:text-lg text-[#AAB2AA] mb-4 max-w-[320px] lg:max-w-[450px] leading-snug mx-auto lg:mx-0 text-center lg:text-left"
+              className="text-base md:text-xl text-[#AAB2AA] mb-10 max-w-[320px] lg:max-w-[550px] leading-relaxed mx-auto lg:mx-0 text-center lg:text-left"
             >
               Track attendance, payments, fees, and revenue <br className="hidden sm:block" />
               in one clear dashboard.
             </motion.p>
+            
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+              className="flex justify-center lg:justify-start"
+            >
+              <Link 
+                to="/auth/signup"
+                className="group relative inline-flex items-center justify-center px-10 py-5 bg-[#C8FF38] text-[#101311] rounded-full font-bold text-base uppercase tracking-widest overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(200,255,56,0.2)]"
+              >
+                <span className="relative z-10">Start Your Free Trial</span>
+                <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+              </Link>
+            </motion.div>
           </div>
 
           {/* Central Revenue Card */}
