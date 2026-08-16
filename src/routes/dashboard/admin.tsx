@@ -8,6 +8,8 @@ import { getAdminStats, getRecentActivity, getGymDetails } from '@/lib/auth.func
 import { checkGymSubscription } from '@/lib/subscription.functions';
 import { clearRoleCache } from '@/lib/role';
 import { format } from 'date-fns';
+import { createRazorpayOrder, verifySubscriptionPayment } from '@/lib/payments.functions';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/dashboard/admin')({
   beforeLoad: async () => {
@@ -36,13 +38,55 @@ export function AdminDashboard() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const checkSubscriptionFn = useServerFn(checkGymSubscription);
-  const { data: subStatus } = useQuery({
+  const createOrderFn = useServerFn(createRazorpayOrder);
+  const verifyPaymentFn = useServerFn(verifySubscriptionPayment);
+
+  const { data: subStatus, refetch: refetchSubscription } = useQuery({
     queryKey: ['gym-subscription-status'],
     queryFn: () => checkSubscriptionFn(),
     staleTime: 60000,
   });
 
   const isExpired = subStatus?.isExpired;
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+  const handleSubscribe = async (planId: string) => {
+    if (!gymData?.id) return;
+    
+    try {
+      setIsProcessingPayment(true);
+      const order = await createOrderFn({ data: { planId, gymId: gymData.id } });
+      
+      // Simulate Razorpay Checkout
+      toast.info("Opening secure payment gateway...");
+      
+      setTimeout(async () => {
+        try {
+          await verifyPaymentFn({
+            data: {
+              gymId: gymData.id,
+              planId,
+              razorpayOrderId: order.orderId,
+              razorpayPaymentId: "pay_simulated_" + Math.random().toString(36).substring(7),
+              razorpaySignature: "sig_simulated"
+            }
+          });
+          toast.success("Subscription successful! Welcome to Gymnion.");
+          queryClient.invalidateQueries({ queryKey: ['admin-gym-settings'] });
+          queryClient.invalidateQueries({ queryKey: ['gym-subscription-status'] });
+          refetchSubscription();
+        } catch (err: any) {
+          toast.error(err.message || "Payment verification failed");
+        } finally {
+          setIsProcessingPayment(false);
+        }
+      }, 1500);
+
+    } catch (err: any) {
+      toast.error(err.message || "Failed to initiate payment");
+      setIsProcessingPayment(false);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -341,7 +385,7 @@ export function AdminDashboard() {
           </section>
 
           {/* Subscription/Manual Features Banner - Current Plan */}
-          {(currentPlan || (gymData?.settings as any)?.manual_pricing || gymData?.plan_tier === 'free') && (
+          {(currentPlan || (gymData?.settings as any)?.manual_pricing || gymData?.plan_tier === 'free') && !isExpired && (
             <section className="bg-[#B7FF1E]/10 border border-[#B7FF1E]/20 rounded-xl p-4 flex items-center justify-between">
               <div>
                 <p className="text-[10px] text-[#858A7D] uppercase font-bold">Current Plan</p>
@@ -428,23 +472,38 @@ export function AdminDashboard() {
             </section>
           )}
 
-          {/* Subscription Expired Warning */}
-          {gymData?.subscription_ends_at && new Date(gymData.subscription_ends_at) < new Date() && (
-            <section className="bg-[#FF5964]/10 border border-[#FF5964]/30 rounded-xl p-4 flex flex-col gap-2 relative overflow-hidden">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#FF5964]"></div>
-              <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-[#FF5964]">warning</span>
-                <div>
-                  <h3 className="text-white font-bold text-sm">Subscription Expired</h3>
-                  <p className="text-[11px] text-[#858A7D]">Please renew your plan to continue using all features.</p>
+          {/* Subscription Expired Warning & Plan Picker */}
+          {isExpired && (
+            <section className="flex flex-col gap-4">
+              <div className="bg-[#FF5964]/10 border border-[#FF5964]/30 rounded-xl p-4 flex flex-col gap-2 relative overflow-hidden">
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#FF5964]"></div>
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-outlined text-[#FF5964]">warning</span>
+                  <div>
+                    <h3 className="text-white font-bold text-sm">Subscription Expired</h3>
+                    <p className="text-[11px] text-[#858A7D]">Please select a plan to continue using Gymnion.</p>
+                  </div>
                 </div>
               </div>
-              <Link 
-                to="/dashboard/admin/settings"
-                className="w-full bg-[#FF5964] text-white h-10 rounded-xl font-bold text-xs flex items-center justify-center mt-1"
-              >
-                Renew Now
-              </Link>
+
+              <div className="grid gap-3">
+                {activePlans?.map((plan: any) => (
+                  <button
+                    key={plan.id}
+                    disabled={isProcessingPayment}
+                    onClick={() => handleSubscribe(plan.id)}
+                    className="w-full bg-[#1e201d] border border-[#B7FF1E]/20 hover:border-[#B7FF1E]/50 rounded-2xl p-5 text-left transition-all group flex justify-between items-center"
+                  >
+                    <div>
+                      <h4 className="text-white font-bold">{plan.name}</h4>
+                      <p className="text-[#B7FF1E] font-bold text-lg mt-1">₹{plan.price / 100}<span className="text-[10px] text-[#858A7D] ml-1 uppercase">/ month</span></p>
+                    </div>
+                    <div className="bg-[#B7FF1E] text-black h-10 px-4 rounded-xl flex items-center justify-center font-bold text-xs uppercase tracking-wider group-hover:scale-105 transition-transform">
+                      {isProcessingPayment ? 'Wait...' : 'Subscribe'}
+                    </div>
+                  </button>
+                ))}
+              </div>
             </section>
           )}
 
