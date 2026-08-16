@@ -389,12 +389,12 @@ function LandingPage() {
             {/* Step 1 */}
             <section className="relative pl-14 lg:pl-0 lg:text-right lg:pr-20 mb-16 lg:mb-0">
               {/* Number Badge */}
-              <div className="absolute left-0 top-1 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
+              <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 top-1 w-10 h-10 rounded-full bg-[#121411] border-2 border-[#d5ff40] flex items-center justify-center shadow-[0_0_20px_2px_rgba(213,255,64,0.15)] z-10">
                 <span className="text-[#d5ff40] font-bold text-lg">01</span>
               </div>
               <div className="mb-6">
                 {/* Person Add Icon */}
-                <div className="text-[#B7FF1E] mb-4">
+                <div className="text-[#B7FF1E] mb-4 lg:flex lg:justify-end">
                   <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                     <path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                   </svg>
