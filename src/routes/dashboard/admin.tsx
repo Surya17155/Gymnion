@@ -57,30 +57,64 @@ export function AdminDashboard() {
       setIsProcessingPayment(true);
       const order = await createOrderFn({ data: { planId, gymId: gymData.id } });
       
-      // Simulate Razorpay Checkout
-      toast.info("Opening secure payment gateway...");
-      
-      setTimeout(async () => {
-        try {
-          await verifyPaymentFn({
-            data: {
-              gymId: gymData.id,
-              planId,
-              razorpayOrderId: order.orderId,
-              razorpayPaymentId: "pay_simulated_" + Math.random().toString(36).substring(7),
-              razorpaySignature: "sig_simulated"
-            }
-          });
-          toast.success("Subscription successful! Welcome to Gymnion.");
-          queryClient.invalidateQueries({ queryKey: ['admin-gym-settings'] });
-          queryClient.invalidateQueries({ queryKey: ['gym-subscription-status'] });
-          refetchSubscription();
-        } catch (err: any) {
-          toast.error(err.message || "Payment verification failed");
-        } finally {
-          setIsProcessingPayment(false);
+      // Load Razorpay Script if not already present
+      if (!(window as any).Razorpay) {
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.async = true;
+        await new Promise((resolve) => {
+          script.onload = resolve;
+          document.body.appendChild(script);
+        });
+      }
+
+      const options = {
+        key: order.key,
+        amount: order.amount,
+        currency: order.currency,
+        name: "Gymnion",
+        description: `Subscription for ${gymData.name}`,
+        order_id: order.orderId,
+        handler: async (response: any) => {
+          try {
+            setIsProcessingPayment(true);
+            await verifyPaymentFn({
+              data: {
+                gymId: gymData.id,
+                planId,
+                razorpayOrderId: response.razorpay_order_id,
+                razorpayPaymentId: response.razorpay_payment_id,
+                razorpaySignature: response.razorpay_signature
+              }
+            });
+            toast.success("Subscription successful! Welcome to Gymnion.");
+            queryClient.invalidateQueries({ queryKey: ['admin-gym-settings'] });
+            queryClient.invalidateQueries({ queryKey: ['gym-subscription-status'] });
+            refetchSubscription();
+          } catch (err: any) {
+            toast.error(err.message || "Payment verification failed");
+          } finally {
+            setIsProcessingPayment(false);
+          }
+        },
+        prefill: {
+          name: gymData.owner_name,
+          email: (await supabase.auth.getUser()).data.user?.email,
+          contact: (gymData as any).phone
+        },
+        theme: {
+          color: "#B7FF1E"
+        },
+        modal: {
+          ondismiss: () => {
+            setIsProcessingPayment(false);
+            toast.info("Payment cancelled");
+          }
         }
-      }, 1500);
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
 
     } catch (err: any) {
       toast.error(err.message || "Failed to initiate payment");
