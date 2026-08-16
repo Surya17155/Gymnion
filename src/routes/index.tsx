@@ -399,8 +399,8 @@ function LandingPage() {
                     <path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                   </svg>
                 </div>
-                <h2 className="text-xl font-semibold text-white mb-2">Add your members</h2>
-                <p className="text-[#c3c8be] text-sm leading-relaxed pr-2">
+                <h2 className="text-xl font-semibold text-white mb-2 lg:text-3xl">Add your members</h2>
+                <p className="text-[#c3c8be] text-sm lg:text-base leading-relaxed pr-2 lg:pr-0 lg:max-w-sm lg:ml-auto">
                   Create clear member profiles with the details your gym needs.
                 </p>
               </div>
