@@ -120,10 +120,14 @@ function SuperAdminPlans() {
       const planData = {
         name: selectedPlan.name,
         price: Math.round(parseFloat(selectedPlan.price.toString()) * 100),
-        features: selectedPlan.features as any,
+        features: (selectedPlan.features || []).map((f: any) => {
+          if (typeof f === 'string') {
+            return { name: f, enabled: true };
+          }
+          return { name: f.name, enabled: !!f.enabled };
+        }),
         member_limit: selectedPlan.member_limit ? parseInt(selectedPlan.member_limit.toString()) : null,
-        is_active: selectedPlan.is_active !== false,
-        updated_at: new Date().toISOString()
+        is_active: selectedPlan.is_active !== false
       };
 
       console.log('Prepared planData', planData);
@@ -266,18 +270,32 @@ function SuperAdminPlans() {
                       <li key={feat.name} className={`flex items-center gap-3 text-sm group cursor-pointer ${
                         plan.name.toLowerCase() === 'unlimited' ? 'text-[#e3e3dd]' : 'text-[#C0C2B8]'
                       }`}
-                      onClick={() => {
-                        const newFeatures = [...(plan.features || [])];
+                      onClick={async () => {
+                        const currentFeatures = Array.isArray(plan.features) ? plan.features : [];
+                        const newFeatures = currentFeatures.map((f: any) => {
+                          if (typeof f === 'string') return { name: f, enabled: true };
+                          return f;
+                        });
+                        
                         const idx = newFeatures.findIndex((f: any) => f.name === feat.name);
                         if (idx >= 0) {
                           newFeatures[idx] = { ...newFeatures[idx], enabled: !isEnabled };
                         } else {
-                          newFeatures.push({ name: feat.name, label: feat.label, enabled: true });
+                          newFeatures.push({ name: feat.name, enabled: true });
                         }
                         
-                        supabase.from('global_plans').update({ features: newFeatures as any }).eq('id', plan.id).then(() => {
+                        try {
+                          await updatePlanFn({
+                            data: {
+                              id: plan.id,
+                              features: newFeatures
+                            }
+                          });
                           queryClient.invalidateQueries({ queryKey: ['global-plans'] });
-                        });
+                          toast.success("Feature updated");
+                        } catch (err: any) {
+                          toast.error(err.message || "Failed to update feature");
+                        }
                       }}
                       >
                         <span className="material-symbols-outlined text-sm" style={{ 
@@ -638,19 +656,24 @@ function SuperAdminPlans() {
                   { name: 'payment_management', label: 'Payment Management', icon: 'payments' },
                   { name: 'fee_reminders', label: 'Fee Reminders', icon: 'notifications_active' }
                 ].map((feat) => {
-                  const featureObj = selectedPlan.features?.find((f: any) => f.name === feat.name) || { name: feat.name, enabled: false };
-                  const isEnabled = featureObj.enabled;
+                  const currentFeatures = Array.isArray(selectedPlan.features) ? selectedPlan.features : [];
+                  const featureObj = currentFeatures.find((f: any) => (typeof f === 'string' ? f : f.name) === feat.name) || { name: feat.name, enabled: false };
+                  const isEnabled = typeof featureObj === 'string' ? true : !!featureObj.enabled;
 
                   return (
                     <div 
                       key={feat.name}
                       onClick={() => {
                         const newFeatures = [...(selectedPlan.features || [])];
-                        const idx = newFeatures.findIndex((f: any) => f.name === feat.name);
+                        const idx = newFeatures.findIndex((f: any) => (typeof f === 'string' ? f : f.name) === feat.name);
                         if (idx >= 0) {
-                          newFeatures[idx] = { ...newFeatures[idx], enabled: !isEnabled };
+                          const currentFeat = newFeatures[idx];
+                          newFeatures[idx] = { 
+                            name: typeof currentFeat === 'string' ? currentFeat : currentFeat.name, 
+                            enabled: !isEnabled 
+                          };
                         } else {
-                          newFeatures.push({ name: feat.name, label: feat.label, enabled: true });
+                          newFeatures.push({ name: feat.name, enabled: true });
                         }
                         setSelectedPlan({ ...selectedPlan, features: newFeatures });
                       }}
