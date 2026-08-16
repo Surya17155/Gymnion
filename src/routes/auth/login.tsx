@@ -50,7 +50,7 @@ function AuthPage() {
           const role = await getRoleForUser(session.user.id);
           const home = homeForRole(role) || '/dashboard';
           console.log("Valid session found on login page, redirecting to:", home);
-          navigate({ to: home });
+          window.location.replace(home);
         } else {
           console.log("Session expired or near expiry, staying on login");
           await supabase.auth.signOut();

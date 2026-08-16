@@ -84,7 +84,7 @@ export function AdminDashboard() {
     queryFn: () => getGymDetailsFn({ data: undefined }),
     staleTime: 30000,
     gcTime: Infinity,
-    retry: 1,
+    retry: false,
   });
 
   useEffect(() => {
@@ -92,12 +92,22 @@ export function AdminDashboard() {
       console.error("Profile fetch error in admin dashboard:", profileError);
       const errorStr = String(profileError);
       
-      let errorReason = "";
+      let isCritical = false;
       if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('expired')) {
-        errorReason = ""; // No message for expired session as per user request
+        isCritical = true;
       } else if (errorStr.includes('403') || errorStr.includes('Forbidden')) {
-        errorReason = "You do not have permission to access this area.";
+        isCritical = true;
       }
+
+      if (isCritical) {
+        supabase.auth.signOut().then(() => {
+          clearRoleCache();
+          window.localStorage.removeItem('tanstack-query-cache');
+          window.location.replace('/');
+        });
+      }
+    }
+  }, [profileError]);
 
       if (errorStr.includes('Unauthorized') || errorStr.includes('401') || errorStr.includes('403')) {
         supabase.auth.signOut().then(() => {

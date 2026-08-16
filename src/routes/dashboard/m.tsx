@@ -48,14 +48,7 @@ export function MemberDashboard() {
             });
           }
           window.localStorage.removeItem('tanstack-query-cache');
-          
-          navigate({ 
-            to: '/auth/login', 
-            search: { 
-              redirect: window.location.pathname,
-              error: errorReason ? encodeURIComponent(errorReason) : ""
-            } 
-          });
+          window.location.replace('/');
         });
       }
     }
