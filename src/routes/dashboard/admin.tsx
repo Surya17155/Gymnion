@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useServerFn } from '@tanstack/react-start';
 import { getAdminStats, getRecentActivity, getGymDetails } from '@/lib/auth.functions';
 import { checkGymSubscription } from '@/lib/subscription.functions';
+import { clearRoleCache } from '@/lib/role';
 import { format } from 'date-fns';
 
 export const Route = createFileRoute('/dashboard/admin')({
