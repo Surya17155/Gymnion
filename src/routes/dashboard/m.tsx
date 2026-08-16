@@ -43,11 +43,7 @@ export function MemberDashboard() {
       // If it's a critical auth or data error, redirect
       if (isCritical) {
         supabase.auth.signOut().then(() => {
-          if (typeof sessionStorage !== 'undefined') {
-            Object.keys(sessionStorage).forEach(key => {
-              if (key.startsWith('gymsync_role')) sessionStorage.removeItem(key);
-            });
-          }
+          clearRoleCache();
           window.localStorage.removeItem('tanstack-query-cache');
           window.location.replace('/');
         });
