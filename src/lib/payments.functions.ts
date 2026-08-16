@@ -96,6 +96,15 @@ export const verifySubscriptionPayment = createServerFn({ method: "POST" })
     } else {
       console.warn("RAZORPAY_KEY_SECRET missing, bypassing signature verification for simulation");
     }
+
+    // Fetch plan details to get the price and name for audit
+    const { data: plan } = await supabaseAdmin
+      .from('global_plans')
+      .select('*')
+      .eq('id', data.planId)
+      .single();
+
+    if (!plan) throw new Error("Plan not found during verification");
     
     // 2. Update Gym subscription (Extend by 1 month)
     const subscriptionEndsAt = new Date();
@@ -111,7 +120,8 @@ export const verifySubscriptionPayment = createServerFn({ method: "POST" })
           plan_id: data.planId,
           payment_status: 'paid',
           last_payment_id: data.razorpayPaymentId,
-          last_order_id: data.razorpayOrderId
+          last_order_id: data.razorpayOrderId,
+          plan_name: plan.name
         } as any
       })
       .eq('id', data.gymId);
