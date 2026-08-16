@@ -9,6 +9,8 @@ import logoAsset from "@/assets/gymnion-logo-new.png.asset.json";
 import heroBgAsset from "@/assets/landing-bg-new.png.asset.json";
 import { TextReveal } from "@/components/ui/text-reveal-animation";
 import featuresBgAsset from "@/assets/features-bg.png.asset.json";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -905,39 +907,7 @@ function LandingPage() {
                 transition={{ delay: 0.3 }}
                 className="bg-black/40 backdrop-blur-sm border border-white/5 p-8 rounded-3xl"
               >
-                <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Name</label>
-                      <input type="text" placeholder="Your Name" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Email</label>
-                      <input type="email" placeholder="work@gym.com" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
-                    </div>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Phone No.</label>
-                      <input type="tel" placeholder="+91 00000 00000" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Gym Name</label>
-                      <input type="text" placeholder="The Iron Hub" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Gym Address</label>
-                    <input type="text" placeholder="Enter gym full address" className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Message</label>
-                    <textarea placeholder="Tell us about your needs..." rows={3} className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all resize-none"></textarea>
-                  </div>
-                  <button className="w-full py-4 rounded-xl bg-[#B7FF1E] text-[#293500] font-bold hover:bg-[#83A51B] transition-all active:scale-[0.98] shadow-[0_10px_20px_rgba(183,255,30,0.15)] mt-2">
-                    Send message
-                  </button>
-                </form>
+                <ContactForm />
               </motion.div>
             </div>
           </motion.div>
@@ -967,4 +937,133 @@ function LandingPage() {
     </div>
   );
 }
+
+function ContactForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    gymName: "",
+    gymAddress: "",
+    message: ""
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch("https://hook.us2.make.com/wpws0ef7i7gl47mbuje8fknum95fjhr9", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        toast.success("Message sent successfully!");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          gymName: "",
+          gymAddress: "",
+          message: ""
+        });
+      } else {
+        toast.error("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("An error occurred. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form className="space-y-4" onSubmit={handleSubmit}>
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="space-y-1.5">
+          <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Name</label>
+          <input 
+            required
+            type="text" 
+            placeholder="Your Name" 
+            value={formData.name}
+            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+            className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" 
+          />
+        </div>
+        <div className="space-y-1.5">
+          <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Email</label>
+          <input 
+            required
+            type="email" 
+            placeholder="work@gym.com" 
+            value={formData.email}
+            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+            className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" 
+          />
+        </div>
+      </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="space-y-1.5">
+          <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Phone No.</label>
+          <input 
+            required
+            type="tel" 
+            placeholder="+91 00000 00000" 
+            value={formData.phone}
+            onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+            className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" 
+          />
+        </div>
+        <div className="space-y-1.5">
+          <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Gym Name</label>
+          <input 
+            required
+            type="text" 
+            placeholder="The Iron Hub" 
+            value={formData.gymName}
+            onChange={(e) => setFormData(prev => ({ ...prev, gymName: e.target.value }))}
+            className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" 
+          />
+        </div>
+      </div>
+      <div className="space-y-1.5">
+        <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Gym Address</label>
+        <input 
+          required
+          type="text" 
+          placeholder="Enter gym full address" 
+          value={formData.gymAddress}
+          onChange={(e) => setFormData(prev => ({ ...prev, gymAddress: e.target.value }))}
+          className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all" 
+        />
+      </div>
+      <div className="space-y-1.5">
+        <label className="text-[10px] uppercase tracking-widest text-[#858A7D] font-bold ml-1">Message</label>
+        <textarea 
+          required
+          placeholder="Tell us about your needs..." 
+          rows={3} 
+          value={formData.message}
+          onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+          className="w-full bg-[#181D19] border border-white/5 rounded-xl p-3 text-white focus:border-[#B7FF1E] outline-none text-sm transition-all resize-none"
+        ></textarea>
+      </div>
+      <button 
+        disabled={isSubmitting}
+        className="w-full py-4 rounded-xl bg-[#B7FF1E] text-[#293500] font-bold hover:bg-[#83A51B] transition-all active:scale-[0.98] shadow-[0_10px_20px_rgba(183,255,30,0.15)] mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isSubmitting ? "Sending..." : "Send message"}
+      </button>
+    </form>
+  );
+}
+
+export default LandingPage;
 
