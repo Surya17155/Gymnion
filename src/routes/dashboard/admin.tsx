@@ -73,7 +73,9 @@ export function AdminDashboard() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate({ to: '/auth/login', search: { redirect: "" } });
+    clearRoleCache();
+    window.localStorage.removeItem('tanstack-query-cache');
+    window.location.replace('/');
   };
 
   const getStatsFn = useServerFn(getAdminStats);
