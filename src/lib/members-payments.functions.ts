@@ -18,12 +18,30 @@ export const createMemberPaymentOrder = createServerFn({ method: "POST" })
 
     if (!member || !member.gyms) throw new Error("Member or Gym not found");
     
+    // Check for connected Razorpay account
+    const { data: connection } = await supabaseAdmin
+      .from('razorpay_connections')
+      .select('*')
+      .eq('gym_id', member.gym_id)
+      .single();
+
+    if (!connection || connection.status !== 'connected') {
+      throw new Error("This gym has not connected their Razorpay account for online payments.");
+    }
+
     const keyId = process.env['RAZORPAY_KEY_ID'];
     const keySecret = process.env['RAZORPAY_KEY_SECRET'];
 
     if (!keyId || !keySecret) throw new Error("Payment service unavailable");
 
-    const razorpay = new Razorpay({ key_id: keyId, key_secret: keySecret });
+    // Use OAuth access token for this request
+    const razorpay = new Razorpay({ 
+      key_id: keyId, 
+      key_secret: keySecret,
+      headers: {
+        'X-Razorpay-Account': connection.razorpay_account_id
+      }
+    });
     
     const amount = member.fee_plans?.amount || 0;
     if (amount <= 0) throw new Error("Invalid payment amount");
@@ -46,7 +64,7 @@ export const createMemberPaymentOrder = createServerFn({ method: "POST" })
       amount: order.amount,
       key: keyId,
       gymName: member.gyms.name,
-      razorpayAccountId: member.gyms.razorpay_account_id
+      razorpayAccountId: connection.razorpay_account_id
     };
   });
 
