@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { regenerateGymCode } from "./gyms.server";
+import { sendWelcomeEmail } from "./emails.functions";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const createGymWithAdminSchema = z.object({
@@ -75,6 +76,13 @@ export const createGymWithAdmin = createServerFn({ method: "POST" })
 
     if (roleError) {
       throw new Error(`Role Assignment Error: ${roleError.message}`);
+    }
+
+    // 4. Send Welcome Email
+    try {
+      await sendWelcomeEmail(data.ownerEmail, data.ownerName, data.name);
+    } catch (emailErr) {
+      console.error("Failed to send welcome email:", emailErr);
     }
 
     return gym;
