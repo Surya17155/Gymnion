@@ -1,14 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { supabaseAdmin } from '@/integrations/supabase/client.server';
+import { sendEmail } from '@/lib/emails.functions';
 
 export const Route = createFileRoute('/api/public/payment-reminders')({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        // Security: Check for a secret key in headers if configured
-        // const authHeader = request.headers.get('Authorization');
-        // if (authHeader !== `Bearer ${process.env['CRON_SECRET']}`) return new Response('Unauthorized', { status: 401 });
-
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         const tomorrowStr = tomorrow.toISOString().split('T')[0];
@@ -26,8 +23,21 @@ export const Route = createFileRoute('/api/public/payment-reminders')({
 
         if (dueTomorrow) {
           for (const member of dueTomorrow) {
-             console.log(`[REMINDER] Sending "Due Tomorrow" email to ${member.email} for gym ${(member.gyms as any)?.name}`);
-             // In production: sendEmail({ to: member.email, subject: 'Payment Due Tomorrow', ... })
+             const gymName = (member.gyms as any)?.name || 'your gym';
+             await sendEmail({
+               to: member.email,
+               subject: `Payment Due Tomorrow - ${gymName}`,
+               html: `
+                 <div style="font-family: sans-serif; max-width: 600px; padding: 20px;">
+                   <h2>Payment Due Tomorrow</h2>
+                   <p>Hi ${member.full_name},</p>
+                   <p>Your subscription at <strong>${gymName}</strong> is expiring tomorrow (${tomorrowStr}).</p>
+                   <p>Please pay your fees to continue your membership without interruption.</p>
+                   <p><a href="https://gymnion.lovable.app/dashboard/m">Click here to pay now</a></p>
+                 </div>
+               `
+             });
+             console.log(`[REMINDER] Sent "Due Tomorrow" email to ${member.email}`);
           }
         }
 
@@ -40,7 +50,6 @@ export const Route = createFileRoute('/api/public/payment-reminders')({
         
         if (dueToday) {
           for (const member of dueToday) {
-            // Check if payment already exists for this month
             const monthStr = today.toISOString().substring(0, 7);
             const { data: payment } = await supabaseAdmin
               .from('payments')
@@ -51,9 +60,22 @@ export const Route = createFileRoute('/api/public/payment-reminders')({
               .maybeSingle();
 
             if (!payment) {
-              console.log(`[OVERDUE] Sending "Payment Required" email to ${member.email} with link to dashboard`);
-              // Update status to overdue
+              const gymName = (member.gyms as any)?.name || 'your gym';
+              await sendEmail({
+                to: member.email,
+                subject: `Payment Overdue - ${gymName}`,
+                html: `
+                  <div style="font-family: sans-serif; max-width: 600px; padding: 20px;">
+                    <h2 style="color: red;">Membership Overdue</h2>
+                    <p>Hi ${member.full_name},</p>
+                    <p>Your subscription at <strong>${gymName}</strong> has expired today.</p>
+                    <p>Your status has been marked as overdue. Please complete your payment to reactivate your membership.</p>
+                    <p><a href="https://gymnion.lovable.app/dashboard/m">Click here to pay now</a></p>
+                  </div>
+                `
+              });
               await supabaseAdmin.from('members').update({ status: 'overdue' }).eq('id', member.id);
+              console.log(`[OVERDUE] Sent "Payment Required" email to ${member.email}`);
             }
           }
         }
