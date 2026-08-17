@@ -168,10 +168,10 @@ function SubscriptionManagement() {
                 <h3 className="text-2xl font-bold text-white">
                   {gymData?.plan_tier === 'free' ? 'Free Trial' : (currentPlan?.name || 'Standard Tier')}
                 </h3>
-                {subStatus?.expiryDate && (
+                {subStatus?.subscriptionEndsAt && (
                   <p className="text-sm text-[#B7FF1E] mt-1 font-medium">
                     {gymData?.plan_tier === 'free' ? 'Trial ends ' : 'Expires '}
-                    {format(new Date(subStatus.expiryDate), 'MMM dd, yyyy')}
+                    {format(new Date(subStatus.subscriptionEndsAt), 'MMM dd, yyyy')}
                   </p>
                 )}
               </div>
