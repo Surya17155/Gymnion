@@ -292,8 +292,8 @@ export function MemberDashboard() {
               <div>
                 <h2 className="text-[12px] leading-[18px] text-[#C0C2B8] uppercase tracking-wider mb-1">Last Payment</h2>
                 <div className="flex items-end gap-2">
-                  <span className="text-[40px] leading-[40px] font-bold text-white tracking-tight">₹{lastPayment?.amount || profile?.fee_plans?.amount || 0}</span>
-                  <span className="text-[12px] leading-[18px] text-[#C0C2B8] mb-1">/ {lastPayment?.payment_month || profile?.fee_plans?.name || 'No Plan'}</span>
+                  <span className="text-[40px] leading-[40px] font-bold text-white tracking-tight">₹{lastPayment?.amount ?? profile?.fee_plans?.amount ?? 0}</span>
+                  <span className="text-[12px] leading-[18px] text-[#C0C2B8] mb-1">/ {lastPayment?.payment_method === 'cash' ? 'Basic' : (lastPayment?.payment_month || profile?.fee_plans?.name || 'No Plan')}</span>
                 </div>
               </div>
               <div className="bg-[#333532] rounded-full p-2 border border-white/5 flex items-center justify-center w-10 h-10">
