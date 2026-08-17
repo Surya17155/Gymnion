@@ -35,6 +35,13 @@ export const initiateRazorpayOAuth = createServerFn({ method: "POST" })
     // For simplicity in this demo environment, we'll store it in a dedicated table if we had one, 
     // or use a secure cookie. Since we are in TanStack Start, we can use a server function to initiate.
     
+    // Retrieve existing settings
+    const { data: gym } = await supabaseAdmin
+      .from('gyms')
+      .select('settings')
+      .eq('id', adminData.gym_id)
+      .single();
+
     // Use a temporary record in settings to verify state on callback
     const settings = (gym?.settings as any) || {};
     settings.razorpay_oauth_state = {
