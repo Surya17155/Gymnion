@@ -88,7 +88,14 @@ export function MemberDashboard() {
     staleTime: 1000 * 60 * 5,
   });
 
-  const lastPayment = payments?.[0];
+  const latestPaidPayment = useMemo(() => {
+    if (!payments) return null;
+    return payments
+      .filter((p: any) => p.status === 'paid' || p.status === 'paid_verified')
+      .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+  }, [payments]);
+
+  const lastPayment = latestPaidPayment || payments?.[0];
   const attendanceCount = useMemo(() => {
     if (!attendance) return 0;
     const now = new Date();
