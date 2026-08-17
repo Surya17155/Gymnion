@@ -76,7 +76,7 @@ function AdminRazorpaySettings() {
               className="bg-[#121411] border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-[#B7FF1E] focus:outline-none font-mono tracking-wider"
             />
             <p className="text-[10px] text-[#858A7D] mt-2 italic">
-              Find this in your Razorpay Dashboard > Settings > API Keys or Account Details.
+              Find this in your Razorpay Dashboard {'>'} Settings {'>'} API Keys or Account Details.
             </p>
           </div>
 
