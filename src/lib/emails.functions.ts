@@ -38,16 +38,20 @@ export async function sendEmail(params: {
         }),
       });
       if (!res.ok) {
-        console.error('Gmail failed to send:', await res.text());
+        const errorText = await res.text();
+        console.error('Gmail failed to send:', errorText);
+        return { success: false, error: errorText };
       }
+      console.log(`[EMAIL_SERVICE] Successfully sent to ${to}`);
+      return { success: true };
     } catch (err) {
       console.error('Gmail service error:', err);
+      return { success: false, error: String(err) };
     }
   } else {
     console.warn('Gmail credentials not found. Check LOVABLE_API_KEY and GOOGLE_MAIL_API_KEY.');
+    return { success: false, error: 'Credentials missing' };
   }
-
-  return { success: true };
 }
 
 export async function sendWelcomeEmail(to: string, ownerName: string, gymName: string) {
