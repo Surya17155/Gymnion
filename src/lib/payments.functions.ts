@@ -137,5 +137,23 @@ export const verifySubscriptionPayment = createServerFn({ method: "POST" })
         razorpay_signature: data.razorpaySignature
       });
 
+    // 4. Send Receipt Email (Mock/Background)
+    try {
+      // Get gym and user details for receipt
+      const { data: gym } = await supabaseAdmin
+        .from('gyms')
+        .select('name, owner_email, owner_name')
+        .eq('id', data.gymId)
+        .single();
+
+      if (gym?.owner_email) {
+        console.log(`[SUBSCRIPTION_RECEIPT] Sending email to ${gym.owner_email} for ${plan.name} (₹${plan.price/100})`);
+        // In a real production scenario with a configured email provider, we would call it here.
+        // For now, we log the intent.
+      }
+    } catch (emailErr) {
+      console.error("Failed to trigger receipt email:", emailErr);
+    }
+
     return { success: true };
   });
