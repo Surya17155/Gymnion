@@ -39,6 +39,7 @@ import { Route as DashboardSuperAdminPaymentsRouteImport } from './routes/dashbo
 import { Route as DashboardSuperAdminPlansRouteImport } from './routes/dashboard/super-admin.plans'
 import { Route as DashboardAdminPlansNewRouteImport } from './routes/dashboard/admin.plans.new'
 import { Route as DashboardAdminSettingsIndexRouteImport } from './routes/dashboard/admin.settings/index'
+import { Route as DashboardAdminSettingsRazorpayRouteImport } from './routes/dashboard/admin.settings/razorpay'
 import { Route as DashboardSuperAdminGymsIndexRouteImport } from './routes/dashboard/super-admin.gyms.index'
 import { Route as DashboardSuperAdminGymsGymIdRouteImport } from './routes/dashboard/super-admin.gyms.$gymId'
 import { Route as DashboardSuperAdminGymsAddRouteImport } from './routes/dashboard/super-admin.gyms.add'
@@ -202,6 +203,12 @@ const DashboardAdminSettingsIndexRoute =
     path: '/settings/',
     getParentRoute: () => DashboardAdminRoute,
   } as any)
+const DashboardAdminSettingsRazorpayRoute =
+  DashboardAdminSettingsRazorpayRouteImport.update({
+    id: '/settings/razorpay',
+    path: '/settings/razorpay',
+    getParentRoute: () => DashboardAdminRoute,
+  } as any)
 const DashboardSuperAdminGymsIndexRoute =
   DashboardSuperAdminGymsIndexRouteImport.update({
     id: '/',
@@ -257,6 +264,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/m/': typeof DashboardMIndexRoute
   '/dashboard/super-admin/': typeof DashboardSuperAdminIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
+  '/dashboard/admin/settings/razorpay': typeof DashboardAdminSettingsRazorpayRoute
   '/dashboard/super-admin/gyms/$gymId': typeof DashboardSuperAdminGymsGymIdRoute
   '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
   '/dashboard/admin/settings/': typeof DashboardAdminSettingsIndexRoute
@@ -289,6 +297,7 @@ export interface FileRoutesByTo {
   '/dashboard/m': typeof DashboardMIndexRoute
   '/dashboard/super-admin': typeof DashboardSuperAdminIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
+  '/dashboard/admin/settings/razorpay': typeof DashboardAdminSettingsRazorpayRoute
   '/dashboard/super-admin/gyms/$gymId': typeof DashboardSuperAdminGymsGymIdRoute
   '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
   '/dashboard/admin/settings': typeof DashboardAdminSettingsIndexRoute
@@ -326,6 +335,7 @@ export interface FileRoutesById {
   '/dashboard/m/': typeof DashboardMIndexRoute
   '/dashboard/super-admin/': typeof DashboardSuperAdminIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
+  '/dashboard/admin/settings/razorpay': typeof DashboardAdminSettingsRazorpayRoute
   '/dashboard/super-admin/gyms/$gymId': typeof DashboardSuperAdminGymsGymIdRoute
   '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
   '/dashboard/admin/settings/': typeof DashboardAdminSettingsIndexRoute
@@ -364,6 +374,7 @@ export interface FileRouteTypes {
     | '/dashboard/m/'
     | '/dashboard/super-admin/'
     | '/dashboard/admin/plans/new'
+    | '/dashboard/admin/settings/razorpay'
     | '/dashboard/super-admin/gyms/$gymId'
     | '/dashboard/super-admin/gyms/add'
     | '/dashboard/admin/settings/'
@@ -396,6 +407,7 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/dashboard/admin/plans/new'
+    | '/dashboard/admin/settings/razorpay'
     | '/dashboard/super-admin/gyms/$gymId'
     | '/dashboard/super-admin/gyms/add'
     | '/dashboard/admin/settings'
@@ -432,6 +444,7 @@ export interface FileRouteTypes {
     | '/dashboard/m/'
     | '/dashboard/super-admin/'
     | '/dashboard/admin/plans/new'
+    | '/dashboard/admin/settings/razorpay'
     | '/dashboard/super-admin/gyms/$gymId'
     | '/dashboard/super-admin/gyms/add'
     | '/dashboard/admin/settings/'
@@ -662,6 +675,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminSettingsIndexRouteImport
       parentRoute: typeof DashboardAdminRoute
     }
+    '/dashboard/admin/settings/razorpay': {
+      id: '/dashboard/admin/settings/razorpay'
+      path: '/settings/razorpay'
+      fullPath: '/dashboard/admin/settings/razorpay'
+      preLoaderRoute: typeof DashboardAdminSettingsRazorpayRouteImport
+      parentRoute: typeof DashboardAdminRoute
+    }
     '/dashboard/super-admin/gyms/': {
       id: '/dashboard/super-admin/gyms/'
       path: '/'
@@ -715,6 +735,7 @@ interface DashboardAdminRouteChildren {
   DashboardAdminQrManagementRoute: typeof DashboardAdminQrManagementRoute
   DashboardAdminSubscriptionRoute: typeof DashboardAdminSubscriptionRoute
   DashboardAdminIndexRoute: typeof DashboardAdminIndexRoute
+  DashboardAdminSettingsRazorpayRoute: typeof DashboardAdminSettingsRazorpayRoute
   DashboardAdminSettingsIndexRoute: typeof DashboardAdminSettingsIndexRoute
 }
 
@@ -727,6 +748,7 @@ const DashboardAdminRouteChildren: DashboardAdminRouteChildren = {
   DashboardAdminQrManagementRoute: DashboardAdminQrManagementRoute,
   DashboardAdminSubscriptionRoute: DashboardAdminSubscriptionRoute,
   DashboardAdminIndexRoute: DashboardAdminIndexRoute,
+  DashboardAdminSettingsRazorpayRoute: DashboardAdminSettingsRazorpayRoute,
   DashboardAdminSettingsIndexRoute: DashboardAdminSettingsIndexRoute,
 }
 
