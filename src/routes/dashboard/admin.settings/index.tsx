@@ -3,6 +3,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { getGymDetails, updateGymCode } from '@/lib/auth.functions';
+import { sendTestReminder } from '@/lib/emails.functions';
+import { useServerFn } from '@tanstack/react-start';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/dashboard/admin/settings/')({
   component: AdminSettings,
@@ -14,7 +17,10 @@ function AdminSettings() {
   const [gymCode, setGymCode] = useState('');
   const [isEditingCode, setIsEditingCode] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [testEmailLoading, setTestEmailLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+
+  const sendReminder = useServerFn(sendTestReminder);
 
   useEffect(() => {
     loadGymDetails();
@@ -46,6 +52,19 @@ function AdminSettings() {
       setMessage({ type: 'error', text: err.message || 'Failed to update GYM code' });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSendTestEmail = async () => {
+    setTestEmailLoading(true);
+    try {
+      await sendReminder({ data: { email: 'amssre.17155@gmail.com' } });
+      toast.success('Test email sent to amssre.17155@gmail.com');
+    } catch (err: any) {
+      toast.error('Failed to send test email');
+      console.error(err);
+    } finally {
+      setTestEmailLoading(false);
     }
   };
 
@@ -217,6 +236,24 @@ function AdminSettings() {
               </div>
               <button aria-checked="true" className="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-[#83A51B] transition-colors duration-200 ease-in-out focus:outline-none" role="switch" type="button">
                 <span aria-hidden="true" className="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+              </button>
+            </div>
+
+            {/* Test Email Setting */}
+            <div className="flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5">
+              <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center mr-4">
+                <span className="material-symbols-outlined text-[#e3e3dd]">alternate_email</span>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-[18px] font-semibold text-[#e3e3dd]">Test Reminder</h3>
+                <p className="text-[12px] text-[#858A7D] mt-1">Send fake fee email to amssre.17155@gmail.com</p>
+              </div>
+              <button 
+                onClick={handleSendTestEmail}
+                disabled={testEmailLoading}
+                className="bg-[#B7FF1E] text-[#293500] px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-transform active:scale-95 disabled:opacity-50"
+              >
+                {testEmailLoading ? 'Sending...' : 'Send'}
               </button>
             </div>
           </div>
