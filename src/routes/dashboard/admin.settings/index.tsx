@@ -51,6 +51,16 @@ function AdminSettings() {
       loadGymDetails();
     } catch (err: any) {
       setMessage({ type: 'error', text: err.message || 'Failed to update GYM code' });
+    }
+  };
+
+  const handleSendTestWelcome = async () => {
+    setLoading(true);
+    try {
+      await triggerTestWelcomeEmail({ data: { email: 'amssre.17155@gmail.com' } });
+      toast.success('Welcome email sent to amssre.17155@gmail.com');
+    } catch (err: any) {
+      toast.error('Failed to send email: ' + err.message);
     } finally {
       setLoading(false);
     }
