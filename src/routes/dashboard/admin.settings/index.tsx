@@ -6,6 +6,7 @@ import { getGymDetails, updateGymCode } from '@/lib/auth.functions';
 
 import { useServerFn } from '@tanstack/react-start';
 import { toast } from 'sonner';
+import { triggerTestWelcomeEmail } from '@/lib/test-email.functions';
 
 export const Route = createFileRoute('/dashboard/admin/settings/')({
   component: AdminSettings,
