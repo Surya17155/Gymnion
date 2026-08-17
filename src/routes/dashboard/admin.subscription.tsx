@@ -236,23 +236,57 @@ function SubscriptionManagement() {
                       <div className="px-5 pb-5 pt-2 animate-in fade-in slide-in-from-top-2 duration-300">
                         <div className="h-px bg-white/5 mb-4"></div>
                         <ul className="space-y-3 mb-6">
-                          {plan.features?.map((f: any, idx: number) => {
-                            const isEnabled = typeof f === 'string' ? true : !!f.enabled;
-                            const label = typeof f === 'string' ? f.replace(/_/g, ' ') : (f.label || f.name.replace(/_/g, ' '));
-                            return (
-                              <li key={idx} className="flex items-center gap-3 text-xs text-[#C0C2B8] capitalize">
-                                <span className={`material-symbols-outlined text-[16px] ${isEnabled ? 'text-[#B7FF1E]' : 'text-[#858A7D]'}`}>
-                                  {isEnabled ? 'check_circle' : 'cancel'}
-                                </span>
-                                {label}
+                          {plan.name.toLowerCase() === 'basic' ? (
+                            <>
+                              <li className="flex items-center gap-3 text-xs text-[#C0C2B8] capitalize">
+                                <span className="material-symbols-outlined text-[16px] text-[#B7FF1E]">check_circle</span>
+                                Attendance management
                               </li>
-                            );
-                          })}
-                          {plan.member_limit && (
-                            <li className="flex items-center gap-3 text-xs text-[#C0C2B8]">
-                              <span className="material-symbols-outlined text-[16px] text-[#B7FF1E]">groups</span>
-                              Up to {plan.member_limit} Members
-                            </li>
+                              <li className="flex items-center gap-3 text-xs text-[#C0C2B8] capitalize">
+                                <span className="material-symbols-outlined text-[16px] text-[#B7FF1E]">check_circle</span>
+                                Payment management
+                              </li>
+                              <li className="flex items-center gap-3 text-xs text-[#C0C2B8] capitalize">
+                                <span className="material-symbols-outlined text-[16px] text-[#B7FF1E]">groups</span>
+                                Up to 100 members only
+                              </li>
+                            </>
+                          ) : plan.name.toLowerCase() === 'standard' ? (
+                            <>
+                              <li className="flex items-center gap-3 text-xs text-[#C0C2B8] capitalize">
+                                <span className="material-symbols-outlined text-[16px] text-[#B7FF1E]">check_circle</span>
+                                Everything in Basic
+                              </li>
+                              <li className="flex items-center gap-3 text-xs text-[#C0C2B8] capitalize">
+                                <span className="material-symbols-outlined text-[16px] text-[#B7FF1E]">check_circle</span>
+                                Fee reminders
+                              </li>
+                              <li className="flex items-center gap-3 text-xs text-[#C0C2B8] capitalize">
+                                <span className="material-symbols-outlined text-[16px] text-[#B7FF1E]">groups</span>
+                                Up to 500 members
+                              </li>
+                            </>
+                          ) : (
+                            <>
+                              {plan.features?.map((f: any, idx: number) => {
+                                const isEnabled = typeof f === 'string' ? true : !!f.enabled;
+                                const label = typeof f === 'string' ? f.replace(/_/g, ' ') : (f.label || f.name.replace(/_/g, ' '));
+                                return (
+                                  <li key={idx} className="flex items-center gap-3 text-xs text-[#C0C2B8] capitalize">
+                                    <span className={`material-symbols-outlined text-[16px] ${isEnabled ? 'text-[#B7FF1E]' : 'text-[#858A7D]'}`}>
+                                      {isEnabled ? 'check_circle' : 'cancel'}
+                                    </span>
+                                    {label}
+                                  </li>
+                                );
+                              })}
+                              {plan.member_limit && (
+                                <li className="flex items-center gap-3 text-xs text-[#C0C2B8]">
+                                  <span className="material-symbols-outlined text-[16px] text-[#B7FF1E]">groups</span>
+                                  Up to {plan.member_limit} Members
+                                </li>
+                              )}
+                            </>
                           )}
                         </ul>
                         {!isCurrent && (
