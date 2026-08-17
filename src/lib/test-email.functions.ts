@@ -6,5 +6,7 @@ export const triggerTestWelcomeEmail = createServerFn({ method: "POST" })
   .inputValidator((d) => z.object({ email: z.string().email() }).parse(d))
   .handler(async ({ data }) => {
     console.log(`Manually triggering test welcome email for ${data.email}`);
-    return await sendWelcomeEmail(data.email, "Test User", "Test Gym");
+    const res = await sendWelcomeEmail(data.email, "Test User", "Test Gym");
+    console.log("Welcome email result:", JSON.stringify(res));
+    return res;
   });
