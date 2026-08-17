@@ -11,32 +11,40 @@ export async function sendEmail(params: {
   html: string;
   from?: string;
 }) {
-  const { to, subject, html, from = "Gymnion <notifications@gymnion.app>" } = params;
+  const { to, subject, html } = params;
   
   console.log(`[EMAIL_SERVICE] Sending to ${to}: "${subject}"`);
   
-  const apiKey = process.env['RESEND_API_KEY'];
-  if (apiKey) {
+  const lovableApiKey = process.env['LOVABLE_API_KEY'];
+  const googleMailApiKey = process.env['GOOGLE_MAIL_API_KEY'];
+
+  if (lovableApiKey && googleMailApiKey) {
     try {
-      const res = await fetch('https://api.resend.com/emails', {
+      // Use the gateway to send email via Gmail
+      const res = await fetch('https://connector-gateway.lovable.dev/google_mail/gmail/v1/users/me/messages/send', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${apiKey}`,
+          'Authorization': `Bearer ${lovableApiKey}`,
+          'X-Connection-Api-Key': googleMailApiKey,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from,
-          to: [to],
-          subject,
-          html,
+          raw: Buffer.from(
+            `To: ${to}\r\n` +
+            `Subject: ${subject}\r\n` +
+            `Content-Type: text/html; charset=utf-8\r\n\r\n` +
+            html
+          ).toString('base64url'),
         }),
       });
       if (!res.ok) {
-        console.error('Email failed to send:', await res.text());
+        console.error('Gmail failed to send:', await res.text());
       }
     } catch (err) {
-      console.error('Email service error:', err);
+      console.error('Gmail service error:', err);
     }
+  } else {
+    console.warn('Gmail credentials not found. Check LOVABLE_API_KEY and GOOGLE_MAIL_API_KEY.');
   }
 
   return { success: true };
