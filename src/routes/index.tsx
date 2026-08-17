@@ -802,18 +802,11 @@ function LandingPage() {
                     </svg>
                     <span className="text-sm text-white">Payment management</span>
                   </li>
-                  <li className="flex items-center gap-3 opacity-50">
-                    <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                    <span className="text-sm text-white">Fee reminders</span>
-                  </li>
                   <li className="flex items-center gap-3">
                     <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
-                    <span className="text-sm text-white">Up to 100 members</span>
+                    <span className="text-sm text-white">Up to 100 members only</span>
                   </li>
                 </ul>
                 <button className="w-full h-12 rounded-full border border-[#B7FF1E] text-[#B7FF1E] text-xs font-bold mt-4 transition-all hover:bg-[#B7FF1E]/10 active:scale-[0.98]">
@@ -834,20 +827,14 @@ function LandingPage() {
                   <span className="text-xs text-[#858A7D]">/ month</span>
                 </div>
                 <p className="text-xs text-[#858A7D] border-b border-white/5 pb-4">
-                  More room to grow, with support when you need it.
+                  Everything in Basic plus extra tools for growing gyms.
                 </p>
                 <ul className="flex flex-col gap-3 pt-2">
                   <li className="flex items-center gap-3">
                     <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
-                    <span className="text-sm text-white">Attendance management</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span className="text-sm text-white">Payment management</span>
+                    <span className="text-sm text-white">Everything in Basic</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <svg className="w-5 h-5 text-[#B7FF1E]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
