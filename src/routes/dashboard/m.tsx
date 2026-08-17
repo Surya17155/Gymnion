@@ -88,7 +88,14 @@ export function MemberDashboard() {
     staleTime: 1000 * 60 * 5,
   });
 
-  const lastPayment = payments?.[0];
+  const latestPaidPayment = useMemo(() => {
+    if (!payments) return null;
+    return payments
+      .filter((p: any) => p.status === 'paid' || p.status === 'paid_verified')
+      .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+  }, [payments]);
+
+  const lastPayment = latestPaidPayment || payments?.[0];
   const attendanceCount = useMemo(() => {
     if (!attendance) return 0;
     const now = new Date();
@@ -285,8 +292,8 @@ export function MemberDashboard() {
               <div>
                 <h2 className="text-[12px] leading-[18px] text-[#C0C2B8] uppercase tracking-wider mb-1">Last Payment</h2>
                 <div className="flex items-end gap-2">
-                  <span className="text-[40px] leading-[40px] font-bold text-white tracking-tight">₹{profile?.fee_plans?.amount || 0}</span>
-                  <span className="text-[12px] leading-[18px] text-[#C0C2B8] mb-1">/ {profile?.fee_plans?.name || 'No Plan'}</span>
+                  <span className="text-[40px] leading-[40px] font-bold text-white tracking-tight">₹{lastPayment?.amount ?? profile?.fee_plans?.amount ?? 0}</span>
+                  <span className="text-[12px] leading-[18px] text-[#C0C2B8] mb-1">/ {lastPayment?.payment_method === 'cash' ? 'Basic' : (lastPayment?.payment_month || profile?.fee_plans?.name || 'No Plan')}</span>
                 </div>
               </div>
               <div className="bg-[#333532] rounded-full p-2 border border-white/5 flex items-center justify-center w-10 h-10">
