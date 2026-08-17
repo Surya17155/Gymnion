@@ -7,6 +7,8 @@ import { useServerFn } from '@tanstack/react-start';
 import { getMyPayments, getMyAttendance } from '@/lib/auth.functions';
 import { clearRoleCache } from '@/lib/role';
 import { format } from 'date-fns';
+import { createMemberPaymentOrder } from '@/lib/members-payments.functions';
+import { toast } from 'sonner';
 
 
 export const Route = createFileRoute('/dashboard/m')({
@@ -29,7 +31,9 @@ function MemberDashboardLayout() {
 export function MemberDashboard() {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const createOrderFn = useServerFn(createMemberPaymentOrder);
   
   const { data: profile, isLoading: isProfileLoading, error: profileError } = useMyProfile();
   
@@ -159,6 +163,55 @@ export function MemberDashboard() {
     window.location.replace('/');
   };
 
+  const handlePayNow = async () => {
+    if (!profile?.id) return;
+    
+    try {
+      setIsProcessingPayment(true);
+      const order = await createOrderFn({ data: { memberId: profile.id } });
+      
+      if (!(window as any).Razorpay) {
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.async = true;
+        await new Promise((resolve) => {
+          script.onload = resolve;
+          document.body.appendChild(script);
+        });
+      }
+
+      const options = {
+        key: order.key,
+        amount: order.amount,
+        currency: "INR",
+        name: order.gymName || "Gymnion",
+        description: "Monthly Membership Fee",
+        order_id: order.orderId,
+        handler: async (response: any) => {
+          toast.success("Payment initiated! You will receive a receipt once processed.");
+          setIsProcessingPayment(false);
+        },
+        prefill: {
+          name: profile.full_name,
+          email: profile.email,
+          contact: profile.phone
+        },
+        theme: { color: "#B7FF1E" },
+        modal: {
+          ondismiss: () => {
+            setIsProcessingPayment(false);
+          }
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to initiate payment");
+      setIsProcessingPayment(false);
+    }
+  };
+
   if (isProfileLoading && !profile) {
     return (
       <div className="bg-[#121411] text-[#e3e3dd] min-h-screen flex items-center justify-center">
@@ -247,10 +300,11 @@ export function MemberDashboard() {
                 <p className="text-[18px] leading-[24px] font-semibold text-white">{nextDue}</p>
               </div>
               <button 
-                disabled={!isPaymentsEnabled || profile?.status === 'active'}
+                onClick={handlePayNow}
+                disabled={!isPaymentsEnabled || profile?.status === 'active' || isProcessingPayment}
                 className="bg-[#B7FF1E] text-[#293500] text-[18px] leading-[24px] font-semibold px-6 py-2.5 rounded-full hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(183,255,30,0.3)] disabled:opacity-50 disabled:shadow-none"
               >
-                Pay Now
+                {isProcessingPayment ? '...' : 'Pay Now'}
               </button>
             </div>
           </section>

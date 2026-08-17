@@ -19,6 +19,8 @@ import { Route as DashboardAdminRouteImport } from './routes/dashboard/admin'
 import { Route as DashboardMRouteImport } from './routes/dashboard/m'
 import { Route as DashboardSuperAdminRouteImport } from './routes/dashboard/super-admin'
 import { Route as ApiPublicAuthCheckRouteImport } from './routes/api/public/auth-check'
+import { Route as ApiPublicPaymentRemindersRouteImport } from './routes/api/public/payment-reminders'
+import { Route as ApiPublicRazorpayWebhookRouteImport } from './routes/api/public/razorpay-webhook'
 import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard/admin.index'
 import { Route as DashboardAdminAccountRouteImport } from './routes/dashboard/admin.account'
 import { Route as DashboardAdminAttendanceRouteImport } from './routes/dashboard/admin.attendance'
@@ -38,6 +40,7 @@ import { Route as DashboardSuperAdminPaymentsRouteImport } from './routes/dashbo
 import { Route as DashboardSuperAdminPlansRouteImport } from './routes/dashboard/super-admin.plans'
 import { Route as DashboardAdminPlansNewRouteImport } from './routes/dashboard/admin.plans.new'
 import { Route as DashboardAdminSettingsIndexRouteImport } from './routes/dashboard/admin.settings/index'
+import { Route as DashboardAdminSettingsRazorpayRouteImport } from './routes/dashboard/admin.settings/razorpay'
 import { Route as DashboardSuperAdminGymsIndexRouteImport } from './routes/dashboard/super-admin.gyms.index'
 import { Route as DashboardSuperAdminGymsGymIdRouteImport } from './routes/dashboard/super-admin.gyms.$gymId'
 import { Route as DashboardSuperAdminGymsAddRouteImport } from './routes/dashboard/super-admin.gyms.add'
@@ -93,6 +96,18 @@ const ApiPublicAuthCheckRoute = ApiPublicAuthCheckRouteImport.update({
   path: '/api/public/auth-check',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPaymentRemindersRoute =
+  ApiPublicPaymentRemindersRouteImport.update({
+    id: '/api/public/payment-reminders',
+    path: '/api/public/payment-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicRazorpayWebhookRoute =
+  ApiPublicRazorpayWebhookRouteImport.update({
+    id: '/api/public/razorpay-webhook',
+    path: '/api/public/razorpay-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DashboardAdminIndexRoute = DashboardAdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -195,6 +210,12 @@ const DashboardAdminSettingsIndexRoute =
     path: '/settings/',
     getParentRoute: () => DashboardAdminRoute,
   } as any)
+const DashboardAdminSettingsRazorpayRoute =
+  DashboardAdminSettingsRazorpayRouteImport.update({
+    id: '/settings/razorpay',
+    path: '/settings/razorpay',
+    getParentRoute: () => DashboardAdminRoute,
+  } as any)
 const DashboardSuperAdminGymsIndexRoute =
   DashboardSuperAdminGymsIndexRouteImport.update({
     id: '/',
@@ -231,6 +252,8 @@ export interface FileRoutesByFullPath {
   '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRouteWithChildren
   '/api/public/auth-check': typeof ApiPublicAuthCheckRoute
+  '/api/public/payment-reminders': typeof ApiPublicPaymentRemindersRoute
+  '/api/public/razorpay-webhook': typeof ApiPublicRazorpayWebhookRoute
   '/dashboard/admin/account': typeof DashboardAdminAccountRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
@@ -249,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/m/': typeof DashboardMIndexRoute
   '/dashboard/super-admin/': typeof DashboardSuperAdminIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
+  '/dashboard/admin/settings/razorpay': typeof DashboardAdminSettingsRazorpayRoute
   '/dashboard/super-admin/gyms/$gymId': typeof DashboardSuperAdminGymsGymIdRoute
   '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
   '/dashboard/admin/settings/': typeof DashboardAdminSettingsIndexRoute
@@ -263,6 +287,8 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/api/public/auth-check': typeof ApiPublicAuthCheckRoute
+  '/api/public/payment-reminders': typeof ApiPublicPaymentRemindersRoute
+  '/api/public/razorpay-webhook': typeof ApiPublicRazorpayWebhookRoute
   '/dashboard/admin/account': typeof DashboardAdminAccountRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
@@ -280,6 +306,7 @@ export interface FileRoutesByTo {
   '/dashboard/m': typeof DashboardMIndexRoute
   '/dashboard/super-admin': typeof DashboardSuperAdminIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
+  '/dashboard/admin/settings/razorpay': typeof DashboardAdminSettingsRazorpayRoute
   '/dashboard/super-admin/gyms/$gymId': typeof DashboardSuperAdminGymsGymIdRoute
   '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
   '/dashboard/admin/settings': typeof DashboardAdminSettingsIndexRoute
@@ -298,6 +325,8 @@ export interface FileRoutesById {
   '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRouteWithChildren
   '/api/public/auth-check': typeof ApiPublicAuthCheckRoute
+  '/api/public/payment-reminders': typeof ApiPublicPaymentRemindersRoute
+  '/api/public/razorpay-webhook': typeof ApiPublicRazorpayWebhookRoute
   '/dashboard/admin/account': typeof DashboardAdminAccountRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
@@ -316,6 +345,7 @@ export interface FileRoutesById {
   '/dashboard/m/': typeof DashboardMIndexRoute
   '/dashboard/super-admin/': typeof DashboardSuperAdminIndexRoute
   '/dashboard/admin/plans/new': typeof DashboardAdminPlansNewRoute
+  '/dashboard/admin/settings/razorpay': typeof DashboardAdminSettingsRazorpayRoute
   '/dashboard/super-admin/gyms/$gymId': typeof DashboardSuperAdminGymsGymIdRoute
   '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
   '/dashboard/admin/settings/': typeof DashboardAdminSettingsIndexRoute
@@ -335,6 +365,8 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/api/public/auth-check'
+    | '/api/public/payment-reminders'
+    | '/api/public/razorpay-webhook'
     | '/dashboard/admin/account'
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
@@ -353,6 +385,7 @@ export interface FileRouteTypes {
     | '/dashboard/m/'
     | '/dashboard/super-admin/'
     | '/dashboard/admin/plans/new'
+    | '/dashboard/admin/settings/razorpay'
     | '/dashboard/super-admin/gyms/$gymId'
     | '/dashboard/super-admin/gyms/add'
     | '/dashboard/admin/settings/'
@@ -367,6 +400,8 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/api/public/auth-check'
+    | '/api/public/payment-reminders'
+    | '/api/public/razorpay-webhook'
     | '/dashboard/admin/account'
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
@@ -384,6 +419,7 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/dashboard/admin/plans/new'
+    | '/dashboard/admin/settings/razorpay'
     | '/dashboard/super-admin/gyms/$gymId'
     | '/dashboard/super-admin/gyms/add'
     | '/dashboard/admin/settings'
@@ -401,6 +437,8 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/api/public/auth-check'
+    | '/api/public/payment-reminders'
+    | '/api/public/razorpay-webhook'
     | '/dashboard/admin/account'
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
@@ -419,6 +457,7 @@ export interface FileRouteTypes {
     | '/dashboard/m/'
     | '/dashboard/super-admin/'
     | '/dashboard/admin/plans/new'
+    | '/dashboard/admin/settings/razorpay'
     | '/dashboard/super-admin/gyms/$gymId'
     | '/dashboard/super-admin/gyms/add'
     | '/dashboard/admin/settings/'
@@ -434,6 +473,8 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   ApiPublicAuthCheckRoute: typeof ApiPublicAuthCheckRoute
+  ApiPublicPaymentRemindersRoute: typeof ApiPublicPaymentRemindersRoute
+  ApiPublicRazorpayWebhookRoute: typeof ApiPublicRazorpayWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -506,6 +547,20 @@ declare module '@tanstack/react-router' {
       path: '/api/public/auth-check'
       fullPath: '/api/public/auth-check'
       preLoaderRoute: typeof ApiPublicAuthCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/payment-reminders': {
+      id: '/api/public/payment-reminders'
+      path: '/api/public/payment-reminders'
+      fullPath: '/api/public/payment-reminders'
+      preLoaderRoute: typeof ApiPublicPaymentRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/razorpay-webhook': {
+      id: '/api/public/razorpay-webhook'
+      path: '/api/public/razorpay-webhook'
+      fullPath: '/api/public/razorpay-webhook'
+      preLoaderRoute: typeof ApiPublicRazorpayWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/admin/': {
@@ -641,6 +696,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminSettingsIndexRouteImport
       parentRoute: typeof DashboardAdminRoute
     }
+    '/dashboard/admin/settings/razorpay': {
+      id: '/dashboard/admin/settings/razorpay'
+      path: '/settings/razorpay'
+      fullPath: '/dashboard/admin/settings/razorpay'
+      preLoaderRoute: typeof DashboardAdminSettingsRazorpayRouteImport
+      parentRoute: typeof DashboardAdminRoute
+    }
     '/dashboard/super-admin/gyms/': {
       id: '/dashboard/super-admin/gyms/'
       path: '/'
@@ -694,6 +756,7 @@ interface DashboardAdminRouteChildren {
   DashboardAdminQrManagementRoute: typeof DashboardAdminQrManagementRoute
   DashboardAdminSubscriptionRoute: typeof DashboardAdminSubscriptionRoute
   DashboardAdminIndexRoute: typeof DashboardAdminIndexRoute
+  DashboardAdminSettingsRazorpayRoute: typeof DashboardAdminSettingsRazorpayRoute
   DashboardAdminSettingsIndexRoute: typeof DashboardAdminSettingsIndexRoute
 }
 
@@ -706,6 +769,7 @@ const DashboardAdminRouteChildren: DashboardAdminRouteChildren = {
   DashboardAdminQrManagementRoute: DashboardAdminQrManagementRoute,
   DashboardAdminSubscriptionRoute: DashboardAdminSubscriptionRoute,
   DashboardAdminIndexRoute: DashboardAdminIndexRoute,
+  DashboardAdminSettingsRazorpayRoute: DashboardAdminSettingsRazorpayRoute,
   DashboardAdminSettingsIndexRoute: DashboardAdminSettingsIndexRoute,
 }
 
@@ -792,6 +856,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   ApiPublicAuthCheckRoute: ApiPublicAuthCheckRoute,
+  ApiPublicPaymentRemindersRoute: ApiPublicPaymentRemindersRoute,
+  ApiPublicRazorpayWebhookRoute: ApiPublicRazorpayWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
