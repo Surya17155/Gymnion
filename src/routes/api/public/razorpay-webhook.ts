@@ -20,7 +20,16 @@ export const Route = createFileRoute('/api/public/razorpay-webhook')({
         const payload = JSON.parse(body);
         const event = payload.event;
 
-        if (event === 'payment.captured') {
+        if (event === 'account.app.authorization_revoked') {
+          const accountId = payload.account_id;
+          if (accountId) {
+            await supabaseAdmin
+              .from('razorpay_connections')
+              .update({ status: 'revoked' })
+              .eq('razorpay_account_id', accountId);
+            console.log(`[OAUTH_WEBHOOK] Revoked authorization for account ${accountId}`);
+          }
+        } else if (event === 'payment.captured') {
           const payment = payload.payload.payment.entity;
           const { member_id, gym_id, source } = payment.notes || {};
 
