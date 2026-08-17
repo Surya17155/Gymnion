@@ -2,55 +2,56 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 /**
- * Sends a generic email using a configured email provider.
- * Currently supports a simple Resend-like pattern or a logging fallback.
+ * Sends a generic email using Gmail via Lovable Connector Gateway.
  */
 export async function sendEmail(params: {
   to: string;
   subject: string;
   html: string;
-  from?: string;
 }) {
   const { to, subject, html } = params;
   
-  console.log(`[EMAIL_SERVICE] Sending to ${to}: "${subject}"`);
-  
-  const lovableApiKey = process.env['LOVABLE_API_KEY'];
-  const googleMailApiKey = process.env['GOOGLE_MAIL_API_KEY'];
+  // Read keys inside the function to ensure they are available in the handler context
+  const LOVABLE_API_KEY = process.env['LOVABLE_API_KEY'];
+  const GOOGLE_MAIL_API_KEY = process.env['GOOGLE_MAIL_API_KEY'];
 
-  if (lovableApiKey && googleMailApiKey) {
-    try {
-      // Use the gateway to send email via Gmail
-      const res = await fetch('https://connector-gateway.lovable.dev/google_mail/gmail/v1/users/me/messages/send', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${lovableApiKey}`,
-          'X-Connection-Api-Key': googleMailApiKey,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          raw: Buffer.from(
-            `To: ${to}\r\n` +
-            `Subject: ${subject}\r\n` +
-            `Content-Type: text/html; charset=utf-8\r\n\r\n` +
-            html
-          ).toString('base64url'),
-        }),
-      });
-      if (!res.ok) {
-        const errorText = await res.text();
-        console.error('Gmail failed to send:', errorText);
-        return { success: false, error: errorText };
-      }
-      console.log(`[EMAIL_SERVICE] Successfully sent to ${to}`);
-      return { success: true };
-    } catch (err) {
-      console.error('Gmail service error:', err);
-      return { success: false, error: String(err) };
+  console.log(`[EMAIL_SERVICE] Attempting to send to ${to}: "${subject}"`);
+  
+  if (!LOVABLE_API_KEY || !GOOGLE_MAIL_API_KEY) {
+    const error = 'Gmail credentials missing (LOVABLE_API_KEY or GOOGLE_MAIL_API_KEY)';
+    console.error(`[EMAIL_SERVICE] ${error}`);
+    return { success: false, error };
+  }
+
+  try {
+    const res = await fetch('https://connector-gateway.lovable.dev/google_mail/gmail/v1/users/me/messages/send', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        'X-Connection-Api-Key': GOOGLE_MAIL_API_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        raw: Buffer.from(
+          `To: ${to}\r\n` +
+          `Subject: ${subject}\r\n` +
+          `Content-Type: text/html; charset=utf-8\r\n\r\n` +
+          html
+        ).toString('base64url'),
+      }),
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error('[EMAIL_SERVICE] Gmail gateway error:', errorText);
+      return { success: false, error: errorText };
     }
-  } else {
-    console.warn('Gmail credentials not found. Check LOVABLE_API_KEY and GOOGLE_MAIL_API_KEY.');
-    return { success: false, error: 'Credentials missing' };
+
+    console.log(`[EMAIL_SERVICE] Successfully sent to ${to}`);
+    return { success: true };
+  } catch (err) {
+    console.error('[EMAIL_SERVICE] Network or fetch error:', err);
+    return { success: false, error: String(err) };
   }
 }
 
