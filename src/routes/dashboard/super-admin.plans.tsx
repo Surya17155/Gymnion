@@ -202,8 +202,8 @@ function SuperAdminPlans() {
                   price: '', 
                   member_limit: '',
                   features: [
-                    { name: 'attendance_management', label: 'Attendance Management', enabled: false },
-                    { name: 'payment_management', label: 'Payment Management', enabled: false },
+                    { name: 'attendance_management', label: 'Attendance Management', enabled: true },
+                    { name: 'payment_management', label: 'Payment Management', enabled: true },
                     { name: 'fee_reminders', label: 'Fee Reminders', enabled: false }
                   ]
                 });
