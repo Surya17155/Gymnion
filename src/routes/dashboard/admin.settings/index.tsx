@@ -139,7 +139,7 @@ function AdminSettings() {
               </div>
               <span className="material-symbols-outlined text-[#858A7D] group-hover:text-[#B7FF1E] transition-colors">chevron_right</span>
             </Link>
-            
+
             <Link 
               to="/dashboard/admin/subscription"
               className="flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5 hover:border-[#B7FF1E]/30 transition-colors group text-left w-full"
@@ -152,6 +152,7 @@ function AdminSettings() {
                 <p className="text-[12px] text-[#858A7D] mt-1">Manage Gymnion plan and billing.</p>
               </div>
               <span className="material-symbols-outlined text-[#858A7D] group-hover:text-[#B7FF1E] transition-colors">chevron_right</span>
+            </Link>
 
             <Link 
               to="/dashboard/admin/qr-management"
