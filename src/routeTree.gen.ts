@@ -19,6 +19,7 @@ import { Route as DashboardAdminRouteImport } from './routes/dashboard/admin'
 import { Route as DashboardMRouteImport } from './routes/dashboard/m'
 import { Route as DashboardSuperAdminRouteImport } from './routes/dashboard/super-admin'
 import { Route as ApiPublicAuthCheckRouteImport } from './routes/api/public/auth-check'
+import { Route as ApiPublicPaymentRemindersRouteImport } from './routes/api/public/payment-reminders'
 import { Route as ApiPublicRazorpayWebhookRouteImport } from './routes/api/public/razorpay-webhook'
 import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard/admin.index'
 import { Route as DashboardAdminAccountRouteImport } from './routes/dashboard/admin.account'
@@ -95,6 +96,12 @@ const ApiPublicAuthCheckRoute = ApiPublicAuthCheckRouteImport.update({
   path: '/api/public/auth-check',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPaymentRemindersRoute =
+  ApiPublicPaymentRemindersRouteImport.update({
+    id: '/api/public/payment-reminders',
+    path: '/api/public/payment-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicRazorpayWebhookRoute =
   ApiPublicRazorpayWebhookRouteImport.update({
     id: '/api/public/razorpay-webhook',
@@ -245,6 +252,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRouteWithChildren
   '/api/public/auth-check': typeof ApiPublicAuthCheckRoute
+  '/api/public/payment-reminders': typeof ApiPublicPaymentRemindersRoute
   '/api/public/razorpay-webhook': typeof ApiPublicRazorpayWebhookRoute
   '/dashboard/admin/account': typeof DashboardAdminAccountRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
@@ -279,6 +287,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/api/public/auth-check': typeof ApiPublicAuthCheckRoute
+  '/api/public/payment-reminders': typeof ApiPublicPaymentRemindersRoute
   '/api/public/razorpay-webhook': typeof ApiPublicRazorpayWebhookRoute
   '/dashboard/admin/account': typeof DashboardAdminAccountRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
@@ -316,6 +325,7 @@ export interface FileRoutesById {
   '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRouteWithChildren
   '/api/public/auth-check': typeof ApiPublicAuthCheckRoute
+  '/api/public/payment-reminders': typeof ApiPublicPaymentRemindersRoute
   '/api/public/razorpay-webhook': typeof ApiPublicRazorpayWebhookRoute
   '/dashboard/admin/account': typeof DashboardAdminAccountRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
@@ -355,6 +365,7 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/api/public/auth-check'
+    | '/api/public/payment-reminders'
     | '/api/public/razorpay-webhook'
     | '/dashboard/admin/account'
     | '/dashboard/admin/attendance'
@@ -389,6 +400,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/api/public/auth-check'
+    | '/api/public/payment-reminders'
     | '/api/public/razorpay-webhook'
     | '/dashboard/admin/account'
     | '/dashboard/admin/attendance'
@@ -425,6 +437,7 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/api/public/auth-check'
+    | '/api/public/payment-reminders'
     | '/api/public/razorpay-webhook'
     | '/dashboard/admin/account'
     | '/dashboard/admin/attendance'
@@ -460,6 +473,7 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   ApiPublicAuthCheckRoute: typeof ApiPublicAuthCheckRoute
+  ApiPublicPaymentRemindersRoute: typeof ApiPublicPaymentRemindersRoute
   ApiPublicRazorpayWebhookRoute: typeof ApiPublicRazorpayWebhookRoute
 }
 
@@ -533,6 +547,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/auth-check'
       fullPath: '/api/public/auth-check'
       preLoaderRoute: typeof ApiPublicAuthCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/payment-reminders': {
+      id: '/api/public/payment-reminders'
+      path: '/api/public/payment-reminders'
+      fullPath: '/api/public/payment-reminders'
+      preLoaderRoute: typeof ApiPublicPaymentRemindersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/razorpay-webhook': {
@@ -835,6 +856,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   ApiPublicAuthCheckRoute: ApiPublicAuthCheckRoute,
+  ApiPublicPaymentRemindersRoute: ApiPublicPaymentRemindersRoute,
   ApiPublicRazorpayWebhookRoute: ApiPublicRazorpayWebhookRoute,
 }
 export const routeTree = rootRouteImport
