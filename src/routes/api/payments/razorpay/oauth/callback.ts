@@ -3,7 +3,15 @@ import { supabaseAdmin } from '@/integrations/supabase/client.server';
 import Razorpay from 'razorpay';
 
 export const Route = createFileRoute('/api/payments/razorpay/oauth/callback')({
-  loader: async ({ request }) => {
+  loader: async () => {
+    // This is an API route, but TanStack Start loaders in api routes receive context.
+    // However, it's easier to handle this in a handler if we want raw request access.
+    // For TanStack Start API routes, we use the server: { handlers: { ... } } pattern.
+  },
+  server: {
+    handlers: {
+      GET: async ({ request }) => {
+
     const url = new URL(request.url);
     const code = url.searchParams.get('code');
     const state = url.searchParams.get('state');

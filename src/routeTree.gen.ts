@@ -44,6 +44,7 @@ import { Route as DashboardAdminSettingsRazorpayRouteImport } from './routes/das
 import { Route as DashboardSuperAdminGymsIndexRouteImport } from './routes/dashboard/super-admin.gyms.index'
 import { Route as DashboardSuperAdminGymsGymIdRouteImport } from './routes/dashboard/super-admin.gyms.$gymId'
 import { Route as DashboardSuperAdminGymsAddRouteImport } from './routes/dashboard/super-admin.gyms.add'
+import { Route as ApiPaymentsRazorpayOauthCallbackRouteImport } from './routes/api/payments/razorpay/oauth/callback'
 import { Route as DashboardAdminPlansEditPlanIdRouteImport } from './routes/dashboard/admin.plans.edit.$planId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -234,6 +235,12 @@ const DashboardSuperAdminGymsAddRoute =
     path: '/add',
     getParentRoute: () => DashboardSuperAdminGymsRoute,
   } as any)
+const ApiPaymentsRazorpayOauthCallbackRoute =
+  ApiPaymentsRazorpayOauthCallbackRouteImport.update({
+    id: '/api/payments/razorpay/oauth/callback',
+    path: '/api/payments/razorpay/oauth/callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DashboardAdminPlansEditPlanIdRoute =
   DashboardAdminPlansEditPlanIdRouteImport.update({
     id: '/edit/$planId',
@@ -277,6 +284,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
   '/dashboard/admin/settings/': typeof DashboardAdminSettingsIndexRoute
   '/dashboard/super-admin/gyms/': typeof DashboardSuperAdminGymsIndexRoute
+  '/api/payments/razorpay/oauth/callback': typeof ApiPaymentsRazorpayOauthCallbackRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
 }
 export interface FileRoutesByTo {
@@ -311,6 +319,7 @@ export interface FileRoutesByTo {
   '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
   '/dashboard/admin/settings': typeof DashboardAdminSettingsIndexRoute
   '/dashboard/super-admin/gyms': typeof DashboardSuperAdminGymsIndexRoute
+  '/api/payments/razorpay/oauth/callback': typeof ApiPaymentsRazorpayOauthCallbackRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
 }
 export interface FileRoutesById {
@@ -350,6 +359,7 @@ export interface FileRoutesById {
   '/dashboard/super-admin/gyms/add': typeof DashboardSuperAdminGymsAddRoute
   '/dashboard/admin/settings/': typeof DashboardAdminSettingsIndexRoute
   '/dashboard/super-admin/gyms/': typeof DashboardSuperAdminGymsIndexRoute
+  '/api/payments/razorpay/oauth/callback': typeof ApiPaymentsRazorpayOauthCallbackRoute
   '/dashboard/admin/plans/edit/$planId': typeof DashboardAdminPlansEditPlanIdRoute
 }
 export interface FileRouteTypes {
@@ -390,6 +400,7 @@ export interface FileRouteTypes {
     | '/dashboard/super-admin/gyms/add'
     | '/dashboard/admin/settings/'
     | '/dashboard/super-admin/gyms/'
+    | '/api/payments/razorpay/oauth/callback'
     | '/dashboard/admin/plans/edit/$planId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -424,6 +435,7 @@ export interface FileRouteTypes {
     | '/dashboard/super-admin/gyms/add'
     | '/dashboard/admin/settings'
     | '/dashboard/super-admin/gyms'
+    | '/api/payments/razorpay/oauth/callback'
     | '/dashboard/admin/plans/edit/$planId'
   id:
     | '__root__'
@@ -462,6 +474,7 @@ export interface FileRouteTypes {
     | '/dashboard/super-admin/gyms/add'
     | '/dashboard/admin/settings/'
     | '/dashboard/super-admin/gyms/'
+    | '/api/payments/razorpay/oauth/callback'
     | '/dashboard/admin/plans/edit/$planId'
   fileRoutesById: FileRoutesById
 }
@@ -475,6 +488,7 @@ export interface RootRouteChildren {
   ApiPublicAuthCheckRoute: typeof ApiPublicAuthCheckRoute
   ApiPublicPaymentRemindersRoute: typeof ApiPublicPaymentRemindersRoute
   ApiPublicRazorpayWebhookRoute: typeof ApiPublicRazorpayWebhookRoute
+  ApiPaymentsRazorpayOauthCallbackRoute: typeof ApiPaymentsRazorpayOauthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -724,6 +738,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSuperAdminGymsAddRouteImport
       parentRoute: typeof DashboardSuperAdminGymsRoute
     }
+    '/api/payments/razorpay/oauth/callback': {
+      id: '/api/payments/razorpay/oauth/callback'
+      path: '/api/payments/razorpay/oauth/callback'
+      fullPath: '/api/payments/razorpay/oauth/callback'
+      preLoaderRoute: typeof ApiPaymentsRazorpayOauthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/admin/plans/edit/$planId': {
       id: '/dashboard/admin/plans/edit/$planId'
       path: '/edit/$planId'
@@ -858,6 +879,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicAuthCheckRoute: ApiPublicAuthCheckRoute,
   ApiPublicPaymentRemindersRoute: ApiPublicPaymentRemindersRoute,
   ApiPublicRazorpayWebhookRoute: ApiPublicRazorpayWebhookRoute,
+  ApiPaymentsRazorpayOauthCallbackRoute: ApiPaymentsRazorpayOauthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
