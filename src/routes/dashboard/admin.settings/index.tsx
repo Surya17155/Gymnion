@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { getGymDetails, updateGymCode } from '@/lib/auth.functions';
-import { sendTestReminder } from '@/lib/emails.functions';
+
 import { useServerFn } from '@tanstack/react-start';
 import { toast } from 'sonner';
 
@@ -17,10 +17,10 @@ function AdminSettings() {
   const [gymCode, setGymCode] = useState('');
   const [isEditingCode, setIsEditingCode] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [testEmailLoading, setTestEmailLoading] = useState(false);
+  
   const [message, setMessage] = useState({ type: '', text: '' });
 
-  const sendReminder = useServerFn(sendTestReminder);
+  
 
   useEffect(() => {
     loadGymDetails();
@@ -55,18 +55,6 @@ function AdminSettings() {
     }
   };
 
-  const handleSendTestEmail = async () => {
-    setTestEmailLoading(true);
-    try {
-      await sendReminder({ data: { email: 'amssre.17155@gmail.com' } });
-      toast.success('Test email sent to amssre.17155@gmail.com');
-    } catch (err: any) {
-      toast.error('Failed to send test email');
-      console.error(err);
-    } finally {
-      setTestEmailLoading(false);
-    }
-  };
 
   return (
     <div className={`bg-[#121411] text-[#e3e3dd] antialiased overflow-x-hidden min-h-screen font-['Poppins'] ${isEditingCode ? 'tab-bar-hidden' : ''}`}>
@@ -239,23 +227,6 @@ function AdminSettings() {
               </button>
             </div>
 
-            {/* Test Email Setting */}
-            <div className="flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5">
-              <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center mr-4">
-                <span className="material-symbols-outlined text-[#e3e3dd]">alternate_email</span>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-[18px] font-semibold text-[#e3e3dd]">Test Reminder</h3>
-                <p className="text-[12px] text-[#858A7D] mt-1">Send fake fee email to amssre.17155@gmail.com</p>
-              </div>
-              <button 
-                onClick={handleSendTestEmail}
-                disabled={testEmailLoading}
-                className="bg-[#B7FF1E] text-[#293500] px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-transform active:scale-95 disabled:opacity-50"
-              >
-                {testEmailLoading ? 'Sending...' : 'Send'}
-              </button>
-            </div>
           </div>
 
           <div className="mt-8">
