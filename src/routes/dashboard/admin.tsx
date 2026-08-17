@@ -69,7 +69,7 @@ export function AdminDashboard() {
       }
 
       const options = {
-        key: order.key,
+        key: "rzp_test_TQjEOlPVSNfNLr", // Public key from user request
         amount: order.amount,
         currency: order.currency,
         name: "Gymnion",
