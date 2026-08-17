@@ -238,6 +238,23 @@ function AdminSettings() {
               </button>
             </div>
 
+            <div className="flex items-center p-[16px] bg-[#1e201d] rounded-2xl border border-white/5">
+              <div className="w-12 h-12 rounded-full bg-[#333532] flex items-center justify-center mr-4">
+                <span className="material-symbols-outlined text-[#e3e3dd]">mail</span>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-[18px] font-semibold text-[#e3e3dd]">Test Welcome Email</h3>
+                <p className="text-[12px] text-[#858A7D] mt-1">Send sample welcome email to test.</p>
+              </div>
+              <button 
+                disabled={loading}
+                onClick={handleSendTestWelcome}
+                className="bg-[#B7FF1E] text-[#293500] px-4 py-2 rounded-xl text-xs font-bold uppercase disabled:opacity-50"
+              >
+                {loading ? 'Sending...' : 'Send'}
+              </button>
+            </div>
+
           </div>
 
           <div className="mt-8">
