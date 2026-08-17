@@ -32,20 +32,13 @@ export const createRazorpayOrder = createServerFn({ method: "POST" })
 
     if (!plan) throw new Error("Plan not found");
 
-    // 3. Initialize Razorpay (using test keys from env or placeholders for now)
-    const keyId = process.env['VITE_RAZORPAY_KEY_ID'] || "rzp_test_placeholder";
+    // 3. Initialize Razorpay
+    const keyId = process.env['RAZORPAY_KEY_ID'];
     const keySecret = process.env['RAZORPAY_KEY_SECRET'];
 
-    if (!keySecret) {
-      console.warn("RAZORPAY_KEY_SECRET missing, using simulation mode");
-      const orderId = `order_sim_${Math.random().toString(36).substring(7)}`;
-      return {
-        orderId,
-        amount: plan.price,
-        currency: "INR",
-        key: keyId,
-        isSimulated: true
-      };
+    if (!keyId || !keySecret) {
+      console.error("Razorpay credentials missing from environment");
+      throw new Error("Payment service is currently unavailable");
     }
 
     const razorpay = new Razorpay({
@@ -85,16 +78,16 @@ export const verifySubscriptionPayment = createServerFn({ method: "POST" })
     // 1. Verify Signature
     const keySecret = process.env['RAZORPAY_KEY_SECRET'];
     
-    if (keySecret) {
-      const generated_signature = createHmac('sha256', keySecret)
-        .update(data.razorpayOrderId + "|" + data.razorpayPaymentId)
-        .digest('hex');
+    if (!keySecret) {
+      throw new Error("Payment service misconfigured");
+    }
 
-      if (generated_signature !== data.razorpaySignature) {
-        throw new Error("Invalid payment signature");
-      }
-    } else {
-      console.warn("RAZORPAY_KEY_SECRET missing, bypassing signature verification for simulation");
+    const generated_signature = createHmac('sha256', keySecret)
+      .update(data.razorpayOrderId + "|" + data.razorpayPaymentId)
+      .digest('hex');
+
+    if (generated_signature !== data.razorpaySignature) {
+      throw new Error("Invalid payment signature");
     }
 
     // Fetch plan details to get the price and name for audit
