@@ -19,6 +19,7 @@ import { Route as DashboardAdminRouteImport } from './routes/dashboard/admin'
 import { Route as DashboardMRouteImport } from './routes/dashboard/m'
 import { Route as DashboardSuperAdminRouteImport } from './routes/dashboard/super-admin'
 import { Route as ApiPublicAuthCheckRouteImport } from './routes/api/public/auth-check'
+import { Route as ApiPublicRazorpayWebhookRouteImport } from './routes/api/public/razorpay-webhook'
 import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard/admin.index'
 import { Route as DashboardAdminAccountRouteImport } from './routes/dashboard/admin.account'
 import { Route as DashboardAdminAttendanceRouteImport } from './routes/dashboard/admin.attendance'
@@ -93,6 +94,12 @@ const ApiPublicAuthCheckRoute = ApiPublicAuthCheckRouteImport.update({
   path: '/api/public/auth-check',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicRazorpayWebhookRoute =
+  ApiPublicRazorpayWebhookRouteImport.update({
+    id: '/api/public/razorpay-webhook',
+    path: '/api/public/razorpay-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DashboardAdminIndexRoute = DashboardAdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -231,6 +238,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRouteWithChildren
   '/api/public/auth-check': typeof ApiPublicAuthCheckRoute
+  '/api/public/razorpay-webhook': typeof ApiPublicRazorpayWebhookRoute
   '/dashboard/admin/account': typeof DashboardAdminAccountRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
@@ -263,6 +271,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/api/public/auth-check': typeof ApiPublicAuthCheckRoute
+  '/api/public/razorpay-webhook': typeof ApiPublicRazorpayWebhookRoute
   '/dashboard/admin/account': typeof DashboardAdminAccountRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
@@ -298,6 +307,7 @@ export interface FileRoutesById {
   '/dashboard/m': typeof DashboardMRouteWithChildren
   '/dashboard/super-admin': typeof DashboardSuperAdminRouteWithChildren
   '/api/public/auth-check': typeof ApiPublicAuthCheckRoute
+  '/api/public/razorpay-webhook': typeof ApiPublicRazorpayWebhookRoute
   '/dashboard/admin/account': typeof DashboardAdminAccountRoute
   '/dashboard/admin/attendance': typeof DashboardAdminAttendanceRoute
   '/dashboard/admin/members': typeof DashboardAdminMembersRoute
@@ -335,6 +345,7 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/api/public/auth-check'
+    | '/api/public/razorpay-webhook'
     | '/dashboard/admin/account'
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
@@ -367,6 +378,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/api/public/auth-check'
+    | '/api/public/razorpay-webhook'
     | '/dashboard/admin/account'
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
@@ -401,6 +413,7 @@ export interface FileRouteTypes {
     | '/dashboard/m'
     | '/dashboard/super-admin'
     | '/api/public/auth-check'
+    | '/api/public/razorpay-webhook'
     | '/dashboard/admin/account'
     | '/dashboard/admin/attendance'
     | '/dashboard/admin/members'
@@ -434,6 +447,7 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   ApiPublicAuthCheckRoute: typeof ApiPublicAuthCheckRoute
+  ApiPublicRazorpayWebhookRoute: typeof ApiPublicRazorpayWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -506,6 +520,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/auth-check'
       fullPath: '/api/public/auth-check'
       preLoaderRoute: typeof ApiPublicAuthCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/razorpay-webhook': {
+      id: '/api/public/razorpay-webhook'
+      path: '/api/public/razorpay-webhook'
+      fullPath: '/api/public/razorpay-webhook'
+      preLoaderRoute: typeof ApiPublicRazorpayWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/admin/': {
@@ -792,6 +813,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   ApiPublicAuthCheckRoute: ApiPublicAuthCheckRoute,
+  ApiPublicRazorpayWebhookRoute: ApiPublicRazorpayWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
