@@ -513,6 +513,54 @@ export type Database = {
           },
         ]
       }
+      razorpay_connections: {
+        Row: {
+          access_token_encrypted: string
+          connected_at: string | null
+          gym_id: string
+          id: string
+          razorpay_account_id: string
+          refresh_token_encrypted: string | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          access_token_encrypted: string
+          connected_at?: string | null
+          gym_id: string
+          id?: string
+          razorpay_account_id: string
+          refresh_token_encrypted?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          access_token_encrypted?: string
+          connected_at?: string | null
+          gym_id?: string
+          id?: string
+          razorpay_account_id?: string
+          refresh_token_encrypted?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "razorpay_connections_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: true
+            referencedRelation: "gym_public_info"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "razorpay_connections_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: true
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           gym_id: string | null
